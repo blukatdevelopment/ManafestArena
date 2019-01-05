@@ -110,7 +110,7 @@ ability slots (1-0 keys) and use them in combat.
 - Force wall
 
 ### Character customization
-
+ 
 The player should be able to select one of N starting archetypes,
 each with different backgrounds, stats, starting equipment, and perks.
 
