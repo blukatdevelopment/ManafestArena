@@ -65,7 +65,7 @@ Items should provide situational advantages and disadvantages.
 Balancing will be an ongoing task.
 
 **Melee Weapons**
-
+ 
 - Knife
 - Spear
 - Sword
