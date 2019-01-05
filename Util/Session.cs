@@ -67,19 +67,18 @@ public class Session : Node {
   }
 
   public void InitSettings(){
-    SettingsDb db = SettingsDb.Init();
+    SettingsDb db = new SettingsDb();
     masterVolume = Util.ToFloat(db.SelectSetting("master_volume"));
     sfxVolume = Util.ToFloat(db.SelectSetting("sfx_volume"));
     musicVolume = Util.ToFloat(db.SelectSetting("music_volume"));
     userName = db.SelectSetting("username");
     mouseSensitivityX = Util.ToFloat(db.SelectSetting("mouse_sensitivity_x"));
     mouseSensitivityY = Util.ToFloat(db.SelectSetting("mouse_sensitivity_y"));
-    db.Close();
     Sound.RefreshVolume();
   }
 
   public static void SaveSettings(){
-    SettingsDb db = SettingsDb.Init();
+    SettingsDb db = new SettingsDb();
     
     db.StoreSetting("master_volume", "" + Session.session.masterVolume);
     db.StoreSetting("sfx_volume", "" + Session.session.sfxVolume);
@@ -88,7 +87,6 @@ public class Session : Node {
     db.StoreSetting("mouse_sensitivity_y", "" + Session.session.mouseSensitivityY);
     db.StoreSetting("username", Session.session.userName);
     
-    db.Close();
     Sound.RefreshVolume();
   }
   
