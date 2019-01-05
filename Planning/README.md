@@ -1,5 +1,5 @@
 # Planning
-A delivery will be released March 4th, 2019, finished or not.
+A delivery will be released April 4th, 2019, finished or not.
 
 Many priorities and goals will be laid out. The strategy will be to approach each of them with roughly 50% effort in order to 
 not get stuck on one for too long.
