@@ -101,16 +101,6 @@ public class Overworld : Spatial {
 
 	/* Asks the cartographer to make a new world */
 	public void InitWorld(){
-		if(Session.session.adventureSettings != null 
-			 && Session.session.adventureSettings.load){
-			
-			AdventureDb db = new AdventureDb(saveFile);
-			OverworldData dat = db.LoadData();
-			
-			actorsData = dat.actorsData;
-			itemsData = dat.itemsData;
-			return;
-		}
 
 		Cartographer cart = new Cartographer();
 		
@@ -392,10 +382,6 @@ public class Overworld : Spatial {
 
 	public void Save(){
 		OverworldData data = new OverworldData(this);
-
-		AdventureDb db = new AdventureDb(saveFile);
-
-		db.SaveData(data);
 	}
 
 	public int GetActorByBrain(Actor.Brains brain){
@@ -509,11 +495,6 @@ public class Overworld : Spatial {
 			return cells[id];
 		}
 		
-		if(!cellsData.ContainsKey(id)){
-			AdventureDb db = new AdventureDb(saveFile);
-			TerrainCellData data = db.LoadCell(id);
-			cellsData.Add(id, data);
-		}
 
 		TerrainCellData cellData = cellsData[id];
 		cellsData.Remove(id);
