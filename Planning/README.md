@@ -108,7 +108,7 @@ ability slots (1-0 keys) and use them in combat.
 - Speed
 - Force push
 - Force wall
-
+ 
 ### Character customization
  
 The player should be able to select one of N starting archetypes,
