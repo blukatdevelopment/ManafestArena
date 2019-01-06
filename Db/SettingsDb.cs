@@ -1,38 +1,61 @@
 /*
- This class manages a JSON text file to store settings.
- Performance is a tertiary concern at this point, so a settings file is
- read in the constructor, and every save results in saving the entire JSON text
- to disk.
+  Apparently external libraries are just not an option, so this is neither
+  going to be sqlite nor json. Settings will be stored in a csv file.
 */
 using Godot;
 using System;
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 
 public class SettingsDb{
-    const string SettingsPath = "Saves/settings.json";
+    const string SettingsPath = "Saves/settings.csv";
     System.Collections.Generic.Dictionary<string, string> settings;
 
     public SettingsDb(){
         settings = new System.Collections.Generic.Dictionary<string, string>();
-        FetchJson();
+        FetchSettings();
     }
 
-    public void StoreJson(){
-        string json = JsonConvert.SerializeObject(settings, Formatting.Indented);
-        System.IO.File.WriteAllText(SettingsPath, json);
+    public void StoreSettings(){
+        
+        string settingsText = "";
+
+        foreach(string key in settings.Keys){
+            settingsText += key + "," + settings[key] + "\n";
+        }
+
+        System.IO.File.WriteAllText(SettingsPath, settingsText);
     }
 
-    public void FetchJson(){
+    public void FetchSettings(){
 
         if(!System.IO.File.Exists(SettingsPath)){
             InitSettings();
         }
 
-        string json = System.IO.File.ReadAllText(SettingsPath);
-        settings = JsonConvert.DeserializeObject<System.Collections.Generic.Dictionary<string, string>>(json);
+        string rawText = System.IO.File.ReadAllText(SettingsPath);
+        settings = ParseSettingsText(rawText);
+    }
+
+    public System.Collections.Generic.Dictionary<string, string> ParseSettingsText(string rawText){
+        string[] lines = rawText.Split(new Char [] {'\n'});
+
+        System.Collections.Generic.Dictionary<string, string> ret;
+        ret = new System.Collections.Generic.Dictionary<string, string>();
+
+        for(int i = 0; i < lines.Length; i++){
+            string line = lines[i];
+            string[] columns = line.Split(new Char [] { ','});
+            
+            if(columns.Length == 2){
+                ret.Add(columns[0], columns[1]);
+            }
+            else{
+                GD.Print("Line " + i + " had incorrect number of columns");
+            }
+        }
+        return ret;
     }
 
     public void InitSettings(){
@@ -43,7 +66,7 @@ public class SettingsDb{
         settings.Add("first_login", DateTime.Today.ToString("MM/dd/yyyy"));
         settings.Add("mouse_sensitivity_x", "1.0");
         settings.Add("mouse_sensitivity_y", "1.0");
-        StoreJson();
+        StoreSettings();
     }
 
     public void StoreSetting(string name, string val){
@@ -53,7 +76,7 @@ public class SettingsDb{
         else{
             settings.Add(name, val);
         }
-        StoreJson();
+        StoreSettings();
     }
 
     public string SelectSetting(string name){

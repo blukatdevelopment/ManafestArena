@@ -2,7 +2,6 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 
 public class LobbyMenu : Container, IMenu {
   public TextEdit messageBox;
@@ -181,7 +180,7 @@ public class LobbyMenu : Container, IMenu {
         netSes.UpdateServer(obj: this, playerJoin: nameof(PlayerJoined), playerLeave: nameof(PlayerQuit));
         ReceiveMessage("Server still using random seed: " + netSes.randomSeed);
         foreach(KeyValuePair<int, PlayerData> entry in netSes.playerData){
-          string json = JsonConvert.SerializeObject(entry.Value, Formatting.Indented);
+          string json = ""; //JsonConvert.SerializeObject(entry.Value, Formatting.Indented);
           AddPlayer(json);
           Rpc(nameof(AddPlayer), json);
         }
@@ -279,7 +278,7 @@ public class LobbyMenu : Container, IMenu {
     }
 
     PlayerData dat = new PlayerData(myName, myId);
-    string json = JsonConvert.SerializeObject(dat, Formatting.Indented);
+    string json = ""; //JsonConvert.SerializeObject(dat, Formatting.Indented);
     AddPlayer(json);
     Rpc(nameof(AddPlayer), json);
 
@@ -294,7 +293,7 @@ public class LobbyMenu : Container, IMenu {
     }
     int myId = Session.session.netSes.selfPeerId;
     PlayerData myDat = Session.session.netSes.playerData[myId];
-    string myJson = JsonConvert.SerializeObject(myDat, Formatting.Indented);
+    string myJson =  ""; //JsonConvert.SerializeObject(myDat, Formatting.Indented);
     RpcId(id, nameof(AddPlayer), myJson);
     StopCountDown();
   }
@@ -334,7 +333,7 @@ public class LobbyMenu : Container, IMenu {
   
   [Remote]
   public void AddPlayer(string json){
-    PlayerData dat = JsonConvert.DeserializeObject<PlayerData>(json);
+    PlayerData dat = null;// JsonConvert.DeserializeObject<PlayerData>(json);
     
     if(dat == null){
       GD.Print("AddPlayer: PlayerData null");
@@ -445,7 +444,7 @@ public class LobbyMenu : Container, IMenu {
 
   [Remote]
   void PrintPlayer(string dat){
-    PlayerData playerDat = JsonConvert.DeserializeObject<PlayerData>(dat);
+    PlayerData playerDat = null; //JsonConvert.DeserializeObject<PlayerData>(dat);
   }
 
   void BuildPlayers(){

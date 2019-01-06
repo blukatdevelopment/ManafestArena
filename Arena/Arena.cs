@@ -7,7 +7,6 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 
 public class Arena : Spatial {
   public bool local;
@@ -200,58 +199,10 @@ public class Arena : Spatial {
     roundTimerActive = true;
   }
 
-  public void OnlineInit(){
-    if(!Session.IsServer()){
-      return;
-    }
-
-    for(int i = 0; i < settings.bots; i++){
-      settings.botIds.Add(NextId());
-    }
-
-    string settingsJson = ArenaSettings.ToJson(Session.session.arenaSettings);
-    
-    DeferredOnlineInit(settingsJson);
-    Rpc(nameof(DeferredOnlineInit), settingsJson);
-  }
+  public void OnlineInit(){}
 
   [Remote]
-  public void DeferredOnlineInit(string json){
-    if(!Session.IsServer()){
-      settings = JsonConvert.DeserializeObject<ArenaSettings>(json);
-      Session.session.arenaSettings = settings;
-    }
-    
-    NetworkSession netSes = Session.session.netSes;
-    netSes.playersReady = 0;
-    playerWorldId = netSes.selfPeerId;
-    
-    foreach(KeyValuePair<int, PlayerData> entry in netSes.playerData){
-      int id = entry.Value.id;
-      InitActor(Actor.Brains.Remote, id);
-    }
-
-    foreach(int id in settings.botIds){
-      if(Session.IsServer()){
-        InitActor(Actor.Brains.Ai, id);
-      }
-      else{
-        InitActor(Actor.Brains.Remote, id);
-      }
-    }
-    
-    if(settings.usePowerups){
-      for(int i = 0; i < 1; i++){
-        SpawnItem(Item.Types.HealthPack);
-        SpawnItem(Item.Types.AmmoPack);
-      }
-    }
-
-    if(Session.IsServer()){
-      roundTimeRemaining = settings.duration * 60;
-      roundTimerActive = true;
-    }
-  }
+  public void DeferredOnlineInit(string json){}
 
   public Actor InitActor(Actor.Brains brain, int id){
     scores.Add(id, 0);

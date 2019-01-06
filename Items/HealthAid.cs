@@ -1,5 +1,4 @@
 using Godot;
-using Newtonsoft.Json;
 
 public class HealthAid : Item, IConsume {
 	const int Health = 25;
@@ -19,7 +18,7 @@ public class HealthAid : Item, IConsume {
       Actor actor = obj as Actor;
       
       if(actor != null){
-        actor.Rpc(nameof(Actor.RemoteReceiveDamage), JsonConvert.SerializeObject(damage, Formatting.Indented));
+        actor.Rpc(nameof(Actor.RemoteReceiveDamage), "");
       }
     }
     

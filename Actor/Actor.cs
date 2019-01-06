@@ -7,7 +7,6 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
 
 public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IHasAmmo, ILook, IInteract {
   
@@ -584,7 +583,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
 
   [Remote]
   public void RemoteReceiveDamage(string json){
-    Damage dmg = JsonConvert.DeserializeObject<Damage>(json);
+    Damage dmg = null;
     
     if(dmg != null){
       ReceiveDamage(dmg);
@@ -773,7 +772,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
 
   [Remote]
   public void DeferredReceiveItem(string json){
-    ItemData dat = JsonConvert.DeserializeObject<ItemData>(json);
+    ItemData dat = null;
     Item item = Item.FromData(dat);
     inventory.ReceiveItem(item);
   }
