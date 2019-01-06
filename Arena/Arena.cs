@@ -39,13 +39,7 @@ public class Arena : Spatial {
 
     InitTerrain();
     InitSpawnPoints();
-    
-    if(local){
-      LocalInit();
-    }
-    else{
-      OnlineInit();
-    } 
+    LocalInit();
   }
 
   public override void _Process(float delta){
@@ -60,28 +54,7 @@ public class Arena : Spatial {
     if(secondCounter >= 1.0f){
       roundTimeRemaining -= secondCounter;
       secondCounter = 0f;
-
-      if(Session.IsServer()){
-        Rpc(nameof(SyncTime), roundTimeRemaining);
-      }
-
-      if(roundTimeRemaining < 0 && !scorePresented){
-        PresentScore();
-
-        if(Session.IsServer()){
-          Rpc(nameof(PresentScore));
-        }
-      }
-      
-      if(roundTimeRemaining < -ScoreDuration){
-        
-        if(Session.IsServer()){
-          Rpc(nameof(RoundOver));
-          RoundOver();
-        }
-      }
     }
-    
   }
   
   public bool PlayerWon(){
@@ -137,24 +110,6 @@ public class Arena : Spatial {
     
     return minutesText + ":" + secondsText;
   }
-  
-  [Remote]
-  public void SyncTime(float newTime){
-    roundTimeRemaining = newTime;
-  }
-
-  [Remote]
-  public void PresentScore(){
-    scorePresented = true;
-    SetPause(true);
-    Session.ChangeMenu(Menu.Menus.HUD);
-  }
-  
-  [Remote]
-  public void RoundOver(){
-    roundTimerActive = false;
-    Session.QuitToMainMenu(); 
-  }
 
   public int NextId(){
     int ret = nextId;
@@ -192,34 +147,16 @@ public class Arena : Spatial {
     roundTimerActive = true;
   }
 
-  public void OnlineInit(){}
-
-  [Remote]
-  public void DeferredOnlineInit(string json){}
-
   public Actor InitActor(Actor.Brains brain, int id){
     scores.Add(id, 0);
 
-    if(!Session.NetActive()){
-      SpawnActor(brain, id);
-      
-      if(brain == Actor.Brains.Player1){
-        playerWorldId = id;
-      }
-      
-      return null;
+    SpawnActor(brain, id);
+    
+    if(brain == Actor.Brains.Player1){
+      playerWorldId = id;
     }
-
-    Actor ret = null;
-
-    if(id == playerWorldId){
-      ret = SpawnActor(Actor.Brains.Player1, id);
-    }
-    else {
-      ret = SpawnActor(brain, id);
-    }
-
-    return ret; 
+    
+    return null;
   }
 
   public void InitTerrain(){
@@ -312,34 +249,10 @@ public class Arena : Spatial {
   }
   
   public void SpawnItem(Item.Types type, int quantity = 1){
-    if(Session.NetActive() && !Session.IsServer()){
-      return;
-    }
-    
     Vector3 pos = RandomItemSpawn();
     Item item = Item.Factory(type);
     item.Translation = pos;
     AddChild(item);
-
-    if(Session.IsServer()){
-      string name = NextItemName();
-      Node itemNode = item as Node;
-      itemNode.Name = name;
-      Rpc(nameof(DeferredSpawnItem), type, name, pos.x, pos.y, pos.z, quantity);
-    }
-  }
-
-  [Remote]
-  public Item DeferredSpawnItem(Item.Types type, string name, float x, float y, float z, int quantity){
-    Vector3 pos = new Vector3(x, y, z);
-    Item item = Item.Factory(type);
-    item.Translation = pos;
-
-    Node itemNode = item as Node;
-    itemNode.Name = name;
-
-    AddChild(item);
-    return item; 
   }
   
   public Vector3 RandomItemSpawn(){
@@ -390,11 +303,7 @@ public class Arena : Spatial {
     return (Arena)instance;
   }
 
-  public void PlayerReady(){
-    if(Session.NetActive()){
-      Rpc(nameof(DeferredPlayerReady));
-    }
-  }
+  public void PlayerReady(){}
 
   public void EquipActor(Actor actor, Item.Types itemType, string itemName){
     int index = actor.IndexOf(itemType, itemName);
@@ -406,27 +315,4 @@ public class Arena : Spatial {
       actor.EquipItem(index);
     }
   }
-
-  [Remote]
-  public void DeferredPlayerReady(){
-    if(!Session.IsServer()){
-      GD.Print("DeferredPlayerReady: Online and not server. Aborting.");
-      return;
-    }
-    
-    NetworkSession netSes = Session.session.netSes; 
-    netSes.playersReady++;
-    if(netSes.playersReady != netSes.playerData.Count){
-      GD.Print("Waiting for other players.");
-      return;
-    }
-    gameStarted = true;
-    // if(settings.useKits){
-    //   foreach(Actor actor in actors){
-    //     EquipActor(actor, Item.Types.Rifle, "Rifle");
-    //   }
-    // }
-    
-  }
-
 }
