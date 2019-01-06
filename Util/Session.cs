@@ -14,20 +14,17 @@ public class Session : Node {
   public static Session session;
   private Node activeMenu;
   public Arena arena;
-  public Overworld adventure; // Overworld manages adventure mode.
   public NetworkSession netSes;
   public Random random;
   public AudioStreamPlayer jukeBox;
   public ArenaSettings arenaSettings; // Set up just before Arena game
-  public AdventureSettings adventureSettings; // Set up for an adventure game
   public float masterVolume, sfxVolume, musicVolume;
   public string userName;
   public float mouseSensitivityX, mouseSensitivityY;
   public Actor player;
   public enum Gamemodes{
     None,
-    Arena,
-    Adventure
+    Arena
   };
 
   public static string NextItemName(){
@@ -39,17 +36,11 @@ public class Session : Node {
   }
 
   public static int NextItemId(){
-    if(Session.session.adventure != null){
-      return Session.session.adventure.NextItemId();
-    }
 
     return 0;
   }
 
   public static int NextActorId(){
-    if(Session.session.adventure != null){
-      return Session.session.adventure.NextActorId();
-    }
 
     return 0;
   }
@@ -63,7 +54,6 @@ public class Session : Node {
 
   public void PerformTests(){
     Test.Init();
-    AdventureTest.RunTests();
   }
 
   public void InitSettings(){
@@ -155,10 +145,6 @@ public class Session : Node {
       ses.arena = null;
     }
     
-    if(ses.adventure != null){
-      ses.adventure.QueueFree();
-      ses.adventure = null;
-    }
     
     if(!keepNet && ses.netSes != null){
       ses.netSes.QueueFree();
@@ -191,32 +177,6 @@ public class Session : Node {
     ses.arena.Init(true);
   }
 
-  public static void LocalAdventure(){
-    ChangeMenu(Menu.Menus.None);
-    Session.session.adventure = new Overworld();
-    Session.session.AddChild(Session.session.adventure);
-  }
-
-  public static void OnlineAdventure(){
-    ChangeMenu(Menu.Menus.None);
-    Session.session.adventure = new Overworld();
-    Session.session.AddChild(Session.session.adventure);
-  }
-
-  public static void OnlineArena(){
-    Session ses = Session.session;
-    ChangeMenu(Menu.Menus.None);
-    Node arenaNode = Arena.ArenaFactory();
-    
-    ses.AddChild(arenaNode);
-    ses.arena = (Arena)arenaNode;
-    ses.arena.Init(false);
-    
-    if(ses.netSes.isServer == false){
-      ChangeMenu(Menu.Menus.HUD);
-    }
-  }
-
   public static void ChangeMenu(Menu.Menus menu){
     Session ses = Session.session;
     if(ses.activeMenu != null){
@@ -247,10 +207,6 @@ public class Session : Node {
       return ses.arena.GetObjectiveText();
     }
     
-    if(ses.adventure != null){
-      return ses.adventure.GetObjectiveText();
-    }
-    
     return "Fight the enemies.";
   }
   
@@ -263,9 +219,6 @@ public class Session : Node {
       arena.HandleEvent(sessionEvent);
     }
     
-    if(adventure != null){
-      adventure.HandleEvent(sessionEvent);
-    }
   }
 
   public void HandleItemDiscardedEvent(SessionEvent sessionEvent){

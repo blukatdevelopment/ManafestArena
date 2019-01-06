@@ -4,7 +4,6 @@ using System;
 public class MainMenu : Container, IMenu {
     
     public Godot.Button localButton;
-    public Godot.Button onlineButton;
     public Godot.Button settingsButton;
     public Godot.Button quitButton;
 
@@ -30,9 +29,6 @@ public class MainMenu : Container, IMenu {
       localButton = Menu.Button(text : "Local", onClick : LocalGame);
       AddChild(localButton);
       
-      onlineButton = Menu.Button(text : "Online", onClick : Online);
-      AddChild(onlineButton);
-      
       quitButton = Menu.Button(text : "Quit", onClick : Quit);
       AddChild(quitButton);
       
@@ -50,17 +46,12 @@ public class MainMenu : Container, IMenu {
       float hu = height/10;
       
       Menu.ScaleControl(localButton, 2 * wu, 2 * hu, 0, 0);
-      Menu.ScaleControl(onlineButton, 2 * wu, 2 * hu, 0, 2 * hu);
       Menu.ScaleControl(settingsButton, 2 * wu, 2 * hu, 0, 4 * hu);
       Menu.ScaleControl(quitButton, 2 * wu, 2 * hu, 0, 8 * hu);
     }
     
     public void LocalGame(){
-      Session.ChangeMenu(Menu.Menus.Local);
-    }
-    
-    public void Online(){
-      Session.ChangeMenu(Menu.Menus.Online);
+      //Session.ChangeMenu(Menu.Menus.Local);
     }
 
     public void Settings(){

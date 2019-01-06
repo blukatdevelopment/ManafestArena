@@ -6,20 +6,14 @@ public class Menu{
   public enum Menus{
     None, 
     Main,
-    Local,
-    Online, 
     Settings,
-    Lobby, 
     Pause, 
     HUD, 
     Inventory,
-    LoadAdventure
   };
 
   public enum SubMenus{
-    None,
-    ArenaConfig,
-    AdventureConfig
+    None
   }
   
   public static Button Button(string text = "", Action onClick = null){
@@ -74,18 +68,6 @@ public class Menu{
         ret = new MainMenu();
         ret.Name = "Main"; 
         break;
-      case Menus.Local: 
-        ret = new LocalMenu(); 
-        ret.Name = "Local";
-        break;
-      case Menus.Online: 
-        ret = new OnlineMenu(); 
-        ret.Name = "Online";
-        break;
-      case Menus.Lobby: 
-        ret = new LobbyMenu(); 
-        ret.Name = "Lobby";
-        break;
       case Menus.Inventory: 
         ret = new InventoryMenu(); 
         ret.Name = "Inventory";
@@ -93,10 +75,6 @@ public class Menu{
       case Menus.Settings: 
         ret = new SettingsMenu(); 
         ret.Name = "Settings";
-        break;
-      case Menus.LoadAdventure:
-        ret = new LoadAdventureMenu();
-        ret.Name = "LoadAdventure";
         break;
     }
     
@@ -115,14 +93,6 @@ public class Menu{
     switch(menu){
       case SubMenus.None: 
         return null;
-        break;
-      case SubMenus.ArenaConfig:
-        ret = new ArenaConfigMenu();
-        ret.Name = "ArenaConfig";
-        break;
-      case SubMenus.AdventureConfig:
-        ret = new AdventureConfigMenu();
-        ret.Name = "AdventureConfig";
         break;
     }
     return ret;

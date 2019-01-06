@@ -153,14 +153,7 @@ public class Arena : Spatial {
   [Remote]
   public void RoundOver(){
     roundTimerActive = false;
-
-    if(this.local){
-      Session.QuitToMainMenu();
-    }
-    else{
-      Session.ChangeMenu(Menu.Menus.Lobby);
-      Session.ClearGame(true);
-    } 
+    Session.QuitToMainMenu(); 
   }
 
   public int NextId(){
