@@ -10,7 +10,7 @@ config_version=3
 
 [application]
 
-config/name="New Game Project"
+config/name="ManafestArena"
 run/main_scene="res://Scenes/Session.tscn"
 config/icon="res://icon.png"
 
