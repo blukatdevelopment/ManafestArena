@@ -50,6 +50,10 @@ public class Session : Node {
     ChangeMenu(Menu.Menus.Main);
     InitJukeBox();
     InitSettings();
+
+    Career.Archetypes arch = Career.Archetypes.One;
+    Career career = Career.Factory(arch);
+    GD.Print(career.ToString());
   }
 
   public void PerformTests(){

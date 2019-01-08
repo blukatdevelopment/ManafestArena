@@ -100,6 +100,10 @@
     <Compile Include="Util\SessionEvent.cs" />
     <Compile Include="Db\SettingsDb.cs" />
     <Compile Include="Inventory\Inventory.cs" />
+    <Compile Include="Career/Career.cs" />
+    <Compile Include="Career/CareerNode.cs" />
+    <Compile Include="Db/CSV.cs" />
+    <Compile Include="Db/CareerDb.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

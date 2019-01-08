@@ -45,14 +45,13 @@ public class SettingsDb{
         ret = new System.Collections.Generic.Dictionary<string, string>();
 
         for(int i = 0; i < lines.Length; i++){
-            string line = lines[i];
-            string[] columns = line.Split(new Char [] { ','});
+            string[] columns = lines[i].Split(new Char [] { ',' });
             
             if(columns.Length == 2){
                 ret.Add(columns[0], columns[1]);
             }
-            else{
-                GD.Print("Line " + i + " had incorrect number of columns");
+            else if(columns.Length != 1){
+                GD.Print("Line " + i + " had incorrect number of columns:" + columns.Length);
             }
         }
         return ret;
