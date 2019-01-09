@@ -115,7 +115,7 @@ public class CareerNode {
     }
 
     public string ToString(){
-        string  ret = "CareerNode[" + nodeId + "," + nodeType + "][";
+        string  ret = "CareerNode[" + nodeId + "," + Enum.GetName(typeof(NodeTypes), nodeType) + "][";
         ret += child1 + "," + child2 + "," + child3 + "]";
         return ret;
     }
@@ -217,5 +217,17 @@ public class CareerNode {
         }
 
         return count;
+    }
+
+    public static List<CareerNode> GetParents(CareerNode node, List<CareerNode> nodes){
+        List<CareerNode> ret = new List<CareerNode>();
+
+        foreach(CareerNode candidate in nodes){
+            if(candidate.child1 == node.nodeId || candidate.child2 == node.nodeId || candidate.child3 == node.nodeId){
+                ret.Add(candidate);
+            }    
+        }
+
+        return ret;
     }
 }
