@@ -3,7 +3,7 @@ using System;
 
 public class MainMenu : Container, IMenu {
     
-    public Godot.Button localButton;
+    public Godot.Button newGameButton;
     public Godot.Button settingsButton;
     public Godot.Button quitButton;
 
@@ -26,8 +26,8 @@ public class MainMenu : Container, IMenu {
     
 
     void InitControls(){
-      localButton = Menu.Button(text : "Local", onClick : LocalGame);
-      AddChild(localButton);
+      newGameButton = Menu.Button(text : "New", onClick : NewGame);
+      AddChild(newGameButton);
       
       quitButton = Menu.Button(text : "Quit", onClick : Quit);
       AddChild(quitButton);
@@ -45,13 +45,13 @@ public class MainMenu : Container, IMenu {
       float wu = width/10; // relative height and width units
       float hu = height/10;
       
-      Menu.ScaleControl(localButton, 2 * wu, 2 * hu, 0, 0);
+      Menu.ScaleControl(newGameButton, 2 * wu, 2 * hu, 0, 0);
       Menu.ScaleControl(settingsButton, 2 * wu, 2 * hu, 0, 4 * hu);
       Menu.ScaleControl(quitButton, 2 * wu, 2 * hu, 0, 8 * hu);
     }
     
-    public void LocalGame(){
-      //Session.ChangeMenu(Menu.Menus.Local);
+    public void NewGame(){
+      Session.ChangeMenu(Menu.Menus.Career);
     }
 
     public void Settings(){

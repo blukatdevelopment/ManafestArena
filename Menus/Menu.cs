@@ -10,6 +10,7 @@ public class Menu{
     Pause, 
     HUD, 
     Inventory,
+    Career
   };
 
   public enum SubMenus{
@@ -75,6 +76,10 @@ public class Menu{
       case Menus.Settings: 
         ret = new SettingsMenu(); 
         ret.Name = "Settings";
+        break;
+      case Menus.Career:
+        ret = new CareerMenu();
+        ret.Name = "Career";
         break;
     }
     

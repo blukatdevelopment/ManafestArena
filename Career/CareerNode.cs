@@ -120,6 +120,20 @@ public class CareerNode {
         return ret;
     }
 
+    public static int GetLevel(CareerNode node, List<CareerNode> nodes){
+        System.Collections.Generic.Dictionary<int, CareerNode[]> levels = GetLevels(nodes);
+
+        foreach(int key in levels.Keys){
+            CareerNode[] level = levels[key];
+            for(int i = 0; i < level.Length; i++){
+                if(level[i].nodeId == node.nodeId){
+                    return key;
+                }
+            }
+        }
+        return -1;
+    }
+
     public static System.Collections.Generic.Dictionary<int, CareerNode[]> GetLevels(List<CareerNode> nodes){
         System.Collections.Generic.Dictionary<int, CareerNode[]> ret;
         ret = new System.Collections.Generic.Dictionary<int, CareerNode[]>();
