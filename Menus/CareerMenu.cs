@@ -10,7 +10,6 @@ public class CareerMenu : Container, IMenu {
 
 
   public void Init(float minX, float minY, float maxX, float maxY){
-    careerNodes = new List<CareerNode>();
     InitControls();
     ScaleControls();
   }
@@ -20,7 +19,7 @@ public class CareerMenu : Container, IMenu {
   }
 
   public bool IsSubMenu(){
-    return true;
+    return false;
   }
 
   public void Clear(){
@@ -34,7 +33,14 @@ public class CareerMenu : Container, IMenu {
     AddChild(mainMenuButton);
 
     careerButtons = new System.Collections.Generic.Dictionary<int, Button>();
-    careerNodes = Career.GenerateCareerTree();
+
+    if(Session.session.career == null || Session.session.career.careerNodes == null){
+      GD.Print("Session's Career not initialized");
+      return;
+    }
+
+    careerNodes = Session.session.career.careerNodes;
+
     foreach(CareerNode node in careerNodes){
       AddNodeButton(node);
     }

@@ -14,6 +14,7 @@ public class Session : Node {
   public static Session session;
   private Node activeMenu;
   public Arena arena;
+  public Career career;
   public NetworkSession netSes;
   public Random random;
   public AudioStreamPlayer jukeBox;
@@ -50,10 +51,6 @@ public class Session : Node {
     ChangeMenu(Menu.Menus.Main);
     InitJukeBox();
     InitSettings();
-
-    Career.Archetypes arch = Career.Archetypes.One;
-    Career career = Career.Factory(arch);
-    GD.Print(career.ToString());
   }
 
   public void PerformTests(){

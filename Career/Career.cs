@@ -79,4 +79,11 @@ public class Career {
       return ret;
     }
 
+    public static void StartNewCareer(Archetypes archetype = Archetypes.None){
+        GD.Print("Start new career");
+        Career career = Factory(archetype);
+        Session.session.career = career;
+        Session.ChangeMenu(Menu.Menus.Career);
+    }
+
 }

@@ -51,7 +51,7 @@ public class MainMenu : Container, IMenu {
     }
     
     public void NewGame(){
-      Session.ChangeMenu(Menu.Menus.Career);
+      Session.ChangeMenu(Menu.Menus.NewGame);
     }
 
     public void Settings(){
