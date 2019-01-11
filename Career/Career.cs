@@ -6,20 +6,15 @@ using System;
 using System.Collections.Generic;
 
 public class Career {
-    public enum Archetypes{
-        None,
-        One,
-        Two,
-        Three
-    };
-
     public List<CareerNode> careerNodes, leaves;
     public CareerNode root;
+    public StatsManager stats;
 
     public Career(){
       careerNodes = new List<CareerNode>();
       root = null;
       leaves = new List<CareerNode>();
+      stats = new StatsManager();
     }
 
     public string ToString(){
@@ -55,14 +50,15 @@ public class Career {
       return text;
     }
 
-    public static Career Factory(Archetypes archetype){
+    public static Career Factory(StatsManager.Archetypes archetype){
       Career ret = new Career();
       ret.careerNodes = GenerateCareerTree();
       ret.root = CareerNode.Root(ret.careerNodes);
       ret.leaves = CareerNode.Leaves(ret.careerNodes);
-
+      ret.stats.Init(archetype);
       return ret;
     }
+
 
     // TODO: Remove hardcoding and randomize this
     public static List<CareerNode> GenerateCareerTree(){
@@ -79,7 +75,7 @@ public class Career {
       return ret;
     }
 
-    public static void StartNewCareer(Archetypes archetype = Archetypes.None){
+    public static void StartNewCareer(StatsManager.Archetypes archetype = StatsManager.Archetypes.None){
         GD.Print("Start new career");
         Career career = Factory(archetype);
         Session.session.career = career;
