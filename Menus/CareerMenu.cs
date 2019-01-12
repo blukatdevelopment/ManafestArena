@@ -141,7 +141,7 @@ public class CareerMenu : Container, IMenu {
 
     Button nodeButton = careerButtons[node];
     Menu.ScaleControl(nodeButton, xSize, ySize, xPos, yPos);
-    GD.Print("Scaled node " + node + " at level " + level + ", active:" + active + " [" + xPos + "," + yPos + "]");
+    //GD.Print("Scaled node " + node + " at level " + level + ", active:" + active + " [" + xPos + "," + yPos + "]");
   }
 
   public void ReturnToMainMenu(){

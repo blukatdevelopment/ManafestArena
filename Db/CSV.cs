@@ -66,12 +66,12 @@ public class CSV {
     return ret;
   }
 
-  public void WriteToFile(string filePath, System.Collections.Generic.Dictionary<int, string[]> rows){
+  public static void WriteToFile(string filePath, System.Collections.Generic.Dictionary<int, string[]> rows){
     string outputText = OutputText(rows);
     System.IO.File.WriteAllText(filePath, outputText);
   }
 
-  public string OutputText(System.Collections.Generic.Dictionary<int, string[]> rows){
+  public static string OutputText(System.Collections.Generic.Dictionary<int, string[]> rows){
     string ret = "";
 
     foreach(int key in rows.Keys){
@@ -84,6 +84,5 @@ public class CSV {
 
     return ret;
   }
-
 
 }

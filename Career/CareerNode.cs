@@ -44,53 +44,6 @@ public class CareerNode {
         return false;
     }
 
-    public void Execute(){
-        switch(nodeType){
-            case NodeTypes.ArenaMatch:
-                ExecuteArenaMatch();
-                break;
-            case NodeTypes.BossMatch:
-                ExecuteBossMatch();
-                break;
-            case NodeTypes.FinalBoss:
-                ExecuteFinalBoss();
-                break;
-            case NodeTypes.Shop:
-                ExecuteShop();
-                break;
-            case NodeTypes.RestSite:
-                ExecuteRestSite();
-                break;
-            case NodeTypes.PressEvent:
-                ExecutePressEvent();
-                break;
-        }
-    }
-
-    public void ExecuteArenaMatch(){
-        GD.Print("ExecuteArenaMatch");
-    }
-
-    public void ExecuteBossMatch(){
-        GD.Print("ExecuteBossMatch");
-    }
-
-    public void ExecuteFinalBoss(){
-        GD.Print("ExecuteFinalBoss");
-    }
-    
-    public void ExecuteShop(){
-        GD.Print("ExecuteShop");
-    }
-    
-    public void ExecuteRestSite(){
-        GD.Print("ExecuteRestSite");
-    }
-    
-    public void ExecutePressEvent(){
-        GD.Print("ExecutePressEvent");
-    }
-
     // Get params for csv file
     public string[] ToRow(){
         int category = (int)nodeType;
@@ -259,7 +212,7 @@ public class CareerNode {
 
     */
     public static bool NodeIsActive(CareerNode node, List<CareerNode> nodes, int currentLevel, int lastNode){
-        GD.Print("NodeIsActive: -Node " + node.nodeId + " -currentlevel" + currentLevel + " -lastNode " + lastNode);
+        //GD.Print("NodeIsActive: -Node " + node.nodeId + " -currentlevel" + currentLevel + " -lastNode " + lastNode);
         if(node == null || nodes == null){
             GD.Print("NodeIsActive: Invalid args " + node + "," + nodes);
             return false;
@@ -314,6 +267,27 @@ public class CareerNode {
             }
         }
 
+        return ret;
+    }
+
+    public static System.Collections.Generic.Dictionary<int, string[]> ToRows(List<CareerNode> nodes){
+        System.Collections.Generic.Dictionary<int, string[]> ret;
+        ret = new System.Collections.Generic.Dictionary<int, string[]>();
+
+        for(int i = 0; i < nodes.Count; i++){
+            ret.Add(i, nodes[i].ToRow());
+        }
+
+        return ret;
+    }
+
+    public static List<CareerNode> FromRows(System.Collections.Generic.Dictionary<int, string[]> rows){
+        List<CareerNode> ret = new List<CareerNode>();
+
+        foreach(int key in rows.Keys){
+            ret.Add(FromRow(rows[key]));
+        }
+        
         return ret;
     }
 }
