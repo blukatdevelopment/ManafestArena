@@ -60,6 +60,22 @@ public class CareerMenu : Container, IMenu {
 
   void ExecuteNode(int id){
     GD.Print("Executing node " + id + ".");
+    Career career = Session.session.career;
+    CareerNode node = CareerNode.GetNode(id, career.careerNodes);
+    int nodeLevel = CareerNode.GetLevel(node, career.careerNodes);
+    int nextLevel = nodeLevel -1;
+
+    if(nodeLevel == 0){
+      GD.Print("Final boss time!");
+      return;
+    }
+    else{
+      GD.Print("Changing current level to " + nextLevel);
+    }
+
+    career.stats.SetBaseStat(StatsManager.Stats.CurrentLevel, nextLevel);
+    career.stats.SetBaseStat(StatsManager.Stats.LastNode, id);
+    ScaleControls();
   }
 
   void ScaleControls(){
@@ -75,18 +91,26 @@ public class CareerMenu : Container, IMenu {
 
   void ScaleNodeButtons(){
     System.Collections.Generic.Dictionary<int, CareerNode[]> levels = CareerNode.GetLevels(careerNodes);
+    List<CareerNode> nodes = Session.session.career.careerNodes;
     foreach(int key in levels.Keys){
-      ScaleLevel(key, levels[key]);
+      ScaleLevel(key, levels[key], nodes);
     }
   }
 
-  void  ScaleLevel(int level, CareerNode[] levelNodes){
+  void  ScaleLevel(int level, CareerNode[] levelNodes, List<CareerNode> nodes){
+    int currentLevel = Session.session.career.stats.GetStat(StatsManager.Stats.CurrentLevel);
+    int lastNode = Session.session.career.stats.GetStat(StatsManager.Stats.LastNode);
+    
     for(int i = 0; i < levelNodes.Length; i++){
-      ScaleNodeButton(levelNodes[i].nodeId, level, i, levelNodes.Length);
+      CareerNode node = CareerNode.GetNode(levelNodes[i].nodeId, nodes);
+      
+      bool active = CareerNode.NodeIsActive(node, nodes, currentLevel, lastNode);
+      
+      ScaleNodeButton(levelNodes[i].nodeId, level, i, levelNodes.Length, active);
     }
   }
 
-  void ScaleNodeButton(int node, int level, int x, int xMax){
+  void ScaleNodeButton(int node, int level, int x, int xMax, bool active){
     Rect2 screen = this.GetViewportRect();
     float width = screen.Size.x;
     float height = screen.Size.y;
@@ -104,14 +128,23 @@ public class CareerMenu : Container, IMenu {
 
     float yPos = hu * (1+level);
 
+    float xSize = wu;
+    float ySize = hu;
+
+    if(active){
+      float scaleOffset = 50;
+      xPos -= (scaleOffset / 2.0f);
+      yPos -= (scaleOffset / 2.0f);
+      xSize += scaleOffset;
+      ySize += scaleOffset;
+    }
+
     Button nodeButton = careerButtons[node];
-    Menu.ScaleControl(nodeButton, wu, hu, xPos, yPos);
-    GD.Print("Scaled node " + node + " at level " + level + ", [" + xPos + "," + yPos + "]");
+    Menu.ScaleControl(nodeButton, xSize, ySize, xPos, yPos);
+    GD.Print("Scaled node " + node + " at level " + level + ", active:" + active + " [" + xPos + "," + yPos + "]");
   }
 
   public void ReturnToMainMenu(){
     Session.ChangeMenu(Menu.Menus.Main);
   }
-
-
 }

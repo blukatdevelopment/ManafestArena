@@ -90,8 +90,8 @@ public class StatsManager {
             case Archetypes.Three:
                 break;
         }
-        baseStats.Add(Stats.CurrentLevel, 0);
-        baseStats.Add(Stats.LastNode, 0);
+        baseStats.Add(Stats.CurrentLevel, -1);
+        baseStats.Add(Stats.LastNode, -1);
     }
 
 
@@ -104,6 +104,14 @@ public class StatsManager {
             return GetDerivedStat(stat);
         }
         return 0;
+    }
+
+    public void SetBaseStat(Stats stat, int value){
+        if(baseStats.ContainsKey(stat)){
+            baseStats[stat] = value;
+            return;
+        }
+        baseStats.Add(stat, value);
     }
 
     // Returns a stat derived from other stats
@@ -144,6 +152,14 @@ public class StatsManager {
             return statBuffs[stat];
         }
         return 0;
+    }
+
+    public void SetStatBuff(Stats stat, int value){
+        if(statBuffs.ContainsKey(stat)){
+            statBuffs[stat] = value;
+            return;
+        }
+        statBuffs.Add(stat, value);
     }
 
     public int GetStat(Stats stat){
