@@ -90,8 +90,8 @@ public class StatsManager {
             case Archetypes.Three:
                 break;
         }
-        baseStats.Add(Stats.CurrentLevel, 0);
-        baseStats.Add(Stats.LastNode, 0);
+        baseStats.Add(Stats.CurrentLevel, -1);
+        baseStats.Add(Stats.LastNode, -1);
     }
 
 
@@ -104,6 +104,14 @@ public class StatsManager {
             return GetDerivedStat(stat);
         }
         return 0;
+    }
+
+    public void SetBaseStat(Stats stat, int value){
+        if(baseStats.ContainsKey(stat)){
+            baseStats[stat] = value;
+            return;
+        }
+        baseStats.Add(stat, value);
     }
 
     // Returns a stat derived from other stats
@@ -146,6 +154,14 @@ public class StatsManager {
         return 0;
     }
 
+    public void SetStatBuff(Stats stat, int value){
+        if(statBuffs.ContainsKey(stat)){
+            statBuffs[stat] = value;
+            return;
+        }
+        statBuffs.Add(stat, value);
+    }
+
     public int GetStat(Stats stat){
         return GetBaseStat(stat) + GetStatBuff(stat);
     }
@@ -173,6 +189,30 @@ public class StatsManager {
         return false;
     }
 
+    public void SetEffect(Effects effect, int value){
+        if(effects.ContainsKey(effect)){
+            effects[effect] = value;
+            return;
+        }
+        effects.Add(effect, value);
+    }
+
+    public void SetAbility(Abilities ability, int value){
+        if(abilities.ContainsKey(ability)){
+            abilities[ability] = value;
+            return;
+        }
+        abilities.Add(ability, value);
+    }
+
+    public void SetFact(Facts fact, string value){
+        if(facts.ContainsKey(fact)){
+            facts[fact] = value;
+            return;
+        }
+        facts.Add(fact, value);
+    }    
+
     public int EffectsLevel(Effects effect){
         if(effects.ContainsKey(effect)){
             return effects[effect];
@@ -188,36 +228,98 @@ public class StatsManager {
         return false;
     }
 
-    public System.Collections.Generic.Dictionary<int, List<string>> GetRows(){
-        System.Collections.Generic.Dictionary<int, List<string>> ret;
-        ret = new System.Collections.Generic.Dictionary<int, List<string>>();
+    public System.Collections.Generic.Dictionary<int, string[]> GetRows(){
+        System.Collections.Generic.Dictionary<int, string[]> ret;
+        ret = new System.Collections.Generic.Dictionary<int, string[]>();
         int i = 0;
         foreach(Stats key in baseStats.Keys){
-            ret.Add(i, new List<string>{"stats", "" + key, "" + baseStats[key]});
+            ret.Add(i, new List<string>{"stats", "" + key, "" + baseStats[key]}.ToArray());
             i++;
         }
 
         foreach(Stats key in statBuffs.Keys){
-            ret.Add(i, new List<string>{"buffs", "" + key, "" + statBuffs[key]});
+            ret.Add(i, new List<string>{"buffs", "" + key, "" + statBuffs[key]}.ToArray());
             i++;
         }
 
         foreach(Effects key in effects.Keys){
-            ret.Add(i, new List<string>{"effects", "" + key, "" + effects[key]});
+            ret.Add(i, new List<string>{"effects", "" + key, "" + effects[key]}.ToArray());
             i++;
         }
 
         foreach(Abilities key in abilities.Keys){
-            ret.Add(i, new List<string>{"abilities", "" + key, "" + abilities[key]});
+            ret.Add(i, new List<string>{"abilities", "" + key, "" + abilities[key]}.ToArray());
             i++;
         }
 
         foreach(Facts key in facts.Keys){
-            ret.Add(i, new List<string>{"facts", "" + key, facts[key]});
+            ret.Add(i, new List<string>{"facts", "" + key, facts[key]}.ToArray());
             i++;
         }
 
         return ret;
 
     }
+
+    public static StatsManager FromRows(System.Collections.Generic.Dictionary<int, string[]> rows){
+        StatsManager ret = new StatsManager();
+        foreach(int key in rows.Keys){
+            ret.LoadRow(rows[key]);
+        }
+        return ret;
+    }
+
+    public void LoadRow(string[] row){
+        string type = row[0];
+        string key = row[1];
+        string value = row[2];
+
+        switch(type){
+            case "stats":
+                LoadStat(key, value);
+                break;
+            case "buffs":
+                LoadBuff(key, value);
+                break;
+            case "effects":
+                LoadEffect(key, value);
+                break;
+            case "abilities":
+                LoadAbility(key, value);
+                break;
+            case "facts":
+                LoadFact(key, value);
+                break;
+        }
+    }
+
+    public void LoadStat(string key, string value){
+        Stats keyStat = (Stats) Enum.Parse(typeof(Stats), key, true);
+        int valueInt = Util.ToInt(value);
+        SetBaseStat(keyStat, valueInt);
+    }
+
+    public void LoadBuff(string key, string value){
+        Stats keyStat = (Stats) Enum.Parse(typeof(Stats), key, true);
+        int valueInt = Util.ToInt(value);
+        SetStatBuff(keyStat, valueInt);   
+    }
+
+    public void LoadEffect(string key, string value){
+        Effects keyEffect = (Effects) Enum.Parse(typeof(Effects), key, true);
+        int valueInt = Util.ToInt(value);
+        SetEffect(keyEffect, valueInt);
+    }
+
+    public void LoadAbility(string key, string value){
+        Abilities keyEffect = (Abilities) Enum.Parse(typeof(Abilities), key, true);
+        int valueInt = Util.ToInt(value);
+        SetAbility(keyEffect, valueInt);
+    }
+
+    public void LoadFact(string key, string value){
+        Facts keyFact = (Facts) Enum.Parse(typeof(Facts), key, true);
+        SetFact(keyFact, value);
+    }
+
 }

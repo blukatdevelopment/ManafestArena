@@ -34,51 +34,14 @@ public class CareerNode {
         return false;
     }
 
-    public void Execute(){
-        switch(nodeType){
-            case NodeTypes.ArenaMatch:
-                ExecuteArenaMatch();
-                break;
-            case NodeTypes.BossMatch:
-                ExecuteBossMatch();
-                break;
-            case NodeTypes.FinalBoss:
-                ExecuteFinalBoss();
-                break;
-            case NodeTypes.Shop:
-                ExecuteShop();
-                break;
-            case NodeTypes.RestSite:
-                ExecuteRestSite();
-                break;
-            case NodeTypes.PressEvent:
-                ExecutePressEvent();
-                break;
+    public bool HasChild(int child){
+        if(child == -1){
+            return false;
         }
-    }
-
-    public void ExecuteArenaMatch(){
-        GD.Print("ExecuteArenaMatch");
-    }
-
-    public void ExecuteBossMatch(){
-        GD.Print("ExecuteBossMatch");
-    }
-
-    public void ExecuteFinalBoss(){
-        GD.Print("ExecuteFinalBoss");
-    }
-    
-    public void ExecuteShop(){
-        GD.Print("ExecuteShop");
-    }
-    
-    public void ExecuteRestSite(){
-        GD.Print("ExecuteRestSite");
-    }
-    
-    public void ExecutePressEvent(){
-        GD.Print("ExecutePressEvent");
+        if(child1 == child || child2 == child || child3 == child){
+            return true;
+        }
+        return false;
     }
 
     // Get params for csv file
@@ -121,6 +84,11 @@ public class CareerNode {
     }
 
     public static int GetLevel(CareerNode node, List<CareerNode> nodes){
+        if(node == null || nodes == null){
+            GD.Print("Invalid args" + node + "," + nodes);
+            return -1;
+        }
+
         System.Collections.Generic.Dictionary<int, CareerNode[]> levels = GetLevels(nodes);
 
         foreach(int key in levels.Keys){
@@ -163,6 +131,15 @@ public class CareerNode {
         }
 
         return ret;
+    }
+
+    public static CareerNode GetNode(int nodeId, List<CareerNode> nodes){
+        foreach(CareerNode node in nodes){
+            if(node.nodeId == nodeId){
+                return node;
+            }
+        }
+        return null;
     }
 
     public static List<CareerNode> GetChildren(List<CareerNode> previousLevel, List<CareerNode> nodes){
@@ -212,6 +189,13 @@ public class CareerNode {
       return ret;
     }
 
+    public static bool IsRoot(CareerNode node, List<CareerNode> nodes){
+        if(ParentCount(node, nodes) == 0){
+            return true;
+        }
+        return false;
+    }
+
     public static CareerNode Root(List<CareerNode> nodes){
         foreach(CareerNode node in nodes){
             if(ParentCount(node, nodes) == 0){
@@ -222,12 +206,40 @@ public class CareerNode {
         return null;
     }
 
+    /*
+        As a player traverses their career, they will be presented with
+        multiple choices per level according to previous choices.
+
+    */
+    public static bool NodeIsActive(CareerNode node, List<CareerNode> nodes, int currentLevel, int lastNode){
+        //GD.Print("NodeIsActive: -Node " + node.nodeId + " -currentlevel" + currentLevel + " -lastNode " + lastNode);
+        if(node == null || nodes == null){
+            GD.Print("NodeIsActive: Invalid args " + node + "," + nodes);
+            return false;
+        }
+
+        int nodeLevel = GetLevel(node, nodes);
+
+        if(node.IsLeaf() && currentLevel == -1){
+            return true;
+        }
+        if(CareerNode.IsRoot(node, nodes) && currentLevel == nodeLevel){
+            return true;
+        }
+
+        if(node.HasChild(lastNode)){
+            return true;
+        }
+
+        return false;
+    }
+
     public static int ParentCount(CareerNode node, List<CareerNode> nodes){
         int count = 0;
         foreach(CareerNode candidate in nodes){
             if(candidate.child1 == node.nodeId || candidate.child2 == node.nodeId || candidate.child3 == node.nodeId){
                 count++;
-            }    
+            }
         }
 
         return count;
@@ -242,6 +254,40 @@ public class CareerNode {
             }    
         }
 
+        return ret;
+    }
+
+    public static List<CareerNode> GetActiveParents(CareerNode node, List<CareerNode> nodes, int currentLevel, int lastNode){
+        List<CareerNode> parents = GetParents(node, nodes);
+        List<CareerNode> ret = new List<CareerNode>();
+
+        foreach(CareerNode parent in parents){
+            if(NodeIsActive(parent, nodes, currentLevel, lastNode)){
+                ret.Add(parent);
+            }
+        }
+
+        return ret;
+    }
+
+    public static System.Collections.Generic.Dictionary<int, string[]> ToRows(List<CareerNode> nodes){
+        System.Collections.Generic.Dictionary<int, string[]> ret;
+        ret = new System.Collections.Generic.Dictionary<int, string[]>();
+
+        for(int i = 0; i < nodes.Count; i++){
+            ret.Add(i, nodes[i].ToRow());
+        }
+
+        return ret;
+    }
+
+    public static List<CareerNode> FromRows(System.Collections.Generic.Dictionary<int, string[]> rows){
+        List<CareerNode> ret = new List<CareerNode>();
+
+        foreach(int key in rows.Keys){
+            ret.Add(FromRow(rows[key]));
+        }
+        
         return ret;
     }
 }

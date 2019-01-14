@@ -8,6 +8,9 @@ using System.Text;
 using System.Collections.Generic;
 
 public class CareerDb {
+  const string StatsFile = "Saves/stats.csv";
+  const string CareerFile = "Saves/career_tree.csv";
+
 
   public static bool CareerExists(){
     return false;
@@ -15,15 +18,26 @@ public class CareerDb {
 
   public static Career LoadCareer(){
     GD.Print("CareerDb.LoadCareer");
-    return null;
+    List<CareerNode> nodes = CareerNode.FromRows(CSV.ReadRows(CareerFile));
+    StatsManager stats = StatsManager.FromRows(CSV.ReadRows(StatsFile));
+    return Career.Factory(nodes, stats);
   }
 
   public static void SaveCareer(Career career){
     GD.Print("CareerDb.SaveCareer");
+    CSV.WriteToFile(StatsFile, career.stats.GetRows());
+    CSV.WriteToFile(CareerFile, CareerNode.ToRows(career.careerNodes));
   }
 
   public static void ClearCareer(){
-    GD.Print("CareerDb.ClearCareer");
+    GD.Print("CareerDb.ClearCareer not implemented");
+  }
+
+  public static bool SaveExists(){
+    if(System.IO.File.Exists(StatsFile) && System.IO.File.Exists(CareerFile)){
+      return true;
+    }
+    return false;
   }
 
 }

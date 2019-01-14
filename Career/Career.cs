@@ -59,6 +59,14 @@ public class Career {
       return ret;
     }
 
+    public static Career Factory(List<CareerNode> careerNodes, StatsManager stats){
+      Career ret = new Career();
+      ret.careerNodes = careerNodes;
+      ret.root = CareerNode.Root(ret.careerNodes);
+      ret.leaves = CareerNode.Leaves(ret.careerNodes);
+      ret.stats = stats;
+      return ret;
+    }
 
     // TODO: Remove hardcoding and randomize this
     public static List<CareerNode> GenerateCareerTree(){
@@ -76,10 +84,10 @@ public class Career {
     }
 
     public static void StartNewCareer(StatsManager.Archetypes archetype = StatsManager.Archetypes.None){
-        GD.Print("Start new career");
         Career career = Factory(archetype);
         Session.session.career = career;
         Session.ChangeMenu(Menu.Menus.Career);
+        CareerDb.SaveCareer(career);
     }
 
 }

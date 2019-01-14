@@ -4,6 +4,7 @@ using System;
 public class MainMenu : Container, IMenu {
     
     public Godot.Button newGameButton;
+    public Godot.Button continueGameButton;
     public Godot.Button settingsButton;
     public Godot.Button quitButton;
 
@@ -28,7 +29,12 @@ public class MainMenu : Container, IMenu {
     void InitControls(){
       newGameButton = Menu.Button(text : "New", onClick : NewGame);
       AddChild(newGameButton);
-      
+
+      if(CareerDb.SaveExists()){
+        continueGameButton = Menu.Button(text : "Continue", onClick : ContinueGame);
+        AddChild(continueGameButton);
+      }
+
       quitButton = Menu.Button(text : "Quit", onClick : Quit);
       AddChild(quitButton);
       
@@ -45,13 +51,23 @@ public class MainMenu : Container, IMenu {
       float wu = width/10; // relative height and width units
       float hu = height/10;
       
-      Menu.ScaleControl(newGameButton, 2 * wu, 2 * hu, 0, 0);
+      Menu.ScaleControl(newGameButton, 2 * wu, 2 * hu, 0, 2 * hu);
+      if(continueGameButton != null){
+        Menu.ScaleControl(continueGameButton, 2 * wu, 2 * hu, 0, 0);
+      }
       Menu.ScaleControl(settingsButton, 2 * wu, 2 * hu, 0, 4 * hu);
       Menu.ScaleControl(quitButton, 2 * wu, 2 * hu, 0, 8 * hu);
     }
     
     public void NewGame(){
       Session.ChangeMenu(Menu.Menus.NewGame);
+    }
+
+    public void ContinueGame(){
+      GD.Print("ContinueGame");
+      Session.session.career = CareerDb.LoadCareer();
+      Session.ChangeMenu(Menu.Menus.Career);
+     
     }
 
     public void Settings(){
