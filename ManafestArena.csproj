@@ -104,6 +104,8 @@
     <Compile Include="Inventory\Inventory.cs" />
     <Compile Include="Career/Career.cs" />
     <Compile Include="Career/CareerNode.cs" />
+    <Compile Include="Career/PressEvent.cs" />
+    <Compile Include="Career/PressEventNode.cs" />
     <Compile Include="Db/CSV.cs" />
     <Compile Include="Db/CareerDb.cs" />
     <Compile Include="Actor/StatsManager.cs" />

@@ -81,18 +81,32 @@ public class CareerMenu : Container, IMenu {
   }
 
   void  ScaleLevel(int level, CareerNode[] levelNodes){
+    Career career = Session.session.career;
+    int currentLevel = career.stats.GetStat(StatsManager.Stats.CurrentLevel);
+    int lastNode = career.stats.GetStat(StatsManager.Stats.LastNode);
+
     for(int i = 0; i < levelNodes.Length; i++){
-      ScaleNodeButton(levelNodes[i].nodeId, level, i, levelNodes.Length);
+      bool available = false;
+      if(i == 0 && currentLevel == 0){
+        available = true;
+      }
+      ScaleNodeButton(levelNodes[i].nodeId, level, i, levelNodes.Length, available);
     }
   }
 
-  void ScaleNodeButton(int node, int level, int x, int xMax){
+  void ScaleNodeButton(int node, int level, int x, int xMax, bool available){
     Rect2 screen = this.GetViewportRect();
     float width = screen.Size.x;
     float height = screen.Size.y;
     float wu = width/10; // relative height and width units
     float hu = height/10;
 
+    if(available){
+      GD.Print("Node " + node + " is available");
+    }
+    else{
+
+    }
     if(!careerButtons.ContainsKey(node)){
       GD.Print("Node " + node + " has no button.");
       return;
