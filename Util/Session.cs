@@ -52,9 +52,6 @@ public class Session : Node {
     InitJukeBox();
     InitSettings();
 
-    // PressEvent pe = new PressEvent();
-    // pe.pressEventNodes.Add(PressEventNode.FromRow(new string[]{"0", "What's your favorite color?", "Blue","", "", "", "0", "0", "0", "0", "", "", "", ""}));
-    // GD.Print(pe.ToString());
   }
 
   public void PerformTests(){

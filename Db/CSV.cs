@@ -25,6 +25,19 @@ public class CSV {
     return null;
   }
 
+  public static System.Collections.Generic.Dictionary<int, string[]> ReadRowsIgnoreHeader(string filePath,bool skipValidation = false){
+    System.Collections.Generic.Dictionary<int, string[]> ret = ReadRows(filePath, skipValidation);
+    if(ret == null){
+      return null;
+    }
+
+    if(ret.ContainsKey(0)){
+      ret.Remove(0);
+    }
+
+    return ret;
+  }
+
   public static bool ValidateRows(System.Collections.Generic.Dictionary<int, string[]> rows){
     bool ret = true;
     if(rows == null){
@@ -37,13 +50,22 @@ public class CSV {
       return false;
     }
 
+    GD.Print("Found  " + rows.Count + " rows");
+
     int columnCount = -1;
     foreach(int key in rows.Keys){
+      string output = "";
+      for(int i = 0; i < rows[key].Length; i++){
+        output += rows[key][i] + ",";
+      }
+      output += "\n";
+      GD.Print(output);
+
       if(columnCount == -1){
         columnCount = rows[key].Length;
       }
-      else if(columnCount != rows[key].Length){
-        GD.Print("Row " + key + " doesn't match first row column length.");
+      else if(columnCount != rows[key].Length && rows[key].Length != 1){
+        GD.Print("Row " + key + " doesn't match first row column length: expected " + columnCount + " and got " + rows[key].Length + ".");
         ret = false;
       }
     }

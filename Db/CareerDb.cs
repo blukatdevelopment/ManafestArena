@@ -40,4 +40,13 @@ public class CareerDb {
     return false;
   }
 
+  public static PressEvent LoadPressEvent(string name){
+    return new PressEvent(CSV.ReadRows(name));
+  }
+
+  public static List<string> PressEventFiles(){
+    string[] filePaths = System.IO.Directory.GetFiles("PressEvents/", "*.csv", SearchOption.TopDirectoryOnly);
+    return new List<string>(filePaths);
+  }
+
 }

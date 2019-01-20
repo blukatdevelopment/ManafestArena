@@ -30,13 +30,18 @@ public class PressEvent {
       return ret;
     }
 
-    public PressEvent(List<string[]> rows){
+    public PressEvent(System.Collections.Generic.Dictionary<int, string[]> rows){
         pressEventNodes = new List<PressEventNode>();
         
-        foreach(string[] row in rows){
-            pressEventNodes.Add(PressEventNode.FromRow(row));
+        foreach(int key in rows.Keys){
+          PressEventNode node = PressEventNode.FromRow(rows[key]);
+          if(node != null){
+            pressEventNodes.Add(node);
+          }
+          
         }
 
         currentNode = PressEventNode.GetNode(0, pressEventNodes);
     }
+
 }
