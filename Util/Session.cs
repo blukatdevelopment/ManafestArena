@@ -51,7 +51,10 @@ public class Session : Node {
     ChangeMenu(Menu.Menus.Main);
     InitJukeBox();
     InitSettings();
+    // PressEvent pe = CareerDb.LoadPressEvent("PressEvents/test.csv");
+    // GD.Print(pe.ToString());
 
+    //Career.ExecutePressEvent("PressEvents/test.csv");
   }
 
   public void PerformTests(){

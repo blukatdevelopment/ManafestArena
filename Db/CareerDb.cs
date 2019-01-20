@@ -49,4 +49,8 @@ public class CareerDb {
     return new List<string>(filePaths);
   }
 
+  public static List<string> Arenas(){
+    return new List<string>{"Arena1", "Arena2", "Arena3", "Arena4"};
+  }
+
 }

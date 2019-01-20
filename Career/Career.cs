@@ -50,6 +50,93 @@ public class Career {
       return text;
     }
 
+    public void ExecuteNode(int id){
+      CareerNode node = CareerNode.GetNode(id, careerNodes);
+      if(node == null){
+        GD.Print("Can't execute null node id " + id);
+        return;
+      }
+
+      stats.SetBaseStat(StatsManager.Stats.LastNode, stats.GetStat(StatsManager.Stats.CurrentNode));
+      stats.SetBaseStat(StatsManager.Stats.CurrentNode, id);
+      stats.SetBaseStat(StatsManager.Stats.NodeInProgress, 1);
+      CareerDb.SaveCareer(this);
+
+      switch(node.nodeType){
+        case CareerNode.NodeTypes.None:
+          GD.Print("NullEncounter");
+          CompleteEncounter();
+          break;
+        case CareerNode.NodeTypes.ArenaMatch:
+          ArenaMatchEncounter();
+          break;
+        case CareerNode.NodeTypes.BossMatch:
+          BossMatchEncounter();
+          break;
+        case CareerNode.NodeTypes.FinalBoss:
+          FinalBossEncounter();
+          break;
+        case CareerNode.NodeTypes.Shop:
+          ShopEncounter();
+          break;
+        case CareerNode.NodeTypes.RestSite:
+          RestSiteEncounter();
+          break;
+        case CareerNode.NodeTypes.PressEvent:
+          PressEventEncounter();
+          break;
+      }
+    }
+
+    public void ArenaMatchEncounter(string info = ""){
+      GD.Print("ArenaMatchEncounter");
+      CompleteEncounter();
+    }
+
+    public void BossMatchEncounter(string info = ""){
+      GD.Print("BossMatchEncounter");
+      CompleteEncounter();
+    }
+
+    public void FinalBossEncounter(string info = ""){
+      GD.Print("FinalBossEncounter");
+      CompleteEncounter();
+    }
+
+    public void ShopEncounter(string info = ""){
+      GD.Print("ShopEncounter");
+      CompleteEncounter();
+    }
+
+    public void RestSiteEncounter(string info = ""){
+      GD.Print("RestSiteEncounter");
+      CompleteEncounter();
+    }
+
+    public void PressEventEncounter(string info = ""){
+      GD.Print("PressEventEncounter");
+      CompleteEncounter();
+    }
+
+    public void CompleteEncounter(){
+      int id = stats.GetStat(StatsManager.Stats.CurrentNode);
+      CareerNode node = CareerNode.GetNode(id, careerNodes);
+      int nodeLevel = CareerNode.GetLevel(node, careerNodes);
+      int nextLevel = nodeLevel -1;
+      stats.SetBaseStat(StatsManager.Stats.CurrentLevel, nextLevel);
+      stats.SetBaseStat(StatsManager.Stats.LastNode, id);
+      stats.SetBaseStat(StatsManager.Stats.CurrentNode, 0);
+      stats.SetBaseStat(StatsManager.Stats.NodeInProgress, 0);
+      
+      CareerDb.SaveCareer(this);
+
+      Session.ChangeMenu(Menu.Menus.Career);
+    }
+
+    public void LoseEncounter(){
+      GD.Print("Game over, dude!");
+    }
+
     public static Career Factory(StatsManager.Archetypes archetype){
       Career ret = new Career();
       ret.careerNodes = GenerateCareerTree();
@@ -78,7 +165,7 @@ public class Career {
       
       ret.Add(CareerNode.FromRow(new string[] {"4", "1", "6", "-1", "-1"}));
       ret.Add(CareerNode.FromRow(new string[] {"5", "1", "6", "-1", "-1"}));
-      ret.Add(CareerNode.FromRow(new string[] {"6", "1", "-1", "-1", "-1"}));
+      ret.Add(CareerNode.FromRow(new string[] {"6", "6", "-1", "-1", "-1"}));
 
       return ret;
     }

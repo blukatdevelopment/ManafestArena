@@ -12,6 +12,7 @@ public class CSV {
 
   public static System.Collections.Generic.Dictionary<int, string[]> ReadRows(string filePath, bool skipValidation = false){
     if(!System.IO.File.Exists(filePath)){
+      GD.Print("No such file: " + filePath);
       return null;
     }
 
@@ -23,19 +24,6 @@ public class CSV {
       return ret;
     }
     return null;
-  }
-
-  public static System.Collections.Generic.Dictionary<int, string[]> ReadRowsIgnoreHeader(string filePath,bool skipValidation = false){
-    System.Collections.Generic.Dictionary<int, string[]> ret = ReadRows(filePath, skipValidation);
-    if(ret == null){
-      return null;
-    }
-
-    if(ret.ContainsKey(0)){
-      ret.Remove(0);
-    }
-
-    return ret;
   }
 
   public static bool ValidateRows(System.Collections.Generic.Dictionary<int, string[]> rows){
@@ -50,7 +38,7 @@ public class CSV {
       return false;
     }
 
-    GD.Print("Found  " + rows.Count + " rows");
+    //GD.Print("Found  " + rows.Count + " rows");
 
     int columnCount = -1;
     foreach(int key in rows.Keys){
@@ -59,7 +47,7 @@ public class CSV {
         output += rows[key][i] + ",";
       }
       output += "\n";
-      GD.Print(output);
+      //GD.Print(output);
 
       if(columnCount == -1){
         columnCount = rows[key].Length;

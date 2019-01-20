@@ -48,8 +48,10 @@ public class StatsManager {
 
         // GameState
         LastEncounter,
+        CurrentNode,
         CurrentLevel,
-        LastNode
+        LastNode,
+        NodeInProgress
     };
 
     public enum Abilities{

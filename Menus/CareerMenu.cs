@@ -10,6 +10,12 @@ public class CareerMenu : Container, IMenu {
 
 
   public void Init(float minX, float minY, float maxX, float maxY){
+    int inProgress = Session.session.career.stats.GetBaseStat(StatsManager.Stats.NodeInProgress);
+    if(inProgress == 1){
+      GD.Print("Node in progress");
+      int currentNode = Session.session.career.stats.GetBaseStat(StatsManager.Stats.CurrentNode);
+      Session.session.career.ExecuteNode(currentNode);
+    }
     InitControls();
     ScaleControls();
   }
@@ -60,10 +66,15 @@ public class CareerMenu : Container, IMenu {
 
   void ExecuteNode(int id){
     GD.Print("Executing node " + id + ".");
+    Session.session.career.ExecuteNode(id);
+    return;
+
     Career career = Session.session.career;
     CareerNode node = CareerNode.GetNode(id, career.careerNodes);
     int nodeLevel = CareerNode.GetLevel(node, career.careerNodes);
     int nextLevel = nodeLevel -1;
+
+
 
     if(nodeLevel == 0){
       GD.Print("Final boss time!");
@@ -72,9 +83,6 @@ public class CareerMenu : Container, IMenu {
     else{
       GD.Print("Changing current level to " + nextLevel);
     }
-
-    career.stats.SetBaseStat(StatsManager.Stats.CurrentLevel, nextLevel);
-    career.stats.SetBaseStat(StatsManager.Stats.LastNode, id);
     ScaleControls();
   }
 
