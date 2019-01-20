@@ -103,7 +103,7 @@ public class CareerMenu : Container, IMenu {
     int lastNode = career.stats.GetStat(StatsManager.Stats.LastNode);
 
     for(int i = 0; i < levelNodes.Length; i++){
-      bool active = true;
+      bool active = CareerNode.NodeIsActive(levelNodes[i], nodes, currentLevel, lastNode);
       ScaleNodeButton(levelNodes[i].nodeId, level, i, levelNodes.Length, active);
     }
   }
