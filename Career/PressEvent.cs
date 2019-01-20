@@ -15,6 +15,21 @@ public class PressEvent {
         pressEventNodes = new List<PressEventNode>();
     }
 
+    public string ToString(){
+      string ret = "";
+      
+      foreach(PressEventNode node in pressEventNodes){
+        if(node != null){
+          ret += node.ToString() + "\n";
+        }
+        else{
+          GD.Print("Node is null");
+        }
+      }
+
+      return ret;
+    }
+
     public PressEvent(List<string[]> rows){
         pressEventNodes = new List<PressEventNode>();
         

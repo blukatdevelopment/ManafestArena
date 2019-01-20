@@ -7,16 +7,34 @@ using System.Collections.Generic;
 
 public class PressEventNode {
 
-    int nodeId;
-    string prompt;
-    string optText1, optText2, optText3, optText4; // Option copy
-    int optDest1, optDest2, optDest3, optDest4; // destination node
-    string outcome1, outcome2, outcome3, outcome4; // Side effects of option
+    public int nodeId;
+    public string prompt;
+
+    // Options data
+    public string[] optText; // Option copy
+    public int[] optDest; // option destinations
+    public string[] sideEffects; // Side effects of option
+    
     const int Blank = -1; // Null destination
     const int End = -2; // This option should end the PressEvent
-    const int RowLength = 15; // How many columns are needed to store this.
+    const int RowLength = 14; // How many columns are needed to store a node
 
-    public PressEventNode(){}
+    public PressEventNode(){
+      optText = new string[4];
+      optDest = new int[4];
+      sideEffects = new string[4];
+    }
+
+    public string ToString(){
+      string ret = "";
+
+      ret += "Node[" + nodeId + "]: " + prompt + "\n";
+      for(int i = 0; i < 4; i++){
+        ret += "\t[" + i + "]: \"" + optText[i] + "\", ";
+        ret += optDest[i] + "," + sideEffects[i] + "\n";
+      }
+      return ret;
+    }
 
     public static PressEventNode GetNode(int nodeId, List<PressEventNode> nodes){
         foreach(PressEventNode node in nodes){
@@ -36,18 +54,18 @@ public class PressEventNode {
         PressEventNode ret = new PressEventNode();
         ret.nodeId = Util.ToInt(row[0]);
         ret.prompt = row[1];
-        ret.optText1 = row[2];
-        ret.optText2 = row[3];
-        ret.optText3 = row[4];
-        ret.optText4 = row[5];
-        ret.optDest1 = Util.ToInt(row[6]);
-        ret.optDest2 = Util.ToInt(row[7]);
-        ret.optDest3 = Util.ToInt(row[8]);
-        ret.optDest4 = Util.ToInt(row[9]);
-        ret.outcome1 = row[10];
-        ret.outcome2 = row[11];
-        ret.outcome3 = row[12];
-        ret.outcome4 = row[13];
+        ret.optText[0] = row[2];
+        ret.optText[1] = row[3];
+        ret.optText[2] = row[4];
+        ret.optText[3] = row[5];
+        ret.optDest[0] = Util.ToInt(row[6]);
+        ret.optDest[1] = Util.ToInt(row[7]);
+        ret.optDest[2] = Util.ToInt(row[8]);
+        ret.optDest[3] = Util.ToInt(row[9]);
+        ret.sideEffects[0] = row[10];
+        ret.sideEffects[1] = row[11];
+        ret.sideEffects[2] = row[12];
+        ret.sideEffects[3] = row[13];
 
         return ret;
     }
