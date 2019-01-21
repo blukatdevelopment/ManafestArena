@@ -123,12 +123,6 @@ public class CareerMenu : Container, IMenu {
     float wu = width/10; // relative height and width units
     float hu = height/10;
 
-    if(active){
-      GD.Print("Node " + node + " is available");
-    }
-    else{
-
-    }
     if(!careerButtons.ContainsKey(node)){
       GD.Print("Node " + node + " has no button.");
       return;
@@ -153,6 +147,8 @@ public class CareerMenu : Container, IMenu {
 
     Button nodeButton = careerButtons[node];
     Menu.ScaleControl(nodeButton, xSize, ySize, xPos, yPos);
+    nodeButton.Disabled = !active;
+
     //GD.Print("Scaled node " + node + " at level " + level + ", active:" + active + " [" + xPos + "," + yPos + "]");
   }
 
