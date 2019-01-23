@@ -8,6 +8,7 @@ using System.Collections.Generic;
 public class CareerNode {
     public int nodeId;
     public int child1, child2, child3; // -1 if null
+    public string extraInfo; // Extra data
     public enum NodeTypes{
         None,
         ArenaMatch,
@@ -48,18 +49,19 @@ public class CareerNode {
     public string[] ToRow(){
         int category = (int)nodeType;
 
-        string[] ret = new string[5];
+        string[] ret = new string[6];
         ret[0] = "" + nodeId;
         ret[1] = "" + category;
         ret[2] = "" + child1;
         ret[3] = "" + child2;
         ret[4] = "" + child3;
+        ret[5] = "" + extraInfo;
 
         return ret;
     }
 
     public static CareerNode FromRow(string[] row){
-        if(row.Length != 5){
+        if(row.Length != 6){
             GD.Print("CareerNode.FromRow invalid row length: " + row.Length);
             return null;
         }
@@ -73,6 +75,7 @@ public class CareerNode {
         ret.child1 = Util.ToInt(row[2]);
         ret.child2 = Util.ToInt(row[3]);
         ret.child3 = Util.ToInt(row[4]);
+        ret.extraInfo = row[5];
 
         return ret;
     }

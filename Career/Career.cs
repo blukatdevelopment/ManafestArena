@@ -164,13 +164,13 @@ public class Career {
     public static List<CareerNode> GenerateCareerTree(){
       List<CareerNode> ret = new List<CareerNode>();
 
-      ret.Add(CareerNode.FromRow(new string[] {"1", "1", "2", "-1", "3"}));
-      ret.Add(CareerNode.FromRow(new string[] {"2", "1", "4", "-1", "-1"}));
-      ret.Add(CareerNode.FromRow(new string[] {"3", "1", "5", "-1", "-1"}));
+      ret.Add(CareerNode.FromRow(new string[] {"1", "1", "2", "-1", "3", ""}));
+      ret.Add(CareerNode.FromRow(new string[] {"2", "1", "4", "-1", "-1", ""}));
+      ret.Add(CareerNode.FromRow(new string[] {"3", "1", "5", "-1", "-1", ""}));
       
-      ret.Add(CareerNode.FromRow(new string[] {"4", "1", "6", "-1", "-1"}));
-      ret.Add(CareerNode.FromRow(new string[] {"5", "1", "6", "-1", "-1"}));
-      ret.Add(CareerNode.FromRow(new string[] {"6", "6", "-1", "-1", "-1"}));
+      ret.Add(CareerNode.FromRow(new string[] {"4", "1", "6", "-1", "-1", ""}));
+      ret.Add(CareerNode.FromRow(new string[] {"5", "1", "6", "-1", "-1", ""}));
+      ret.Add(CareerNode.FromRow(new string[] {"6", "6", "-1", "-1", "-1", "PressEvents/Test.csv"}));
 
       return ret;
     }
