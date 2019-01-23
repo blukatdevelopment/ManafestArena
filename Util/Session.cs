@@ -12,7 +12,7 @@ using System.Text;
 
 public class Session : Node {
   public static Session session;
-  private Node activeMenu;
+  public Node activeMenu;
   public Arena arena;
   public Career career;
   public NetworkSession netSes;
@@ -188,16 +188,24 @@ public class Session : Node {
       IMenu menuInstance = ses.activeMenu as IMenu;
       
       if(menuInstance != null){
+        //GD.Print("menuInstance.Clear()");
         menuInstance.Clear();
       }
       else{
+        //GD.Print("ChangeMenu.QueueFree ses.activeMenu");
         ses.activeMenu.QueueFree();
       }
       
       ses.activeMenu = null;
     }
+    else{
+      GD.Print("ChangeMenu: ses.activeMenu already null");
+    }
 
     ses.activeMenu = Menu.MenuFactory(menu);
+    if(ses.activeMenu == null){
+      GD.Print("Session.ChangeMenu: menu null for " + menu);
+    }
   }
   
   private void EnforceSingleton(){

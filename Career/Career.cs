@@ -9,6 +9,7 @@ public class Career {
     public List<CareerNode> careerNodes, leaves;
     public CareerNode root;
     public StatsManager stats;
+    public PressEvent pressEvent;
 
     public Career(){
       careerNodes = new List<CareerNode>();
@@ -115,7 +116,11 @@ public class Career {
 
     public void PressEventEncounter(string info = ""){
       GD.Print("PressEventEncounter");
-      CompleteEncounter();
+      if(Session.session.activeMenu == null){
+        GD.Print("active menu is null");
+      }
+      
+      Session.ChangeMenu(Menu.Menus.PressEvent);
     }
 
     public void CompleteEncounter(){

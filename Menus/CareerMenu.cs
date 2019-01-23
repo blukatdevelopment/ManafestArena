@@ -15,6 +15,7 @@ public class CareerMenu : Container, IMenu {
       GD.Print("Node in progress");
       int currentNode = Session.session.career.stats.GetBaseStat(StatsManager.Stats.CurrentNode);
       Session.session.career.ExecuteNode(currentNode);
+      Clear();
     }
     InitControls();
     ScaleControls();
@@ -29,6 +30,7 @@ public class CareerMenu : Container, IMenu {
   }
 
   public void Clear(){
+    GD.Print("CareerMenu.Clear");
     this.QueueFree();
   }
 
@@ -148,8 +150,6 @@ public class CareerMenu : Container, IMenu {
     Button nodeButton = careerButtons[node];
     Menu.ScaleControl(nodeButton, xSize, ySize, xPos, yPos);
     nodeButton.Disabled = !active;
-
-    //GD.Print("Scaled node " + node + " at level " + level + ", active:" + active + " [" + xPos + "," + yPos + "]");
   }
 
   public void ReturnToMainMenu(){

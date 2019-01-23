@@ -11,7 +11,8 @@ public class Menu{
     HUD, 
     Inventory,
     Career,
-    NewGame
+    NewGame,
+    PressEvent
   };
 
   public enum SubMenus{
@@ -86,6 +87,10 @@ public class Menu{
         ret = new NewGameMenu();
         ret.Name = "NewGame";
         break;
+      case Menus.PressEvent:
+        ret = new PressEventMenu();
+        ret.Name = "PressEvent";
+        break;
     }
     
     Session.session.AddChild(ret);
@@ -94,7 +99,9 @@ public class Menu{
     if(menuInstance != null){
       menuInstance.Init(0, 0, 0, 0); // Assuiming these are not subMenus
     }
-    
+    if(ret == null){
+      GD.Print("Menu.MenuFactory returning null for " + menu);
+    }
     return ret;
   }
 
