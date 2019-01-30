@@ -15,6 +15,32 @@ public class PressEvent {
         pressEventNodes = new List<PressEventNode>();
     }
 
+    // Returns true when tree is done.
+    public bool SelectOption(int option){
+      if(currentNode == null){
+        GD.Print("PressEvent.SelectOption: No currentNode loaded.");
+        return false;
+      }
+      int destinationId = currentNode.optDest[option];
+      PressEventNode destinationNode = PressEventNode.GetNode(destinationId, pressEventNodes);
+
+      if(destinationId == -2){
+        GD.Print("PressEvent.SelectOption: End of dialogue tree.");
+        return true;
+      }
+      else if (destinationId == -1){
+        GD.Print("PressEvent.SelectOption: Option " + option + "'s dest is null. How did you even select it?");
+      }
+      else if(destinationNode == null){
+        GD.Print("PressEvent.SelectOption: Option " + option + "'s destination " + destinationId + " is invalid.");
+      }
+      else{
+        currentNode = destinationNode;
+      }
+
+      return false;
+    }
+
     public string ToString(){
       string ret = "";
       

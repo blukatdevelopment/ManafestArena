@@ -84,7 +84,7 @@ public class Career {
           RestSiteEncounter();
           break;
         case CareerNode.NodeTypes.PressEvent:
-          PressEventEncounter();
+          PressEventEncounter(node.extraInfo);
           break;
       }
     }
@@ -115,10 +115,11 @@ public class Career {
     }
 
     public void PressEventEncounter(string info = ""){
-      GD.Print("PressEventEncounter");
+      GD.Print("PressEventEncounter -info " + info);
       if(Session.session.activeMenu == null){
         GD.Print("active menu is null");
       }
+      pressEvent = CareerDb.LoadPressEvent(info);
       
       Session.ChangeMenu(Menu.Menus.PressEvent);
     }
@@ -170,7 +171,7 @@ public class Career {
       
       ret.Add(CareerNode.FromRow(new string[] {"4", "1", "6", "-1", "-1", ""}));
       ret.Add(CareerNode.FromRow(new string[] {"5", "1", "6", "-1", "-1", ""}));
-      ret.Add(CareerNode.FromRow(new string[] {"6", "6", "-1", "-1", "-1", "PressEvents/Test.csv"}));
+      ret.Add(CareerNode.FromRow(new string[] {"6", "6", "-1", "-1", "-1", "PressEvents/test.csv"}));
 
       return ret;
     }
