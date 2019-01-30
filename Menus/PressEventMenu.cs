@@ -89,6 +89,7 @@ public class PressEventMenu : Container, IMenu {
     int currentNode = stats.GetStat(StatsManager.Stats.CurrentNode);
     stats.SetBaseStat(StatsManager.Stats.LastNode, currentNode);
 
+    Career.Save();
   }
 
   public void TearDownControls(){

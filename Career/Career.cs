@@ -183,4 +183,8 @@ public class Career {
         CareerDb.SaveCareer(career);
     }
 
+    public static void Save(){
+      CareerDb.SaveCareer(Session.session.career);
+    }
+
 }
