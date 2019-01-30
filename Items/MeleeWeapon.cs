@@ -79,6 +79,10 @@ public class MeleeWeapon : Item, IWeapon {
   void GiveDamage(IReceiveDamage receiver){
     Damage damage = new Damage();
     damage.health = HealthDamage;
+    Node wielderNode = wielder as Node;
+    if(wielderNode != null){
+      damage.sender = wielderNode.GetPath();
+    }
     receiver.ReceiveDamage(damage);
   }
   

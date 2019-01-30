@@ -172,14 +172,14 @@ public class Session : Node {
     Session.ClearGame();
   }
   
-  public static void LocalArena(){
-    ChangeMenu(Menu.Menus.None);
+  public static void LocalArena(string terrainFile = "res://Scenes/Prefabs/Terrain.tscn"){
+    //ChangeMenu(Menu.Menus.None);
     ChangeMenu(Menu.Menus.HUD);
     Session ses = Session.session;
     Node arenaNode = Arena.ArenaFactory();
     ses.arena = (Arena)arenaNode;
     ses.AddChild(arenaNode);
-    ses.arena.Init(true);
+    ses.arena.Init(true, terrainFile);
   }
 
   public static void ChangeMenu(Menu.Menus menu){
@@ -188,21 +188,29 @@ public class Session : Node {
       IMenu menuInstance = ses.activeMenu as IMenu;
       
       if(menuInstance != null){
-        //GD.Print("menuInstance.Clear()");
+        GD.Print("menuInstance.Clear() " + menu);
         menuInstance.Clear();
       }
       else{
-        //GD.Print("ChangeMenu.QueueFree ses.activeMenu");
+        GD.Print("ChangeMenu.QueueFree ses.activeMenu" + menu);
         ses.activeMenu.QueueFree();
       }
       
       ses.activeMenu = null;
     }
     else{
-      GD.Print("ChangeMenu: ses.activeMenu already null");
+      GD.Print("ChangeMenu: ses.activeMenu already null when setting " + menu);
     }
 
-    ses.activeMenu = Menu.MenuFactory(menu);
+    Node createdMenu = Menu.MenuFactory(menu);
+    if(ses.activeMenu != null){
+      GD.Print("Menu Changed menu in its Init().");
+      return;
+    }
+    else{
+      ses.activeMenu = createdMenu;
+    }
+
     if(ses.activeMenu == null){
       GD.Print("Session.ChangeMenu: menu null for " + menu);
     }

@@ -59,9 +59,9 @@ public class Menu{
         Sound.PauseSong();
         return null; 
         break;
-      case Menus.HUD: 
+      case Menus.HUD:
         ret = new HUDMenu(); 
-        ret.Name = "Pause";
+        ret.Name = "HUD";
         break;
       case Menus.Pause: 
         ret = new PauseMenu();

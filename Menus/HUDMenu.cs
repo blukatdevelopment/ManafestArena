@@ -30,6 +30,7 @@ public class HUDMenu : Container, IMenu{
   }
 
   public void Clear(){
+    GD.Print("HUDMenu.clear()");
     this.QueueFree();
   }
 

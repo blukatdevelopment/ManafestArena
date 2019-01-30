@@ -69,7 +69,7 @@ public class Career {
           CompleteEncounter();
           break;
         case CareerNode.NodeTypes.ArenaMatch:
-          ArenaMatchEncounter();
+          ArenaMatchEncounter(node.extraInfo);
           break;
         case CareerNode.NodeTypes.BossMatch:
           BossMatchEncounter();
@@ -90,8 +90,17 @@ public class Career {
     }
 
     public void ArenaMatchEncounter(string info = ""){
-      GD.Print("ArenaMatchEncounter");
-      CompleteEncounter();
+      GD.Print("ArenaMatchEncounter: " + info);
+      ArenaSettings settings = new ArenaSettings();
+      settings.useKits = false;
+      settings.usePowerups = false;
+      settings.duration = 100;
+      settings.bots = 1;
+
+      Session.session.arenaSettings = settings;
+
+      Session.LocalArena();
+      //CompleteEncounter();
     }
 
     public void BossMatchEncounter(string info = ""){
@@ -165,7 +174,7 @@ public class Career {
     public static List<CareerNode> GenerateCareerTree(){
       List<CareerNode> ret = new List<CareerNode>();
 
-      ret.Add(CareerNode.FromRow(new string[] {"1", "1", "2", "-1", "3", ""}));
+      ret.Add(CareerNode.FromRow(new string[] {"1", "1", "2", "-1", "3", "first"}));
       ret.Add(CareerNode.FromRow(new string[] {"2", "1", "4", "-1", "-1", ""}));
       ret.Add(CareerNode.FromRow(new string[] {"3", "1", "5", "-1", "-1", ""}));
       

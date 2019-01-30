@@ -22,10 +22,9 @@ public class Arena : Spatial {
   public bool scorePresented = false;
   public System.Collections.Generic.Dictionary<int, int> scores;
   public int playerWorldId = -1;
-
   int playersReady = 0;
 
-  public void Init(bool local){
+  public void Init(bool local, string terrainFile){
     settings = Session.session.arenaSettings;
     
     if(settings == null){
@@ -37,7 +36,7 @@ public class Arena : Spatial {
     actors = new List<Actor>();
     scores = new System.Collections.Generic.Dictionary<int, int>();
 
-    InitTerrain();
+    InitTerrain(terrainFile);
     InitSpawnPoints();
     LocalInit();
   }
@@ -86,9 +85,16 @@ public class Arena : Spatial {
 
     string ret = "Arena\n";
     
-    string timeText = TimeFormat( (int)roundTimeRemaining);
-    ret += "Time: " + timeText + "\n";
     ret += "Score: " + scores[playerWorldId];
+    
+    int remaining = settings.bots - scores[playerWorldId];
+
+    if(remaining == 1){
+      ret += "\n" + remaining + " enemies left.";  
+    }
+    else{
+      ret += "\n" + remaining + " enemy left.";
+    }
     
     return ret;
   }
@@ -144,7 +150,7 @@ public class Arena : Spatial {
 
     roundTimeRemaining = settings.duration * 60;
 
-    roundTimerActive = true;
+    roundTimerActive = false;
   }
 
   public Actor InitActor(Actor.Brains brain, int id){
@@ -159,8 +165,8 @@ public class Arena : Spatial {
     return null;
   }
 
-  public void InitTerrain(){
-    PackedScene ps = (PackedScene)GD.Load("res://Scenes/Prefabs/Terrain.tscn");
+  public void InitTerrain(string terrainFile){
+    PackedScene ps = (PackedScene)GD.Load(terrainFile);
     Node instance = ps.Instance();
     AddChild(instance);
     terrain = (Spatial)instance;
@@ -176,31 +182,47 @@ public class Arena : Spatial {
   }
 
   public void HandleActorDead(SessionEvent sessionEvent){
-    string[] actors = sessionEvent.args;  
+    string[] actorPaths = sessionEvent.args;  
     
-    if(actors == null || actors.Length == 0 || actors[0] == ""){
+    if(actorPaths == null || actorPaths.Length == 0 || actorPaths[0] == ""){
       return;
     }
 
-    Node actorNode = GetNode(new NodePath(actors[0]));
+    Node actorNode = GetNode(new NodePath(actorPaths[0]));
     Actor actor = actorNode as Actor;
     Actor.Brains brain = actor.brainType;
-    
-    int id = actor.id;
+    ClearActor(actor);
 
-    actorNode.Name = "Deadplayer" + id;
-    actor.QueueFree();
-    actor = SpawnActor(brain, id);
-    
     if(actor.brainType == Actor.Brains.Player1){
-      Session.ChangeMenu(Menu.Menus.HUD);
+      SetPause(true);
+      Session.ClearGame();
+      Session.ChangeMenu(Menu.Menus.Main);
     }
     
-    if(actors.Length < 2 || actors[1] == ""){
+    AwardPoints(actorPaths);
+    if(actors.Count == 1){
+      Session.session.career.CompleteEncounter();
+      Session.ClearGame();
+    }
+  }
+
+  public void ClearActor(Actor actor){
+    if(actor == null){
+      return;
+    }
+    int id = actor.id;
+
+    actor.QueueFree();
+    actors.Remove(actor);
+  }
+
+  public void AwardPoints(string[] actorPaths){
+    if(actorPaths.Length < 2 || actorPaths[1] == ""){
+     GD.Print("No killer specified");
      return; 
     }
 
-    Node killerNode = GetNode(new NodePath(actors[1]));
+    Node killerNode = GetNode(new NodePath(actorPaths[1]));
     Actor killer = killerNode as Actor;
 
     if(killer != null){

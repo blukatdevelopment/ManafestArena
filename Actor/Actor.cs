@@ -193,6 +193,9 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     Point at end of ray in looking direction.
   */
   public Vector3 Pointer(float distance = 100f){
+    if(IsPaused()){
+      return new Vector3();
+    }
     Vector3 start = GlobalHeadPosition();
     Transform headTrans = GlobalHeadTransform();
     Vector3 end = Util.TForward(headTrans);
@@ -202,6 +205,9 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
   }
 
   public object VisibleObject(){
+    if(IsPaused()){
+      return null;
+    }
     Vector3 start = GlobalHeadPosition();
     Vector3 end = Pointer();
     World world = GetWorld();
@@ -804,13 +810,25 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
   }
 
   public void TogglePause(){
-    ActorInputHandler inputHandler = brain as ActorInputHandler;
-    if(inputHandler == null){
+    SetPaused(!menuActive);
+  }
+
+  public void Pause(){
+    SetPaused(true);
+  }
+
+  public void Unpause(){
+    SetPaused(false);
+  }
+
+  public void SetPaused(bool val){
+    paused = val;
+
+    if(brain as ActorInputHandler == null){
       return;
     }
-    
-    menuActive = !menuActive;
-    
+
+    menuActive = val;
     if(menuActive){
       Session.ChangeMenu(Menu.Menus.Pause);
       Input.SetMouseMode(Input.MouseMode.Visible);
@@ -819,14 +837,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
       Session.ChangeMenu(Menu.Menus.HUD);
       Input.SetMouseMode(Input.MouseMode.Captured);
     }
-  }
 
-  public void Pause(){
-    paused = true;
-  }
-
-  public void Unpause(){
-    paused = false;
   }
   
   public static Actor Factory(ActorData data){
