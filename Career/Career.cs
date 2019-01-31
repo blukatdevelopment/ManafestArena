@@ -148,9 +148,12 @@ public class Career {
       Session.ChangeMenu(Menu.Menus.Career);
     }
 
-    public void LoseEncounter(){
-      GD.Print("Game over, dude!");
+    public void FailEncounter(){
+      Session.ClearGame();
+      
+      Session.ChangeMenu(Menu.Menus.Main);
     }
+
 
     public static Career Factory(StatsManager.Archetypes archetype){
       Career ret = new Career();

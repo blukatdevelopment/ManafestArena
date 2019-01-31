@@ -19,10 +19,16 @@ public class InputEvent {
     One, Two, Three, Four, Five, Six, Seven, Eight, Nine, Zero,
     // Mouse buttons
     M1, M2, M3,
-    MUp, MDown // Mouse Scroll wheel
+    MUp, MDown, // Mouse Scroll wheel
+
+    // N64
+    Start,
+    CUp, CDown, CRight, CLeft,
+    DUp, DDown, DRight, DLeft
+
   };
   public enum Actions {None, Up, Down};
-  public enum Axes {None, Mouse };
+  public enum Axes {None, Mouse, Left, Right};
   public Buttons button;
   public Actions action;
   public Axes axis;

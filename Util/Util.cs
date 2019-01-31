@@ -300,4 +300,15 @@ public class Util{
   public static Vector2 GetMousePosition(Spatial spat){
     return spat.GetViewport().GetMousePosition();
   }
+
+  public static List<System.Object> ArrayToList(Godot.Array array){
+    List<System.Object> ret = new List<System.Object>();
+    while(array.Count > 0){
+      ret.Add(array[0]);
+      array.RemoveAt(0);
+    }
+    return ret;
+  }
+
+
 }

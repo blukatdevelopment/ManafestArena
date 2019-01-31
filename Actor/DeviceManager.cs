@@ -8,36 +8,56 @@ using System;
 using System.Collections.Generic;
 
 public class DeviceManager {
-  public enum Devices{MouseAndKeyboard};
+  public enum Devices{MouseAndKeyboard, N64};
   private Devices device;
+  private int joyId;
   private bool mouseActive;
   private Spatial eyes;
   private float sensitivityX = 0.2f;
   private float sensitivityY = 0.2f;
+
   
   List<bool> buttonsDown; // Store button states to check for changes.
   Vector2 mouseCur, mouseLast;
   
-  public DeviceManager(Devices device, Spatial eyes = null){
+  public DeviceManager(Devices device, Spatial eyes = null, int joyId = -1){
     this.device = device;
     buttonsDown = new List<bool>();
     mouseActive = false;
+    int buttonCount = 0;
+    this.joyId = joyId;
+
     switch(device){
       case Devices.MouseAndKeyboard:
         Input.SetMouseMode(Input.MouseMode.Captured);
         mouseActive = true;
-        int buttonCount = 70;
-        for(int i = 0; i < buttonCount; i++){ buttonsDown.Add(false); }
-      break;  
+        buttonCount = 70;
+        break;
+      
+      case Devices.N64:
+        mouseActive = false;
+        buttonCount = 14;
+        break;
     }
+
+    for(int i = 0; i < buttonCount; i++){ 
+      buttonsDown.Add(false); 
+    }
+
     this.eyes = eyes;
   }
   
   public List<InputEvent> GetInputEvents(){
     switch(device){
-      case Devices.MouseAndKeyboard: return KeyboardEvents(); break;
+      case Devices.MouseAndKeyboard: 
+        return KeyboardEvents(); 
+        break;
+      case Devices.N64:
+        return N64Events();
+        break;
+
     }
-    return new List<InputEvent>();  
+    return new List<InputEvent>();
   }
   
   private InputEvent Down(InputEvent.Buttons button){
@@ -68,6 +88,48 @@ public class DeviceManager {
     
     return ret;
   }
+
+  private List<InputEvent> ButtonEvents(int buttonId, int buttonIndex, InputEvent.Buttons button){
+
+    List<InputEvent> ret = new List<InputEvent>();
+    
+    bool press = Input.IsJoyButtonPressed(joyId, buttonId);
+    
+    if(press && !buttonsDown[buttonIndex]){ 
+      ret.Add(Down(button));
+      buttonsDown[buttonIndex] = true;
+    }
+    else if(!press && buttonsDown[buttonIndex]){ 
+      ret.Add(Up(button));
+      buttonsDown[buttonIndex] = false;
+    }
+    
+    return ret;
+
+  }
+
+  private List<InputEvent> N64Events(){
+    List<InputEvent> ret = new List<InputEvent>();
+
+    ret.AddRange(ButtonEvents(6, 0, InputEvent.Buttons.A));
+    ret.AddRange(ButtonEvents(10, 1, InputEvent.Buttons.B));
+    ret.AddRange(ButtonEvents(3, 2, InputEvent.Buttons.CUp));
+    ret.AddRange(ButtonEvents(1, 3, InputEvent.Buttons.CRight));
+    ret.AddRange(ButtonEvents(0, 4, InputEvent.Buttons.CDown));
+    ret.AddRange(ButtonEvents(2, 5, InputEvent.Buttons.CLeft));
+    ret.AddRange(ButtonEvents(11, 6, InputEvent.Buttons.Start));
+    ret.AddRange(ButtonEvents(5, 7, InputEvent.Buttons.R));
+    ret.AddRange(ButtonEvents(4, 8, InputEvent.Buttons.L));
+    ret.AddRange(ButtonEvents(12, 9, InputEvent.Buttons.DUp));
+    ret.AddRange(ButtonEvents(13, 9, InputEvent.Buttons.DDown));
+    ret.AddRange(ButtonEvents(15, 9, InputEvent.Buttons.DRight));
+    ret.AddRange(ButtonEvents(14, 9, InputEvent.Buttons.DLeft));
+    ret.AddRange(AxisEvents(0, 1, 0.005f, InputEvent.Axes.Left, false, true));
+
+    return ret;    
+  }
+
+
   
   private List<InputEvent> KeyboardEvents(){
     List<InputEvent> ret = new List<InputEvent>();
@@ -116,5 +178,61 @@ public class DeviceManager {
     
     return ret;
   }
-  
+
+  private List<InputEvent> AxisEvents(int axisX, int axisY, float deadZone, InputEvent.Axes axisEnum, bool invertX, bool invertY){
+
+    List<InputEvent> ret = new List<InputEvent>();
+
+    float x = Input.GetJoyAxis(joyId, axisX);
+    if(x < deadZone && x > -deadZone){
+      x = 0f;
+    }
+    if(invertX){
+      x *= -1;
+    }
+    
+    float y = Input.GetJoyAxis(joyId, axisY);
+    if(y < deadZone && y > -deadZone){
+      y = 0f;
+    }
+    if(invertY){
+      y *= -1;
+    }
+
+
+    if(x != 0f || y != 0f){
+      ret.Add(new InputEvent(InputEvent.Axes.Left, x, y));
+    }
+
+    return ret;
+  }
+
+  public static List<int> ConnectedJoypads(){
+    List<System.Object> joypads = Util.ArrayToList(Input.GetConnectedJoypads());
+    List<int> ret = new List<int>();
+    foreach(System.Object obj in joypads){
+      ret.Add((int)obj);
+    }
+    return ret;
+  }
+
+  public static bool JoypadConnected(int joyId){
+    return ConnectedJoypads().Contains(joyId);
+  }
+
+
+  public static void SpamJoyPadInput(int joyPad){
+    for(int i = 0; i < 100; i++){
+      if(Input.IsJoyButtonPressed(joyPad, i)){
+        GD.Print("Button " + i + " pressed.");
+      }
+    }
+    for(int i = 0; i < 10; i++){
+      float axis = Input.GetJoyAxis(joyPad, i);
+      if(axis != 0f){
+        GD.Print("Joy axis " + i + " set to " + axis);
+      }
+    }
+  }
+
 }
