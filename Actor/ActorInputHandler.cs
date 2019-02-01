@@ -16,7 +16,8 @@ public class ActorInputHandler : Brain {
   public ActorInputHandler(Actor actor, Spatial eyes) : base (actor, eyes){
     InitHeld();
     InitEyes(eyes);
-    device = new DeviceManager(DeviceManager.Devices.MouseAndKeyboard, eyes);
+    device = new DeviceManager(DeviceManager.Devices.N64, eyes, 0);
+    GD.Print("Initialized ActorInputHandler with " + device.device);
   }
   
   private void InitEyes(Node eyes){
@@ -76,14 +77,70 @@ public class ActorInputHandler : Brain {
     }
   }
   
+  bool IsN64(){
+    return device.device == DeviceManager.Devices.N64;
+  }
+
+  bool IsKbm(){
+    return device.device == DeviceManager.Devices.MouseAndKeyboard;
+  }
+
+  bool HeldRight(){
+    if(IsKbm() && held.ContainsKey(InputEvent.Buttons.D) && held[InputEvent.Buttons.D]){
+      return true;
+    }
+
+    if(IsN64() && held.ContainsKey(InputEvent.Buttons.DRight) && held[InputEvent.Buttons.DRight]){
+      return true;
+    }
+
+    return false;
+  }
+
+  bool HeldLeft(){
+    if(IsKbm() && held.ContainsKey(InputEvent.Buttons.A) && held[InputEvent.Buttons.A]){
+      return true;
+    }
+
+    if(IsN64() && held.ContainsKey(InputEvent.Buttons.DLeft) && held[InputEvent.Buttons.DLeft]){
+      return true;
+    }
+
+    return false;
+  }
+
+  bool HeldUp(){
+    if(IsKbm() && held.ContainsKey(InputEvent.Buttons.W) && held[InputEvent.Buttons.W]){
+      return true;
+    }
+
+    if(IsN64() && held.ContainsKey(InputEvent.Buttons.DUp) && held[InputEvent.Buttons.DUp]){
+      return true;
+    }
+
+    return false;
+  }
+
+  bool HeldDown(){
+    if(IsKbm() && held.ContainsKey(InputEvent.Buttons.S) && held[InputEvent.Buttons.S]){
+      return true;
+    }
+
+    if(IsN64() && held.ContainsKey(InputEvent.Buttons.DDown) && held[InputEvent.Buttons.DDown]){
+      return true;
+    }
+
+    return false;
+  }
+
   private void HandleMovement(){
     int dx = 0;
     int dz = 0;
     
-    if(held[InputEvent.Buttons.W]){ dz--; }
-    if(held[InputEvent.Buttons.A]){ dx--; }
-    if(held[InputEvent.Buttons.S]){ dz++; }
-    if(held[InputEvent.Buttons.D]){ dx++; }
+    if(HeldUp()){ dz--; }
+    if(HeldLeft()){ dx--; }
+    if(HeldDown()){ dz++; }
+    if(HeldRight()){ dx++; }
 
     if(dx != 0 || dz != 0){
       Vector3 movement = new Vector3(dx, 0, dz);
@@ -94,6 +151,7 @@ public class ActorInputHandler : Brain {
   
   
   private void HandleButton(InputEvent evt){
+    GD.Print("Handling button " + evt.ToString());
     if(evt.action == InputEvent.Actions.Down){
       held[evt.button] = true;
       Press(evt);
@@ -108,6 +166,17 @@ public class ActorInputHandler : Brain {
   }
 
   private void Press(InputEvent evt){    
+    switch(device.device){
+      case DeviceManager.Devices.MouseAndKeyboard:
+        PressKeyboard(evt);
+        break;
+      case DeviceManager.Devices.N64:
+        PressN64(evt);
+        break;
+    }
+  }
+
+  private void PressKeyboard(InputEvent evt){
     switch(evt.button){
       case InputEvent.Buttons.Esc: 
         Session.Event(SessionEvent.PauseEvent());
@@ -123,6 +192,21 @@ public class ActorInputHandler : Brain {
     }
   }
 
+  private void PressN64(InputEvent evt){
+    switch(evt.button){
+      case InputEvent.Buttons.Esc: 
+        Session.Event(SessionEvent.PauseEvent());
+        break;
+      case InputEvent.Buttons.CDown: actor.Jump(); break;
+      case InputEvent.Buttons.L: actor.SetSprint(true); break;
+      case InputEvent.Buttons.Z: actor.Use(Item.Uses.A); break;
+      case InputEvent.Buttons.R: actor.Use(Item.Uses.B); break;
+      case InputEvent.Buttons.CUp: actor.Use(Item.Uses.C); break;
+      case InputEvent.Buttons.B: actor.Use(Item.Uses.D); break;
+      case InputEvent.Buttons.A: actor.InitiateInteraction(); break;
+    }
+  }
+
   private void HandleAxis(InputEvent evt){
     float wx = Session.session.mouseSensitivityX;
     float wy = Session.session.mouseSensitivityY;
@@ -130,7 +214,8 @@ public class ActorInputHandler : Brain {
     if(evt.axis == InputEvent.Axes.Mouse){
       actor.Turn(evt.x * wx, evt.y * wy);
     }
-    
-    actor.Turn(evt.x * wx, evt.y * wy);
+    if(device.device == DeviceManager.Devices.N64 && evt.axis == InputEvent.Axes.Left){
+      actor.Turn(evt.x * -wx, evt.y * wy);  
+    }
   }
 }

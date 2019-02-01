@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 public class DeviceManager {
   public enum Devices{MouseAndKeyboard, N64};
-  private Devices device;
+  public Devices device;
   private int joyId;
   private bool mouseActive;
   private Spatial eyes;
