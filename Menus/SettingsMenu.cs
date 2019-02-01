@@ -90,7 +90,7 @@ public class SettingsMenu : Container, IMenu {
 
       int deviceInt = (int)Session.session.player1Device;
 
-      deviceSlider = Menu.HSlider(0f, 1.0f, (float)deviceInt, 1.0f);
+      deviceSlider = Menu.HSlider(0f, 2.0f, (float)deviceInt, 1.0f);
       AddChild(deviceSlider);
       deviceSlider.Connect("value_changed", this, nameof(UpdateDevice));
     }

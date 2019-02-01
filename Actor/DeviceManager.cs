@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 
 public class DeviceManager {
-  public enum Devices{MouseAndKeyboard, N64};
+  public enum Devices{MouseAndKeyboard, N64, Nes};
   public Devices device;
   private int joyId;
   private bool mouseActive;
@@ -38,6 +38,11 @@ public class DeviceManager {
         mouseActive = false;
         buttonCount = 14;
         break;
+
+      case Devices.Nes:
+        mouseActive = false;
+        buttonCount = 4;
+        break;
     }
 
     for(int i = 0; i < buttonCount; i++){ 
@@ -55,6 +60,9 @@ public class DeviceManager {
       case Devices.N64:
         return N64Events();
         break;
+      case Devices.Nes:
+        return NesEvents();
+        break;
 
     }
     return new List<InputEvent>();
@@ -67,6 +75,9 @@ public class DeviceManager {
         break;
       case Devices.N64:
         return "Retro N64 Controller";
+        break;
+      case Devices.Nes:
+        return "Retro NES Controller";
         break;
     }
     return "None";
@@ -118,6 +129,18 @@ public class DeviceManager {
     
     return ret;
 
+  }
+
+  private List<InputEvent> NesEvents(){
+    List<InputEvent> ret = new List<InputEvent>();
+
+    ret.AddRange(ButtonEvents(1, 0, InputEvent.Buttons.A));
+    ret.AddRange(ButtonEvents(16, 1, InputEvent.Buttons.B));
+    ret.AddRange(ButtonEvents(3, 2, InputEvent.Buttons.Start));
+    ret.AddRange(ButtonEvents(11, 3, InputEvent.Buttons.Select));
+    ret.AddRange(AxisEvents(0, 1, 0.005f, InputEvent.Axes.Left, false, true));
+
+    return ret;    
   }
 
   private List<InputEvent> N64Events(){
@@ -235,7 +258,7 @@ public class DeviceManager {
 
 
   public static void SpamJoyPadInput(int joyPad){
-    for(int i = 0; i < 100; i++){
+    for(int i = 0; i < 200; i++){
       if(Input.IsJoyButtonPressed(joyPad, i)){
         GD.Print("Button " + i + " pressed.");
       }

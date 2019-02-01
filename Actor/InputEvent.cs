@@ -24,7 +24,10 @@ public class InputEvent {
     // N64
     Start,
     CUp, CDown, CRight, CLeft,
-    DUp, DDown, DRight, DLeft
+    DUp, DDown, DRight, DLeft,
+
+    // NES
+    Select
 
   };
   public enum Actions {None, Up, Down};
