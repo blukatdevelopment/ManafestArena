@@ -22,6 +22,8 @@ public class Session : Node {
   public float masterVolume, sfxVolume, musicVolume;
   public string userName;
   public float mouseSensitivityX, mouseSensitivityY;
+  public DeviceManager.Devices player1Device;
+
   public Actor player;
   public enum Gamemodes{
     None,
@@ -55,7 +57,7 @@ public class Session : Node {
   }
 
   public override void _Process(float delta){
-
+    DeviceManager.SpamJoyPadInput(0);
   }
 
   public void PerformTests(){
@@ -70,6 +72,8 @@ public class Session : Node {
     userName = db.SelectSetting("username");
     mouseSensitivityX = Util.ToFloat(db.SelectSetting("mouse_sensitivity_x"));
     mouseSensitivityY = Util.ToFloat(db.SelectSetting("mouse_sensitivity_y"));
+    player1Device = (DeviceManager.Devices)Util.ToInt(db.SelectSetting("player1_device"));
+
     Sound.RefreshVolume();
   }
 
@@ -82,7 +86,8 @@ public class Session : Node {
     db.StoreSetting("mouse_sensitivity_x", "" + Session.session.mouseSensitivityX);
     db.StoreSetting("mouse_sensitivity_y", "" + Session.session.mouseSensitivityY);
     db.StoreSetting("username", Session.session.userName);
-    
+    db.StoreSetting("player1_device", "" + (int)Session.session.player1Device);
+    GD.Print("Saving player device as "  + (int)Session.session.player1Device);
     Sound.RefreshVolume();
   }
   

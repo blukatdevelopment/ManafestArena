@@ -16,6 +16,10 @@ public class SettingsMenu : Container, IMenu {
     public Godot.HSlider mouseYSlider;
     public Godot.TextEdit mouseYLabel;
     public Godot.TextEdit userNameBox;
+    public Godot.TextEdit deviceLabel;
+    public Godot.HSlider deviceSlider;
+
+    public float deviceFloat;
 
     public void Init(float minX, float minY, float maxX, float maxY){
       InitControls();
@@ -63,14 +67,14 @@ public class SettingsMenu : Container, IMenu {
       musicVolumeLabel = (Godot.TextEdit)Menu.TextBox("Music Volume: " + Session.session.musicVolume, false);
       AddChild(musicVolumeLabel);
 
-      mouseXSlider = Menu.HSlider(0f, 1.0f, Session.session.mouseSensitivityX, 0.05f);
+      mouseXSlider = Menu.HSlider(0f, 5.0f, Session.session.mouseSensitivityX, 0.05f);
       AddChild(mouseXSlider);
       mouseXSlider.Connect("value_changed", this, nameof(UpdateMouseX));
       
       mouseXLabel = (Godot.TextEdit)Menu.TextBox("Mouse Sensitivity X: " + Session.session.mouseSensitivityX, false);
       AddChild(mouseXLabel);
 
-      mouseYSlider = Menu.HSlider(0f, 1.0f, Session.session.mouseSensitivityY, 0.05f);
+      mouseYSlider = Menu.HSlider(0f, 5.0f, Session.session.mouseSensitivityY, 0.05f);
       AddChild(mouseYSlider);
       mouseYSlider.Connect("value_changed", this, nameof(UpdateMouseY));
       
@@ -79,6 +83,16 @@ public class SettingsMenu : Container, IMenu {
 
       userNameBox = Menu.TextBox(Session.session.userName, false);
       AddChild(userNameBox);
+
+      string deviceString = DeviceManager.DeviceName(Session.session.player1Device);
+      deviceLabel = (Godot.TextEdit)Menu.TextBox("Device: " + deviceString, false);
+      AddChild(deviceLabel);
+
+      int deviceInt = (int)Session.session.player1Device;
+
+      deviceSlider = Menu.HSlider(0f, 1.0f, (float)deviceInt, 1.0f);
+      AddChild(deviceSlider);
+      deviceSlider.Connect("value_changed", this, nameof(UpdateDevice));
     }
 
     void ScaleControls(){
@@ -102,6 +116,8 @@ public class SettingsMenu : Container, IMenu {
       Menu.ScaleControl(mouseYLabel, 2 * wu, 0.5f * hu, 0, 6 * hu);
       Menu.ScaleControl(mouseYSlider, 2 * wu, 0.5f * hu, 0, 6.5f * hu);
       Menu.ScaleControl(userNameBox, 2 * wu, 0.5f * hu, 0, 7 * hu);
+      Menu.ScaleControl(deviceLabel, 2 * wu, 0.5f * hu, 0, 7.5f * hu);
+      Menu.ScaleControl(deviceSlider, 2 * wu, 0.5f * hu, 0, 8 * hu);
     }
 
     public void MainMenu(){
@@ -133,6 +149,14 @@ public class SettingsMenu : Container, IMenu {
       mouseYLabel.SetText(str);
     }
 
+    public void UpdateDevice(float val){
+      GD.Print("Changed to " + val + ", " + deviceFloat);
+      int valInt = (int)val;
+      DeviceManager.Devices device = (DeviceManager.Devices)valInt;
+      string str = "Device: " + DeviceManager.DeviceName(device);
+      deviceLabel.SetText(str);
+    }
+
     public void SaveSettings(){
       Session.session.masterVolume = masterVolumeSlider.Value;
       Session.session.sfxVolume = sfxVolumeSlider.Value;
@@ -141,6 +165,9 @@ public class SettingsMenu : Container, IMenu {
       Session.session.mouseSensitivityY = mouseYSlider.Value;
       Session.session.userName = userNameBox.GetText();
       
+      int deviceInt = (int)deviceSlider.Value;
+      Session.session.player1Device = (DeviceManager.Devices)deviceInt;
+
       Sound.RefreshVolume();
       Session.SaveSettings();
     }
@@ -151,6 +178,10 @@ public class SettingsMenu : Container, IMenu {
       musicVolumeSlider.Value = Session.session.musicVolume;
       mouseXSlider.Value = Session.session.mouseSensitivityX;
       mouseYSlider.Value = Session.session.mouseSensitivityY;
+
+      int deviceInt = (int)Session.session.player1Device;
+      deviceFloat = (float)deviceInt;
+
       userNameBox.SetText(Session.session.userName);
     }
 }

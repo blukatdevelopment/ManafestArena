@@ -12,11 +12,12 @@ public class ActorInputHandler : Brain {
   private float delta = 1f;
   private float syncTimer = 0f;
   public const float syncRate = 0.05f;
-  
+
+
   public ActorInputHandler(Actor actor, Spatial eyes) : base (actor, eyes){
     InitHeld();
     InitEyes(eyes);
-    device = new DeviceManager(DeviceManager.Devices.N64, eyes, 0);
+    device = new DeviceManager(Session.session.player1Device, eyes, 0);
     GD.Print("Initialized ActorInputHandler with " + device.device);
   }
   
@@ -90,7 +91,7 @@ public class ActorInputHandler : Brain {
       return true;
     }
 
-    if(IsN64() && held.ContainsKey(InputEvent.Buttons.DRight) && held[InputEvent.Buttons.DRight]){
+    if(IsN64() && held.ContainsKey(InputEvent.Buttons.CRight) && held[InputEvent.Buttons.CRight]){
       return true;
     }
 
@@ -102,7 +103,7 @@ public class ActorInputHandler : Brain {
       return true;
     }
 
-    if(IsN64() && held.ContainsKey(InputEvent.Buttons.DLeft) && held[InputEvent.Buttons.DLeft]){
+    if(IsN64() && held.ContainsKey(InputEvent.Buttons.CLeft) && held[InputEvent.Buttons.CLeft]){
       return true;
     }
 
@@ -114,19 +115,11 @@ public class ActorInputHandler : Brain {
       return true;
     }
 
-    if(IsN64() && held.ContainsKey(InputEvent.Buttons.DUp) && held[InputEvent.Buttons.DUp]){
-      return true;
-    }
-
     return false;
   }
 
   bool HeldDown(){
     if(IsKbm() && held.ContainsKey(InputEvent.Buttons.S) && held[InputEvent.Buttons.S]){
-      return true;
-    }
-
-    if(IsN64() && held.ContainsKey(InputEvent.Buttons.DDown) && held[InputEvent.Buttons.DDown]){
       return true;
     }
 
@@ -194,28 +187,51 @@ public class ActorInputHandler : Brain {
 
   private void PressN64(InputEvent evt){
     switch(evt.button){
-      case InputEvent.Buttons.Esc: 
+      case InputEvent.Buttons.Start: 
         Session.Event(SessionEvent.PauseEvent());
         break;
-      case InputEvent.Buttons.CDown: actor.Jump(); break;
       case InputEvent.Buttons.L: actor.SetSprint(true); break;
       case InputEvent.Buttons.Z: actor.Use(Item.Uses.A); break;
       case InputEvent.Buttons.R: actor.Use(Item.Uses.B); break;
       case InputEvent.Buttons.CUp: actor.Use(Item.Uses.C); break;
+      case InputEvent.Buttons.CDown: actor.Jump(); break;
       case InputEvent.Buttons.B: actor.Use(Item.Uses.D); break;
       case InputEvent.Buttons.A: actor.InitiateInteraction(); break;
     }
   }
 
   private void HandleAxis(InputEvent evt){
+    switch(device.device){
+      case DeviceManager.Devices.MouseAndKeyboard:
+        HandleAxisKeyboard(evt);
+        break;
+      case DeviceManager.Devices.N64:
+        HandleAxisN64(evt);
+        break;
+    }
+  
+  }
+
+  private void HandleAxisKeyboard(InputEvent evt){
     float wx = Session.session.mouseSensitivityX;
     float wy = Session.session.mouseSensitivityY;
-    
+
     if(evt.axis == InputEvent.Axes.Mouse){
       actor.Turn(evt.x * wx, evt.y * wy);
     }
-    if(device.device == DeviceManager.Devices.N64 && evt.axis == InputEvent.Axes.Left){
-      actor.Turn(evt.x * -wx, evt.y * wy);  
+
+  }
+
+  private void HandleAxisN64(InputEvent evt){
+    float wx = Session.session.mouseSensitivityX;
+    float wy = Session.session.mouseSensitivityY;
+
+    Vector3 movement = new Vector3(0, 0, -evt.y);
+    movement *= actor.GetMovementSpeed(); 
+    actor.Move(movement, this.delta);
+
+    if(evt.x != 0f){
+      actor.Turn(evt.x * -wx, 0f);
     }
   }
 }

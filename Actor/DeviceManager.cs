@@ -59,6 +59,18 @@ public class DeviceManager {
     }
     return new List<InputEvent>();
   }
+
+  public static string DeviceName(Devices deviceEnum){
+    switch(deviceEnum){
+      case Devices.MouseAndKeyboard:
+        return "Mouse and Keyboard";
+        break;
+      case Devices.N64:
+        return "Retro N64 Controller";
+        break;
+    }
+    return "None";
+  }
   
   private InputEvent Down(InputEvent.Buttons button){
       return new InputEvent(button, InputEvent.Actions.Down);
@@ -120,10 +132,11 @@ public class DeviceManager {
     ret.AddRange(ButtonEvents(11, 6, InputEvent.Buttons.Start));
     ret.AddRange(ButtonEvents(5, 7, InputEvent.Buttons.R));
     ret.AddRange(ButtonEvents(4, 8, InputEvent.Buttons.L));
-    ret.AddRange(ButtonEvents(12, 9, InputEvent.Buttons.DUp));
-    ret.AddRange(ButtonEvents(13, 9, InputEvent.Buttons.DDown));
-    ret.AddRange(ButtonEvents(15, 9, InputEvent.Buttons.DRight));
-    ret.AddRange(ButtonEvents(14, 9, InputEvent.Buttons.DLeft));
+    ret.AddRange(ButtonEvents(7, 9, InputEvent.Buttons.Z));
+    ret.AddRange(ButtonEvents(12, 10, InputEvent.Buttons.DUp));
+    ret.AddRange(ButtonEvents(13, 11, InputEvent.Buttons.DDown));
+    ret.AddRange(ButtonEvents(15, 12, InputEvent.Buttons.DRight));
+    ret.AddRange(ButtonEvents(14, 13, InputEvent.Buttons.DLeft));
     ret.AddRange(AxisEvents(0, 1, 0.005f, InputEvent.Axes.Left, false, true));
 
     return ret;    
