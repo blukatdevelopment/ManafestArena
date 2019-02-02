@@ -72,16 +72,16 @@ public class Career {
           ArenaMatchEncounter(node.extraInfo);
           break;
         case CareerNode.NodeTypes.BossMatch:
-          BossMatchEncounter();
+          BossMatchEncounter(node.extraInfo);
           break;
         case CareerNode.NodeTypes.FinalBoss:
-          FinalBossEncounter();
+          FinalBossEncounter(node.extraInfo);
           break;
         case CareerNode.NodeTypes.Shop:
-          ShopEncounter();
+          ShopEncounter(node.extraInfo);
           break;
         case CareerNode.NodeTypes.RestSite:
-          RestSiteEncounter();
+          RestSiteEncounter(node.extraInfo);
           break;
         case CareerNode.NodeTypes.PressEvent:
           PressEventEncounter(node.extraInfo);
@@ -94,23 +94,35 @@ public class Career {
       ArenaSettings settings = new ArenaSettings();
       settings.useKits = false;
       settings.usePowerups = false;
-      settings.duration = 100;
       settings.bots = 1;
 
       Session.session.arenaSettings = settings;
 
-      Session.LocalArena();
-      //CompleteEncounter();
+      Session.LocalArena(info);
     }
 
     public void BossMatchEncounter(string info = ""){
-      GD.Print("BossMatchEncounter");
-      CompleteEncounter();
+      GD.Print("BossMatchEncounter: " + info);
+      ArenaSettings settings = new ArenaSettings();
+      settings.useKits = false;
+      settings.usePowerups = false;
+      settings.bots = 1;
+
+      Session.session.arenaSettings = settings;
+
+      Session.LocalArena(info);
     }
 
     public void FinalBossEncounter(string info = ""){
-      GD.Print("FinalBossEncounter");
-      CompleteEncounter();
+      GD.Print("FinalBossMatchEncounter: " + info);
+      ArenaSettings settings = new ArenaSettings();
+      settings.useKits = false;
+      settings.usePowerups = false;
+      settings.bots = 1;
+
+      Session.session.arenaSettings = settings;
+
+      Session.LocalArena(info);
     }
 
     public void ShopEncounter(string info = ""){
@@ -125,9 +137,6 @@ public class Career {
 
     public void PressEventEncounter(string info = ""){
       GD.Print("PressEventEncounter -info " + info);
-      if(Session.session.activeMenu == null){
-        GD.Print("active menu is null");
-      }
       pressEvent = CareerDb.LoadPressEvent(info);
       
       Session.ChangeMenu(Menu.Menus.PressEvent);
@@ -189,9 +198,9 @@ public class Career {
     public static List<CareerNode> GenerateCareerTree(string championName){
       List<CareerNode> ret = new List<CareerNode>();
 
-      ret.Add(CareerNode.FromRow(new string[] {"1", "1", "2", "-1", "3", "first"}));
-      ret.Add(CareerNode.FromRow(new string[] {"2", "1", "4", "-1", "-1", ""}));
-      ret.Add(CareerNode.FromRow(new string[] {"3", "1", "5", "-1", "-1", ""}));
+      ret.Add(CareerNode.FromRow(new string[] {"1", "3", "2", "-1", "3", "res://Scenes/Maps/Test.tscn"}));
+      ret.Add(CareerNode.FromRow(new string[] {"2", "2", "4", "-1", "-1", "res://Scenes/Maps/Test.tscn"}));
+      ret.Add(CareerNode.FromRow(new string[] {"3", "1", "5", "-1", "-1", "res://Scenes/Maps/Test.tscn"}));
       
       ret.Add(CareerNode.FromRow(new string[] {"4", "5", "6", "-1", "-1", ""}));
       ret.Add(CareerNode.FromRow(new string[] {"5", "4", "6", "-1", "-1", ""}));

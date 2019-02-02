@@ -30,7 +30,7 @@ public class RestSiteMenu : Container, IMenu {
   }
 
   void InitControls(){
-    restButton = Menu.Button("Finish shopping", () => { 
+    restButton = Menu.Button("Rest", () => { 
       HealPlayer1();
       Session.session.career.CompleteEncounter();
     });

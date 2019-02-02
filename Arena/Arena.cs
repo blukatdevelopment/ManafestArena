@@ -317,13 +317,6 @@ public class Arena : Spatial {
     int randInt = rand.Next(spawnList.Count);
     return spawnList[randInt];
   }
-  
-  /* A factory to do all that node stuff in lieu of a constructor */ 
-  public static Arena ArenaFactory(){
-    PackedScene ps = (PackedScene)GD.Load("res://Scenes/Arena.tscn");
-    Node instance = ps.Instance();
-    return (Arena)instance;
-  }
 
   public void PlayerReady(){}
 

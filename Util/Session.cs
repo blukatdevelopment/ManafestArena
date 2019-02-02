@@ -178,11 +178,8 @@ public class Session : Node {
   }
   
   public static void LocalArena(string terrainFile = "res://Scenes/Maps/Test.tscn"){
-    //ChangeMenu(Menu.Menus.None);
     ChangeMenu(Menu.Menus.HUD);
     Session ses = Session.session;
-    // Node arenaNode = Arena.ArenaFactory();
-    // ses.arena = (Arena)arenaNode;
     ses.arena = new Arena();
     ses.AddChild(ses.arena);
     ses.arena.Init(true, terrainFile);
