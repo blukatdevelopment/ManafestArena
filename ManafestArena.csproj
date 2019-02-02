@@ -71,6 +71,7 @@
     <Compile Include="Menus\NewGameMenu.cs" />
     <Compile Include="Menus\PressEventMenu.cs" />
     <Compile Include="Menus\EndGameMenu.cs" />
+    <Compile Include="Menus\ShopMenu.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Items\Damage.cs" />
     <Compile Include="Items\IHasAmmo.cs" />

@@ -32,10 +32,10 @@ public class EndGameMenu : Container, IMenu {
     AddChild(mainMenuButton);
 
 
-    titleLabel = (Godot.TextEdit)Menu.TextBox(EndCopy(), false);
+    titleLabel = (Godot.TextEdit)Menu.TextBox(EndCopy());
     AddChild(titleLabel);
 
-    creditsLabel = (Godot.TextEdit)Menu.TextBox(CreditsCopy(), false);
+    creditsLabel = (Godot.TextEdit)Menu.TextBox(CreditsCopy());
     AddChild(creditsLabel);
   }
 

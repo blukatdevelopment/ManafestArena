@@ -13,7 +13,8 @@ public class Menu{
     Career,
     NewGame,
     PressEvent,
-    EndGame
+    EndGame,
+    Shop
   };
 
   public enum SubMenus{
@@ -29,11 +30,11 @@ public class Menu{
     return button;
   }
   
-  public static TextEdit TextBox(string val = "", bool readOnly = true){    
+  public static TextEdit TextBox(string val = "", bool readOnly = true, bool wordWrap = false){    
     TextEdit textBox = new TextEdit();
     textBox.SetText(val);
     textBox.Readonly = readOnly;
-  
+    textBox.WrapLines = wordWrap;
     return textBox;
   }
 
@@ -95,6 +96,10 @@ public class Menu{
       case Menus.EndGame:
         ret = new EndGameMenu();
         ret.Name = "EndGame";
+        break;
+      case Menus.Shop:
+        ret = new ShopMenu();
+        ret.Name = "Shop";
         break;
     }
     

@@ -142,4 +142,53 @@ public class ItemData : IHasInfo {
   public static string ToJson(ItemData dat){
     return "";//JsonConvert.SerializeObject(dat, Formatting.Indented);
   }
+
+
+  public static ItemData Factory(string name){
+    ItemData ret = new ItemData();
+    ret.name = "NULL";
+    ret.stackable = false;
+    ret.extra.Add("shop_name", name);
+
+    switch(name.ToLower()){
+      case "sword":
+        ret.name = "sword";
+        ret.description = "A little sharp around the edges.";
+        break;
+      case "magic_rifle":
+        ret.name = "Magic Rifle";
+        ret.description = "Blast 'em with mana!";
+        break;
+      case "magic_beans":
+        ret.name = "Magic Beans";
+        ret.description = "Don't plant these!";
+        break;
+      case "bow_and_arrows":
+        ret.name = "Bow and arrows(6)";
+        ret.description = "Fight quietly.";
+        break;
+      case "magic_talisman":
+        ret.name = "Magical Talisman";
+        ret.description = "It's pretty cool looking.";
+        break;
+      case "old_fish":
+        ret.name = "Old Fish";
+        ret.description = "Smells pretty bad.";
+        break;
+      case "nutriloaf":
+        ret.name = "Nutriloaf";
+        ret.description = "Vegetable matter mingling with bread! It's green, mean, and packed with nutrients every growing champion needs!";
+        break;
+      case "fire_tome":
+        ret.name = "Fire Tome";
+        ret.description = "Cast more fireballs for less mana!";
+        break;
+    }
+
+    if(ret.name == "NULL"){
+      GD.Print("ItemData.Factory: " + name + " was an invalid name.");
+    }
+
+    return ret;
+  }
 }

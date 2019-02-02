@@ -115,7 +115,7 @@ public class Career {
 
     public void ShopEncounter(string info = ""){
       GD.Print("ShopEncounter");
-      CompleteEncounter();
+      Session.ChangeMenu(Menu.Menus.Shop);
     }
 
     public void RestSiteEncounter(string info = ""){
@@ -195,7 +195,7 @@ public class Career {
       ret.Add(CareerNode.FromRow(new string[] {"3", "1", "5", "-1", "-1", ""}));
       
       ret.Add(CareerNode.FromRow(new string[] {"4", "1", "6", "-1", "-1", ""}));
-      ret.Add(CareerNode.FromRow(new string[] {"5", "1", "6", "-1", "-1", ""}));
+      ret.Add(CareerNode.FromRow(new string[] {"5", "4", "6", "-1", "-1", ""}));
       ret.Add(CareerNode.FromRow(new string[] {"6", "6", "-1", "-1", "-1", "PressEvents/test.csv"}));
 
       return ret;
@@ -210,6 +210,31 @@ public class Career {
 
     public static void Save(){
       CareerDb.SaveCareer(Session.session.career);
+    }
+
+
+    public static List<ItemData> ShopItems(){
+      List<string> names = RandomShopItemNames();
+      List<ItemData> ret = new List<ItemData>();
+      
+      foreach(string name in names){
+        ret.Add(ItemData.Factory(name));
+      }
+      
+      return ret;
+    }
+
+    public static List<string> RandomShopItemNames(){
+      return new List<string>{
+        "sword",
+        "magic_rifle",
+        "magic_beans",
+        "old_fish",
+        "magic_talisman",
+        "nutriloaf",
+        "fire_tome",
+        "bow_and_arrows"
+      };
     }
 
 }
