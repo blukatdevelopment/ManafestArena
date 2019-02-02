@@ -12,7 +12,6 @@ public class DeviceManager {
   public Devices device;
   private int joyId;
   private bool mouseActive;
-  private Spatial eyes;
   private float sensitivityX = 0.2f;
   private float sensitivityY = 0.2f;
 
@@ -20,7 +19,7 @@ public class DeviceManager {
   List<bool> buttonsDown; // Store button states to check for changes.
   Vector2 mouseCur, mouseLast;
   
-  public DeviceManager(Devices device, Spatial eyes = null, int joyId = -1){
+  public DeviceManager(Devices device, int joyId = -1){
     this.device = device;
     buttonsDown = new List<bool>();
     mouseActive = false;
@@ -48,8 +47,6 @@ public class DeviceManager {
     for(int i = 0; i < buttonCount; i++){ 
       buttonsDown.Add(false); 
     }
-
-    this.eyes = eyes;
   }
   
   public List<InputEvent> GetInputEvents(){
@@ -196,10 +193,8 @@ public class DeviceManager {
   private List<InputEvent> MouseEvents(){
     List<InputEvent> ret = new List<InputEvent>();
     
-    if(eyes != null){
-      mouseCur = Util.GetMousePosition(eyes);
-    }
-    else{ GD.Print("DeviceManager:Eyes null"); }
+
+    mouseCur = Util.GetMousePosition();
     
     if(mouseLast == null){ mouseLast = mouseCur; }
     else if((mouseLast.x != mouseCur.x) || (mouseLast.y != mouseCur.y)){

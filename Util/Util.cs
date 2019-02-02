@@ -297,8 +297,9 @@ public class Util{
     }
   }
 
-  public static Vector2 GetMousePosition(Spatial spat){
-    return spat.GetViewport().GetMousePosition();
+  public static Vector2 GetMousePosition(){
+
+    return Session.session.GetViewport().GetMousePosition();
   }
 
   public static List<System.Object> ArrayToList(Godot.Array array){

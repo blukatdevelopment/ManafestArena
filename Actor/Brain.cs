@@ -9,7 +9,7 @@ public class Brain {
   protected Actor actor;
   protected Spatial eyes;
   
-  public Brain(Actor actor, Spatial eyes = null){
+  public Brain(Actor actor){
       this.actor = actor;
       this.eyes = eyes;
   }

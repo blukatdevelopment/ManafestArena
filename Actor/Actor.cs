@@ -78,14 +78,13 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
 
   public void InitBrain(Brains b){
     this.brainType = b;
-    GD.Print("eyes. " + eyes);
     switch(b){
       case Brains.Player1:
-        brain = (Brain)new ActorInputHandler(this, eyes); 
+        brain = (Brain)new ActorInputHandler(this); 
         Session.session.player = this;
         break;
       case Brains.Ai: 
-        brain = (Brain)new Ai(this, eyes); 
+        brain = (Brain)new Ai(this); 
         break;
       case Brains.Remote:
         brain = null;

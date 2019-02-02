@@ -14,23 +14,12 @@ public class ActorInputHandler : Brain {
   public const float syncRate = 0.05f;
 
 
-  public ActorInputHandler(Actor actor, Spatial eyes) : base (actor, eyes){
+  public ActorInputHandler(Actor actor) : base (actor){
     InitHeld();
-    InitEyes(eyes);
-    device = new DeviceManager(Session.session.player1Device, eyes, 0);
+    device = new DeviceManager(Session.session.player1Device, 0);
     GD.Print("Initialized ActorInputHandler with " + device.device);
   }
-  
-  private void InitEyes(Node eyes){
-    if(eyes == null){ GD.Print("ActorInputHandler:Eyes were null"); }
-    else{
-      this.eyes = eyes as Spatial;
-      
-      if(eyes == null){
-        GD.Print("ActorInputHandler:Eyes failed to cast.");
-      }
-    }
-  }
+
   
   private void InitHeld(){
     held = new System.Collections.Generic.Dictionary<InputEvent.Buttons, bool>();

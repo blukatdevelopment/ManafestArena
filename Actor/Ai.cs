@@ -20,7 +20,7 @@ public class Ai : Brain
   public const float syncRate = 0.05f;
 
 
-  public Ai(Actor actor, Spatial eyes) : base (actor, eyes){
+  public Ai(Actor actor) : base (actor){
     host = actor;
     target = null;
   }
