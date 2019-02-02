@@ -148,6 +148,7 @@ public class Career {
       CareerNode node = CareerNode.GetNode(id, careerNodes);
       int nodeLevel = CareerNode.GetLevel(node, careerNodes);
       int nextLevel = nodeLevel -1;
+      
       stats.SetBaseStat(StatsManager.Stats.CurrentLevel, nextLevel);
       stats.SetBaseStat(StatsManager.Stats.LastNode, id);
       stats.SetBaseStat(StatsManager.Stats.CurrentNode, 0);

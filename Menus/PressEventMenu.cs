@@ -67,30 +67,9 @@ public class PressEventMenu : Container, IMenu {
       return;
     }
 
-    UpdateCareer();
-
-    this.QueueFree(); // Keep this menu from persisting in the background
-    Session.ChangeMenu(Menu.Menus.Career);
+    Session.session.career.CompleteEncounter();
   }
 
-  // Update career upon completion of node.
-  public void UpdateCareer(){
-    StatsManager stats = Session.session.career.stats;
-
-    int nodeInProgress = stats.GetStat(StatsManager.Stats.NodeInProgress);
-    if(nodeInProgress == 1){
-      stats.SetBaseStat(StatsManager.Stats.NodeInProgress, 0);
-    }
-
-    int currentLevel = stats.GetStat(StatsManager.Stats.CurrentLevel);
-    currentLevel++;
-    stats.SetBaseStat(StatsManager.Stats.CurrentLevel, currentLevel);
-
-    int currentNode = stats.GetStat(StatsManager.Stats.CurrentNode);
-    stats.SetBaseStat(StatsManager.Stats.LastNode, currentNode);
-
-    Career.Save();
-  }
 
   public void TearDownControls(){
     if(promptText != null){

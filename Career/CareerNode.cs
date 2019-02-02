@@ -215,7 +215,6 @@ public class CareerNode {
 
     */
     public static bool NodeIsActive(CareerNode node, List<CareerNode> nodes, int currentLevel, int lastNode){
-        //GD.Print("NodeIsActive: -Node " + node.nodeId + " -currentlevel" + currentLevel + " -lastNode " + lastNode);
         if(node == null || nodes == null){
             GD.Print("NodeIsActive: Invalid args " + node + "," + nodes);
             return false;
@@ -226,7 +225,8 @@ public class CareerNode {
         if(node.IsLeaf() && currentLevel == -1){
             return true;
         }
-        if(CareerNode.IsRoot(node, nodes) && currentLevel == nodeLevel){
+        if(CareerNode.IsRoot(node, nodes) && currentLevel == 0){
+            GD.Print("Node " + node.nodeId + " is root and currentLevel is 0");
             return true;
         }
 
