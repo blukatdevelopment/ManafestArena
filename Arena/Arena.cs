@@ -12,7 +12,7 @@ public class Arena : Spatial {
   public bool local;
   public List<Actor> actors;
   public Spatial terrain;
-  public List<Vector3> actorSpawnPoints, itemSpawnPoints;
+  public List<Vector3> enemySpawnPoints, playerSpawnPoints, itemSpawnPoints;
   public int nextId = -2147483648;
   public bool gameStarted = false;
   public ArenaSettings settings;
@@ -244,30 +244,30 @@ public class Arena : Spatial {
   
   public void InitSpawnPoints(){
     SceneTree st = GetTree();
-    Godot.Array actorSpawns = st.GetNodesInGroup("ActorSpawnPoint");
     
-    this.actorSpawnPoints = new List<Vector3>();
-    
-    for(int i = 0; i < actorSpawns.Count; i++){
-      Spatial spawnPoint = actorSpawns[i] as Spatial;
-      
-      if(spawnPoint != null){
-        this.actorSpawnPoints.Add(spawnPoint.GetGlobalTransform().origin);
-      }
-    }
-    
-    Godot.Array itemSpawns = st.GetNodesInGroup("ItemSpawnPoint");
-    this.itemSpawnPoints = new List<Vector3>();
-    
-    for(int i = 0; i < itemSpawns.Count; i++){
-      Spatial spawnPoint = itemSpawns[i] as Spatial;
-      
-      if(spawnPoint != null){
-        this.itemSpawnPoints.Add(spawnPoint.GetGlobalTransform().origin);
-      }
-    }
+    playerSpawnPoints = GetSpawnPoints("PlayerSpawnPoint");
+    enemySpawnPoints = GetSpawnPoints("EnemySpawnPoint");
+    itemSpawnPoints = GetSpawnPoints("ItemSpawnPoint");
+
   }
   
+
+  List<Vector3> GetSpawnPoints(string name){
+    List<Vector3> ret = new List<Vector3>();
+
+    SceneTree st = GetTree();
+    List<System.Object> objs = Util.ArrayToList(st.GetNodesInGroup(name));
+
+    foreach(System.Object obj in objs){
+      Spatial spat = obj as Spatial;
+      if(spat != null){
+        ret.Add(spat.GetGlobalTransform().origin);
+      }
+    }
+
+    return ret;
+  }
+
   public void SpawnItem(Item.Types type, int quantity = 1){
     Vector3 pos = RandomItemSpawn();
     Item item = Item.Factory(type);
@@ -282,8 +282,10 @@ public class Arena : Spatial {
   }
   
   public Actor SpawnActor(Actor.Brains brain = Actor.Brains.Player1, int id = 0){
-    Vector3 pos = RandomActorSpawn();
-    
+    Vector3 pos = RandomSpawn(enemySpawnPoints);
+    if(brain == Actor.Brains.Player1){
+      pos = RandomSpawn(playerSpawnPoints);
+    }
 
     ActorData dat = new ActorData();
 
@@ -310,10 +312,10 @@ public class Arena : Spatial {
     return actor;
   }
   
-  public Vector3 RandomActorSpawn(){
+  public Vector3 RandomSpawn(List<Vector3> spawnList){
     System.Random rand = Session.GetRandom();
-    int randInt = rand.Next(actorSpawnPoints.Count);
-    return actorSpawnPoints[randInt];
+    int randInt = rand.Next(spawnList.Count);
+    return spawnList[randInt];
   }
   
   /* A factory to do all that node stuff in lieu of a constructor */ 
