@@ -11,7 +11,7 @@ public class Career {
     public StatsManager stats;
     public PressEvent pressEvent;
 
-    public Career(){
+    public Career(string championName = ""){
       careerNodes = new List<CareerNode>();
       root = null;
       leaves = new List<CareerNode>();
@@ -167,12 +167,12 @@ public class Career {
       Session.ChangeMenu(Menu.Menus.EndGame);
     }
 
-    public static Career Factory(StatsManager.Archetypes archetype){
-      Career ret = new Career();
-      ret.careerNodes = GenerateCareerTree();
+    public static Career Factory(string championName){
+      Career ret = new Career(championName);
+      ret.careerNodes = GenerateCareerTree(championName);
       ret.root = CareerNode.Root(ret.careerNodes);
       ret.leaves = CareerNode.Leaves(ret.careerNodes);
-      ret.stats.Init(archetype);
+      ret.stats.Init(StatsManager.Archetype(championName));
       return ret;
     }
 
@@ -186,7 +186,7 @@ public class Career {
     }
 
     // TODO: Remove hardcoding and randomize this
-    public static List<CareerNode> GenerateCareerTree(){
+    public static List<CareerNode> GenerateCareerTree(string championName){
       List<CareerNode> ret = new List<CareerNode>();
 
       ret.Add(CareerNode.FromRow(new string[] {"1", "1", "2", "-1", "3", "first"}));
@@ -200,8 +200,8 @@ public class Career {
       return ret;
     }
 
-    public static void StartNewCareer(StatsManager.Archetypes archetype = StatsManager.Archetypes.None){
-        Career career = Factory(archetype);
+    public static void StartNewCareer(string championName = ""){
+        Career career = Factory(championName);
         Session.session.career = career;
         Session.ChangeMenu(Menu.Menus.Career);
         CareerDb.SaveCareer(career);

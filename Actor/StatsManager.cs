@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 
 public class StatsManager {
-    public enum Archetypes{
+    public enum Archetypes{ // Types of characters
         None,
         One,
         Two,
@@ -323,6 +323,21 @@ public class StatsManager {
     public void LoadFact(string key, string value){
         Facts keyFact = (Facts) Enum.Parse(typeof(Facts), key, true);
         SetFact(keyFact, value);
+    }
+
+    public static Archetypes Archetype(string championName){
+        switch(championName){
+            case "fred":
+                return Archetypes.One;
+                break;
+            case "velma":
+                return Archetypes.Two;
+                break;
+            case "scoob":
+                return Archetypes.Three;
+                break;
+        }
+        return Archetypes.None;
     }
 
 }
