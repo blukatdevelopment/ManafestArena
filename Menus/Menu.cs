@@ -14,7 +14,8 @@ public class Menu{
     NewGame,
     PressEvent,
     EndGame,
-    Shop
+    Shop,
+    RestSite
   };
 
   public enum SubMenus{
@@ -100,6 +101,10 @@ public class Menu{
       case Menus.Shop:
         ret = new ShopMenu();
         ret.Name = "Shop";
+        break;
+      case Menus.RestSite:
+        ret = new RestSiteMenu();
+        ret.Name = "Rest Site";
         break;
     }
     

@@ -120,7 +120,7 @@ public class Career {
 
     public void RestSiteEncounter(string info = ""){
       GD.Print("RestSiteEncounter");
-      CompleteEncounter();
+      Session.ChangeMenu(Menu.Menus.RestSite);
     }
 
     public void PressEventEncounter(string info = ""){
@@ -167,7 +167,6 @@ public class Career {
       Session.ChangeMenu(Menu.Menus.EndGame);
     }
 
-
     public static Career Factory(StatsManager.Archetypes archetype){
       Career ret = new Career();
       ret.careerNodes = GenerateCareerTree();
@@ -194,7 +193,7 @@ public class Career {
       ret.Add(CareerNode.FromRow(new string[] {"2", "1", "4", "-1", "-1", ""}));
       ret.Add(CareerNode.FromRow(new string[] {"3", "1", "5", "-1", "-1", ""}));
       
-      ret.Add(CareerNode.FromRow(new string[] {"4", "1", "6", "-1", "-1", ""}));
+      ret.Add(CareerNode.FromRow(new string[] {"4", "5", "6", "-1", "-1", ""}));
       ret.Add(CareerNode.FromRow(new string[] {"5", "4", "6", "-1", "-1", ""}));
       ret.Add(CareerNode.FromRow(new string[] {"6", "6", "-1", "-1", "-1", "PressEvents/test.csv"}));
 
@@ -235,6 +234,29 @@ public class Career {
         "fire_tome",
         "bow_and_arrows"
       };
+    }
+
+    public static List<string> RestSiteUpgrades(){
+      return new List<string>{
+        "one",
+        "two",
+        "three"
+      };
+    }
+
+    public static string UpgradeDescription(string upgradeName){
+      switch(upgradeName){
+        case "one":
+          return "First is the worst.";
+          break;
+        case "two":
+          return "Second is the best.";
+          break;
+        case "three":
+          return "Third is the bird in a polka-dot dress.";
+          break;
+      }
+      return "";
     }
 
 }
