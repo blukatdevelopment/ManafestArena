@@ -51,7 +51,8 @@ public class StatsManager {
         CurrentNode,
         CurrentLevel,
         LastNode,
-        NodeInProgress
+        NodeInProgress,
+        Victory
     };
 
     public enum Abilities{

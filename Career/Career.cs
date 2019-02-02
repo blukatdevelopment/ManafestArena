@@ -134,6 +134,7 @@ public class Career {
     }
 
     public void CompleteEncounter(){
+      Session.ClearGame();
       int id = stats.GetStat(StatsManager.Stats.CurrentNode);
       CareerNode node = CareerNode.GetNode(id, careerNodes);
       int nodeLevel = CareerNode.GetLevel(node, careerNodes);
@@ -145,13 +146,25 @@ public class Career {
       
       CareerDb.SaveCareer(this);
 
-      Session.ChangeMenu(Menu.Menus.Career);
+      if(nextLevel == -1){
+        CompleteGame();
+      }
+      else{
+        Session.ChangeMenu(Menu.Menus.Career);
+      }
+    }
+
+    public void CompleteGame(){
+      GD.Print("CompleteGame");
+      Session.ClearGame();
+      stats.SetBaseStat(StatsManager.Stats.Victory, 1);
+      Session.ChangeMenu(Menu.Menus.EndGame);
     }
 
     public void FailEncounter(){
       Session.ClearGame();
-      
-      Session.ChangeMenu(Menu.Menus.Main);
+      GD.Print("FailEncounter");
+      Session.ChangeMenu(Menu.Menus.EndGame);
     }
 
 

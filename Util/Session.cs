@@ -53,7 +53,6 @@ public class Session : Node {
     ChangeMenu(Menu.Menus.Main);
     InitJukeBox();
     InitSettings();
-
   }
 
   public override void _Process(float delta){

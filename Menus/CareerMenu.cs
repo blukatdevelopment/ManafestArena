@@ -20,7 +20,7 @@ public class CareerMenu : Container, IMenu {
     InitControls();
     ScaleControls();
   }
-  
+
   public void Resize(float minX, float minY, float maxX, float maxY){
     ScaleControls();
   }

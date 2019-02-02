@@ -194,15 +194,13 @@ public class Arena : Spatial {
     ClearActor(actor);
 
     if(actor.brainType == Actor.Brains.Player1){
-      SetPause(true);
-      Session.ClearGame();
-      Session.ChangeMenu(Menu.Menus.Main);
+      Session.session.career.FailEncounter();
+      return;
     }
     
     AwardPoints(actorPaths);
     if(actors.Count == 1){
       Session.session.career.CompleteEncounter();
-      Session.ClearGame();
     }
   }
 

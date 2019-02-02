@@ -30,7 +30,9 @@ public class CareerDb {
   }
 
   public static void ClearCareer(){
-    GD.Print("CareerDb.ClearCareer not implemented");
+    GD.Print("CareerDb.ClearCareer");
+    System.IO.File.Delete(StatsFile);
+    System.IO.File.Delete(CareerFile);
   }
 
   public static bool SaveExists(){

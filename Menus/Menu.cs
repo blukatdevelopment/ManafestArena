@@ -12,7 +12,8 @@ public class Menu{
     Inventory,
     Career,
     NewGame,
-    PressEvent
+    PressEvent,
+    EndGame
   };
 
   public enum SubMenus{
@@ -90,6 +91,10 @@ public class Menu{
       case Menus.PressEvent:
         ret = new PressEventMenu();
         ret.Name = "PressEvent";
+        break;
+      case Menus.EndGame:
+        ret = new EndGameMenu();
+        ret.Name = "EndGame";
         break;
     }
     
