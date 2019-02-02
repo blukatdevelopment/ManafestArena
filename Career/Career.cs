@@ -10,12 +10,14 @@ public class Career {
     public CareerNode root;
     public StatsManager stats;
     public PressEvent pressEvent;
+    public ActorData playerData;
 
     public Career(string championName = ""){
       careerNodes = new List<CareerNode>();
       root = null;
       leaves = new List<CareerNode>();
       stats = new StatsManager();
+      playerData = ActorData.Factory(StatsManager.Archetype(championName));
     }
 
     public string ToString(){
@@ -69,13 +71,13 @@ public class Career {
           CompleteEncounter();
           break;
         case CareerNode.NodeTypes.ArenaMatch:
-          ArenaMatchEncounter(node.extraInfo);
+          ArenaEncounter(node.extraInfo);
           break;
         case CareerNode.NodeTypes.BossMatch:
-          BossMatchEncounter(node.extraInfo);
+          ArenaEncounter(node.extraInfo);
           break;
         case CareerNode.NodeTypes.FinalBoss:
-          FinalBossEncounter(node.extraInfo);
+          ArenaEncounter(node.extraInfo);
           break;
         case CareerNode.NodeTypes.Shop:
           ShopEncounter(node.extraInfo);
@@ -89,37 +91,13 @@ public class Career {
       }
     }
 
-    public void ArenaMatchEncounter(string info = ""){
+    public void ArenaEncounter(string info = ""){
       GD.Print("ArenaMatchEncounter: " + info);
       ArenaSettings settings = new ArenaSettings();
       settings.useKits = false;
       settings.usePowerups = false;
-      settings.bots = 1;
-
-      Session.session.arenaSettings = settings;
-
-      Session.LocalArena(info);
-    }
-
-    public void BossMatchEncounter(string info = ""){
-      GD.Print("BossMatchEncounter: " + info);
-      ArenaSettings settings = new ArenaSettings();
-      settings.useKits = false;
-      settings.usePowerups = false;
-      settings.bots = 1;
-
-      Session.session.arenaSettings = settings;
-
-      Session.LocalArena(info);
-    }
-
-    public void FinalBossEncounter(string info = ""){
-      GD.Print("FinalBossMatchEncounter: " + info);
-      ArenaSettings settings = new ArenaSettings();
-      settings.useKits = false;
-      settings.usePowerups = false;
-      settings.bots = 1;
-
+      settings.enemies = EnemiesForMap(info);
+      settings.player = playerData;
       Session.session.arenaSettings = settings;
 
       Session.LocalArena(info);
@@ -143,12 +121,17 @@ public class Career {
     }
 
     public void CompleteEncounter(){
+      if(Session.session.player != null){
+        playerData = Session.session.player.GetData();
+        playerData.SaveStats(stats);
+      }
+
       Session.ClearGame();
       int id = stats.GetStat(StatsManager.Stats.CurrentNode);
       CareerNode node = CareerNode.GetNode(id, careerNodes);
       int nodeLevel = CareerNode.GetLevel(node, careerNodes);
       int nextLevel = nodeLevel -1;
-      
+
       stats.SetBaseStat(StatsManager.Stats.CurrentLevel, nextLevel);
       stats.SetBaseStat(StatsManager.Stats.LastNode, id);
       stats.SetBaseStat(StatsManager.Stats.CurrentNode, 0);
@@ -192,6 +175,8 @@ public class Career {
       ret.root = CareerNode.Root(ret.careerNodes);
       ret.leaves = CareerNode.Leaves(ret.careerNodes);
       ret.stats = stats;
+      ret.playerData = new ActorData();
+      ret.playerData.LoadStats(ret.stats);
       return ret;
     }
 
@@ -268,5 +253,31 @@ public class Career {
       }
       return "";
     }
+
+
+  public static List<ActorData> EnemiesForMap(string mapName){
+    List<string> enemyNames = EnemyNamesForMap(mapName);
+    List<ActorData> ret = new List<ActorData>();
+
+    foreach(string name in enemyNames){
+      ret.Add(ActorData.Factory(StatsManager.Archetype(name)));
+    }
+
+    return ret;
+  }
+
+  public static List<string> EnemyNamesForMap(string mapName){
+    switch(mapName){
+      case "res://Scenes/Maps/Test.tscn":
+        return new List<string>{
+          "old man rivers",
+          "old man jenkins"
+        };
+        break;
+    }
+
+    GD.Print("Invalid map name " + mapName);
+    return new List<string>();
+  }
 
 }

@@ -143,14 +143,27 @@ public class Arena : Spatial {
       }
     }
 
-    InitActor(Actor.Brains.Player1, NextId());
-    for(int i = 0; i < settings.bots; i++){
-      InitActor(Actor.Brains.Ai, NextId());
+    InitActor(settings.player, NextId());
+
+
+    foreach(ActorData enemy in settings.enemies){
+      InitActor(enemy, NextId());
     }
 
-    roundTimeRemaining = settings.duration * 60;
-
     roundTimerActive = false;
+  }
+
+  public Actor InitActor(ActorData dat, int id){
+    scores.Add(id, 0);
+    Actor ret = SpawnActor(dat.brain, id);
+    ret.LoadData(dat);
+    ret.id = id;
+    GD.Print("Spawned Actor " + dat.ToString());
+    if(dat.brain == Actor.Brains.Player1){
+      Session.session.player = ret;
+      GD.Print("Setting player to " + id);
+    }
+    return ret;
   }
 
   public Actor InitActor(Actor.Brains brain, int id){
@@ -223,7 +236,7 @@ public class Arena : Spatial {
     Node killerNode = GetNode(new NodePath(actorPaths[1]));
     Actor killer = killerNode as Actor;
 
-    if(killer != null){
+    if(killer != null && killer.id != -1){
       scores[killer.id]++;
     }
   }

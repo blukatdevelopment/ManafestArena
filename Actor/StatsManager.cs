@@ -1,5 +1,7 @@
 /*
     Basically a character sheet + dice to make calculations + game status.
+    Persists a wide range of data to a csv file until JSON or SQL storage are
+    made available.
 */
 using Godot;
 using System;
@@ -10,7 +12,9 @@ public class StatsManager {
         None,
         One,
         Two,
-        Three
+        Three,
+        EnemyOne,
+        EnemyTwo
     };
 
     public enum Effects{ // Perks and status conditions
@@ -63,8 +67,7 @@ public class StatsManager {
 
     public enum Facts{
         None,
-        Name,
-        Rival
+        Name
     };
 
     System.Collections.Generic.Dictionary<Stats, int> baseStats;
@@ -167,6 +170,13 @@ public class StatsManager {
 
     public int GetStat(Stats stat){
         return GetBaseStat(stat) + GetStatBuff(stat);
+    }
+
+    public string GetFact(Facts fact){
+        if(facts.ContainsKey(fact)){
+            return facts[fact];
+        }
+        return "";
     }
 
     public bool StatIsDerived(Stats stat){
@@ -325,8 +335,8 @@ public class StatsManager {
         SetFact(keyFact, value);
     }
 
-    public static Archetypes Archetype(string championName){
-        switch(championName){
+    public static Archetypes Archetype(string characterName){
+        switch(characterName){
             case "fred":
                 return Archetypes.One;
                 break;
@@ -336,8 +346,14 @@ public class StatsManager {
             case "scoob":
                 return Archetypes.Three;
                 break;
+            case "old man rivers":
+                return Archetypes.EnemyOne;
+                break;
+            case "old man jenkins":
+                return Archetypes.EnemyTwo;
+                break;
         }
+        GD.Print("StatsManager.Archetypes: Invalid character name " + characterName);
         return Archetypes.None;
     }
-
 }
