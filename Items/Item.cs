@@ -293,6 +293,16 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
     return item;
   }
 
+  public static Item Factory(string itemTypeName){
+    if(itemTypeName == null || itemTypeName == ""){
+      return null;
+    }
+
+    Types type = (Types) Enum.Parse(typeof(Item.Types), itemTypeName, true);
+
+    return Factory(type);
+  }
+
   public static Item Factory(Types type){
     Item ret = null;
     if(type == Types.None){

@@ -106,6 +106,7 @@
     <Compile Include="Util\SessionEvent.cs" />
     <Compile Include="Db\SettingsDb.cs" />
     <Compile Include="Inventory\Inventory.cs" />
+    <Compile Include="Inventory\HotBar.cs" />
     <Compile Include="Career/Career.cs" />
     <Compile Include="Career/CareerNode.cs" />
     <Compile Include="Career/PressEvent.cs" />

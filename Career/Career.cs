@@ -16,8 +16,8 @@ public class Career {
       careerNodes = new List<CareerNode>();
       root = null;
       leaves = new List<CareerNode>();
-      stats = new StatsManager();
-      playerData = ActorData.Factory(StatsManager.Archetype(championName));
+      stats = new StatsManager(championName);
+      playerData = new ActorData(stats);
     }
 
     public string ToString(){
@@ -165,7 +165,6 @@ public class Career {
       ret.careerNodes = GenerateCareerTree(championName);
       ret.root = CareerNode.Root(ret.careerNodes);
       ret.leaves = CareerNode.Leaves(ret.careerNodes);
-      ret.stats.Init(StatsManager.Archetype(championName));
       return ret;
     }
 
@@ -260,7 +259,9 @@ public class Career {
     List<ActorData> ret = new List<ActorData>();
 
     foreach(string name in enemyNames){
-      ret.Add(ActorData.Factory(StatsManager.Archetype(name)));
+      StatsManager sm = new StatsManager(name);
+
+
     }
 
     return ret;

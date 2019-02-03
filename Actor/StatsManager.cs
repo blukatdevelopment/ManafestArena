@@ -49,6 +49,7 @@ public class StatsManager {
         UnarmedDamage,
         DamageResistance,
         DamageThreshold,
+        SlotsMax,
 
         // GameState
         LastEncounter,
@@ -67,7 +68,17 @@ public class StatsManager {
 
     public enum Facts{
         None,
-        Name
+        Name,
+        Slot1,
+        Slot2,
+        Slot3,
+        Slot4,
+        Slot5,
+        Slot6,
+        Slot7,
+        Slot8,
+        Slot9,
+        Slot10
     };
 
     System.Collections.Generic.Dictionary<Stats, int> baseStats;
@@ -85,21 +96,58 @@ public class StatsManager {
         facts = new System.Collections.Generic.Dictionary<Facts, string>();
     }
 
+    public StatsManager(string archetypeString){
+        baseStats = new System.Collections.Generic.Dictionary<Stats, int>();
+        statBuffs = new System.Collections.Generic.Dictionary<Stats, int>();
+        abilities = new System.Collections.Generic.Dictionary<Abilities, int>();
+        effects = new System.Collections.Generic.Dictionary<Effects, int>();
+        facts = new System.Collections.Generic.Dictionary<Facts, string>();
+        Init(archetypeString);   
+    }
+
+    public void Init(string archetypeString){
+        Init(Archetype(archetypeString));
+    }
+
     public void Init(Archetypes archetype){
         switch(archetype){
             case Archetypes.None:
                 break;
             case Archetypes.One:
+                BeastInit();
                 break;
             case Archetypes.Two:
+                MageInit();
                 break;
             case Archetypes.Three:
+                SoldierInit();
+                break;
+            case Archetypes.EnemyOne:
+                GoonInit();
+                break;
+            case Archetypes.EnemyTwo:
+                GoonInit();
                 break;
         }
         baseStats.Add(Stats.CurrentLevel, -1);
         baseStats.Add(Stats.LastNode, -1);
     }
 
+    public void BeastInit(){
+        GD.Print("BeastManInit");
+    }
+
+    public void MageInit(){
+        GD.Print("MageInit");
+    }
+
+    public void SoldierInit(){
+        GD.Print("SoldierInit");
+    }
+
+    public void GoonInit(){
+       GD.Print("GoonInit"); 
+    }
 
     // Returns a stat before buffs are applied
     public int GetBaseStat(Stats stat){

@@ -12,6 +12,7 @@ public class ActorData {
 	public int id, health, healthMax;
 	public Vector3 pos, rot;
 	public Inventory inventory;
+	public StatsManager stats;
 
 	// Extra data
 	public System.Collections.Generic.Dictionary<string, string> extra;
@@ -23,6 +24,16 @@ public class ActorData {
 		pos = new Vector3();
 		rot = new Vector3();
 		extra = new System.Collections.Generic.Dictionary<string, string>();
+	}
+
+	public ActorData(StatsManager sm){
+		id = -1;
+		health = healthMax = 0;
+		inventory = new Inventory();
+		pos = new Vector3();
+		rot = new Vector3();
+		extra = new System.Collections.Generic.Dictionary<string, string>();
+		LoadStats(sm);
 	}
 
 	public override string ToString(){
@@ -45,6 +56,7 @@ public class ActorData {
 		health = sm.GetStat(StatsManager.Stats.Health);
 		healthMax = sm.GetStat(StatsManager.Stats.HealthMax);
 		name = sm.GetFact(StatsManager.Facts.Name);
+		stats = sm;
 	}
 
 	// Save this data to an existing stats manager
@@ -69,68 +81,5 @@ public class ActorData {
 	public static string ToJson(ActorData dat){
 		return "";
 		//return JsonConvert.SerializeObject(dat, Formatting.Indented);
-	}
-
-
-	public static ActorData Factory(StatsManager.Archetypes archetype){
-		switch(archetype){
-			case StatsManager.Archetypes.One:
-				return ArchetypeOne();
-				break;
-			case StatsManager.Archetypes.Two:
-				return ArchetypeTwo();
-				break;
-			case StatsManager.Archetypes.Three:
-				return ArchetypeThree();
-				break;
-			case StatsManager.Archetypes.EnemyOne:
-				return ArchetypeEnemyOne();
-				break;
-			case StatsManager.Archetypes.EnemyTwo:
-				return ArchetypeEnemyTwo();
-				break;
-		}
-		GD.Print("ActorData.Factory: How'd you get here?!");
-		return null;
-	}
-
-	public static ActorData ArchetypeOne(){
-		ActorData ret = new ActorData();
-		ret.name = "ArchetypeOne";
-		ret.brain = Actor.Brains.Player1;
-		ret.healthMax = ret.health = 100;
-		return ret;
-	}
-
-	public static ActorData ArchetypeTwo(){
-		ActorData ret = new ActorData();
-		ret.name = "ArchetypeTwo";
-		ret.brain = Actor.Brains.Player1;
-		ret.healthMax = ret.health = 100;
-		return ret;
-	}
-
-	public static ActorData ArchetypeThree(){
-		ActorData ret = new ActorData();
-		ret.name = "ArchetypeThree";
-		ret.brain = Actor.Brains.Player1;
-		ret.healthMax = ret.health = 100;
-		return ret;
-	}
-
-	public static ActorData ArchetypeEnemyOne(){
-		ActorData ret = new ActorData();
-		ret.name = "ArchetypeEnemyOne";
-		ret.brain = Actor.Brains.Ai;
-		ret.healthMax = ret.health = 100;
-		return ret;
-	}
-
-	public static ActorData ArchetypeEnemyTwo(){
-		ActorData ret = new ActorData();
-		ret.name = "ArchetypeEnemyTwo";
-		ret.brain = Actor.Brains.Ai;
-		ret.healthMax = ret.health = 100;
-		return ret;
 	}
 }
