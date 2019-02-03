@@ -297,9 +297,17 @@ public class Util{
     }
   }
 
-  public static Vector2 GetMousePosition(){
+  public static Vector2 GetMouseMovement(){
+    Vector2 ret = Session.session.mouseMovement;
+    Session.session.mouseMovement = new Vector2();
+    return ret;
+  }
 
-    return Session.session.GetViewport().GetMousePosition();
+  public static Vector2 GetMousePosition(){
+    Vector2 ret = Session.session.mousePosition;
+    GD.Print("GetMousePosition" + ret);
+    return ret;
+    //return Session.session.GetViewport().GetMousePosition();
   }
 
   public static List<System.Object> ArrayToList(Godot.Array array){

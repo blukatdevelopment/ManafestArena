@@ -23,6 +23,8 @@ public class Session : Node {
   public string userName;
   public float mouseSensitivityX, mouseSensitivityY;
   public DeviceManager.Devices player1Device;
+  public Vector2 mousePosition;
+  public Vector2 mouseMovement;
 
   public Actor player;
   public enum Gamemodes{
@@ -53,6 +55,14 @@ public class Session : Node {
     ChangeMenu(Menu.Menus.Main);
     InitJukeBox();
     InitSettings();
+  }
+
+  public override void _Input(Godot.InputEvent evt){
+    InputEventMouseMotion mot = evt as InputEventMouseMotion;
+    if(mot != null){
+      mousePosition = mot.GlobalPosition;
+      mouseMovement = mot.Relative;
+    }
   }
 
   public override void _Process(float delta){

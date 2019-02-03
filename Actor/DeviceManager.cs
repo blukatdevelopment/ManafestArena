@@ -18,7 +18,7 @@ public class DeviceManager {
   
   List<bool> buttonsDown; // Store button states to check for changes.
   Vector2 mouseCur, mouseLast;
-  
+
   public DeviceManager(Devices device, int joyId = -1){
     this.device = device;
     buttonsDown = new List<bool>();
@@ -193,19 +193,25 @@ public class DeviceManager {
   private List<InputEvent> MouseEvents(){
     List<InputEvent> ret = new List<InputEvent>();
     
-
-    mouseCur = Util.GetMousePosition();
-    
-    if(mouseLast == null){ mouseLast = mouseCur; }
-    else if((mouseLast.x != mouseCur.x) || (mouseLast.y != mouseCur.y)){
-      float dx = mouseLast.x - mouseCur.x;
-      float dy = mouseLast.y - mouseCur.y;
-      dx *= sensitivityX;
-      dy *= sensitivityY;
-      
-      mouseLast = mouseCur;
-      ret.Add(new InputEvent(InputEvent.Axes.Mouse, dx, dy));
+    Vector2 mm = Util.GetMouseMovement();
+    float dx = mm.x * sensitivityX;
+    float dy = mm.y * sensitivityY;
+    if(dx != 0.0f || dy != 0.0f){
+      GD.Print(" " + dx + ", " + dy);
     }
+    ret.Add(new InputEvent(InputEvent.Axes.Mouse, -dx, -dy));
+    // mouseCur = Util.GetMousePosition();
+    
+    // if(mouseLast == null){ mouseLast = mouseCur; }
+    // else if((mouseLast.x != mouseCur.x) || (mouseLast.y != mouseCur.y)){
+    //   float dx = mouseLast.x - mouseCur.x;
+    //   float dy = mouseLast.y - mouseCur.y;
+    //   dx *= sensitivityX;
+    //   dy *= sensitivityY;
+      
+    //   mouseLast = mouseCur;
+    //   ret.Add(new InputEvent(InputEvent.Axes.Mouse, dx, dy));
+    // }
     
     return ret;
   }
