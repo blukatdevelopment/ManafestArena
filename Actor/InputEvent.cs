@@ -27,11 +27,15 @@ public class InputEvent {
     DUp, DDown, DRight, DLeft,
 
     // NES
-    Select
+    Select,
 
+    // PS1
+    R1, R2, L1, L2,
+    RClick, LClick,
+    Triangle, Square
   };
   public enum Actions {None, Up, Down};
-  public enum Axes {None, Mouse, Left, Right};
+  public enum Axes {None, Mouse, Left, Right, DPad};
   public Buttons button;
   public Actions action;
   public Axes axis;

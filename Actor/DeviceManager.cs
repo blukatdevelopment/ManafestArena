@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 
 public class DeviceManager {
-  public enum Devices{MouseAndKeyboard, N64, Nes};
+  public enum Devices{MouseAndKeyboard, N64, Nes, Ps1};
   public Devices device;
   private int joyId;
   private bool mouseActive;
@@ -42,6 +42,11 @@ public class DeviceManager {
         mouseActive = false;
         buttonCount = 4;
         break;
+
+      case Devices.Ps1:
+        mouseActive = false;
+        buttonCount = 16;
+        break;
     }
 
     for(int i = 0; i < buttonCount; i++){ 
@@ -60,6 +65,9 @@ public class DeviceManager {
       case Devices.Nes:
         return NesEvents();
         break;
+      case Devices.Ps1:
+        return Ps1Events();
+        break;
 
     }
     return new List<InputEvent>();
@@ -75,6 +83,9 @@ public class DeviceManager {
         break;
       case Devices.Nes:
         return "Retro NES Controller";
+        break;
+      case Devices.Ps1:
+        return "Retro PS1 Controller";
         break;
     }
     return "None";
@@ -126,6 +137,32 @@ public class DeviceManager {
     
     return ret;
 
+  }
+
+
+  private List<InputEvent> Ps1Events(){
+    List<InputEvent> ret = new List<InputEvent>();
+
+    ret.AddRange(ButtonEvents(2, 0, InputEvent.Buttons.Square));
+    ret.AddRange(ButtonEvents(3, 1, InputEvent.Buttons.Triangle));
+    ret.AddRange(ButtonEvents(1, 2, InputEvent.Buttons.O));
+    ret.AddRange(ButtonEvents(0, 3, InputEvent.Buttons.X));
+    ret.AddRange(ButtonEvents(5, 4, InputEvent.Buttons.R1));
+    ret.AddRange(ButtonEvents(5, 5, InputEvent.Buttons.L1));
+    ret.AddRange(ButtonEvents(11, 6, InputEvent.Buttons.Start));
+    ret.AddRange(ButtonEvents(10, 7, InputEvent.Buttons.Select));
+    ret.AddRange(ButtonEvents(9, 8, InputEvent.Buttons.RClick));
+    ret.AddRange(ButtonEvents(8, 9, InputEvent.Buttons.LClick));
+    ret.AddRange(ButtonEvents(7, 10, InputEvent.Buttons.R2));
+    ret.AddRange(ButtonEvents(6, 11, InputEvent.Buttons.L2));
+    ret.AddRange(ButtonEvents(12, 12, InputEvent.Buttons.DUp));
+    ret.AddRange(ButtonEvents(15, 13, InputEvent.Buttons.DRight));
+    ret.AddRange(ButtonEvents(13, 14, InputEvent.Buttons.DDown));
+    ret.AddRange(ButtonEvents(14, 15, InputEvent.Buttons.DLeft));
+    ret.AddRange(AxisEvents(0, 1, 0.005f, InputEvent.Axes.Left, false, true));
+    ret.AddRange(AxisEvents(2, 3, 0.005f, InputEvent.Axes.Right, false, true));
+
+    return ret;    
   }
 
   private List<InputEvent> NesEvents(){
@@ -200,19 +237,6 @@ public class DeviceManager {
       GD.Print(" " + dx + ", " + dy);
     }
     ret.Add(new InputEvent(InputEvent.Axes.Mouse, -dx, -dy));
-    // mouseCur = Util.GetMousePosition();
-    
-    // if(mouseLast == null){ mouseLast = mouseCur; }
-    // else if((mouseLast.x != mouseCur.x) || (mouseLast.y != mouseCur.y)){
-    //   float dx = mouseLast.x - mouseCur.x;
-    //   float dy = mouseLast.y - mouseCur.y;
-    //   dx *= sensitivityX;
-    //   dy *= sensitivityY;
-      
-    //   mouseLast = mouseCur;
-    //   ret.Add(new InputEvent(InputEvent.Axes.Mouse, dx, dy));
-    // }
-    
     return ret;
   }
 
@@ -236,9 +260,8 @@ public class DeviceManager {
       y *= -1;
     }
 
-
     if(x != 0f || y != 0f){
-      ret.Add(new InputEvent(InputEvent.Axes.Left, x, y));
+      ret.Add(new InputEvent(axisEnum, x, y));
     }
 
     return ret;

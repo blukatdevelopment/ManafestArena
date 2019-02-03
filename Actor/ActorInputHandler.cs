@@ -75,6 +75,10 @@ public class ActorInputHandler : Brain {
     return device.device == DeviceManager.Devices.MouseAndKeyboard;
   }
 
+  bool IsPs1(){
+    return device.device == DeviceManager.Devices.Ps1;
+  }
+
   bool HeldRight(){
     if(IsKbm() && held.ContainsKey(InputEvent.Buttons.D) && held[InputEvent.Buttons.D]){
       return true;
@@ -140,10 +144,16 @@ public class ActorInputHandler : Brain {
     }
     else if(evt.action == InputEvent.Actions.Up){
       held[evt.button] = false;
-      
-      if(evt.button == InputEvent.Buttons.Shift){
-        actor.SetSprint(false);
-      }
+      HandleUp(evt);
+    }
+  }
+
+  private void HandleUp(InputEvent evt){
+    if(IsKbm() && evt.button == InputEvent.Buttons.Shift){
+      actor.SetSprint(false);
+    }
+    if(IsPs1() && evt.button == InputEvent.Buttons.LClick){
+      actor.SetSprint(false);
     }
   }
 
@@ -157,6 +167,9 @@ public class ActorInputHandler : Brain {
         break;
       case DeviceManager.Devices.Nes:
         PressNes(evt);
+        break;
+      case DeviceManager.Devices.Ps1:
+        PressPs1(evt);
         break;
     }
   }
@@ -174,6 +187,29 @@ public class ActorInputHandler : Brain {
       case InputEvent.Buttons.M3: actor.Use(Item.Uses.C); break;
       case InputEvent.Buttons.R: actor.Use(Item.Uses.D); break;
       case InputEvent.Buttons.E: actor.InitiateInteraction(); break;
+    }
+  }
+
+  private void PressPs1(InputEvent evt){
+    switch(evt.button){
+      case InputEvent.Buttons.Start: 
+        Session.Event(SessionEvent.PauseEvent());
+        break;
+      case InputEvent.Buttons.Square: actor.Use(Item.Uses.D); break;
+      case InputEvent.Buttons.Triangle: break;
+      case InputEvent.Buttons.O: break;
+      case InputEvent.Buttons.X: actor.Jump(); break;
+      case InputEvent.Buttons.R1: actor.Use(Item.Uses.A); break;
+      case InputEvent.Buttons.R2: actor.Use(Item.Uses.C); break;
+      case InputEvent.Buttons.L1: actor.Use(Item.Uses.B); break;
+      case InputEvent.Buttons.L2: break;
+      case InputEvent.Buttons.DUp: break;
+      case InputEvent.Buttons.DRight: break;
+      case InputEvent.Buttons.DLeft: break;
+      case InputEvent.Buttons.DDown: break;
+      case InputEvent.Buttons.Select: break;
+      case InputEvent.Buttons.RClick: actor.Use(Item.Uses.C); break;
+      case InputEvent.Buttons.LClick: actor.SetSprint(true); break;
     }
   }
 
@@ -213,6 +249,9 @@ public class ActorInputHandler : Brain {
       case DeviceManager.Devices.Nes:
         HandleAxisNes(evt);
         break;
+      case DeviceManager.Devices.Ps1:
+        HandleAxisPs1(evt);
+        break;
     }
   
   }
@@ -250,6 +289,21 @@ public class ActorInputHandler : Brain {
 
     if(evt.x != 0f){
       actor.Turn(evt.x * -wx, 0f);
+    }
+  }
+
+  private void HandleAxisPs1(InputEvent evt){
+    float wx = Session.session.mouseSensitivityX;
+    float wy = Session.session.mouseSensitivityY;
+
+    if(evt.axis == InputEvent.Axes.Left){
+      Vector3 movement = new Vector3(evt.x, 0, -evt.y);
+      movement *= actor.GetMovementSpeed(); 
+      actor.Move(movement, this.delta);
+    }
+
+    if(evt.axis == InputEvent.Axes.Right && (evt.x != 0 || evt.y != 0)){
+      actor.Turn(evt.x * -wx, evt.y * wx);
     }
   }
 }
