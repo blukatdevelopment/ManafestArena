@@ -233,9 +233,6 @@ public class DeviceManager {
     Vector2 mm = Util.GetMouseMovement();
     float dx = mm.x * sensitivityX;
     float dy = mm.y * sensitivityY;
-    if(dx != 0.0f || dy != 0.0f){
-      GD.Print(" " + dx + ", " + dy);
-    }
     ret.Add(new InputEvent(InputEvent.Axes.Mouse, -dx, -dy));
     return ret;
   }

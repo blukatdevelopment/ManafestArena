@@ -50,6 +50,12 @@ public class ActorData {
 		return ret;
 	}
 
+	public Actor.Brains GetBrain(){
+		if(stats != null){
+			return (Actor.Brains) stats.GetStat(StatsManager.Stats.Brain);
+		}
+		return brain;
+	}
 
 	// Load this data from an existing stats manager
 	public void LoadStats(StatsManager sm){
@@ -68,6 +74,9 @@ public class ActorData {
 
 	// Return a new stats manager containing this data
 	public StatsManager GetStats(){
+		if(stats != null){
+			return stats;
+		}
 		StatsManager ret = new StatsManager();
 		SaveStats(ret);
 		return ret;

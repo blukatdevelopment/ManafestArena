@@ -51,6 +51,9 @@ public class StatsManager {
         DamageThreshold,
         SlotsMax,
 
+        // Identity
+        Brain,
+
         // GameState
         LastEncounter,
         CurrentNode,
@@ -69,6 +72,7 @@ public class StatsManager {
     public enum Facts{
         None,
         Name,
+        Archetype,
         Slot1,
         Slot2,
         Slot3,
@@ -134,19 +138,43 @@ public class StatsManager {
     }
 
     public void BeastInit(){
+        int brainInt = (int)Actor.Brains.Player1;
+        SetBaseStat(Stats.Brain, brainInt);
+        SetFact(Facts.Archetype, CharacterName(Archetypes.One));
+        SetBaseStat(Stats.Health, 100);
+        SetBaseStat(Stats.HealthMax, 100);
+        SetFact(Facts.Name, "Beast");
         GD.Print("BeastManInit");
     }
 
     public void MageInit(){
+        int brainInt = (int)Actor.Brains.Player1;
+        SetFact(Facts.Archetype, CharacterName(Archetypes.One));
+        SetBaseStat(Stats.Brain, brainInt);
+        SetBaseStat(Stats.Health, 100);
+        SetBaseStat(Stats.HealthMax, 100);
+        SetFact(Facts.Name, "Mage");
         GD.Print("MageInit");
     }
 
     public void SoldierInit(){
+        int brainInt = (int)Actor.Brains.Player1;
+        SetFact(Facts.Archetype, CharacterName(Archetypes.Three));
+        SetBaseStat(Stats.Brain, brainInt);
+        SetBaseStat(Stats.Health, 100);
+        SetBaseStat(Stats.HealthMax, 100);
+        SetFact(Facts.Name, "Soldier");
         GD.Print("SoldierInit");
     }
 
     public void GoonInit(){
-       GD.Print("GoonInit"); 
+        int brainInt = (int)Actor.Brains.Ai;
+        SetFact(Facts.Archetype, CharacterName(Archetypes.EnemyOne));
+        SetBaseStat(Stats.Brain, brainInt);
+        SetBaseStat(Stats.Health, 100);
+        SetBaseStat(Stats.HealthMax, 100);
+        SetFact(Facts.Name, "Goon");
+        GD.Print("GoonInit"); 
     }
 
     // Returns a stat before buffs are applied
@@ -157,15 +185,26 @@ public class StatsManager {
         else if(baseStats.ContainsKey(stat)){
             return GetDerivedStat(stat);
         }
+        GD.Print("Stat " + stat + " not set");
         return 0;
     }
 
     public void SetBaseStat(Stats stat, int value){
+        if(stat == Stats.HealthMax){
+          GD.Print("SetBaseStat: " + stat + ", " + value);
+        }
         if(baseStats.ContainsKey(stat)){
+            if(stat == Stats.HealthMax){
+                GD.Print("baseStats already contains " + stat);
+            }
             baseStats[stat] = value;
             return;
         }
         baseStats.Add(stat, value);
+        if(stat == Stats.HealthMax){
+            GD.Print("baseStats does not already contain " + stat);
+            GD.Print(this.ToString());
+        }
     }
 
     // Returns a stat derived from other stats
@@ -217,6 +256,10 @@ public class StatsManager {
     }
 
     public int GetStat(Stats stat){
+        if(stat == Stats.HealthMax){
+            GD.Print("Getting healthmax as " + GetBaseStat(stat) + "(" + GetStatBuff(stat) + "): Total: " + (GetBaseStat(stat) + GetStatBuff(stat)) );
+            GD.Print(this.ToString());
+        }
         return GetBaseStat(stat) + GetStatBuff(stat);
     }
 
@@ -228,6 +271,7 @@ public class StatsManager {
     }
 
     public bool StatIsDerived(Stats stat){
+        return false;
         List<Stats> derived = new List<Stats>{
             Stats.HealthMax,
             Stats.StaminaMax,
@@ -403,5 +447,35 @@ public class StatsManager {
         }
         GD.Print("StatsManager.Archetypes: Invalid character name " + characterName);
         return Archetypes.None;
+    }
+
+    public static string CharacterName(Archetypes archetype){
+        switch(archetype){
+            case Archetypes.One:
+                return "fred";
+                break;
+            case Archetypes.Two:
+                return "velma";
+                break;
+            case Archetypes.Three:
+                return "scoob";
+                break;
+            case Archetypes.EnemyOne:
+                return "old man rivers";
+                break;
+            case Archetypes.EnemyTwo:
+                return "old man jenkins";
+                break;
+        }
+        return "NULL";
+    }
+
+    public string ToString(){
+        string ret = "StatsManager:\n";
+        ret += "BaseStats: \n";
+        foreach(Stats stat in baseStats.Keys){
+            ret += "" + stat + ":" + baseStats[stat] + "\n"; 
+        }
+        return ret;
     }
 }

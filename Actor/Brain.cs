@@ -7,13 +7,15 @@ using System;
 
 public class Brain {
   protected Actor actor;
-  protected Spatial eyes;
   
   public Brain(Actor actor){
       this.actor = actor;
-      this.eyes = eyes;
   }
   
+  public virtual string ToString(){
+    return "Brain: Base brain";
+  }
+
   /* Called from update loop. Override this to control the actor.*/
   public virtual void Update(float delta){
     GD.Print("Please override this method:Update");

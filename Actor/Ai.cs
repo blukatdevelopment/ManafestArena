@@ -189,4 +189,8 @@ public class Ai : Brain
     }
   }
 
+  public override string ToString(){
+    return "Brain: AI";
+  }
+
 }

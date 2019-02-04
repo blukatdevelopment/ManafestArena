@@ -42,7 +42,7 @@ public class HUDMenu : Container, IMenu{
       return;
     }
     
-    string healthText = "Health: " + player.GetHealth();
+    string healthText = "Health: " + player.GetHealth() + "/" + player.GetHealthMax();
     healthBox.Text = healthText;
 
     string itemText = player.ItemInfo();

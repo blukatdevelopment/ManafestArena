@@ -137,7 +137,7 @@ public class ActorInputHandler : Brain {
   
   
   private void HandleButton(InputEvent evt){
-    GD.Print("Handling button " + evt.ToString());
+ 
     if(evt.action == InputEvent.Actions.Down){
       held[evt.button] = true;
       Press(evt);
@@ -305,5 +305,9 @@ public class ActorInputHandler : Brain {
     if(evt.axis == InputEvent.Axes.Right && (evt.x != 0 || evt.y != 0)){
       actor.Turn(evt.x * -wx, evt.y * wx);
     }
+  }
+
+  public override string ToString(){
+    return "Brain: ActorInputHandler";
   }
 }

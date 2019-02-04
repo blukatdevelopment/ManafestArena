@@ -143,11 +143,13 @@ public class Arena : Spatial {
       }
     }
 
-    InitActor(settings.player, NextId());
-
+    Session.session.player = InitActor(settings.player, NextId());
+    playerWorldId = Session.session.player.id;
+    //GD.Print("Session.session.Player set to " + Session.session.player.ToString());
 
     foreach(ActorData enemy in settings.enemies){
-      InitActor(enemy, NextId());
+      Actor enemyActor = InitActor(enemy, NextId());
+      //GD.Print("Spawned enemy: " + enemyActor.ToString());
     }
 
     roundTimerActive = false;
@@ -155,27 +157,11 @@ public class Arena : Spatial {
 
   public Actor InitActor(ActorData dat, int id){
     scores.Add(id, 0);
-    Actor ret = SpawnActor(dat.brain, id);
+    dat.id = id;
+    Actor ret = SpawnActor(dat);
     ret.LoadData(dat);
-    ret.id = id;
-    GD.Print("Spawned Actor " + dat.ToString());
-    if(dat.brain == Actor.Brains.Player1){
-      Session.session.player = ret;
-      GD.Print("Setting player to " + id);
-    }
+
     return ret;
-  }
-
-  public Actor InitActor(Actor.Brains brain, int id){
-    scores.Add(id, 0);
-
-    SpawnActor(brain, id);
-    
-    if(brain == Actor.Brains.Player1){
-      playerWorldId = id;
-    }
-    
-    return null;
   }
 
   public void InitTerrain(string terrainFile){
@@ -261,7 +247,6 @@ public class Arena : Spatial {
     playerSpawnPoints = GetSpawnPoints("PlayerSpawnPoint");
     enemySpawnPoints = GetSpawnPoints("EnemySpawnPoint");
     itemSpawnPoints = GetSpawnPoints("ItemSpawnPoint");
-
   }
   
 
@@ -294,33 +279,21 @@ public class Arena : Spatial {
     return itemSpawnPoints[randInt];
   }
   
-  public Actor SpawnActor(Actor.Brains brain = Actor.Brains.Player1, int id = 0){
+  public Actor SpawnActor(ActorData dat){
+    Actor.Brains brain = dat.GetBrain();
+
     Vector3 pos = RandomSpawn(enemySpawnPoints);
     if(brain == Actor.Brains.Player1){
       pos = RandomSpawn(playerSpawnPoints);
     }
 
-    ActorData dat = new ActorData();
-
-    dat.id = id;
     dat.pos = pos;
-    dat.health = dat.healthMax = 100;
-    if(settings.useKits){
-      dat.inventory.ReceiveItem(Item.Factory(Item.Types.Rifle));
-      List<Item> kitItems = Item.BulkFactory(Item.Types.Ammo, 100);
-
-      dat.inventory.ReceiveItem(kitItems[0]);
-    }
 
     Actor actor = Actor.Factory(brain, dat);
     actor.NameHand(actor.Name + "(Hand)");  
     
     actors.Add(actor);
     AddChild(actor);
-
-    if(settings.useKits){
-      EquipActor(actor, Item.Types.Rifle, "Rifle");
-    }
 
     return actor;
   }

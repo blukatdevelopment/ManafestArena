@@ -39,12 +39,14 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
 
   private int health;
   private int healthMax = 100;
+  private StatsManager stats;
   
   // Inventory
   private Item activeItem;
   private Item hand; // Weapon for unarmed actors.
   private bool unarmed = true; 
   private Inventory inventory;
+  private HotBar hotbar;
   
   // Handpos
   private float HandPosX = 0;
@@ -141,6 +143,16 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     name = dat.name;
     id = dat.id;
     inventory = dat.inventory;
+
+    if(dat.stats != null){
+      LoadStats(dat.stats);
+    }
+  }
+
+  public void LoadStats(StatsManager stats){
+    hotbar = new HotBar(stats);
+    this.stats = stats;
+    Brains brain = (Brains)stats.GetStat(StatsManager.Stats.Brain);
   }
 
   public ActorData GetData(){
@@ -630,8 +642,24 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     
   }
 
+  public string ToString(){
+    string ret = "Actor: \n";
+    ret += "\tName: " + name + "\n";
+    ret += "\tHealth: " + health + "/" +  healthMax + "\n";
+    ret += "\tID: " + id + "\n";
+    ret += "\t" + brain.ToString() + "\n";
+    if(hotbar != null){
+      ret += "\t" + hotbar.ToString() + "\n";
+    }
+    return ret;
+  }
+
   public int GetHealth(){
     return health;
+  }
+
+  public int GetHealthMax(){
+    return healthMax;
   }
   
   public void SyncPosition(){
@@ -840,7 +868,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
   }
   
   public static Actor Factory(ActorData data){
-    return Factory(data.brain, data);
+    return Factory(data.GetBrain(), data);
   }
 
   public static Actor Factory(Brains brain = Brains.Player1, ActorData data = null){
