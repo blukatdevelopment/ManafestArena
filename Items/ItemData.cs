@@ -24,6 +24,7 @@ public class ItemData : IHasInfo {
 
 		extra = new System.Collections.Generic.Dictionary<string, string>();
 		stack = new List<int>();
+    stackable = false;
 	}
 
 	public string GetExtra(string key){

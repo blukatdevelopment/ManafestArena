@@ -11,8 +11,10 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
   const int BaseDamage = 10;
   const float ProjectileOffset = 0.1f;
   const float ImpulseStrength = 50f;
+  public int healthDamage;
   public string ammoType = "Bullet";
   public Inventory inventory;
+  public Inventory reserve;
   public int maxAmmo = 10;
   public float busyDelay = 0f;
   public bool busy = false;
@@ -21,6 +23,20 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
   
   public ProjectileWeapon(){
     inventory = new Inventory();
+    reserve = new Inventory();
+    healthDamage = BaseDamage;
+  }
+
+  // Load weapon without associating it with an external inventory.
+  public void LoadInternalReserve(ItemData projectile, int projectileCount){
+    for(int i = 0; i < projectileCount; i++){
+      if(i < maxAmmo){
+        inventory.StoreItemData(ItemData.Clone(projectile));
+      }
+      else{
+        reserve.StoreItemData(ItemData.Clone(projectile));
+      }
+    }
   }
   
   public override void _Process(float delta){
@@ -38,7 +54,7 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
   public override ItemData GetData(){
     ItemData ret = ItemGetData();
     
-    ret.description += "\nDamage: " + BaseDamage + "\n";
+    ret.description += "\nDamage: " + healthDamage + "\n";
     ret.description += "Capacity: " + maxAmmo + "\n";
     ret.description += "Ammo Type: " + ammoType + "\n";
     ret.description += "Range: " + ImpulseStrength;
@@ -48,20 +64,22 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
 
   public override string GetInfo(){
     string ret = name + "[" + inventory.ItemCount() + "/" + maxAmmo;
-    
+    int ammoTotal = CheckReserveAmmo(ammoType, 0);
+
     if(wielder != null){
       IHasAmmo ammoHolder = wielder as IHasAmmo;
       if(ammoHolder != null){
-        ret += "/" + ammoHolder.CheckAmmo(ammoType, 0);
+        ammoTotal += ammoHolder.CheckAmmo(ammoType, 0);
       }
     }
+    ret += "/" + ammoTotal;
     
     ret += "]";
     return ret; 
   }
   
   public Damage GetBaseDamage(){
-    return new Damage(BaseDamage);
+    return new Damage(healthDamage);
   }
   
   public int CheckAmmo(string ammoType, int max = 0){
@@ -163,6 +181,11 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
     Item projectile = Item.Factory(Item.Types.Bullet);
     projectile.Name = name;
     Projectile proj = projectile as Projectile;
+
+    if(proj != null){
+      proj.healthDamage = healthDamage;
+    }
+
     Actor wielderActor = wielder as Actor;
     
     if(wielderActor != null){
@@ -212,28 +235,59 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
   private void Reload(){
     int needed = maxAmmo - inventory.ItemCount();
     
-    if(needed == 0 || wielder == null){
+    List<ItemData> receivedAmmo = new List<ItemData>();
+
+    if(needed < 1){
+      GD.Print("Reload not needed");
       return;
     }
     
     IHasAmmo ammoHolder = wielder as IHasAmmo;
-    
-    if(ammoHolder == null){
-      return;
+    if(ammoHolder != null){
+      receivedAmmo = ammoHolder.RequestAmmo(ammoType, needed);
     }
     
-    if(ammoHolder.CheckAmmo(ammoType, 1) == 0){
+    if(receivedAmmo.Count == 0){
+      receivedAmmo = RequestReserveAmmo(needed);
+    }
+
+    if(receivedAmmo.Count == 0){
+      GD.Print("No reload possible");
       return;
     }
-    
     speaker.PlayEffect(Sound.Effects.RifleReload);
-    List<ItemData> receivedAmmo = ammoHolder.RequestAmmo(ammoType, needed);
-    
+
     foreach(ItemData ammo in receivedAmmo){
       inventory.StoreItemData(ammo);
     }
   }
   
+  public List<ItemData> RequestReserveAmmo(int needed){
+    List<ItemData> ret = new List<ItemData>();
+
+    for(int i = 0; i < needed; i++){
+      ItemData dat = reserve.RetrieveItem(0);
+      if(dat != null){
+        ret.Add(dat);
+      }
+    }
+
+    return ret;
+  }
+
+  public int CheckReserveAmmo(string ammoType, int max = 0){
+    int quantity = reserve.GetQuantity(Item.Types.Ammo, ammoType);
+    
+    if(max > 0 && max > quantity){
+      return quantity;
+    }
+    else if(max <= 0){
+      return quantity;
+    }
+    
+    return max;
+  }
+
   private Vector3 ProjectilePosition(){
     Vector3 current = Translation; 
     Vector3 forward = -Transform.basis.z;

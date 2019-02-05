@@ -284,6 +284,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
   }
 
   public string GetInteractionText(Item.Uses interaction = Item.Uses.A){
+    return "";
     string ret = "Talk to " + GetInfo() + ".";
     switch(interaction){
       case Item.Uses.A:
@@ -632,8 +633,11 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
       return;
     }
 
+    int start = health;
     health -= damage.health;
-    
+    int end = health;
+
+    GD.Print("Health reduced from " + start + " to " + end);
     if(damage.health > 0 && health > 0){
       speaker.PlayEffect(Sound.Effects.ActorDamage);
     }

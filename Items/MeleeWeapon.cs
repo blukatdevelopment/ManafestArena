@@ -23,7 +23,7 @@ public class MeleeWeapon : Item, IWeapon {
   }
   
   public MeleeWeapon(){
-
+    healthDamage = DefaultDamage;
   }
 
   public void Init(){
@@ -85,7 +85,7 @@ public class MeleeWeapon : Item, IWeapon {
     Damage damage = new Damage(healthDamage);
 
     Node wielderNode = wielder as Node;
-    
+
     if(wielderNode != null){
       damage.sender = wielderNode.GetPath();
     }

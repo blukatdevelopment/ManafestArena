@@ -104,6 +104,9 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         ret = "Pick up " + name + ".";
         break;
     }
+    if(name == "Hand"){
+      return "";
+    }
     return ret;
   }
 
@@ -339,7 +342,9 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
   // Return an instance of the type's archetypal class.
   public static Item FromType(Types type){
     Item ret = null;
-    
+    MeleeWeapon mw;
+    ProjectileWeapon pw;
+    ItemData dat;
     switch(type){
       case Types.Hand: ret = new MeleeWeapon() as Item; break;
       case Types.Rifle: ret = new ProjectileWeapon() as Item; break;
@@ -355,7 +360,7 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         break;
       case Types.AidHealthPack: ret = new HealthAid() as Item; break;
       case Types.Spear:
-        MeleeWeapon mw = new MeleeWeapon();
+        mw = new MeleeWeapon();
         mw.healthDamage = 51;
         ret = mw as Item;
         break;
@@ -363,7 +368,15 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         ret = new ProjectileWeapon() as Item;
         break;
       case Types.Crossbow:
-        ret = new ProjectileWeapon() as Item;
+        pw = new ProjectileWeapon();
+        pw.healthDamage = 100;
+        pw.maxAmmo = 1;
+        pw.ammoType = "Bolt";
+        dat = new ItemData();
+        dat.type = Types.Ammo;
+        dat.name = pw.ammoType;
+        pw.LoadInternalReserve(dat, 10);
+        ret = pw as Item;
         break;
       case Types.FlintlockPistol:
         ret = new ProjectileWeapon() as Item;

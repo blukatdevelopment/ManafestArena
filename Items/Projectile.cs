@@ -5,7 +5,7 @@ using System;
 using Godot;
 
 public class Projectile : Item {
-  int healthDamage = 50;
+  public int healthDamage = 50;
   public string sender; // Node path for actor that fired this projectile.
   
   [Remote]
