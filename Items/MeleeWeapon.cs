@@ -6,7 +6,7 @@ using System;
 
 public class MeleeWeapon : Item, IWeapon {
   
-  const int DefaultDamage = 10;
+  public const int DefaultDamage = 10;
   public int healthDamage;
   public Vector3 wieldedPosition;
   public Vector3 forwardPosition;
@@ -76,12 +76,12 @@ public class MeleeWeapon : Item, IWeapon {
     }
   }
   
-  private void Strike(IReceiveDamage receiver){
+  public void Strike(IReceiveDamage receiver){
     GiveDamage(receiver);
     EndSwing();
   }
   
-  void GiveDamage(IReceiveDamage receiver){
+  public void GiveDamage(IReceiveDamage receiver){
     Damage damage = new Damage(healthDamage);
 
     Node wielderNode = wielder as Node;
@@ -92,13 +92,13 @@ public class MeleeWeapon : Item, IWeapon {
     receiver.ReceiveDamage(damage);
   }
   
-  private void Swing(){
+  public void Swing(){
     if(!busy && !swinging){
       StartSwing();
     }
   }
   
-  private void StartSwing(){
+  public void StartSwing(){
     speaker.PlayEffect(Sound.Effects.FistSwing);
     
     busy = true;
@@ -111,7 +111,7 @@ public class MeleeWeapon : Item, IWeapon {
     SetCollision(true);
   }
    
-  private void EndSwing(){
+  public void EndSwing(){
     swinging = false;
     busy = false;
     Translation = wieldedPosition;

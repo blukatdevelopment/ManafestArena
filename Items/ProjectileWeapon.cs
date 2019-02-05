@@ -231,6 +231,9 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
   public override void Unequip(){
     IHasAmmo ammoHolder = wielder as IHasAmmo;
     
+    busyDelay = -1f;
+    busy = false;
+
     if(ammoHolder != null){
       ammoHolder.StoreAmmo(inventory.RetrieveAllItems());
     }

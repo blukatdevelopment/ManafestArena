@@ -344,6 +344,7 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
     Item ret = null;
     MeleeWeapon mw;
     ProjectileWeapon pw;
+    ThrownItem ti;
     ItemData dat;
     switch(type){
       case Types.Hand: ret = new MeleeWeapon() as Item; break;
@@ -360,9 +361,9 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         break;
       case Types.AidHealthPack: ret = new HealthAid() as Item; break;
       case Types.Spear:
-        mw = new MeleeWeapon();
-        mw.healthDamage = 51;
-        ret = mw as Item;
+        ti = new ThrownItem();
+        ti.healthDamage = 51;
+        ret = ti as Item;
         break;
       case Types.Staff:
         ret = new ProjectileWeapon() as Item;

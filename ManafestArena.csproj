@@ -94,6 +94,7 @@
     <Compile Include="Items\AmmoPowerUp.cs" />
     <Compile Include="Items\ItemData.cs" />
     <Compile Include="Items\HealthAid.cs" />
+    <Compile Include="Items\ThrownItem.cs" />
     <Compile Include="Arena\Arena.cs" />
     <Compile Include="Arena\ArenaSettings.cs" />
     <Compile Include="Util\NetworkSession.cs" />
