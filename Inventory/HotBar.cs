@@ -36,16 +36,21 @@ public class HotBar : IHasItem {
     items = new Item[slotsMax];
     for(int i = 0; i < slotsMax; i++){
       string slotContents = stats.GetFact(slots[i]);
-      items[i] = Item.Factory(slotContents);
+      Item item = Item.Factory(slotContents); 
+      if(item != null){
+        items[i] = item;
+      }
     }
     equippedSlot = 0;
+
+    GD.Print(this.ToString());
   }
 
   public int EquippedSlot(){
     return equippedSlot;
   }
 
-  public Item Equipitem(int slot){
+  public Item EquipItem(int slot){
     if(slot < 0 || slot >= items.Length){
       GD.Print("HotBar.EquipItem: Out of range");
       return null;

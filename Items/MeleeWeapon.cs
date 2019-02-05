@@ -6,7 +6,8 @@ using System;
 
 public class MeleeWeapon : Item, IWeapon {
   
-  const int HealthDamage = 10;
+  const int DefaultDamage = 10;
+  public int healthDamage;
   public Vector3 wieldedPosition;
   public Vector3 forwardPosition;
   public bool swinging = false;
@@ -17,10 +18,14 @@ public class MeleeWeapon : Item, IWeapon {
   
   public override ItemData GetData(){
     ItemData ret = ItemGetData();
-    ret.description += "\nDamage: " + HealthDamage + "\n";
+    ret.description += "\nDamage: " + healthDamage + "\n";
     return ret;
   }
   
+  public MeleeWeapon(){
+
+  }
+
   public void Init(){
     
   }
@@ -44,7 +49,7 @@ public class MeleeWeapon : Item, IWeapon {
   }
   
   public Damage GetBaseDamage(){
-    return new Damage(HealthDamage);
+    return new Damage(healthDamage);
   }
   
   public override bool IsBusy(){
@@ -77,9 +82,10 @@ public class MeleeWeapon : Item, IWeapon {
   }
   
   void GiveDamage(IReceiveDamage receiver){
-    Damage damage = new Damage();
-    damage.health = HealthDamage;
+    Damage damage = new Damage(healthDamage);
+
     Node wielderNode = wielder as Node;
+    
     if(wielderNode != null){
       damage.sender = wielderNode.GetPath();
     }

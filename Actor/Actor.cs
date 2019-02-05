@@ -150,7 +150,11 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
   }
 
   public void LoadStats(StatsManager stats){
+    GD.Print("Loading stats " + stats.GetFact(StatsManager.Facts.Name));
     hotbar = new HotBar(stats);
+    if(hotbar != null && hotbar.EquipItem(0) != null){
+      DeferredEquipItem(hotbar.EquipItem(0));
+    }
     this.stats = stats;
     Brains brain = (Brains)stats.GetStat(StatsManager.Stats.Brain);
   }
@@ -400,6 +404,17 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
 
   [Remote]
   public void DeferredEquipItem(int index){
+    ItemData dat = inventory.RetrieveItem(index);
+    if(dat == null){
+      GD.Print("Actor.DeferredEquipItem: Item at index " + index + " was null.");
+      return;
+    }
+    
+    Item item = Item.FromData(dat);
+    DeferredEquipItem(item);
+  }
+
+  public void DeferredEquipItem(Item item){
     if(unarmed){
       StashHand();
     }
@@ -407,14 +422,6 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
       StashItem();
     }
 
-    ItemData dat = inventory.RetrieveItem(index);
-    
-    if(dat == null){
-      GD.Print("Actor.DeferredEquipItem: Item at index " + index + " was null.");
-      return;
-    }
-
-    Item item = Item.FromData(dat);
 
     if(eyes == null){
       GD.Print("Actor.DeferredEquipItem: No eyes.");
@@ -469,10 +476,11 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
   [Remote]
   public void DeferredStashItem(){
     activeItem.Unequip();
-    inventory.ReceiveItem(activeItem);
+    //inventory.ReceiveItem(activeItem);
     eyes.RemoveChild(activeItem);
 
-    activeItem.QueueFree();
+    //activeItem.QueueFree();
+    activeItem = null;
     EquipHand();
   }
 

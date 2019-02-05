@@ -19,7 +19,18 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
     HealthPack,
     AmmoPack,
     Ammo,
-    AidHealthPack
+    AidHealthPack,
+    
+    // Beast
+    Spear,
+
+    // Mage
+    Staff,
+    
+    // Soldier
+    Crossbow,
+    FlintlockPistol,
+    Knife
   };
 
   public enum Categories { // Inventory categories.
@@ -343,6 +354,23 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         ret.stackable = true; 
         break;
       case Types.AidHealthPack: ret = new HealthAid() as Item; break;
+      case Types.Spear:
+        MeleeWeapon mw = new MeleeWeapon();
+        mw.healthDamage = 51;
+        ret = mw as Item;
+        break;
+      case Types.Staff:
+        ret = new ProjectileWeapon() as Item;
+        break;
+      case Types.Crossbow:
+        ret = new ProjectileWeapon() as Item;
+        break;
+      case Types.FlintlockPistol:
+        ret = new ProjectileWeapon() as Item;
+        break;
+      case Types.Knife:
+        ret = new MeleeWeapon() as Item;
+        break;
     }
     
     return ret;
@@ -409,6 +437,21 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         break;
       case Types.AidHealthPack:
         ret = new string[]{"HealthPack", "Heals what ails you.", "res://Models/Healthpack.obj"};
+        break;
+      case Types.Spear:
+        ret = new string[]{"Spear", "One end's pointy. Stab with it, or throw it.", "res://Models/Rifle.obj"};
+        break;
+      case Types.Staff:
+        ret = new string[]{"Staff", "Spell crystals on the end of a stick.", "res://Models/Rifle.obj"};
+        break;
+      case Types.Crossbow:
+        ret = new string[]{"Crossbow", "Smokeless, weather resistant armor-piercing main weapon.", "res://Models/Rifle.obj"};
+        break;
+      case Types.FlintlockPistol:
+        ret = new string[]{"Flintlock pistol", "Don't bring a knife to a gunfight.", "res://Models/Rifle.obj"};
+        break;
+      case Types.Knife:
+        ret = new string[]{"Knife", "Don't bring a gun to a knifefight.", "res://Models/Rifle.obj"};
         break;
     }
     

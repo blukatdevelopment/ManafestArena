@@ -159,7 +159,6 @@ public class Arena : Spatial {
     scores.Add(id, 0);
     dat.id = id;
     Actor ret = SpawnActor(dat);
-    ret.LoadData(dat);
 
     return ret;
   }

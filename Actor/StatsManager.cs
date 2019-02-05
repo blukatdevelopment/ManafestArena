@@ -151,6 +151,8 @@ public class StatsManager {
         SetBaseStat(Stats.Willpower,    3);
         SetBaseStat(Stats.Strength,     9);
         
+        SetFact(Facts.Slot1, "Spear");
+
         ReplenishStats();
         GD.Print("BeastManInit");
     }
@@ -169,6 +171,8 @@ public class StatsManager {
         SetBaseStat(Stats.Willpower,    5);
         SetBaseStat(Stats.Strength,     5);
 
+        SetFact(Facts.Slot1, "Staff");
+
         ReplenishStats();
         GD.Print("MageInit");
     }
@@ -186,6 +190,10 @@ public class StatsManager {
         SetBaseStat(Stats.Agility,      5);
         SetBaseStat(Stats.Willpower,    5);
         SetBaseStat(Stats.Strength,     5);
+
+        SetFact(Facts.Slot1, "Crossbow");
+        SetFact(Facts.Slot2, "FlintlockPistol");
+        SetFact(Facts.Slot3, "Knife");
 
         ReplenishStats();
         GD.Print("SoldierInit");

@@ -125,7 +125,10 @@ public class Career {
     public void CompleteEncounter(){
       if(Session.session.player != null){
         playerData = Session.session.player.GetData();
-        playerData.SaveStats(stats);
+        if(playerData != null){
+          stats.SetBaseStat(StatsManager.Stats.Health, playerData.health);
+          playerData.stats = stats;
+        }
       }
 
       Session.ClearGame();
@@ -196,6 +199,7 @@ public class Career {
     }
 
     public static void StartNewCareer(string championName = ""){
+        Session.session.player = null;
         Career career = Factory(championName);
         Session.session.career = career;
         Session.ChangeMenu(Menu.Menus.Career);
