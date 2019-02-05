@@ -222,6 +222,17 @@ public class DeviceManager {
     ret.AddRange(KeyEvents(16777237, 15, InputEvent.Buttons.Shift));
     ret.AddRange(KeyEvents(82, 16, InputEvent.Buttons.R));
     ret.AddRange(KeyEvents(69, 17, InputEvent.Buttons.E));
+    ret.AddRange(KeyEvents(49, 18, InputEvent.Buttons.One));
+    ret.AddRange(KeyEvents(50, 19, InputEvent.Buttons.Two));
+    ret.AddRange(KeyEvents(51, 20, InputEvent.Buttons.Three));
+    ret.AddRange(KeyEvents(52, 21, InputEvent.Buttons.Four));
+    ret.AddRange(KeyEvents(53, 22, InputEvent.Buttons.Five));
+    ret.AddRange(KeyEvents(54, 23, InputEvent.Buttons.Six));
+    ret.AddRange(KeyEvents(55, 24, InputEvent.Buttons.Seven));
+    ret.AddRange(KeyEvents(56, 25, InputEvent.Buttons.Eight));
+    ret.AddRange(KeyEvents(57, 26, InputEvent.Buttons.Nine));
+    ret.AddRange(KeyEvents(48, 27, InputEvent.Buttons.Zero));
+
     ret.AddRange(MouseEvents());
 
     return ret;

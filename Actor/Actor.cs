@@ -374,6 +374,10 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
       SetMenuActive(false);
     }
   }
+
+  public void EquipHotbarItem(int slot){
+    DeferredEquipItem(hotbar.EquipItem(slot));
+  }
   
   /* Equip item based on inventory index. */
   public void EquipItem(int index){
@@ -415,6 +419,10 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
   }
 
   public void DeferredEquipItem(Item item){
+    if(item == null){
+      GD.Print("Actor.DeferredEquipItem: Can't equip null item");
+      return;
+    }
     if(unarmed){
       StashHand();
     }
@@ -436,6 +444,10 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     activeItem.Equip(this);
     unarmed = false;
     GD.Print("Successfully equipped item " + item.Name);
+  }
+
+  public void EquipNextItem(){
+    DeferredEquipItem(hotbar.EquipNextItem());
   }
   
   /* Removes activeItem from hands. */

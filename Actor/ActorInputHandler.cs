@@ -179,14 +179,23 @@ public class ActorInputHandler : Brain {
       case InputEvent.Buttons.Esc: 
         Session.Event(SessionEvent.PauseEvent());
         break;
-      case InputEvent.Buttons.Tab: actor.ToggleInventory(); break;
+      case InputEvent.Buttons.Tab: actor.EquipNextItem(); break;
       case InputEvent.Buttons.Space: actor.Jump(); break;
       case InputEvent.Buttons.Shift: actor.SetSprint(true); break;
       case InputEvent.Buttons.M1: actor.Use(Item.Uses.A); break;
       case InputEvent.Buttons.M2: actor.Use(Item.Uses.B); break;
       case InputEvent.Buttons.M3: actor.Use(Item.Uses.C); break;
       case InputEvent.Buttons.R: actor.Use(Item.Uses.D); break;
-      case InputEvent.Buttons.E: actor.InitiateInteraction(); break;
+      case InputEvent.Buttons.One: actor.EquipHotbarItem(0); break;
+      case InputEvent.Buttons.Two: actor.EquipHotbarItem(1); break;
+      case InputEvent.Buttons.Three: actor.EquipHotbarItem(2); break;
+      case InputEvent.Buttons.Four: actor.EquipHotbarItem(3); break;
+      case InputEvent.Buttons.Five: actor.EquipHotbarItem(4); break;
+      case InputEvent.Buttons.Six: actor.EquipHotbarItem(5); break;
+      case InputEvent.Buttons.Seven: actor.EquipHotbarItem(6); break;
+      case InputEvent.Buttons.Eight: actor.EquipHotbarItem(7); break;
+      case InputEvent.Buttons.Nine: actor.EquipHotbarItem(8); break;
+      case InputEvent.Buttons.Zero: actor.EquipHotbarItem(9); break;
     }
   }
 
