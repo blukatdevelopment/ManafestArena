@@ -11,6 +11,7 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
   const int BaseDamage = 10;
   const float ProjectileOffset = 0.1f;
   const float ImpulseStrength = 50f;
+  const float DefaultReloadDelay = 2f;
   public int healthDamage;
   public string ammoType = "Bullet";
   public Inventory inventory;
@@ -20,11 +21,13 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
   public bool busy = false;
   public delegate void OnBusyEnd();
   public OnBusyEnd busyEndHandler;
+  public float reloadDelay;
   
   public ProjectileWeapon(){
     inventory = new Inventory();
     reserve = new Inventory();
     healthDamage = BaseDamage;
+    reloadDelay = DefaultReloadDelay;
   }
 
   // Load weapon without associating it with an external inventory.
@@ -117,14 +120,17 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
     return new string[]{ ammoType };
   }
   
-  void StartReload(List<ItemData> newAmmo){
+  void StartReload(){
+
+    if(!ReloadNeeded()){
+      return;
+    }
+    speaker.PlayEffect(Sound.Effects.RifleReload);
     busy = true;
-    busyDelay = 2f;
+    busyDelay = reloadDelay;
 
     OnBusyEnd loadAmmo = () => { 
-      foreach(ItemData ammo in newAmmo){
-        inventory.StoreItemData(ammo);
-      } 
+      Reload();
     };
 
     busyEndHandler = loadAmmo;
@@ -142,7 +148,7 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
     switch(use){
       case Uses.A: Fire(); break;
       case Uses.B: break; // Aim logic goes here.
-      case Uses.D: Reload(); break;
+      case Uses.D: StartReload(); break;
     }
   }
   
@@ -233,33 +239,39 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
   }
   
   private void Reload(){
-    int needed = maxAmmo - inventory.ItemCount();
     
     List<ItemData> receivedAmmo = new List<ItemData>();
 
-    if(needed < 1){
+    if(!ReloadNeeded()){
       GD.Print("Reload not needed");
       return;
     }
     
     IHasAmmo ammoHolder = wielder as IHasAmmo;
     if(ammoHolder != null){
-      receivedAmmo = ammoHolder.RequestAmmo(ammoType, needed);
+      receivedAmmo = ammoHolder.RequestAmmo(ammoType, ReloadAmmoNeeded());
     }
     
     if(receivedAmmo.Count == 0){
-      receivedAmmo = RequestReserveAmmo(needed);
+      receivedAmmo = RequestReserveAmmo(ReloadAmmoNeeded());
     }
 
     if(receivedAmmo.Count == 0){
       GD.Print("No reload possible");
       return;
     }
-    speaker.PlayEffect(Sound.Effects.RifleReload);
 
     foreach(ItemData ammo in receivedAmmo){
       inventory.StoreItemData(ammo);
     }
+  }
+
+  public bool ReloadNeeded(){
+    return ReloadAmmoNeeded() > 0;
+  }
+
+  public int ReloadAmmoNeeded(){
+    return maxAmmo - inventory.ItemCount();
   }
   
   public List<ItemData> RequestReserveAmmo(int needed){
