@@ -55,6 +55,7 @@ public class Session : Node {
     ChangeMenu(Menu.Menus.Main);
     InitJukeBox();
     InitSettings();
+    //PerformTests();
   }
 
   public override void _Input(Godot.InputEvent evt){
@@ -71,6 +72,7 @@ public class Session : Node {
 
   public void PerformTests(){
     Test.Init();
+    StatsManager.StatsTests();
   }
 
   public void InitSettings(){

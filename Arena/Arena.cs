@@ -23,6 +23,7 @@ public class Arena : Spatial {
   public System.Collections.Generic.Dictionary<int, int> scores;
   public int playerWorldId = -1;
   int playersReady = 0;
+  public int totalEnemies;
 
   public void Init(bool local, string terrainFile){
     settings = Session.session.arenaSettings;
@@ -87,13 +88,12 @@ public class Arena : Spatial {
     
     ret += "Score: " + scores[playerWorldId];
     
-    int remaining = settings.bots - scores[playerWorldId];
 
-    if(remaining == 1){
-      ret += "\n" + remaining + " enemies left.";  
+    if(totalEnemies == 1){
+      ret += "\n" + totalEnemies + " enemies left.";  
     }
     else{
-      ret += "\n" + remaining + " enemy left.";
+      ret += "\n" + totalEnemies + " enemy left.";
     }
     
     return ret;
@@ -149,7 +149,7 @@ public class Arena : Spatial {
 
     foreach(ActorData enemy in settings.enemies){
       Actor enemyActor = InitActor(enemy, NextId());
-      //GD.Print("Spawned enemy: " + enemyActor.ToString());
+      totalEnemies++;
     }
 
     roundTimerActive = false;
@@ -196,9 +196,10 @@ public class Arena : Spatial {
       Session.session.career.FailEncounter();
       return;
     }
+    totalEnemies--;
     
     AwardPoints(actorPaths);
-    if(actors.Count == 1){
+    if(totalEnemies == 0){
       Session.session.career.CompleteEncounter();
     }
   }

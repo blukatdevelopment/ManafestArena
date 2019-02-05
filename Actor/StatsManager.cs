@@ -141,9 +141,17 @@ public class StatsManager {
         int brainInt = (int)Actor.Brains.Player1;
         SetBaseStat(Stats.Brain, brainInt);
         SetFact(Facts.Archetype, CharacterName(Archetypes.One));
-        SetBaseStat(Stats.Health, 100);
-        SetBaseStat(Stats.HealthMax, 100);
         SetFact(Facts.Name, "Beast");
+
+        SetBaseStat(Stats.Intelligence, 3);
+        SetBaseStat(Stats.Charisma,     3);
+        SetBaseStat(Stats.Endurance,    6);
+        SetBaseStat(Stats.Perception,   9);
+        SetBaseStat(Stats.Agility,      9);
+        SetBaseStat(Stats.Willpower,    3);
+        SetBaseStat(Stats.Strength,     9);
+        
+        ReplenishStats();
         GD.Print("BeastManInit");
     }
 
@@ -151,9 +159,17 @@ public class StatsManager {
         int brainInt = (int)Actor.Brains.Player1;
         SetFact(Facts.Archetype, CharacterName(Archetypes.One));
         SetBaseStat(Stats.Brain, brainInt);
-        SetBaseStat(Stats.Health, 100);
-        SetBaseStat(Stats.HealthMax, 100);
         SetFact(Facts.Name, "Mage");
+
+        SetBaseStat(Stats.Intelligence, 5);
+        SetBaseStat(Stats.Charisma,     5);
+        SetBaseStat(Stats.Endurance,    5);
+        SetBaseStat(Stats.Perception,   5);
+        SetBaseStat(Stats.Agility,      5);
+        SetBaseStat(Stats.Willpower,    5);
+        SetBaseStat(Stats.Strength,     5);
+
+        ReplenishStats();
         GD.Print("MageInit");
     }
 
@@ -161,9 +177,17 @@ public class StatsManager {
         int brainInt = (int)Actor.Brains.Player1;
         SetFact(Facts.Archetype, CharacterName(Archetypes.Three));
         SetBaseStat(Stats.Brain, brainInt);
-        SetBaseStat(Stats.Health, 100);
-        SetBaseStat(Stats.HealthMax, 100);
         SetFact(Facts.Name, "Soldier");
+
+        SetBaseStat(Stats.Intelligence, 5);
+        SetBaseStat(Stats.Charisma,     5);
+        SetBaseStat(Stats.Endurance,    5);
+        SetBaseStat(Stats.Perception,   5);
+        SetBaseStat(Stats.Agility,      5);
+        SetBaseStat(Stats.Willpower,    5);
+        SetBaseStat(Stats.Strength,     5);
+
+        ReplenishStats();
         GD.Print("SoldierInit");
     }
 
@@ -171,18 +195,33 @@ public class StatsManager {
         int brainInt = (int)Actor.Brains.Ai;
         SetFact(Facts.Archetype, CharacterName(Archetypes.EnemyOne));
         SetBaseStat(Stats.Brain, brainInt);
-        SetBaseStat(Stats.Health, 100);
-        SetBaseStat(Stats.HealthMax, 100);
         SetFact(Facts.Name, "Goon");
+
+        SetBaseStat(Stats.Intelligence, 5);
+        SetBaseStat(Stats.Charisma,     5);
+        SetBaseStat(Stats.Endurance,    5);
+        SetBaseStat(Stats.Perception,   5);
+        SetBaseStat(Stats.Agility,      5);
+        SetBaseStat(Stats.Willpower,    5);
+        SetBaseStat(Stats.Strength,     5);
+
+        ReplenishStats();
         GD.Print("GoonInit"); 
+    }
+
+    // Raise all stats with a max to that max value.
+    public void ReplenishStats(){
+        int healthMax = GetStat(Stats.HealthMax);
+        SetBaseStat(Stats.Health, healthMax);
     }
 
     // Returns a stat before buffs are applied
     public int GetBaseStat(Stats stat){
-        if(baseStats.ContainsKey(stat) && !StatIsDerived(stat)){
+        bool derived = StatIsDerived(stat);
+        if(baseStats.ContainsKey(stat) && !derived){
             return baseStats[stat];
         }
-        else if(baseStats.ContainsKey(stat)){
+        else if(derived){
             return GetDerivedStat(stat);
         }
         GD.Print("Stat " + stat + " not set");
@@ -210,8 +249,7 @@ public class StatsManager {
     // Returns a stat derived from other stats
     public int GetDerivedStat(Stats stat){
         switch(stat){
-            case Stats.HealthMax:
-                break;
+            case Stats.HealthMax: return HealthMaxFormula(GetStat(Stats.Endurance)); break;
             case Stats.HealthRegenAmount:
                 break;
             case Stats.HealthRegenDelay:
@@ -236,8 +274,19 @@ public class StatsManager {
                 break;
             case Stats.DamageThreshold:
                 break;
+            case Stats.SlotsMax: return SlotsMaxFormula(GetStat(Stats.Strength)); break;
         }
         return 0;
+    }
+
+    public static int HealthMaxFormula(int endurance){
+        return 50 + (endurance * 10);
+    }
+
+    public static int SlotsMaxFormula(int strength){
+        int ret = strength / 2; // 2 strength = 1 slot
+        ret += 1; // round up to give 0 strength 1 slot
+        return ret;
     }
 
     public int GetStatBuff(Stats stat){
@@ -256,11 +305,9 @@ public class StatsManager {
     }
 
     public int GetStat(Stats stat){
-        if(stat == Stats.HealthMax){
-            GD.Print("Getting healthmax as " + GetBaseStat(stat) + "(" + GetStatBuff(stat) + "): Total: " + (GetBaseStat(stat) + GetStatBuff(stat)) );
-            GD.Print(this.ToString());
-        }
-        return GetBaseStat(stat) + GetStatBuff(stat);
+        int baseStat = GetBaseStat(stat);
+        int buff = GetStatBuff(stat);
+        return baseStat + buff;
     }
 
     public string GetFact(Facts fact){
@@ -270,14 +317,14 @@ public class StatsManager {
         return "";
     }
 
-    public bool StatIsDerived(Stats stat){
-        return false;
+    public static bool StatIsDerived(Stats stat){
         List<Stats> derived = new List<Stats>{
             Stats.HealthMax,
             Stats.StaminaMax,
             Stats.ManaMax,
             Stats.Speed,
-            Stats.UnarmedDamage
+            Stats.UnarmedDamage,
+            Stats.SlotsMax
         };
 
         if(derived.IndexOf(stat) != -1){
@@ -477,5 +524,78 @@ public class StatsManager {
             ret += "" + stat + ":" + baseStats[stat] + "\n"; 
         }
         return ret;
+    }
+
+    public static void StatsTests(){
+        
+        IcepawsTests();
+        FormulaTests();
+        DerivedTests();
+        ReplenishTest();
+
+        Test.PrintFails();
+    }
+
+    public static void IcepawsTests(){
+        StatsManager sm = GetTestStatsManager();
+        
+        Test.Assert(sm.GetStat(Stats.Intelligence) == 5, "Intelligence not set correctly.");
+        Test.Assert(sm.GetStat(Stats.Charisma) == 5, "Charisma not set correctly.");
+        Test.Assert(sm.GetStat(Stats.Endurance) == 5, "Endurance not set correctly.");
+        Test.Assert(sm.GetStat(Stats.Perception) == 5, "Perception not set correctly.");
+        Test.Assert(sm.GetStat(Stats.Agility) == 5, "Agility not set correctly.");
+        Test.Assert(sm.GetStat(Stats.Willpower) == 5, "Willpower not set correctly.");
+        Test.Assert(sm.GetStat(Stats.Strength) == 5, "Strength not set correctly.");
+    }
+
+    public static void FormulaTests(){
+
+        int actual, expected;
+
+        actual = HealthMaxFormula(5);
+        expected = 100;
+        Test.Assert(actual == expected, "HealthmaxFormula got " + actual + " and expected " + expected + ".");
+
+        actual = SlotsMaxFormula(5);
+        expected = 3;
+        Test.Assert(actual == expected, "SlotsMaxFormula got " + actual + " and expected " + expected + ".");
+    }
+
+    public static void DerivedTests(){
+        StatsManager sm = GetTestStatsManager();
+        
+        TestDerived(sm, Stats.HealthMax, 100);
+        TestDerived(sm, Stats.SlotsMax, 3);
+    }
+
+    public static void TestDerived(StatsManager sm, Stats stat, int expected){
+        int actual = sm.GetStat(stat);
+        Test.Assert( actual == expected, stat + "derived as " +  actual + " when expecting " + expected + ".");
+    }
+
+    public static void ReplenishTest(){
+        StatsManager sm = GetTestStatsManager();
+
+        int health = sm.GetStat(Stats.Health);
+        Test.Assert(health == 0, "Health should be 0 by default.");
+
+        sm.ReplenishStats();
+
+        health = sm.GetStat(Stats.Health);
+        int healthMax = sm.GetStat(Stats.HealthMax);
+        Test.Assert(health == healthMax, "Health should be replenished to " + healthMax + " got: " + health);
+    }
+
+    public static StatsManager GetTestStatsManager(){
+        StatsManager sm = new StatsManager();
+
+        sm.SetBaseStat(Stats.Intelligence, 5);
+        sm.SetBaseStat(Stats.Charisma, 5);
+        sm.SetBaseStat(Stats.Endurance, 5);
+        sm.SetBaseStat(Stats.Perception, 5);
+        sm.SetBaseStat(Stats.Agility, 5);
+        sm.SetBaseStat(Stats.Willpower, 5);
+        sm.SetBaseStat(Stats.Strength, 5);
+        return sm;
     }
 }
