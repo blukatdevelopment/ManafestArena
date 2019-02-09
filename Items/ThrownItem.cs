@@ -8,16 +8,19 @@ using System;
 
 public class ThrownItem : MeleeWeapon, IWeapon, IEquip {
 
+    public static float DefaultImpulseStrength = 50.0f;
     public bool meleeEnabled;
+    public bool thrown;
+    public float impulseStrength;
 
     public ThrownItem(){
         healthDamage = DefaultDamage;
-        this.meleeEnabled = true;
-
+        meleeEnabled = true;
+        thrown = false;
+        impulseStrength = DefaultImpulseStrength;
     }
 
     public override void Use(Item.Uses use, bool released = false){
-        GD.Print("Item used with  " + use + "use melee " + meleeEnabled );
         switch(use){            
             case Uses.A: 
                 if(meleeEnabled){
@@ -33,7 +36,57 @@ public class ThrownItem : MeleeWeapon, IWeapon, IEquip {
 
     public void Throw(){
         GD.Print("Throw item");
+        if(thrown){
+            GD.Print("Can only throw item once.");
+            return;
+        }
+        thrown = true;
+
+        Actor actor = wielder as Actor;
+
+        if(actor != null){
+            actor.DropItem(this);
+            SetCollision(true);
+            wielder = null;
+        }
+
+        Transform start = this.GetGlobalTransform();
+        Transform destination = start;
+        destination.Translated(new Vector3(0, 0, 1));
+        
+        Vector3 impulse = start.origin - destination.origin;
+
+        this.SetAxisVelocity(impulse * impulseStrength);
+
+        swinging = true;
     }
 
+    public override void DoOnCollide(object body){
+    if(!swinging){
+      return;
+    }
+    if(thrown){
+        swinging = false;
+        this.SetAxisVelocity(new Vector3());
+    }
+    
+    IReceiveDamage receiver = body as IReceiveDamage;
+    IReceiveDamage wielderDamage = wielder as IReceiveDamage;
+    
+    if(receiver != null && receiver != wielderDamage){
+      Strike(receiver);
+    }
+  }
+
+  public override void EndSwing(){
+    swinging = false;
+    busy = false;
+
+    if(wielder != null){
+        GD.Print("Wielder " + wielder);
+        Translation = wieldedPosition;
+        SetCollision(false);    
+    }
+  }
     
 }

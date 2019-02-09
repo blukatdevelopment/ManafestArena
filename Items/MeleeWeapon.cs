@@ -111,7 +111,7 @@ public class MeleeWeapon : Item, IWeapon {
     SetCollision(true);
   }
    
-  public void EndSwing(){
+  public virtual void EndSwing(){
     swinging = false;
     busy = false;
     Translation = wieldedPosition;

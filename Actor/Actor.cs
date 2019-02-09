@@ -431,7 +431,6 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
       StashItem();
     }
 
-
     if(eyes == null){
       GD.Print("Actor.DeferredEquipItem: No eyes.");
       return;
@@ -473,6 +472,18 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     else if(Session.NetActive()){
       RpcId(1, nameof(ServerStashItem), Session.session.netSes.selfPeerId);
     }
+  }
+
+  public void DropItem(Item item){
+    Transform itemTrans = item.GetGlobalTransform();
+    
+    eyes.RemoveChild(item);
+    Session.session.arena.AddChild(item);
+    
+    item.GlobalTransform = itemTrans;
+    item.Mode = RigidBody.ModeEnum.Rigid;
+    activeItem = null;
+    hotbar.DropEquippedItem();
   }
 
   [Remote]

@@ -9,6 +9,11 @@ using System.Text;
 public class Util{
   
   
+
+  //############################################################################
+  //#       Rotation calculations                                              #
+  //############################################################################
+
   /* Transform methods. IF you pass a global or local transform, it will match.*/
   public static Vector3 TUp(Transform t){
     return t.basis.y;
@@ -43,6 +48,14 @@ public class Util{
     float z = ToRadians(degrees.z);
     return new Vector3(x, y, z);
   }
+
+  public static void ApplyRotation(Transform doner, Transform recipient){
+        recipient.basis = doner.basis;
+  }
+
+  //############################################################################
+  //#       String parsing                                                     #
+  //############################################################################
 
   public static float ToFloat(string val){
     if(val == ""){

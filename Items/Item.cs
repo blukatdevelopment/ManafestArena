@@ -362,7 +362,7 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
       case Types.AidHealthPack: ret = new HealthAid() as Item; break;
       case Types.Spear:
         ti = new ThrownItem();
-        ti.healthDamage = 51;
+        ti.healthDamage = 100;
         ret = ti as Item;
         break;
       case Types.Staff:

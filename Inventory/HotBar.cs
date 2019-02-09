@@ -50,6 +50,10 @@ public class HotBar : IHasItem {
     return equippedSlot;
   }
 
+  public void DropEquippedItem(){
+    items[equippedSlot] = null;
+  }
+
   public Item EquipItem(int slot){
     if(slot < 0 || slot >= items.Length){
       GD.Print("HotBar.EquipItem: Out of range");
