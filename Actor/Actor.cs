@@ -815,7 +815,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
   public bool HasItem(string item){
     return false;
   }
-  
+
   public string ItemInfo(){
     if(activeItem != null){
       return activeItem.GetInfo();

@@ -18,6 +18,7 @@ public class ThrownItem : MeleeWeapon, IWeapon, IEquip {
         meleeEnabled = true;
         thrown = false;
         impulseStrength = DefaultImpulseStrength;
+        swingSpeed = DefaultSwingSpeed;
     }
 
     public override void Use(Item.Uses use, bool released = false){

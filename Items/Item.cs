@@ -23,6 +23,7 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
     
     // Beast
     Spear,
+    Claws,
 
     // Mage
     Staff,
@@ -365,6 +366,11 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         ti.healthDamage = 100;
         ret = ti as Item;
         break;
+      case Types.Claws:
+        mw = new MeleeWeapon();
+        mw.healthDamage = 50;
+        mw.swingSpeed = 0.5f;
+        break;
       case Types.Staff:
         ret = new ProjectileWeapon() as Item;
         break;
@@ -380,10 +386,21 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         ret = pw as Item;
         break;
       case Types.FlintlockPistol:
-        ret = new ProjectileWeapon() as Item;
+        pw = new ProjectileWeapon();
+        pw.healthDamage = 60;
+        pw.maxAmmo = 1;
+        pw.ammoType = "MusketBall";
+        dat = new ItemData();
+        dat.type = Types.Ammo;
+        dat.name = pw.ammoType;
+        pw.LoadInternalReserve(dat, 6);
+        ret = pw as Item;
         break;
       case Types.Knife:
-        ret = new MeleeWeapon() as Item;
+        mw = new MeleeWeapon();
+        mw.healthDamage = 35;
+        mw.swingSpeed = 1.0f;
+        ret = mw as Item;
         break;
     }
     
@@ -454,6 +471,9 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         break;
       case Types.Spear:
         ret = new string[]{"Spear", "One end's pointy. Stab with it, or throw it.", "res://Models/Rifle.obj"};
+        break;
+      case Types.Claws:
+        ret = new string[]{"Claws", "Knives conveniently placed on your hands.", "res://Models/Rifle.obj"};
         break;
       case Types.Staff:
         ret = new string[]{"Staff", "Spell crystals on the end of a stick.", "res://Models/Rifle.obj"};

@@ -7,6 +7,7 @@ using System;
 public class MeleeWeapon : Item, IWeapon {
   
   public const int DefaultDamage = 10;
+  public const float DefaultSwingSpeed = 0.5f;
   public int healthDamage;
   public Vector3 wieldedPosition;
   public Vector3 forwardPosition;
@@ -15,6 +16,8 @@ public class MeleeWeapon : Item, IWeapon {
   public bool busy = false;
   public delegate void OnBusyEnd();
   public OnBusyEnd busyEndHandler;
+  public float swingSpeed;
+
   
   public override ItemData GetData(){
     ItemData ret = ItemGetData();
@@ -24,6 +27,7 @@ public class MeleeWeapon : Item, IWeapon {
   
   public MeleeWeapon(){
     healthDamage = DefaultDamage;
+    swingSpeed = DefaultSwingSpeed;
   }
 
   public void Init(){
@@ -78,7 +82,7 @@ public class MeleeWeapon : Item, IWeapon {
   
   public void Strike(IReceiveDamage receiver){
     GiveDamage(receiver);
-    EndSwing();
+    swinging = false;
   }
   
   public void GiveDamage(IReceiveDamage receiver){
@@ -102,7 +106,7 @@ public class MeleeWeapon : Item, IWeapon {
     speaker.PlayEffect(Sound.Effects.FistSwing);
     
     busy = true;
-    busyDelay = 0.5f;
+    busyDelay = swingSpeed;
     OnBusyEnd endSwing = EndSwing;
     busyEndHandler = endSwing;
     swinging = true;
