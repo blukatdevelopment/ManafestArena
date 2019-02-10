@@ -125,8 +125,9 @@ public class Career {
     public void CompleteEncounter(){
       if(Session.session.player != null){
         playerData = Session.session.player.GetData();
-        if(playerData != null){
-          stats.SetBaseStat(StatsManager.Stats.Health, playerData.health);
+        if(playerData != null && playerData.stats != null){
+          int health = playerData.stats.GetBaseStat(StatsManager.Stats.Health);
+          stats.SetBaseStat(StatsManager.Stats.Health, health);
           playerData.stats = stats;
         }
       }

@@ -388,6 +388,24 @@ public class StatsManager {
         return false;
     }
 
+    public void ReceiveDamage(Damage damage){
+        int health = GetStat(Stats.Health);
+        int healthMax = GetStat(Stats.HealthMax);
+
+        health -= damage.health;
+
+        if(health <= 0){
+            health = 0;
+            SetStatBuff(Stats.Health, 0); // Remove buff on death.
+        }
+
+        if(health > healthMax){
+            health = healthMax;
+        }
+
+        SetBaseStat(Stats.Health, health);
+    }
+
     public System.Collections.Generic.Dictionary<int, string[]> GetRows(){
         System.Collections.Generic.Dictionary<int, string[]> ret;
         ret = new System.Collections.Generic.Dictionary<int, string[]>();

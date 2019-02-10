@@ -9,7 +9,7 @@ using System.Collections.Generic;
 public class ActorData {
 	public Actor.Brains brain;
 	public string name;
-	public int id, health, healthMax;
+	public int id;
 	public Vector3 pos, rot;
 	public Inventory inventory;
 	public StatsManager stats;
@@ -19,7 +19,6 @@ public class ActorData {
 
 	public ActorData(){
 		id = -1;
-		health = healthMax = 0;
 		inventory = new Inventory();
 		pos = new Vector3();
 		rot = new Vector3();
@@ -28,7 +27,6 @@ public class ActorData {
 
 	public ActorData(StatsManager sm){
 		id = -1;
-		health = healthMax = 0;
 		inventory = new Inventory();
 		pos = new Vector3();
 		rot = new Vector3();
@@ -59,16 +57,12 @@ public class ActorData {
 
 	// Load this data from an existing stats manager
 	public void LoadStats(StatsManager sm){
-		health = sm.GetStat(StatsManager.Stats.Health);
-		healthMax = sm.GetStat(StatsManager.Stats.HealthMax);
 		name = sm.GetFact(StatsManager.Facts.Name);
 		stats = sm;
 	}
 
 	// Save this data to an existing stats manager
 	public void SaveStats(StatsManager sm){
-		sm.SetBaseStat(StatsManager.Stats.Health, health);
-		sm.SetBaseStat(StatsManager.Stats.HealthMax, healthMax);
 		sm.SetFact(StatsManager.Facts.Name, name);
 	}
 

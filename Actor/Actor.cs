@@ -37,8 +37,6 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
   public MeshInstance meshInstance;
   public CollisionShape collisionShape;
 
-  private int health;
-  private int healthMax = 100;
   private StatsManager stats;
   
   // Inventory
@@ -58,7 +56,6 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
 
   // These can change when detailed actor models with animations are added in.
   public const string ActorMeshPath = "res://Models/Actor.obj";
-  public const int HumanoidHealthMax = 100;
 
   public Actor(){
     brainType = Brains.Ai;
@@ -67,6 +64,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     inventory = new Inventory();
     InitHand();
     id = -1;
+    stats = new StatsManager();
   }
 
   public Actor(Brains b){
@@ -76,6 +74,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     inventory = new Inventory();
     InitHand();
     id = -1;
+    stats = new StatsManager();
   }
 
   public void InitBrain(Brains b){
@@ -130,15 +129,9 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     AddChild(speaker);
   }
 
-  public void InitStats(){
-    healthMax = HumanoidHealthMax;
-    health = healthMax;
-  }
 
   public void LoadData(ActorData dat){
     // FIXME add remaining fields to ActorData and this method
-    health = dat.health;
-    healthMax = dat.healthMax;
     Translation = dat.pos;
     name = dat.name;
     id = dat.id;
@@ -162,12 +155,11 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
   public ActorData GetData(){
     ActorData data = new ActorData();
     data.pos = Translation;
-    data.health = health;
-    data.healthMax = healthMax;
     data.brain = brainType;
     data.id = id;
     data.name = name;
     data.inventory = inventory;
+    data.stats = stats;
     
     return data;
   }
@@ -640,27 +632,22 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
   }
   
   public void ReceiveDamage(Damage damage){
+    int health = GetHealth();
     if(health <= 0){
       return;
     }
 
-    int start = health;
-    health -= damage.health;
-    int end = health;
+    stats.ReceiveDamage(damage);
 
-    GD.Print("Health reduced from " + start + " to " + end);
-    if(damage.health > 0 && health > 0){
-      speaker.PlayEffect(Sound.Effects.ActorDamage);
-    }
+    int healthDelta =  GetHealth() - health;
+    health = GetHealth();
 
     if(health <= 0){
-      health = 0;
       speaker.PlayEffect(Sound.Effects.ActorDeath);
       Die(damage.sender);
     }
-
-    if(health > healthMax){
-      health = healthMax;
+    else if(healthDelta < 0){
+      speaker.PlayEffect(Sound.Effects.ActorDamage);
     }
   }
   
@@ -680,7 +667,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
   public string ToString(){
     string ret = "Actor: \n";
     ret += "\tName: " + name + "\n";
-    ret += "\tHealth: " + health + "/" +  healthMax + "\n";
+    ret += "\tHealth: " + GetHealth() + "/" +  GetHealthMax() + "\n";
     ret += "\tID: " + id + "\n";
     ret += "\t" + brain.ToString() + "\n";
     if(hotbar != null){
@@ -690,11 +677,11 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
   }
 
   public int GetHealth(){
-    return health;
+    return stats.GetStat(StatsManager.Stats.Health);
   }
 
   public int GetHealthMax(){
-    return healthMax;
+    return stats.GetStat(StatsManager.Stats.HealthMax);
   }
   
   public void SyncPosition(){
