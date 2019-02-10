@@ -370,6 +370,7 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         mw = new MeleeWeapon();
         mw.healthDamage = 50;
         mw.swingSpeed = 0.5f;
+        ret = mw as Item;
         break;
       case Types.Staff:
         ret = new ProjectileWeapon() as Item;

@@ -42,8 +42,8 @@ public class HUDMenu : Container, IMenu{
       return;
     }
     
-    string healthText = "Health: " + player.GetHealth() + "/" + player.GetHealthMax();
-    healthBox.Text = healthText;
+    
+    healthBox.Text = player.GetStatusText();
 
     string itemText = player.ItemInfo();
     itemBox.Text = itemText;

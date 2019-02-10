@@ -154,6 +154,7 @@ public class StatsManager {
         SetBaseStat(Stats.Strength,     9);
         
         SetFact(Facts.Slot1, "Spear");
+        SetFact(Facts.Slot2, "Claws");
 
         ReplenishStats();
         GD.Print("BeastManInit");
@@ -223,6 +224,14 @@ public class StatsManager {
     public void ReplenishStats(){
         int healthMax = GetStat(Stats.HealthMax);
         SetBaseStat(Stats.Health, healthMax);
+
+        int staminaMax = GetStat(Stats.StaminaMax);
+        SetBaseStat(Stats.Stamina, staminaMax);
+
+        int manaMax = GetStat(Stats.ManaMax);
+        SetBaseStat(Stats.Mana, manaMax);
+
+        SetEffect(Effects.Bleed, 0);
     }
 
     // Returns a stat before buffs are applied
@@ -234,36 +243,32 @@ public class StatsManager {
         else if(derived){
             return GetDerivedStat(stat);
         }
-        GD.Print("Stat " + stat + " not set");
+        //GD.Print("Stat " + stat + " not set");
         return 0;
     }
 
     public void SetBaseStat(Stats stat, int value){
-        if(stat == Stats.HealthMax){
-          GD.Print("SetBaseStat: " + stat + ", " + value);
-        }
         if(baseStats.ContainsKey(stat)){
-            if(stat == Stats.HealthMax){
-                GD.Print("baseStats already contains " + stat);
-            }
             baseStats[stat] = value;
             return;
         }
         baseStats.Add(stat, value);
-        if(stat == Stats.HealthMax){
-            GD.Print("baseStats does not already contain " + stat);
-            GD.Print(this.ToString());
-        }
     }
 
     // Returns a stat derived from other stats
     public int GetDerivedStat(Stats stat){
+        int intelligence = GetStat(Stats.Intelligence);
+        int charisma = GetStat(Stats.Charisma);
+        int endurance = GetStat(Stats.Endurance);
+        int perception = GetStat(Stats.Perception);
+        int agility = GetStat(Stats.Agility);
+        int willpower = GetStat(Stats.Willpower);
+        int strength = GetStat(Stats.Strength);
+
         switch(stat){
-            case Stats.HealthMax: return HealthMaxFormula(GetStat(Stats.Endurance)); break;
-            case Stats.StaminaMax:
-                break;
-            case Stats.ManaMax:
-                break;
+            case Stats.HealthMax: return HealthMaxFormula(endurance); break;
+            case Stats.StaminaMax: return StaminaMaxFormula(agility, endurance); break;
+            case Stats.ManaMax: return ManaMaxFormula(intelligence, willpower); break;
             case Stats.Speed:
                 break;
             case Stats.UnarmedDamage:
@@ -279,6 +284,44 @@ public class StatsManager {
 
     public static int HealthMaxFormula(int endurance){
         return 50 + (endurance * 10);
+    }
+
+    public static int StaminaMaxFormula(int endurance, int agility){
+        return (endurance * 10 ) + (agility * 10);
+    }
+
+    public static int ManaMaxFormula(int intelligence, int willpower){
+        return (intelligence * 10) + (willpower * 10);
+    }
+
+    public static int HealthRegenFormula(int endurance){
+        int ret = endurance - 7;
+        
+        if(ret < 0){
+            return 0;
+        }
+
+        return ret; 
+    }
+
+    public static int StaminaRegenFormula(int agility, int endurance){
+        if(agility == 0){
+            return 1;
+        }
+        if(agility < 6 || endurance < 6){
+            return agility;
+        }
+
+        return agility + endurance;
+    }
+
+    public static int ManaRegenFormula(int intelligence, int willpower){
+        int ret = willpower;
+        if(intelligence > 5){
+            ret += intelligence - 5;
+        }
+
+        return ret;
     }
 
     public static int SlotsMaxFormula(int strength){
@@ -395,10 +438,57 @@ public class StatsManager {
     }
 
     public int GetEffect(Effects effect){
+
+        int intelligence = GetStat(Stats.Intelligence);
+        int charisma = GetStat(Stats.Charisma);
+        int endurance = GetStat(Stats.Endurance);
+        int perception = GetStat(Stats.Perception);
+        int agility = GetStat(Stats.Agility);
+        int willpower = GetStat(Stats.Willpower);
+        int strength = GetStat(Stats.Strength);
+
+        switch(effect){
+            case Effects.HealthRegen:
+                return HealthRegenFormula(endurance);
+                break;
+            case Effects.StaminaRegen:
+                return StaminaRegenFormula(agility, endurance);
+                break;
+            case Effects.ManaRegen:
+                return ManaRegenFormula(intelligence, willpower);
+                break;
+        }
+
         if(effects.ContainsKey(effect)){
             return effects[effect];
         }
+        
         return 0;
+    }
+
+    public string GetStatusText(){
+        string ret = "";
+
+        int health = GetStat(Stats.Health);
+        int healthMax = GetStat(Stats.HealthMax);
+        int healthRegen = GetEffect(Effects.HealthRegen);
+
+        ret += "Health[" + health + "/" + healthMax + "]";
+        if(healthRegen > 0){
+            ret += "(+" + healthRegen + ")";
+        }
+
+        int stamina = GetStat(Stats.Stamina);
+        int staminaMax = GetStat(Stats.StaminaMax);
+        int staminaRegen = GetEffect(Effects.StaminaRegen);
+        ret += "\nStamina[" + stamina + "/" + staminaMax + "](+" + staminaRegen + ")";
+
+        int mana = GetStat(Stats.Mana);
+        int manaMax = GetStat(Stats.ManaMax);
+        int manaRegen = GetEffect(Effects.ManaRegen);
+        ret += "\nMana[" + mana + "/" + manaMax + "](+" + manaRegen + ")";
+
+        return ret;
     }
 
     public void SetAbility(Abilities ability, int value){
@@ -659,7 +749,7 @@ public class StatsManager {
 
     public static void IcepawsTests(){
         StatsManager sm = GetTestStatsManager();
-        
+
         Test.Assert(sm.GetStat(Stats.Intelligence) == 5, "Intelligence not set correctly.");
         Test.Assert(sm.GetStat(Stats.Charisma) == 5, "Charisma not set correctly.");
         Test.Assert(sm.GetStat(Stats.Endurance) == 5, "Endurance not set correctly.");
@@ -667,6 +757,10 @@ public class StatsManager {
         Test.Assert(sm.GetStat(Stats.Agility) == 5, "Agility not set correctly.");
         Test.Assert(sm.GetStat(Stats.Willpower) == 5, "Willpower not set correctly.");
         Test.Assert(sm.GetStat(Stats.Strength) == 5, "Strength not set correctly.");
+
+        Test.Assert(sm.GetStat(Stats.HealthMax) == 100, "HealthMax not set correctly.");
+        Test.Assert(sm.GetStat(Stats.StaminaMax) == 100, "StaminaMax not set correctly.");
+        Test.Assert(sm.GetStat(Stats.ManaMax) == 100, "ManaMax not set correctly.");
     }
 
     public static void FormulaTests(){
@@ -677,9 +771,54 @@ public class StatsManager {
         expected = 100;
         Test.Assert(actual == expected, "HealthmaxFormula got " + actual + " and expected " + expected + ".");
 
+        actual = StaminaMaxFormula(5, 5);
+        expected = 100;
+        Test.Assert(actual == expected, "StaminaMax got " + actual + " and expected " + expected + ".");
+
+        actual = ManaMaxFormula(5, 5);
+        expected = 100;
+        Test.Assert(actual == expected, "ManaMax got " + actual + " and expected " + expected + ".");
+
         actual = SlotsMaxFormula(5);
         expected = 3;
         Test.Assert(actual == expected, "SlotsMaxFormula got " + actual + " and expected " + expected + ".");
+
+        actual = HealthRegenFormula(5);
+        expected = 0;
+        Test.Assert(actual == expected, "HealthRegen(5) got " + actual + " and expected " + expected + ".");
+
+        actual = HealthRegenFormula(8);
+        expected = 1;
+        Test.Assert(actual == expected, "HealthRegen(8) got " + actual + " and expected " + expected + ".");
+
+        actual = HealthRegenFormula(9);
+        expected = 2;
+        Test.Assert(actual == expected, "HealthRegen(9) got " + actual + " and expected " + expected + ".");
+
+        actual = HealthRegenFormula(10);
+        expected = 3;
+        Test.Assert(actual == expected, "HealthRegen(10) got " + actual + " and expected " + expected + ".");
+
+        actual = StaminaRegenFormula(0, 10);
+        expected = 1;
+        Test.Assert(actual == expected, "StaminaRegen(0, 10) got " + actual + " and expected " + expected + ".");
+
+        actual = StaminaRegenFormula(5, 5);
+        expected = 5;
+        Test.Assert(actual == expected, "StaminaRegen(5, 5) got " + actual + " and expected " + expected + ".");
+
+        actual = StaminaRegenFormula(10, 10);
+        expected = 20;
+        Test.Assert(actual == expected, "StaminaRegen(10, 10) got " + actual + " and expected " + expected + ".");
+
+        actual = ManaRegenFormula(5, 5);
+        expected = 5;
+        Test.Assert(actual == expected, "ManaRegen(5, 5) got " + actual + " and expected " + expected + ".");
+
+        actual = ManaRegenFormula(10, 10);
+        expected = 15;
+        Test.Assert(actual == expected, "ManaRegen(5, 5) got " + actual + " and expected " + expected + ".");
+
     }
 
     public static void DerivedTests(){
@@ -700,11 +839,25 @@ public class StatsManager {
         int health = sm.GetStat(Stats.Health);
         Test.Assert(health == 0, "Health should be 0 by default.");
 
+        int stamina = sm.GetStat(Stats.Stamina);
+        Test.Assert(stamina == 0, "Stamina should be 0 by default.");        
+
+        int mana = sm.GetStat(Stats.Mana);
+        Test.Assert(mana == 0, "Mana should be 0 by default.");
+
         sm.ReplenishStats();
 
         health = sm.GetStat(Stats.Health);
         int healthMax = sm.GetStat(Stats.HealthMax);
         Test.Assert(health == healthMax, "Health should be replenished to " + healthMax + " got: " + health);
+
+        stamina = sm.GetStat(Stats.Stamina);
+        int staminaMax = sm.GetStat(Stats.StaminaMax);
+        Test.Assert(stamina == staminaMax, "Stamina should be replenished to " + staminaMax + " got: " + stamina);        
+
+        mana = sm.GetStat(Stats.Mana);
+        int manaMax = sm.GetStat(Stats.ManaMax);
+        Test.Assert(mana == manaMax, "Mana should be replenished to " + manaMax + " got: " + mana);        
     }
 
     public static StatsManager GetTestStatsManager(){

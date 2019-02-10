@@ -569,6 +569,9 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
   }
     
   public override void _Process(float delta){
+      if(IsDead()){
+        return;
+      }
       if(brainType != Brains.Remote){ 
         brain.Update(delta); 
         Gravity(delta);
@@ -643,6 +646,10 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     HandleDeath(GetHealth() - health, damage);
   }
 
+  public string GetStatusText(){
+    return stats.GetStatusText();
+  }
+
   public void StatsUpdate(float delta){
     int health = GetHealth();
     stats.Update(delta);
@@ -691,6 +698,10 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
       ret += "\t" + hotbar.ToString() + "\n";
     }
     return ret;
+  }
+
+  public bool IsDead(){
+    return GetHealth() <= 0;
   }
 
   public int GetHealth(){

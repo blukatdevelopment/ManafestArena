@@ -55,7 +55,7 @@ public class Session : Node {
     ChangeMenu(Menu.Menus.Main);
     InitJukeBox();
     InitSettings();
-    //PerformTests();
+    PerformTests();
   }
 
   public override void _Input(Godot.InputEvent evt){
