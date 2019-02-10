@@ -19,7 +19,10 @@ public class StatsManager {
 
     public enum Effects{ // Perks and status conditions
         None,
-        Bleed
+        Bleed,
+        HealthRegen,
+        StaminaRegen,
+        ManaRegen
     };
 
     public enum Stats{
@@ -35,16 +38,10 @@ public class StatsManager {
         // DERIVED stats
         Health,
         HealthMax,
-        HealthRegenDelay,
-        HealthRegenAmount,
         Stamina,
         StaminaMax,
-        StaminaRegenDelay,
-        StaminaRegenAmount,
         Mana,
         ManaMax,
-        ManaRegenDelay,
-        ManaRegenAmount,
         Speed,
         UnarmedDamage,
         DamageResistance,
@@ -85,6 +82,9 @@ public class StatsManager {
         Slot10
     };
 
+    public const float UpdateDelay = 1f;
+    public float timeSinceLastEffect;
+
     System.Collections.Generic.Dictionary<Stats, int> baseStats;
     System.Collections.Generic.Dictionary<Stats, int> statBuffs;
     System.Collections.Generic.Dictionary<Effects, int> effects;
@@ -98,6 +98,7 @@ public class StatsManager {
         abilities = new System.Collections.Generic.Dictionary<Abilities, int>();
         effects = new System.Collections.Generic.Dictionary<Effects, int>();
         facts = new System.Collections.Generic.Dictionary<Facts, string>();
+        timeSinceLastEffect = 0f;
     }
 
     public StatsManager(string archetypeString){
@@ -107,6 +108,7 @@ public class StatsManager {
         effects = new System.Collections.Generic.Dictionary<Effects, int>();
         facts = new System.Collections.Generic.Dictionary<Facts, string>();
         Init(archetypeString);   
+        timeSinceLastEffect = 0f;
     }
 
     public void Init(string archetypeString){
@@ -258,21 +260,9 @@ public class StatsManager {
     public int GetDerivedStat(Stats stat){
         switch(stat){
             case Stats.HealthMax: return HealthMaxFormula(GetStat(Stats.Endurance)); break;
-            case Stats.HealthRegenAmount:
-                break;
-            case Stats.HealthRegenDelay:
-                break;
             case Stats.StaminaMax:
                 break;
-            case Stats.StaminaRegenAmount:
-                break;
-            case Stats.StaminaRegenDelay:
-                break;
             case Stats.ManaMax:
-                break;
-            case Stats.ManaRegenAmount:
-                break;
-            case Stats.ManaRegenDelay:
                 break;
             case Stats.Speed:
                 break;
@@ -341,6 +331,53 @@ public class StatsManager {
         return false;
     }
 
+    public bool StatCheck(Stats stat){
+        if(StatIsIcepaws(stat)){
+            return IcepawsCheck(stat);
+        }
+
+        return true;
+    }
+
+    public bool IcepawsCheck(Stats stat){
+        if(!StatIsIcepaws(stat)){
+            GD.Print(stat + " isn't an ICEPAWS stat.");
+            return false;
+        }
+
+        const int Max = 10; // ICEPAWS go from 0 to 10
+        const int Min = 0;
+        int val = GetStat(stat);
+        int roll = Util.RandInt(Min, Max);
+
+        if(roll <= val){
+            return true;
+        }
+
+        return false;
+    }
+
+    public static bool StatIsIcepaws(Stats stat){
+        List<Stats> icepaws = GetIcepawsStats();
+
+        if(icepaws.IndexOf(stat) != -1){
+            return true;
+        }
+        return false;
+    }
+
+    public static List<Stats> GetIcepawsStats(){
+        return new List<Stats>{
+            Stats.Intelligence,
+            Stats.Charisma,
+            Stats.Endurance,
+            Stats.Perception,
+            Stats.Agility,
+            Stats.Willpower,
+            Stats.Strength
+        };
+    }
+
     public bool HasPerk(Effects effect){
         if(effects.ContainsKey(effect)){
             return true;
@@ -355,6 +392,13 @@ public class StatsManager {
             return;
         }
         effects.Add(effect, value);
+    }
+
+    public int GetEffect(Effects effect){
+        if(effects.ContainsKey(effect)){
+            return effects[effect];
+        }
+        return 0;
     }
 
     public void SetAbility(Abilities ability, int value){
@@ -388,6 +432,54 @@ public class StatsManager {
         return false;
     }
 
+    public void Update(float delta){
+        timeSinceLastEffect += delta;
+
+        if(timeSinceLastEffect >= UpdateDelay){
+            timeSinceLastEffect = 0;
+            ApplyEffects();
+        }
+    }
+
+    private void ApplyEffects(){
+        foreach(Effects effect in Enum.GetValues(typeof(Effects))){
+            ApplyEffect(effect);
+        }
+    }
+
+    public void ApplyEffect(Effects effect){
+        int potency = GetEffect(effect);
+        if(potency == 0){
+            return;
+        }
+
+        Damage dmg = new Damage();
+
+        switch(effect){
+            case Effects.Bleed:
+                if(potency < 0){
+                    potency = 0;
+                    SetEffect(Effects.Bleed, potency);
+                }
+                else if(StatCheck(Stats.Endurance)){
+                    potency -= 1;
+                    SetEffect(Effects.Bleed, potency);
+                }
+                dmg.health = potency;
+                break;
+            case Effects.HealthRegen:
+                dmg.health = - potency;
+                break;
+            case Effects.StaminaRegen:
+                dmg.stamina = - potency;
+                break; 
+            case Effects.ManaRegen:
+                dmg.mana = - potency;
+                break;
+        }
+        ReceiveDamage(dmg);
+    }
+
     public void ReceiveDamage(Damage damage){
         int health = GetStat(Stats.Health);
         int healthMax = GetStat(Stats.HealthMax);
@@ -404,6 +496,9 @@ public class StatsManager {
         }
 
         SetBaseStat(Stats.Health, health);
+
+        int mana = GetStat(Stats.Mana);
+        int manaMax = GetStat(Stats.ManaMax);
     }
 
     public System.Collections.Generic.Dictionary<int, string[]> GetRows(){

@@ -573,6 +573,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
         brain.Update(delta); 
         Gravity(delta);
       }
+      StatsUpdate(delta);
   }
   
   public void Gravity(float delta){ 
@@ -639,12 +640,28 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
 
     stats.ReceiveDamage(damage);
 
-    int healthDelta =  GetHealth() - health;
-    health = GetHealth();
+    HandleDeath(GetHealth() - health, damage);
+  }
+
+  public void StatsUpdate(float delta){
+    int health = GetHealth();
+    stats.Update(delta);
+
+    HandleDeath(GetHealth() - health, null);
+  }
+
+  private void HandleDeath(int healthDelta, Damage damage){
+    int health = GetHealth();
 
     if(health <= 0){
       speaker.PlayEffect(Sound.Effects.ActorDeath);
-      Die(damage.sender);
+      string sender = "";
+      
+      if(damage != null){
+        sender = damage.sender;
+      }
+      
+      Die(sender);
     }
     else if(healthDelta < 0){
       speaker.PlayEffect(Sound.Effects.ActorDamage);

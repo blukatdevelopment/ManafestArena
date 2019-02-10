@@ -8,7 +8,16 @@ using System.Text;
 
 public class Util{
   
-  
+  private static Random random;
+
+  public static int RandInt(int min, int max){
+    if(random == null){
+      random = new Random();
+    }
+
+    return random.Next(min, max);
+  }
+
 
   //############################################################################
   //#       Rotation calculations                                              #
@@ -331,6 +340,5 @@ public class Util{
     }
     return ret;
   }
-
 
 }
