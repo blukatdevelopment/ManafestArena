@@ -8,7 +8,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IHasAmmo, ILook, IInteract {
+public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IHasAmmo, ILook, IInteract, IHasStats {
   
   public enum Brains{
     Player1, // Local player leveraging keyboard input.
@@ -178,6 +178,10 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
 
   public void NameHand(string handName){
     hand.Name = handName;
+  }
+
+  public StatsManager GetStats(){
+    return stats;
   }
 
   /* Return global position of eyes(if available) or body */

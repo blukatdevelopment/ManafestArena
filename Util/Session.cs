@@ -67,12 +67,13 @@ public class Session : Node {
   }
 
   public override void _Process(float delta){
-    DeviceManager.SpamJoyPadInput(0);
+    //DeviceManager.SpamJoyPadInput(0);
   }
 
   public void PerformTests(){
     Test.Init();
-    StatsManager.StatsTests();
+    //StatsManager.StatsTests();
+    SpellCaster.SpellCasterTests();
   }
 
   public void InitSettings(){

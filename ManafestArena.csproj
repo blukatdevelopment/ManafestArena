@@ -82,6 +82,7 @@
     <Compile Include="Items\IHasItem.cs" />
     <Compile Include="Items\IHasInfo.cs" />
     <Compile Include="Items\IEquip.cs" />
+    <Compile Include="Items\IHasStats.cs" />
     <Compile Include="Items\ICollide.cs" />
     <Compile Include="Items\IInteract.cs" />
     <Compile Include="Items\IConsume.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="Items\ItemData.cs" />
     <Compile Include="Items\HealthAid.cs" />
     <Compile Include="Items\ThrownItem.cs" />
+    <Compile Include="Items\SpellCaster.cs" />
     <Compile Include="Arena\Arena.cs" />
     <Compile Include="Arena\ArenaSettings.cs" />
     <Compile Include="Util\NetworkSession.cs" />

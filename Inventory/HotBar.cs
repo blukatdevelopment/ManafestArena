@@ -46,8 +46,21 @@ public class HotBar : IHasItem {
     GD.Print(this.ToString());
   }
 
+  public void SetItemSlot(int slot, Item item){
+    if(slot < 0 || slot >= items.Length){
+      GD.Print("HotBar.SetItemSlot: Slot " + slot + " is invalid.");
+      return;
+    }
+
+    items[slot] = item;
+  }
+
   public int EquippedSlot(){
     return equippedSlot;
+  }
+
+  public Item EquippedItem(){
+    return items[equippedSlot];
   }
 
   public void DropEquippedItem(){
@@ -94,6 +107,17 @@ public class HotBar : IHasItem {
     return items.Length;
   }
 
+  public int ActiveSlotsCount(){
+    int ret = 0;
+
+    for(int i = 0; i < items.Length; i++){
+      if(items[i] != null){
+        ret++;
+      }
+    }
+
+    return ret;
+  }
 
   public string ToString(){
     string ret = "HotBar: [" + items.Length + "]\n";

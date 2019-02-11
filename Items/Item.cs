@@ -102,7 +102,7 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
     string ret = "Pick up " + name + ".";
     switch(interaction){
       case Item.Uses.A:
-        ret = "Pick up " + name + ".";
+        //ret = "Pick up " + name + ".";
         break;
     }
     if(name == "Hand"){
