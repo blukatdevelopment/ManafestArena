@@ -22,6 +22,7 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
   public delegate void OnBusyEnd();
   public OnBusyEnd busyEndHandler;
   public float reloadDelay;
+  public bool requireAmmoToFire;
   
   public ProjectileWeapon(){
     inventory = new Inventory();
@@ -169,6 +170,9 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
   }
 
   public bool ExpendAmmo(){
+    if(!requireAmmoToFire){
+      return true;
+    }
     if(inventory.ItemCount() > 0){
       inventory.RetrieveItem(0, 1);
       return true;

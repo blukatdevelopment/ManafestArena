@@ -27,6 +27,7 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
 
     // Mage
     Staff,
+    FireballSpell,
     
     // Soldier
     Crossbow,
@@ -71,13 +72,15 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
     speaker = new Speaker();
     AddChild(speaker);
 
-    meshInstance = new MeshInstance();
-    meshInstance.Mesh = ResourceLoader.Load(meshPath) as Mesh;
-    AddChild(meshInstance);
+    if(meshPath != ""){
+      meshInstance = new MeshInstance();
+      meshInstance.Mesh = ResourceLoader.Load(meshPath) as Mesh;
+      AddChild(meshInstance);
 
-    collisionShape = new CollisionShape();
-    AddChild(collisionShape);
-    collisionShape.MakeConvexFromBrothers();
+      collisionShape = new CollisionShape();
+      AddChild(collisionShape);
+      collisionShape.MakeConvexFromBrothers();
+    }
   }
   
   public virtual bool IsBusy(){
@@ -375,7 +378,7 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         ret = mw as Item;
         break;
       case Types.Staff:
-        sc = new SpellCaster(new List<Types>{ Types.Knife });
+        sc = new SpellCaster(new List<Types>{ Types.FireballSpell });
         ret = sc as Item;
         break;
       case Types.Crossbow:
@@ -405,6 +408,17 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         mw.healthDamage = 35;
         mw.swingSpeed = 1.0f;
         ret = mw as Item;
+        break;
+      case Types.FireballSpell:
+        pw = new ProjectileWeapon();
+        pw.healthDamage = 30;
+        pw.requireAmmoToFire = false;
+        pw.ammoType = "MusketBall";
+        dat = new ItemData();
+        dat.type = Types.Ammo;
+        dat.name = pw.ammoType;
+        pw.LoadInternalReserve(dat, 6);
+        ret = pw as Item;
         break;
     }
     
@@ -490,6 +504,9 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         break;
       case Types.Knife:
         ret = new string[]{"Knife", "Don't bring a gun to a knifefight.", "res://Models/Rifle.obj"};
+        break;
+      case Types.FireballSpell:
+        ret = new string[]{"Fireball", "Better than a wet match.", ""};
         break;
     }
     

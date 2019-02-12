@@ -8,7 +8,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class SpellCaster : Item {
+public class SpellCaster : Item, IHasStats {
     HotBar hotbar; 
 
     public SpellCaster(){
@@ -37,6 +37,20 @@ public class SpellCaster : Item {
     spell.Use(Uses.A);
   }
 
+  public StatsManager GetStats(){
+    if(wielder == null){
+        return null;
+    }
+
+    IHasStats statWielder = wielder as IHasStats;
+
+    if(statWielder == null){
+        return null;
+    }
+
+    return statWielder.GetStats();
+  }
+
   public void NextSpell(){
     hotbar.EquipNextItem();
   }
@@ -58,6 +72,7 @@ public class SpellCaster : Item {
         for(int i = 0; i < spellItems.Count; i++){
             hotbar.SetItemSlot(i, spellItems[i]);
             AddChild(spellItems[i]);
+            spellItems[i].Equip(this);
             spellItems[i].Mode = RigidBody.ModeEnum.Static;
         }
     }
