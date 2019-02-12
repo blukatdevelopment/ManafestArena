@@ -346,7 +346,9 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
     MeleeWeapon mw;
     ProjectileWeapon pw;
     ThrownItem ti;
+    SpellCaster sc;
     ItemData dat;
+
     switch(type){
       case Types.Hand: ret = new MeleeWeapon() as Item; break;
       case Types.Rifle: ret = new ProjectileWeapon() as Item; break;
@@ -373,7 +375,8 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         ret = mw as Item;
         break;
       case Types.Staff:
-        ret = new ProjectileWeapon() as Item;
+        sc = new SpellCaster(new List<Types>{ Types.Knife });
+        ret = sc as Item;
         break;
       case Types.Crossbow:
         pw = new ProjectileWeapon();

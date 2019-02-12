@@ -51,17 +51,17 @@ public class HUDMenu : Container, IMenu{
     string objectiveText = Session.GetObjectiveText();
     objectiveBox.Text = objectiveText;
 
-    IInteract interactor = player.VisibleObject() as IInteract;
+    //IInteract interactor = player.VisibleObject() as IInteract;
     
-    if(interactor == null){
-      interactionBox.Hide();
-    }
-    else{
-      Item.Uses interaction = player.GetActiveInteraction();
-      string interactionText = interactor.GetInteractionText(interaction);
-      interactionBox.Show();
-      interactionBox.SetText(interactionText);
-    }
+    // if(interactor == null){
+    //   interactionBox.Hide();
+    // }
+    // else{
+    //   Item.Uses interaction = player.GetActiveInteraction();
+    //   string interactionText = interactor.GetInteractionText(interaction);
+    //   interactionBox.Show();
+    //   interactionBox.SetText(interactionText);
+    // }
   }
 
   void InitControls(){
@@ -74,7 +74,7 @@ public class HUDMenu : Container, IMenu{
     objectiveBox = Menu.Label("Objective Info");
     AddChild(objectiveBox);
 
-    interactionBox = Menu.Label("Interaction text");
+    interactionBox = Menu.Label("");
     AddChild(interactionBox);
   }
 

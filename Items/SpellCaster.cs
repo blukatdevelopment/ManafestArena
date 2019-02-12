@@ -58,6 +58,7 @@ public class SpellCaster : Item {
         for(int i = 0; i < spellItems.Count; i++){
             hotbar.SetItemSlot(i, spellItems[i]);
             AddChild(spellItems[i]);
+            spellItems[i].Mode = RigidBody.ModeEnum.Static;
         }
     }
 
