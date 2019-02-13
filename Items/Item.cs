@@ -59,6 +59,7 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
   protected CollisionShape collisionShape;
   public bool stackable;
   public List<int> stack;
+  public int manaCost, staminaCost;
 
   public void BaseInit(string name, string description, string meshPath, bool allowCollision = true){
     this.name = name;
@@ -296,6 +297,20 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
   public virtual string GetInfo(){
     return name;
   }
+
+  public StatsManager GetStats(){
+    if(wielder == null){
+        return null;
+    }
+
+    IHasStats statWielder = wielder as IHasStats;
+
+    if(statWielder == null){
+        return null;
+    }
+
+    return statWielder.GetStats();
+  }
   
   public virtual string GetMoreInfo(){
     return description;
@@ -413,7 +428,8 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         pw = new ProjectileWeapon();
         pw.healthDamage = 30;
         pw.requireAmmoToFire = false;
-        pw.ammoType = "MusketBall";
+        pw.ammoType = "Fireball";
+        pw.manaCost = 30;
         dat = new ItemData();
         dat.type = Types.Ammo;
         dat.name = pw.ammoType;

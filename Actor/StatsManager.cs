@@ -180,6 +180,21 @@ public class StatsManager {
         GD.Print("MageInit");
     }
 
+    // For consuming mana, stamina, health, etc
+    public bool ConsumeStat(Stats stat, int quantity){
+        int available = GetBaseStat(stat);
+        if(available < quantity){
+            return false;
+        }
+
+        GD.Print("a, q: "+available+","+quantity);
+        available -= quantity;
+
+        SetBaseStat(stat, available);
+
+        return true;
+    }
+
     public void SoldierInit(){
         int brainInt = (int)Actor.Brains.Player1;
         SetFact(Facts.Archetype, CharacterName(Archetypes.Three));

@@ -37,20 +37,6 @@ public class SpellCaster : Item, IHasStats {
     spell.Use(Uses.A);
   }
 
-  public StatsManager GetStats(){
-    if(wielder == null){
-        return null;
-    }
-
-    IHasStats statWielder = wielder as IHasStats;
-
-    if(statWielder == null){
-        return null;
-    }
-
-    return statWielder.GetStats();
-  }
-
   public void NextSpell(){
     hotbar.EquipNextItem();
   }

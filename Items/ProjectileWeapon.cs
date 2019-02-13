@@ -170,7 +170,17 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
   }
 
   public bool ExpendAmmo(){
-    if(!requireAmmoToFire){
+    if(!requireAmmoToFire && manaCost == 0 && staminaCost == 0){
+      return true;
+    }
+    else if(!requireAmmoToFire){
+      StatsManager stats = GetStats();
+      if(manaCost != 0 && !stats.ConsumeStat(StatsManager.Stats.Mana, manaCost)){
+        return false;
+      }
+      if(staminaCost != 0 && !stats.ConsumeStat(StatsManager.Stats.Stamina, staminaCost)){
+        return false;
+      }
       return true;
     }
     if(inventory.ItemCount() > 0){
@@ -179,7 +189,8 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
     }
     
     return false;
-  } 
+  }
+
 
   [Remote]
   public void DeferredFire(string name){
@@ -250,7 +261,6 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
     List<ItemData> receivedAmmo = new List<ItemData>();
 
     if(!ReloadNeeded()){
-      GD.Print("Reload not needed");
       return;
     }
     
@@ -264,7 +274,6 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
     }
 
     if(receivedAmmo.Count == 0){
-      GD.Print("No reload possible");
       return;
     }
 
@@ -274,7 +283,7 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
   }
 
   public bool ReloadNeeded(){
-    return ReloadAmmoNeeded() > 0;
+    return requireAmmoToFire && ReloadAmmoNeeded() > 0;
   }
 
   public int ReloadAmmoNeeded(){
