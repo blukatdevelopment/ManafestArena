@@ -22,7 +22,8 @@ public class StatsManager {
         Bleed,
         HealthRegen,
         StaminaRegen,
-        ManaRegen
+        ManaRegen,
+        SprintingFatigue
     };
 
     public enum Stats{
@@ -47,9 +48,11 @@ public class StatsManager {
         DamageResistance,
         DamageThreshold,
         SlotsMax,
+        JumpCost,
 
-        // Identity
+        // Misc
         Brain,
+        Sprinting,
 
         // GameState
         LastEncounter,
@@ -292,7 +295,8 @@ public class StatsManager {
                 break;
             case Stats.DamageThreshold:
                 break;
-            case Stats.SlotsMax: return SlotsMaxFormula(GetStat(Stats.Strength)); break;
+            case Stats.SlotsMax: return SlotsMaxFormula(strength); break;
+            case Stats.JumpCost: return JumpCostFormula(agility);
         }
         return 0;
     }
@@ -307,6 +311,13 @@ public class StatsManager {
 
     public static int ManaMaxFormula(int intelligence, int willpower){
         return (intelligence * 10) + (willpower * 10);
+    }
+
+    public static int JumpCostFormula(int agility){
+        if(agility == 0){
+            return 100;
+        }
+        return 100 / agility;
     }
 
     public static int HealthRegenFormula(int endurance){
@@ -337,6 +348,20 @@ public class StatsManager {
         }
 
         return ret;
+    }
+
+    public static int SprintFatigueFormula(int sprinting, int agility, int endurance){
+        if(sprinting == 0){
+            return 0;
+        }
+
+        int baseCost = 10;
+
+        int agilityBonus = agility/2;
+
+        int enduranceBonus = endurance/2;
+
+        return baseCost - agilityBonus - enduranceBonus;
     }
 
     public static int SlotsMaxFormula(int strength){
@@ -380,7 +405,8 @@ public class StatsManager {
             Stats.ManaMax,
             Stats.Speed,
             Stats.UnarmedDamage,
-            Stats.SlotsMax
+            Stats.SlotsMax,
+            Stats.JumpCost
         };
 
         if(derived.IndexOf(stat) != -1){
@@ -472,6 +498,9 @@ public class StatsManager {
             case Effects.ManaRegen:
                 return ManaRegenFormula(intelligence, willpower);
                 break;
+            case Effects.SprintingFatigue:
+                int sprinting = GetStat(Stats.Sprinting);
+                return SprintFatigueFormula(sprinting, agility, endurance);
         }
 
         if(effects.ContainsKey(effect)){
@@ -557,6 +586,7 @@ public class StatsManager {
         if(potency == 0){
             return;
         }
+        //GD.Print("Applying effect" + effect + "," + potency);
 
         Damage dmg = new Damage();
 
@@ -573,13 +603,16 @@ public class StatsManager {
                 dmg.health = potency;
                 break;
             case Effects.HealthRegen:
-                dmg.health = - potency;
+                dmg.health = -potency;
                 break;
             case Effects.StaminaRegen:
-                dmg.stamina = - potency;
+                dmg.stamina = -potency;
                 break; 
             case Effects.ManaRegen:
-                dmg.mana = - potency;
+                dmg.mana = -potency;
+                break;
+            case Effects.SprintingFatigue:
+                dmg.stamina = potency;
                 break;
         }
         ReceiveDamage(dmg);
@@ -593,7 +626,6 @@ public class StatsManager {
 
         if(health <= 0){
             health = 0;
-            SetStatBuff(Stats.Health, 0); // Remove buff on death.
         }
 
         if(health > healthMax){
@@ -604,6 +636,33 @@ public class StatsManager {
 
         int mana = GetStat(Stats.Mana);
         int manaMax = GetStat(Stats.ManaMax);
+
+        mana -= damage.mana;
+
+        if(mana <= 0){
+            mana = 0;
+        }
+
+        if(mana > manaMax){
+            mana = manaMax;
+        }
+
+        SetBaseStat(Stats.Mana, mana);
+
+        int stamina = GetStat(Stats.Stamina);
+        int staminaMax = GetStat(Stats.StaminaMax);
+
+        stamina -= damage.stamina;
+        
+        if(stamina <= 0){
+            stamina = 0;
+        }
+
+        if(stamina > staminaMax){
+            stamina = staminaMax;
+        }
+
+        SetBaseStat(Stats.Stamina, stamina);
     }
 
     public System.Collections.Generic.Dictionary<int, string[]> GetRows(){

@@ -352,6 +352,9 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
   
   public void SetSprint(bool val){
     sprinting = val;
+    int sprintInt = sprinting ? 1 : 0;
+    stats.SetBaseStat(StatsManager.Stats.Sprinting, sprintInt);
+    GD.Print("Sprinting set to " + sprintInt + ", " + stats.GetStat(StatsManager.Stats.Sprinting));
   }
   
   public float GetMovementSpeed(){
@@ -628,6 +631,10 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     float jumpForce = 10;
     gravityVelocity = jumpForce;
     grounded = false; 
+    int jumpCost = stats.GetStat(StatsManager.Stats.JumpCost);
+    Damage dmg = new Damage();
+    dmg.stamina = jumpCost;
+    ReceiveDamage(dmg);
   }
 
   [Remote]
