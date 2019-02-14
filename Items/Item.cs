@@ -384,12 +384,14 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
       case Types.Spear:
         ti = new ThrownItem();
         ti.healthDamage = 100;
+        ti.staminaCost = 25;
         ret = ti as Item;
         break;
       case Types.Claws:
         mw = new MeleeWeapon();
         mw.healthDamage = 50;
         mw.swingSpeed = 0.5f;
+        mw.staminaCost = 15;
         ret = mw as Item;
         break;
       case Types.Staff:
@@ -422,6 +424,7 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         mw = new MeleeWeapon();
         mw.healthDamage = 35;
         mw.swingSpeed = 1.0f;
+        mw.staminaCost = 15;
         ret = mw as Item;
         break;
       case Types.FireballSpell:
