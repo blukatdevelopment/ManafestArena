@@ -359,7 +359,9 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
   
   public float GetMovementSpeed(){
     float speed = 5f;
-    if(sprinting){
+
+    int stamina = stats.GetStat(StatsManager.Stats.Stamina);
+    if(sprinting && stamina > 0){
       speed *= 2f;
     }
     return speed;

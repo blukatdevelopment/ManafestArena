@@ -355,7 +355,7 @@ public class StatsManager {
             return 0;
         }
 
-        int baseCost = 10;
+        int baseCost = 20;
 
         int agilityBonus = agility/2;
 
