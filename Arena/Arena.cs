@@ -13,6 +13,7 @@ public class Arena : Spatial {
   public List<Actor> actors;
   public Spatial terrain;
   public List<Vector3> enemySpawnPoints, playerSpawnPoints, itemSpawnPoints;
+  public List<Vector3> usedEnemySpawnPoints;
   public int nextId = -2147483648;
   public bool gameStarted = false;
   public ArenaSettings settings;
@@ -247,6 +248,8 @@ public class Arena : Spatial {
     playerSpawnPoints = GetSpawnPoints("PlayerSpawnPoint");
     enemySpawnPoints = GetSpawnPoints("EnemySpawnPoint");
     itemSpawnPoints = GetSpawnPoints("ItemSpawnPoint");
+
+    usedEnemySpawnPoints = new List<Vector3>();
   }
   
 
@@ -282,7 +285,7 @@ public class Arena : Spatial {
   public Actor SpawnActor(ActorData dat){
     Actor.Brains brain = dat.GetBrain();
 
-    Vector3 pos = RandomSpawn(enemySpawnPoints);
+    Vector3 pos = RandomSpawn(enemySpawnPoints, usedEnemySpawnPoints);
     if(brain == Actor.Brains.Player1){
       pos = RandomSpawn(playerSpawnPoints);
     }
@@ -301,7 +304,37 @@ public class Arena : Spatial {
   public Vector3 RandomSpawn(List<Vector3> spawnList){
     System.Random rand = Session.GetRandom();
     int randInt = rand.Next(spawnList.Count);
+    
     return spawnList[randInt];
+  }
+
+  // Don't place spawnpoints on top of each other.
+  public Vector3 RandomSpawn(List<Vector3> spawnList, List<Vector3> usedList){
+    if(spawnList.Count == usedList.Count){
+      usedList = new List<Vector3>();
+    }
+    if(spawnList.Count == 0){
+      GD.Print("RandomSpawn: spawnList empty");
+    }
+
+    System.Random rand = Session.GetRandom();
+
+    Vector3 ret = new Vector3();
+    bool finished = false;
+    const int MaxIterations = 500;
+    int i = 0;
+
+    while(!finished && i < MaxIterations){
+      i++;
+      int randInt = rand.Next(spawnList.Count);
+      ret = spawnList[randInt];
+      
+      if(usedList.IndexOf(ret) != -1){
+        finished = true;
+      } 
+    }
+
+    return ret;
   }
 
   public void PlayerReady(){}
