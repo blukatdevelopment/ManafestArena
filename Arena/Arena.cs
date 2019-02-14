@@ -59,17 +59,11 @@ public class Arena : Spatial {
   }
   
   public bool PlayerWon(){
-    int max = playerWorldId;
-    
-    foreach(KeyValuePair<int, int> key in scores){
-      int score = key.Value;
-      
-      if(score > scores[max]){
-        max = score;
-      }
+    if(actors.Count > 1){
+      return false;
     }
-    
-    if(max == playerWorldId){
+
+    if(actors[0].brainType == Actor.Brains.Player1){
       return true;
     }
     
@@ -199,7 +193,7 @@ public class Arena : Spatial {
     totalEnemies--;
     
     AwardPoints(actorPaths);
-    if(totalEnemies == 0){
+    if(PlayerWon()){
       Session.session.career.CompleteEncounter();
     }
   }
