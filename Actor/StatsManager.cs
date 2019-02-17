@@ -82,7 +82,10 @@ public class StatsManager {
         Slot7,
         Slot8,
         Slot9,
-        Slot10
+        Slot10,
+        ColorX,
+        ColorY,
+        ColorZ
     };
 
     public const float UpdateDelay = 1f;

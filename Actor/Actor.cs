@@ -874,7 +874,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
   }
   
   public bool IsPaused(){
-    return menuActive;
+    return paused;
   }
 
   public void SetMenuActive(bool val){
@@ -904,7 +904,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
   }
   
   public void TogglePause(){
-    SetPaused(!menuActive);
+    SetPaused(!paused);
   }
 
   public void Pause(){

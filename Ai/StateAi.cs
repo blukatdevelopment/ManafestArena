@@ -34,6 +34,10 @@ public class StateAi : Brain {
       return;
     }
 
+    if(host.IsPaused()){
+      return;
+    }
+    
     if(activeState == null){
       ChangeState(DefaultState);
     }
