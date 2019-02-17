@@ -58,6 +58,13 @@
     <Compile Include="Actor\DeviceManager.cs" />
     <Compile Include="Actor\InputEvent.cs" />
     <Compile Include="Actor\ILook.cs" />
+    <Compile Include="Ai\IBehaviorState.cs" />
+    <Compile Include="Ai\StateAi.cs" />
+    <Compile Include="Ai\RoamingState.cs" />
+    <Compile Include="Ai\PursuingState.cs" />
+    <Compile Include="Ai\FightingState.cs" />
+    <Compile Include="Ai\RangedCombatState.cs" />
+    <Compile Include="Ai\MeleeCombatState.cs" />
     <Compile Include="Menus\Button.cs" />
     <Compile Include="Menus\MainMenu.cs" />
     <Compile Include="Menus\Menu.cs" />

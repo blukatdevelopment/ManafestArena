@@ -6,7 +6,7 @@ using System;
 */
 
 public class Brain {
-  protected Actor actor;
+  public Actor actor;
   
   public Brain(Actor actor){
       this.actor = actor;

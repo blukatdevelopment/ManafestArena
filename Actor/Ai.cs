@@ -74,7 +74,6 @@ public class Ai : Brain
     if(currentDist > potentialDist){
       host.Move(new Vector3(0, 0, -host.GetMovementSpeed()), delta);
     }
-    
   }
   
   void AimAt(Vector3 point){

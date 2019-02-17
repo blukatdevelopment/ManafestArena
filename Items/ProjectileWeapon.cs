@@ -94,6 +94,12 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
     return quantity;
   }
   
+  public int ViewAmmoCount(){
+    int count = inventory.ItemCount();
+    count += reserve.ItemCount();
+    return count;
+  }
+
   public List<ItemData> RequestAmmo(string ammoType, int max = 0){
     return inventory.RetrieveItems(Item.Types.Ammo, ammoType, max);
   }

@@ -85,7 +85,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
         Session.session.player = this;
         break;
       case Brains.Ai: 
-        brain = (Brain)new Ai(this); 
+        brain = (Brain)new StateAi(this); 
         break;
       case Brains.Remote:
         brain = null;
@@ -897,6 +897,10 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     return inventory.GetAllItems();
   }
 
+  public List<Item> GetHotbarItems(){
+    return hotbar.GetEveryItem();
+  }
+  
   public void TogglePause(){
     SetPaused(!menuActive);
   }
