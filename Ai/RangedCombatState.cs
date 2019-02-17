@@ -1,5 +1,5 @@
 /*
-  An AI behavior that decides how to attack an enemy.
+  An AI behavior for combat using ranged weapons.
 */
 using Godot;
 using System;
@@ -9,9 +9,22 @@ public class RangedCombatState : IBehaviorState {
   public Actor hostActor;
   public StateAi hostAi;
   public Actor enemy;
+  public bool aimed;
+  public bool inRange;
+  public float currentRange;
+
+
+  public float attackTimer;
+  public const float AttackInterval = 1f;
+  public const float RangedRange = 10f;
+  public const float RangedAimMargin = 0.5f;
+
+  public float strafeTimer;
+  public int strafeDirection;
 
   public RangedCombatState(Actor actor){
     hostActor = actor;
+    attackTimer = 0f;
   }
 
   public void Init(StateAi hostAi){
@@ -22,27 +35,59 @@ public class RangedCombatState : IBehaviorState {
       return;
     }
 
-    // TODO: Make this choose the closest enemy
     enemy = hostAi.enemies[0];
   }
 
   public void Update(float delta){
-    DetermineAttack();
-  }
-
-  public void DetermineAttack(){
-    List<Item> items = hostAi.GetItems();
-
-    foreach(Item item in items){
-      ProjectileWeapon pw = item as ProjectileWeapon;
-      if(pw != null && pw.ViewAmmoCount() > 0){
-        hostAi.ChangeState(StateAi.States.Ranged);
-        return;
-      }
+    if(enemy == null){
+      hostAi.ChangeState(StateAi.States.Roaming);
     }
 
-    hostAi.ChangeState(StateAi.States.Melee);
+    aimed = hostAi.IsAimedAt(enemy.Transform.origin, RangedAimMargin);
+    currentRange = hostAi.DistanceToActor(enemy);
+    inRange = currentRange <= RangedRange;
+
+    Strafe(delta);
+    MaintainDistance(delta);
+    Attack(delta);
   }
 
+  public void Strafe(float delta){
+    strafeTimer -= delta;
+    if(strafeTimer > 0){
+      hostActor.Move(new Vector3(strafeDirection * hostActor.GetMovementSpeed(), 0, 0), delta);
+      return;
+    }
+    strafeDirection = Util.RandInt(-1, 1);
+    strafeTimer = 0.5f; // Quick strafing
+  }
+
+  public void MaintainDistance(float delta){
+    if(!inRange && aimed){
+      // Move up into range
+      hostActor.Move(new Vector3(0, 0, -hostActor.GetMovementSpeed()), delta);
+    }
+    else if(aimed && currentRange < RangedRange){
+      // Back up to keep out of melee range
+      hostActor.Move(new Vector3(0, 0, hostActor.GetMovementSpeed()), delta);
+    }
+    hostAi.AimAt(enemy.Transform.origin);
+  }
+
+  public void Attack(float delta){
+    attackTimer += delta;
+    
+    ProjectileWeapon pw = hostActor.PrimaryItem() as ProjectileWeapon;
+
+    if(pw == null || pw.GetAmmoCount() == 0){
+      hostAi.ChangeState(StateAi.States.Fighting);
+    }
+
+
+    if(attackTimer >= AttackInterval && aimed){
+      hostActor.Use(Item.Uses.A);
+      attackTimer = 0f;
+    }
+  }
 
 }

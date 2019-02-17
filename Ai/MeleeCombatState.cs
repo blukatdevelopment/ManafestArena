@@ -38,6 +38,10 @@ public class MeleeCombatState : IBehaviorState {
   }
 
   public void Update(float delta){
+    if(enemy == null){
+      hostAi.ChangeState(StateAi.States.Roaming);
+    }
+    
     aimed = hostAi.IsAimedAt(enemy.Transform.origin, MeleeAimMargin);
     inRange = hostAi.DistanceToActor(enemy) <= MeleeRange;
     Strafe(delta);

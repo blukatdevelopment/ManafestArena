@@ -44,7 +44,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
   private Item hand; // Weapon for unarmed actors.
   private bool unarmed = true; 
   private Inventory inventory;
-  private HotBar hotbar;
+  public HotBar hotbar;
   
   // Handpos
   private float HandPosX = 0;

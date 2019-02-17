@@ -83,7 +83,9 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
   }
   
   public Damage GetBaseDamage(){
-    return new Damage(healthDamage);
+    Damage ret = new Damage();
+    ret.health = healthDamage;
+    return ret;
   }
   
   public int CheckAmmo(string ammoType, int max = 0){
@@ -94,7 +96,7 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
     return quantity;
   }
   
-  public int ViewAmmoCount(){
+  public int GetAmmoCount(){
     int count = inventory.ItemCount();
     count += reserve.ItemCount();
     return count;

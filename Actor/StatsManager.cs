@@ -234,8 +234,21 @@ public class StatsManager {
         SetBaseStat(Stats.Willpower,    5);
         SetBaseStat(Stats.Strength,     5);
 
-        ReplenishStats();
-        GD.Print("GoonInit"); 
+        SetFact(Facts.Slot1, RandomGoonWeapon());
+        ReplenishStats(); 
+    }
+
+    public string RandomGoonWeapon(){
+        int rand = Util.RandInt(0, 5);
+        string ret = "";
+        switch(rand){
+            case 1: ret = "Crossbow"; break;
+            case 2: ret = "FlintlockPistol"; break;
+            case 3: ret = "Knife"; break;
+            case 4: ret = "Spear"; break;
+        }
+
+        return ret;
     }
 
     // Raise all stats with a max to that max value.

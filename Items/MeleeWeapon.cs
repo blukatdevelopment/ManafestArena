@@ -53,7 +53,9 @@ public class MeleeWeapon : Item, IWeapon {
   }
   
   public Damage GetBaseDamage(){
-    return new Damage(healthDamage);
+    Damage ret = new Damage();
+    ret.health = healthDamage;
+    return ret;
   }
   
   public override bool IsBusy(){

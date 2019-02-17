@@ -19,6 +19,7 @@ public class RoamingState : IBehaviorState {
 
   public void Init(StateAi hostAi){
     this.hostAi = hostAi;
+    hostAi.enemies = new List<Actor>();
   }
 
   public void Update(float delta){
