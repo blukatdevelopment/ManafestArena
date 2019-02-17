@@ -43,6 +43,7 @@ public class StateAi : Brain {
 
 
   public void ChangeState(States state){
+    GD.Print("Changing state to " + state);
     activeState = StateFactory(state);
   }
 
@@ -82,7 +83,6 @@ public class StateAi : Brain {
   public List<Item> GetItems(){
     return actor.GetHotbarItems();
   }
-
   
   public List<Actor> ActorsInSight(){
     Vector3 start = host.GlobalHeadPosition();
@@ -151,5 +151,17 @@ public class StateAi : Brain {
     lookingRot = Util.ToDegrees(lookingRot);
     Vector3 turnRot = (lookingRot - hostRot);
     host.Turn(turnRot.y, turnRot.x);
+  }
+
+  public bool IsAimedAt(Vector3 point, float aimMargin){
+    Vector3 hostRot = host.GetRotationDegrees();
+    Transform aimedTrans = host.Transform.LookingAt(point, host.Up());
+    
+    Vector3 aimedRot = aimedTrans.basis.GetEuler();
+    aimedRot = Util.ToDegrees(aimedRot);
+    
+    float aimAngle = hostRot.DistanceTo(aimedRot);
+    
+    return aimAngle < aimMargin;
   }
 }

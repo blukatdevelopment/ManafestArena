@@ -19,8 +19,7 @@ public class PursuingState : IBehaviorState {
 
   public void Init(StateAi hostAi){
     this.hostAi = hostAi;
-    
-    if(hostAi.enemies.Count == 0){
+    if(hostAi.enemies.Count == 0 || hostAi.enemies[0] == null){
       hostAi.ChangeState(StateAi.States.Roaming);
       return;
     }

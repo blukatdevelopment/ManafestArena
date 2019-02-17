@@ -9,7 +9,7 @@ public class RoamingState : IBehaviorState {
   public Actor hostActor;
   public StateAi hostAi;
 
-  public const float EnemyCheckInterval = 1f;
+  public const float EnemyCheckInterval = 0.25f;
   public float enemyCheckTimer;
 
   public RoamingState(Actor actor){
