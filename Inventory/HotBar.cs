@@ -139,5 +139,17 @@ public class HotBar : IHasItem {
   public Item PrimaryItem(){ return items[equippedSlot]; }
   public int ItemCount(){ return GetSlotsCount(); }
   public List<ItemData> GetAllItems(){ return null; }
+  
+  public List<Item> GetEveryItem(){
+    List<Item> ret = new List<Item>();
+
+    for(int i = 0; i < items.Length; i++){
+      if(items[i] != null){
+        ret.Add(items[i]);
+      }
+    }
+
+    return ret;
+  }
 
 }
