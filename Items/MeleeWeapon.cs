@@ -97,9 +97,22 @@ public class MeleeWeapon : Item, IWeapon {
   }
   
   public void Swing(){
-    if(!busy && !swinging){
+    if(!busy && !swinging && ExpendResources()){
       StartSwing();
     }
+  }
+
+  /* Returns true on success */
+  public bool ExpendResources(){
+    StatsManager stats = GetStats();
+    if(manaCost != 0 && !stats.ConsumeStat(StatsManager.Stats.Mana, manaCost)){
+      return false;
+    }
+    if(staminaCost != 0 && !stats.ConsumeStat(StatsManager.Stats.Stamina, staminaCost)){
+      return false;
+    }
+    
+    return true;
   }
   
   public void StartSwing(){
