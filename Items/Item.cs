@@ -476,6 +476,14 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
     return ret;
   }
 
+  public void SetMaterial(Material material){
+    if(meshInstance == null){
+      return;
+    }
+    ArrayMesh mesh = meshInstance.Mesh as ArrayMesh;
+    mesh.SurfaceSetMaterial(0, material);
+  }
+
   // Return an array of strings used to initialize an archetypal item of given type.
   // When making new item types, add an archetype here.
   // 0 name

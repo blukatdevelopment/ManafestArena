@@ -129,6 +129,11 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     AddChild(speaker);
   }
 
+  public void SetMaterial(Material material){
+    ArrayMesh mesh = meshInstance.Mesh as ArrayMesh;
+    mesh.SurfaceSetMaterial(0, material);
+  }
+
 
   public void LoadData(ActorData dat){
     // FIXME add remaining fields to ActorData and this method
