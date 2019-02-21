@@ -79,6 +79,10 @@ public class ActorInputHandler : Brain {
     return device.device == DeviceManager.Devices.Ps1;
   }
 
+  bool IsSnes(){
+    return device.device == DeviceManager.Devices.Snes;
+  }
+
   bool HeldRight(){
     if(IsKbm() && held.ContainsKey(InputEvent.Buttons.D) && held[InputEvent.Buttons.D]){
       return true;
@@ -171,6 +175,9 @@ public class ActorInputHandler : Brain {
       case DeviceManager.Devices.Ps1:
         PressPs1(evt);
         break;
+      case DeviceManager.Devices.Snes:
+        PressSnes(evt);
+        break;
     }
   }
 
@@ -232,6 +239,18 @@ public class ActorInputHandler : Brain {
     }
   }
 
+  private void PressSnes(InputEvent evt){
+    switch(evt.button){
+      case InputEvent.Buttons.Select: 
+        Session.Event(SessionEvent.PauseEvent());
+        break;
+      case InputEvent.Buttons.B: actor.Jump(); break;
+      case InputEvent.Buttons.A: actor.Use(Item.Uses.A); break;
+      case InputEvent.Buttons.X: actor.EquipNextItem(); break;
+      case InputEvent.Buttons.Y: actor.Use(Item.Uses.B); break;
+    }
+  }
+
   private void PressN64(InputEvent evt){
     switch(evt.button){
       case InputEvent.Buttons.Start: 
@@ -261,6 +280,9 @@ public class ActorInputHandler : Brain {
       case DeviceManager.Devices.Ps1:
         HandleAxisPs1(evt);
         break;
+      case DeviceManager.Devices.Snes:
+        HandleAxisSnes(evt);
+        break;
     }
   
   }
@@ -289,6 +311,19 @@ public class ActorInputHandler : Brain {
   }
 
   private void HandleAxisNes(InputEvent evt){
+    float wx = Session.session.mouseSensitivityX;
+    float wy = Session.session.mouseSensitivityY;
+
+    Vector3 movement = new Vector3(0, 0, -evt.y);
+    movement *= actor.GetMovementSpeed(); 
+    actor.Move(movement, this.delta);
+
+    if(evt.x != 0f){
+      actor.Turn(evt.x * -wx, 0f);
+    }
+  }
+
+  private void HandleAxisSnes(InputEvent evt){
     float wx = Session.session.mouseSensitivityX;
     float wy = Session.session.mouseSensitivityY;
 

@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 
 public class DeviceManager {
-  public enum Devices{MouseAndKeyboard, N64, Nes, Ps1};
+  public enum Devices{MouseAndKeyboard, N64, Nes, Ps1, Snes};
   public Devices device;
   private int joyId;
   private bool mouseActive;
@@ -47,6 +47,10 @@ public class DeviceManager {
         mouseActive = false;
         buttonCount = 16;
         break;
+      case Devices.Snes:
+        mouseActive = false;
+        buttonCount = 11;
+        break;
     }
 
     for(int i = 0; i < buttonCount; i++){ 
@@ -68,6 +72,9 @@ public class DeviceManager {
       case Devices.Ps1:
         return Ps1Events();
         break;
+      case Devices.Snes:
+        return SnesEvents();
+        break;
 
     }
     return new List<InputEvent>();
@@ -86,6 +93,9 @@ public class DeviceManager {
         break;
       case Devices.Ps1:
         return "Retro PS1 Controller";
+        break;
+      case Devices.Snes:
+        return "Retro SNES Controller";
         break;
     }
     return "None";
@@ -172,6 +182,21 @@ public class DeviceManager {
     ret.AddRange(ButtonEvents(16, 1, InputEvent.Buttons.B));
     ret.AddRange(ButtonEvents(3, 2, InputEvent.Buttons.Start));
     ret.AddRange(ButtonEvents(11, 3, InputEvent.Buttons.Select));
+    ret.AddRange(AxisEvents(0, 1, 0.005f, InputEvent.Axes.Left, false, true));
+
+    return ret;    
+  }
+
+  private List<InputEvent> SnesEvents(){
+    List<InputEvent> ret = new List<InputEvent>();
+
+    ret.AddRange(ButtonEvents(1, 0, InputEvent.Buttons.A));
+    ret.AddRange(ButtonEvents(16, 1, InputEvent.Buttons.B));
+    ret.AddRange(ButtonEvents(0, 2, InputEvent.Buttons.X));
+    ret.AddRange(ButtonEvents(2, 3, InputEvent.Buttons.Y));
+    ret.AddRange(ButtonEvents(11, 4, InputEvent.Buttons.Select));
+    ret.AddRange(ButtonEvents(3, 5, InputEvent.Buttons.R));
+    ret.AddRange(ButtonEvents(10, 6, InputEvent.Buttons.L));
     ret.AddRange(AxisEvents(0, 1, 0.005f, InputEvent.Axes.Left, false, true));
 
     return ret;    
