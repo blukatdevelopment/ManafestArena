@@ -189,8 +189,8 @@ public class Career {
       List<CareerNode> ret = new List<CareerNode>();
 
       ret.Add(CareerNode.FromRow(new string[] {"1", "3", "2", "-1", "3", "res://Scenes/Maps/Test.tscn"}));
-      ret.Add(CareerNode.FromRow(new string[] {"2", "2", "4", "-1", "-1", "res://Scenes/Maps/Test.tscn"}));
-      ret.Add(CareerNode.FromRow(new string[] {"3", "1", "5", "-1", "-1", "res://Scenes/Maps/Test.tscn"}));
+      ret.Add(CareerNode.FromRow(new string[] {"2", "2", "4", "-1", "-1", "res://Scenes/Maps/Pillars.tscn"}));
+      ret.Add(CareerNode.FromRow(new string[] {"3", "1", "5", "-1", "-1", "res://Scenes/Maps/Pillars.tscn"}));
       
       ret.Add(CareerNode.FromRow(new string[] {"4", "5", "6", "-1", "-1", ""}));
       ret.Add(CareerNode.FromRow(new string[] {"5", "4", "6", "-1", "-1", ""}));
@@ -278,6 +278,16 @@ public class Career {
         return new List<string>{
           "old man rivers",
           "old man jenkins"
+        };
+        break;
+        case "res://Scenes/Maps/Pillars.tscn":
+        return new List<string>{
+          "old man rivers",
+          "old man rivers",
+          "old man rivers",
+          "old man rivers",
+          "old man rivers",
+          "old man rivers"
         };
         break;
     }
