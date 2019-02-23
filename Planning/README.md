@@ -30,16 +30,9 @@ The fighter's career consists of a tree of nodes where the leaves are
 starting points, and the root is the final fight for the championship.
 If the player dies at any point during their career, they lose.
 
-#### Public match
+#### Arena match
 
-The fighter competes in an arena against enemies. 
-Winning grants sponsorship Carthage credits and career points.
-
-#### Title match
-
-The fighter fights to complete a title-holder's arena, which may involve
-platforming, traps, and enemies.
-Reward includes carthage credits, career points, and special items.
+The fighter competes in an arena against enemies.
 
 #### Rest spot
 
@@ -49,10 +42,6 @@ The fighter can rest to restore HP, or can upgrade an ability.
 
 The fighter makes an appearance in carthage media.
 This can result in a random reward, punishment, or decision.
-
-#### Shop
-
-The fighter can spend Carthage credits to buy items.
 
 ### FPS gameplay
 
