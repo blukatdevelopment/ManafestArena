@@ -73,7 +73,7 @@ public class Session : Node {
   public void PerformTests(){
     Test.Init();
     //StatsManager.StatsTests();
-    SpellCaster.SpellCasterTests();
+    //SpellCaster.SpellCasterTests();
   }
 
   public void InitSettings(){

@@ -111,6 +111,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
 
     if(brainType == Brains.Player1){
       Camera cam = new Camera();
+      cam.Far = 1000f; // Render EVERYTHING possible
       eyesInstance = (Spatial)cam;
     }
     else{
