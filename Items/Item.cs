@@ -437,7 +437,7 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         pw.healthDamage = 35;
         pw.requireAmmoToFire = false;
         pw.ammoType = "Fireball";
-        pw.manaCost = 30;
+        pw.manaCost = 20;
         dat = new ItemData();
         dat.type = Types.Ammo;
         dat.name = pw.ammoType;

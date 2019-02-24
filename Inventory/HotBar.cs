@@ -107,8 +107,30 @@ public class HotBar : IHasItem {
     if(equippedSlot >= items.Length){
       equippedSlot = 0;
     }
+
+    if(ActiveSlotsCount() > 0 && items[equippedSlot] == null){
+      equippedSlot = GetNextActiveSlot();
+    }
     
     return items[equippedSlot];
+  }
+
+  public int GetNextActiveSlot(){
+    // Check after equppedSlot
+    for(int i = equippedSlot + 1; i < items.Length; i++){
+      if(items[i] != null){
+        return i;
+      }
+    }
+
+    //Check before equippedSlot
+    for(int i = 0; i < equippedSlot; i++){
+      if(items[i] != null){
+        return i;
+      }
+    }
+
+    return -1;
   }
 
   public Item EquipPreviousItem(){
