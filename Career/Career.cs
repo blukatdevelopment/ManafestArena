@@ -285,18 +285,20 @@ public class Career {
     switch(mapName){
       case "res://Scenes/Maps/Test.tscn":
         return new List<string>{
-          "old man rivers",
-          "old man jenkins"
+          "goon1",
+          "goon1"
         };
         break;
         case "res://Scenes/Maps/Pillars.tscn":
         return new List<string>{
-          "old man rivers",
-          "old man rivers",
-          "old man rivers",
-          "old man rivers",
-          "old man rivers",
-          "old man rivers"
+          "goon1",
+          "goon1",
+          "goon1",
+          "goon1",
+          "goon1",
+          "goon1",
+          "goon1",
+          "goon1"
         };
         break;
     }
