@@ -38,18 +38,18 @@ public class NewGameMenu : Container, IMenu {
     descriptionLabel = Menu.TextBox("Choose a champion.");
     AddChild(descriptionLabel);
 
-    firstCharacterButton = Menu.Button("Fred", () => {
-      SelectChampion("fred");
+    firstCharacterButton = Menu.Button("Beast", () => {
+      SelectChampion("beast");
     });
     AddChild(firstCharacterButton);
 
-    secondCharacterButton = Menu.Button("Velma", () => {
-      SelectChampion("velma");
+    secondCharacterButton = Menu.Button("Mage", () => {
+      SelectChampion("mage");
     });
     AddChild(secondCharacterButton);
 
-    thirdCharacterButton = Menu.Button("Scoob", () => {
-      SelectChampion("scoob");
+    thirdCharacterButton = Menu.Button("Soldier", () => {
+      SelectChampion("soldier");
     });
     AddChild(thirdCharacterButton);
 
@@ -68,14 +68,14 @@ public class NewGameMenu : Container, IMenu {
 
   string CharacterDescription(string characterName){
     switch(characterName.ToLower()){
-      case "fred":
-        return "We're up to our ascotts in a mystery!";
+      case "beast":
+        return "Extracted from the great plains, this contestant is equal parts bark and bite.\n A beast man of the long house confederacy, he wields a spear and deadly claws.\n If he wins, he'll turn his homeland into a nature preserve so that his\n people can continue to live off the land.";
         break;
-      case "velma":
-        return "Jinkies!";
+      case "mage":
+        return "A mage of royal Persian blood, this contestant wields a powerful\n magic staff and a lifetime of training in the arcane arts.\n If he wins, he'll open a trade portal in the heart of Persia.";
         break;
-      case "scoob":
-        return "Roobie doobie doo!";
+      case "soldier":
+        return "A mercenary defected from the Han royal guard, this contestant wields\n a crossbow and keeps a black powder pistol on his hip.\n If he wins, he'll use his \nendorsements to expand his fledgeling mercenary business.";
         break;
     }
     return "NULL";
