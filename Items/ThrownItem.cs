@@ -12,6 +12,7 @@ public class ThrownItem : MeleeWeapon, IWeapon, IEquip {
     public bool meleeEnabled;
     public bool thrown;
     public float impulseStrength;
+    public object pastWielder;
 
     public ThrownItem(){
         healthDamage = DefaultDamage;
@@ -44,6 +45,7 @@ public class ThrownItem : MeleeWeapon, IWeapon, IEquip {
         thrown = true;
 
         Actor actor = wielder as Actor;
+        pastWielder = wielder;
 
         if(actor != null){
             actor.DropItem(this);
@@ -62,7 +64,9 @@ public class ThrownItem : MeleeWeapon, IWeapon, IEquip {
         swinging = true;
     }
 
-    public override void DoOnCollide(object body){
+  public override void DoOnCollide(object body){
+    HandlePickup(body);
+
     if(!swinging){
       return;
     }
@@ -77,6 +81,33 @@ public class ThrownItem : MeleeWeapon, IWeapon, IEquip {
     if(receiver != null && receiver != wielderDamage){
       Strike(receiver);
     }
+  }
+
+  public void HandlePickup(object body){
+    if(!thrown || swinging){
+        return;
+    }
+
+    Actor pastActor = pastWielder as Actor;
+    Actor currentActor = body as Actor;
+    
+    if(pastActor == null || currentActor == null){
+        return;
+    }
+
+    if(pastActor == currentActor){
+        GD.Print("Picking item back up");
+        thrown = false;
+        if(GetParent() != null){
+            GetParent().RemoveChild(this);
+        }
+        
+        currentActor.PickUpAndEquipItem(this);
+    }
+    else{
+        GD.Print("Only the original actor can pick it up.");
+    }
+    
   }
 
   public override void EndSwing(){

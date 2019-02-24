@@ -29,7 +29,7 @@ public class HotBar : IHasItem {
       StatsManager.Facts.Slot7,
       StatsManager.Facts.Slot8,
       StatsManager.Facts.Slot9,
-      StatsManager.Facts.Slot10,
+      StatsManager.Facts.Slot10
     };
 
     int slotsMax = stats.GetStat(StatsManager.Stats.SlotsMax);
@@ -55,6 +55,16 @@ public class HotBar : IHasItem {
     items[slot] = item;
   }
 
+  public int FirstEmptySlot(){
+    for(int i = 0; i < items.Length; i++){
+      if(items[i] == null){
+        return i;
+      }
+    }
+
+    return -1;
+  }
+
   public int EquippedSlot(){
     return equippedSlot;
   }
@@ -65,6 +75,15 @@ public class HotBar : IHasItem {
 
   public void DropEquippedItem(){
     items[equippedSlot] = null;
+  }
+
+  public void SetEquippedSlot(int slot){
+    if(slot < 0 || slot >= items.Length){
+      GD.Print("HotBar.EquipItem: Out of range");
+      return;
+    }
+
+    equippedSlot = slot;
   }
 
   public Item EquipItem(int slot){

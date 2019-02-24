@@ -179,7 +179,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
       GD.Print("Hand already initialized.");
     }
     hand = Item.Factory(Item.Types.Hand);
-    EquipHand(); 
+    //EquipHand(); 
   }
 
   public void NameHand(string handName){
@@ -387,6 +387,22 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     DeferredEquipItem(hotbar.EquipItem(slot));
   }
   
+  /* Equip item to hotbar immediately. */
+  public void PickUpAndEquipItem(Item item){
+    int slot = hotbar.FirstEmptySlot();
+
+    if(slot == -1){
+      GD.Print("PickUpAndEquipItem: No empty slot");
+      return;
+    }
+
+    hotbar.SetItemSlot(slot, item);
+    hotbar.EquipItem(slot);
+
+    DeferredEquipItem(item);
+
+  }
+
   /* Equip item based on inventory index. */
   public void EquipItem(int index){
     if(inventory.GetItem(index) == null){
@@ -442,15 +458,31 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
       GD.Print("Actor.DeferredEquipItem: No eyes.");
       return;
     }
-    
+
     eyes.AddChild(item);
     
+
     item.Mode = RigidBody.ModeEnum.Static;
-    item.Translation = new Vector3(HandPosX, HandPosY, HandPosZ);
+    item.Transform = GetItemTransform();
+    //item.Translation = new Vector3(HandPosX, HandPosY, HandPosZ);
     activeItem = item;
     activeItem.Equip(this);
     unarmed = false;
     GD.Print("Successfully equipped item " + item.Name);
+  }
+
+  public Transform GetItemTransform(){
+    Vector3 x = new Vector3(1f, 0f, 0f);
+    Vector3 y = new Vector3(0f, 1f, 0f);
+    Vector3 z = new Vector3(0f, 0f, 1f);
+
+    Basis basis = new Basis(x, y, z);
+
+    Vector3 origin = new Vector3(HandPosX, HandPosY, HandPosZ);
+
+    Transform ret = new Transform(basis, origin);
+
+    return ret;
   }
 
   public void EquipNextItem(){
@@ -512,7 +544,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
 
     //activeItem.QueueFree();
     activeItem = null;
-    EquipHand();
+    //EquipHand();
   }
 
   /* Remove hand in preparation of equipping an item */
