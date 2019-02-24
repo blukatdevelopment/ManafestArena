@@ -38,6 +38,7 @@ public class SpellCaster : Item, IHasStats {
   }
 
   public void NextSpell(){
+    GD.Print("NextSpell");
     hotbar.EquipNextItem();
   }
 
@@ -68,6 +69,14 @@ public class SpellCaster : Item, IHasStats {
         ret += hotbar.ToString();
 
         return ret;
+    }
+
+    public override string GetInfo(){
+        Item spell = hotbar.EquippedItem();
+        if(spell == null){
+            return "Magic Staff: No spell";
+        }
+        return name + ":\n" + spell.name + "\n(" + spell.manaCost + " mana)";
     }
 
     public static void SpellCasterTests(){

@@ -223,6 +223,15 @@ public class Career {
       return ret;
     }
 
+    public List<Item.Types> GetAvailableSpells(){
+      return new List<Item.Types>{
+        Item.Types.FireballSpell,
+        Item.Types.HealSpell,
+        Item.Types.StaminaSpell,
+        Item.Types.ManaSpell
+      };
+    }
+
     public static List<string> RandomShopItemNames(){
       return new List<string>{
         "sword",

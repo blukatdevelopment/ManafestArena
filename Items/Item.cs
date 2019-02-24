@@ -28,6 +28,9 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
     // Mage
     Staff,
     FireballSpell,
+    HealSpell,
+    StaminaSpell,
+    ManaSpell,
     
     // Soldier
     Crossbow,
@@ -366,6 +369,7 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
     ThrownItem ti;
     SpellCaster sc;
     ItemData dat;
+    RestorationSpell rs;
 
     switch(type){
       case Types.Hand: ret = new MeleeWeapon() as Item; break;
@@ -395,7 +399,8 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         ret = mw as Item;
         break;
       case Types.Staff:
-        sc = new SpellCaster(new List<Types>{ Types.FireballSpell });
+        List<Types> spells = Session.session.career.GetAvailableSpells();
+        sc = new SpellCaster(spells);
         ret = sc as Item;
         break;
       case Types.Crossbow:
@@ -429,7 +434,7 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         break;
       case Types.FireballSpell:
         pw = new ProjectileWeapon();
-        pw.healthDamage = 30;
+        pw.healthDamage = 35;
         pw.requireAmmoToFire = false;
         pw.ammoType = "Fireball";
         pw.manaCost = 30;
@@ -438,6 +443,27 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         dat.name = pw.ammoType;
         pw.LoadInternalReserve(dat, 6);
         ret = pw as Item;
+        break;
+      case Types.HealSpell:
+        rs = new RestorationSpell();
+        rs.health = 15;
+        rs.manaCost = 50;
+        rs.coolDown = 1f;
+        ret = rs as Item;
+        break;
+      case Types.StaminaSpell:
+        rs = new RestorationSpell();
+        rs.stamina = 15;
+        rs.manaCost = 15;
+        rs.coolDown = 0.5f;
+        ret = rs as Item;
+        break;
+      case Types.ManaSpell:
+        rs = new RestorationSpell();
+        rs.mana = 25;
+        rs.manaCost = 15;
+        rs.coolDown = 0.5f;
+        ret = rs as Item;
         break;
     }
     
@@ -534,6 +560,15 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         break;
       case Types.FireballSpell:
         ret = new string[]{"Fireball", "Better than a wet match.", ""};
+        break;
+      case Types.HealSpell:
+        ret = new string[]{"Restore Health", "That feels better.", ""};
+        break;
+      case Types.StaminaSpell:
+        ret = new string[]{"Restore Stamina", "Get pumped!", ""};
+        break;
+      case Types.ManaSpell:
+        ret = new string[]{"Restore Mana", "Sometimes it takes mana to make mana.", ""};
         break;
     }
     
