@@ -279,9 +279,13 @@ public class Arena : Spatial {
   public Actor SpawnActor(ActorData dat){
     Actor.Brains brain = dat.GetBrain();
 
-    Vector3 pos = RandomSpawn(enemySpawnPoints, usedEnemySpawnPoints);
+    Vector3 pos;
     if(brain == Actor.Brains.Player1){
       pos = RandomSpawn(playerSpawnPoints);
+    }
+    else{
+      pos = RandomSpawn(enemySpawnPoints, usedEnemySpawnPoints);
+      usedEnemySpawnPoints.Add(pos);
     }
 
     dat.pos = pos;
@@ -323,7 +327,7 @@ public class Arena : Spatial {
       int randInt = rand.Next(spawnList.Count);
       ret = spawnList[randInt];
       
-      if(usedList.IndexOf(ret) != -1){
+      if(usedList.IndexOf(ret) == -1){
         finished = true;
       } 
     }
