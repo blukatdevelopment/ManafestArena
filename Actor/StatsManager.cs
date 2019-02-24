@@ -777,19 +777,19 @@ public class StatsManager {
 
     public static Archetypes Archetype(string characterName){
         switch(characterName){
-            case "fred":
+            case "beast":
                 return Archetypes.One;
                 break;
-            case "velma":
+            case "mage":
                 return Archetypes.Two;
                 break;
-            case "scoob":
+            case "soldier":
                 return Archetypes.Three;
                 break;
-            case "old man rivers":
+            case "goon1":
                 return Archetypes.EnemyOne;
                 break;
-            case "old man jenkins":
+            case "goon2":
                 return Archetypes.EnemyTwo;
                 break;
         }
@@ -800,19 +800,19 @@ public class StatsManager {
     public static string CharacterName(Archetypes archetype){
         switch(archetype){
             case Archetypes.One:
-                return "fred";
+                return "beast";
                 break;
             case Archetypes.Two:
-                return "velma";
+                return "mage";
                 break;
             case Archetypes.Three:
-                return "scoob";
+                return "soldier";
                 break;
             case Archetypes.EnemyOne:
-                return "old man rivers";
+                return "goon1";
                 break;
             case Archetypes.EnemyTwo:
-                return "old man jenkins";
+                return "goon2";
                 break;
         }
         return "NULL";
