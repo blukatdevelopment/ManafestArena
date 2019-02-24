@@ -29,6 +29,7 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
     reserve = new Inventory();
     healthDamage = BaseDamage;
     reloadDelay = DefaultReloadDelay;
+    requireAmmoToFire = true;
   }
 
   // Load weapon without associating it with an external inventory.
