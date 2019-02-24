@@ -188,13 +188,13 @@ public class Career {
     public static List<CareerNode> GenerateCareerTree(string championName){
       List<CareerNode> ret = new List<CareerNode>();
 
-      ret.Add(CareerNode.FromRow(new string[] {"1", "3", "2", "-1", "3", "res://Scenes/Maps/Test.tscn"}));
-      ret.Add(CareerNode.FromRow(new string[] {"2", "2", "4", "-1", "-1", "res://Scenes/Maps/Pillars.tscn"}));
+      ret.Add(CareerNode.FromRow(new string[] {"1", "1", "2", "-1", "3", "res://Scenes/Maps/Open.tscn"}));
+      ret.Add(CareerNode.FromRow(new string[] {"2", "1", "4", "-1", "-1", "res://Scenes/Maps/Levels.tscn"}));
       ret.Add(CareerNode.FromRow(new string[] {"3", "1", "5", "-1", "-1", "res://Scenes/Maps/Pillars.tscn"}));
       
       ret.Add(CareerNode.FromRow(new string[] {"4", "5", "6", "-1", "-1", ""}));
-      ret.Add(CareerNode.FromRow(new string[] {"5", "4", "6", "-1", "-1", ""}));
-      ret.Add(CareerNode.FromRow(new string[] {"6", "6", "-1", "-1", "-1", "PressEvents/test.csv"}));
+      ret.Add(CareerNode.FromRow(new string[] {"5", "1", "6", "-1", "-1", "res://Scenes/Maps/Urban.tscn"}));
+      ret.Add(CareerNode.FromRow(new string[] {"6", "1", "-1", "-1", "-1", "res://Scenes/Maps/Urban.tscn"}));
 
       return ret;
     }
@@ -300,6 +300,38 @@ public class Career {
           "goon1",
           "goon1"
         };
+        break;
+        case "res://Scenes/Maps/Urban.tscn":
+        return new List<string>{
+          "goon1",
+          "goon1",
+          "goon1",
+          "goon1"
+        };
+        break;
+        case "res://Scenes/Maps/Maze.tscn":
+        return new List<string>{
+          "goon1",
+          "goon1",
+          "goon1",
+          "goon1",
+          "goon1",
+          "goon1",
+          "goon1",
+          "goon1"
+        };
+        case "res://Scenes/Maps/Levels.tscn":
+        return new List<string>{
+          "goon1",
+          "goon1",
+          "goon1",
+          "goon1",
+          "goon1",
+          "goon1",
+          "goon1",
+          "goon1"
+        };
+        break;
         break;
     }
 
