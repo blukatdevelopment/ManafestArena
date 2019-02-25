@@ -624,6 +624,14 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
         Gravity(delta);
       }
       StatsUpdate(delta);
+      KillActorsThatFallOutOfTheMap();
+  }
+
+  public void KillActorsThatFallOutOfTheMap(){
+    if(GetTranslation().y < -10){
+      GD.Print("I fell out of the map!");
+      Die();
+    }
   }
   
   public void Gravity(float delta){ 
