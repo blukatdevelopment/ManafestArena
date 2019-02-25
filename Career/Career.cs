@@ -145,6 +145,8 @@ public class Career {
       
       CareerDb.SaveCareer(this);
 
+
+      Session.session.player = null;
       if(nextLevel == -1){
         CompleteGame();
       }
