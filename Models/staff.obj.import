@@ -1,0 +1,17 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/staff.obj-aa1c217dc245eb3cf3033994df2c1fed.mesh"
+
+[deps]
+
+files=[ "res://.import/staff.obj-aa1c217dc245eb3cf3033994df2c1fed.mesh" ]
+
+source_file="res://Models/staff.obj"
+dest_files=[ "res://.import/staff.obj-aa1c217dc245eb3cf3033994df2c1fed.mesh", "res://.import/staff.obj-aa1c217dc245eb3cf3033994df2c1fed.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
