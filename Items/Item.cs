@@ -63,6 +63,7 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
   public bool stackable;
   public List<int> stack;
   public int manaCost, staminaCost;
+  public Vector3 color;
 
   public void BaseInit(string name, string description, string meshPath, bool allowCollision = true){
     this.name = name;
@@ -358,6 +359,11 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
 
     ret.id = Session.NextItemId();
 
+    
+    Material mat = Util.ColoredMaterial(ret.color);
+    ret.SetMaterial(mat);
+    
+
     return ret;
   }
 
@@ -390,6 +396,7 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         ti.healthDamage = 100;
         ti.staminaCost = 25;
         ret = ti as Item;
+        ret.color = new Vector3(0, 1, 0);
         break;
       case Types.Claws:
         mw = new MeleeWeapon();
@@ -466,8 +473,6 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         ret = rs as Item;
         break;
     }
-    
-    ret.SetMaterial(Util.ColoredMaterial(new Vector3()));
     return ret;
   }
   
@@ -505,10 +510,21 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
 
   public void SetMaterial(Material material){
     if(meshInstance == null){
+      GD.Print(name + " has no mesh to set material to");
       return;
     }
     ArrayMesh mesh = meshInstance.Mesh as ArrayMesh;
     mesh.SurfaceSetMaterial(0, material);
+  }
+
+  public Material GetMaterial(){
+    if(meshInstance == null){
+      GD.Print(name + " has no mesh to get material from");
+      return null;
+    }
+
+    ArrayMesh mesh = meshInstance.Mesh as ArrayMesh;
+    return mesh.SurfaceGetMaterial(0);
   }
 
   // Return an array of strings used to initialize an archetypal item of given type.

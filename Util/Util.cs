@@ -345,7 +345,9 @@ public class Util{
     SpatialMaterial ret = new SpatialMaterial();
     
     ret.AlbedoColor = new Color(color.x, color.y, color.z, 1f);
-    return ret as Material;
+    GD.Print("Material: " + ret);
+    GD.Print("Material color " + ret.AlbedoColor);
+    return ret;
   }
 
 }
