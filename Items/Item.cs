@@ -467,6 +467,7 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         break;
     }
     
+    ret.SetMaterial(Util.ColoredMaterial(new Vector3()));
     return ret;
   }
   
@@ -571,7 +572,6 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         ret = new string[]{"Restore Mana", "Sometimes it takes mana to make mana.", ""};
         break;
     }
-    
     return ret;
   }
   

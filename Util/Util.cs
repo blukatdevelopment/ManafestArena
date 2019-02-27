@@ -341,4 +341,11 @@ public class Util{
     return ret;
   }
 
+  public static Material ColoredMaterial(Vector3 color){
+    SpatialMaterial ret = new SpatialMaterial();
+    
+    ret.AlbedoColor = new Color(color.x, color.y, color.z, 1f);
+    return ret as Material;
+  }
+
 }
