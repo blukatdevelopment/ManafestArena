@@ -363,27 +363,8 @@ public class Util{
   // Create an array using a single value
   public static Godot.Array ArrayWrap(object obj){
     Godot.Array arr = new Godot.Array();
-    arr.Add(obj);
+    //arr.Add(obj);
     return arr;
-  }
-
-  public static void MeshLibraryDotAddItem(MeshLibrary meshLib, int index, string meshPath){
-    meshLib.CreateItem(index);
-
-    Mesh mesh = ResourceLoader.Load(meshPath) as Mesh;
-    
-    GD.Print("mesh " + meshPath + " looks like " + mesh);
-    meshLib.SetItemMesh(index, mesh);
-
-    Shape shape = mesh.CreateConvexShape();
-    
-    GD.Print("Shape " + meshPath + " looks like " + shape);
-
-    Godot.Array arr = ArrayWrap(shape);
-
-    GD.Print("Arr " + meshPath + " looks like " + arr);
-
-    meshLib.SetItemShapes(index, arr);
   }
 
 }
