@@ -27,15 +27,67 @@ public class Menu{
     
     if(text != ""){ button.SetText(text); }
     if(onClick != null){ button.SetOnClick(onClick); }
-    
+
+
+    button.AddStyleboxOverride("normal", ColorStyleBox("normal"));
+    button.AddStyleboxOverride("pressed", ColorStyleBox("pressed"));
+    button.AddStyleboxOverride("hover", ColorStyleBox("hover"));
+    button.AddStyleboxOverride("disabled", ColorStyleBox("disabled"));
+
+    button.AddColorOverride("font_color",           GFX.Color(new Vector3()));
+    button.AddColorOverride("font_color_pressed",   GFX.Color(new Vector3()));
+    button.AddColorOverride("font_color_hover",     GFX.Color(new Vector3()));
+    button.AddColorOverride("font_color_disabled",  GFX.Color(new Vector3()));
+
     return button;
   }
   
+  public static Color BoxColor(string state){
+    Vector3 rgb = new Vector3();
+    switch(state){
+      case "normal":        rgb = new Vector3(0.211f, 0.219f, 0.349f); break;
+      case "pressed":       rgb = new Vector3(0.090f, 0.101f, 0.227f); break;
+      case "hover":         rgb = new Vector3(0.203f, 0.207f, 0.258f); break;
+      case "disabled":      rgb = new Vector3(0.466f, 0.470f, 0.513f); break;
+      case "completion":    rgb = new Vector3(0.090f, 0.101f, 0.227f); break;
+      case "panel":         rgb = new Vector3(0.466f, 0.470f, 0.513f); break;
+      case "focus":         rgb = new Vector3(0.203f, 0.207f, 0.258f); break;
+      case "read_only":     rgb = new Vector3(0.466f, 0.470f, 0.513f); break;
+      case "slider":        rgb = new Vector3(0.466f, 0.470f, 0.513f); break;
+      case "grabber_area":  rgb = new Vector3(0.466f, 0.470f, 0.513f); break;
+    }
+
+    return GFX.Color(rgb);
+  }
+
+  public static StyleBox ColorStyleBox(string state){
+    return ColorStyleBox(BoxColor(state));
+  }
+
+  public static StyleBox ColorStyleBox(Color bgColor){
+    StyleBoxFlat box = new StyleBoxFlat();
+    box.BgColor = bgColor;
+    box.BorderColor = GFX.Color(new Vector3());
+    int border = 5;
+    box.BorderWidthLeft = border;
+    box.BorderWidthRight = border;
+    box.BorderWidthTop = border;
+    box.BorderWidthBottom = border;
+    return box;
+  }
+
   public static TextEdit TextBox(string val = "", bool readOnly = true, bool wordWrap = false){    
     TextEdit textBox = new TextEdit();
     textBox.SetText(val);
     textBox.Readonly = readOnly;
     textBox.WrapLines = wordWrap;
+
+    textBox.AddStyleboxOverride("normal", ColorStyleBox("normal"));
+    textBox.AddStyleboxOverride("focus", ColorStyleBox("focus"));
+    textBox.AddStyleboxOverride("panel", ColorStyleBox("panel"));
+    textBox.AddStyleboxOverride("read_only", ColorStyleBox("read_only"));
+
+
     return textBox;
   }
 
@@ -46,6 +98,13 @@ public class Menu{
     slider.Value = val;
     slider.Step = step;
     
+    slider.AddIconOverride("grabber", ResourceLoader.Load("res://Textures/UI/grabber.png") as Texture);
+    slider.AddIconOverride("grabber_highlight", ResourceLoader.Load("res://Textures/UI/grabber_highlight.png") as Texture);
+
+    slider.AddStyleboxOverride("slider", ColorStyleBox("slider"));
+    slider.AddStyleboxOverride("focus", ColorStyleBox("focus"));
+    slider.AddStyleboxOverride("grabber_area", ColorStyleBox("grabber_area"));
+
     return slider;
   }
 

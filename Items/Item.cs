@@ -360,7 +360,7 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
     ret.id = Session.NextItemId();
 
     
-    Material mat = Util.ColoredMaterial(ret.color);
+    Material mat = GFX.GetColorSpatialMaterial(ret.color);
     ret.SetMaterial(mat);
     
 

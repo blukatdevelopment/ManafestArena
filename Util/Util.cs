@@ -341,15 +341,6 @@ public class Util{
     return ret;
   }
 
-  public static Material ColoredMaterial(Vector3 color){
-    SpatialMaterial ret = new SpatialMaterial();
-    
-    ret.AlbedoColor = new Color(color.x, color.y, color.z, 1f);
-    GD.Print("Material: " + ret);
-    GD.Print("Material color " + ret.AlbedoColor);
-    return ret;
-  }
-
   public static Node GetChildByName(Node parent, string name){
     foreach(Node child in parent.GetChildren()){
       if(child.Name == name){
@@ -363,7 +354,7 @@ public class Util{
   // Create an array using a single value
   public static Godot.Array ArrayWrap(object obj){
     Godot.Array arr = new Godot.Array();
-    //arr.Add(obj);
+    arr.Add(obj);
     return arr;
   }
 

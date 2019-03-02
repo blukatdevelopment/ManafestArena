@@ -181,7 +181,7 @@ public class Arena : Spatial {
 
     for(int i = 0; i < 8; i++){
       ArrayMesh arrMesh = theme.GetItemMesh(i) as ArrayMesh;
-      Material material = Util.ColoredMaterial(colors[i]);
+      Material material = GFX.GetColorSpatialMaterial(colors[i]);
       arrMesh.SurfaceSetMaterial(0, material);
     }
   }
