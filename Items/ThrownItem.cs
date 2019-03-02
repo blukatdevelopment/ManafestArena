@@ -8,7 +8,7 @@ using System;
 
 public class ThrownItem : MeleeWeapon, IWeapon, IEquip {
 
-    public static float DefaultImpulseStrength = 50.0f;
+    public static float DefaultImpulseStrength = 25.0f;
     public bool meleeEnabled;
     public bool thrown;
     public float impulseStrength;
@@ -77,7 +77,10 @@ public class ThrownItem : MeleeWeapon, IWeapon, IEquip {
     
     IReceiveDamage receiver = body as IReceiveDamage;
     IReceiveDamage wielderDamage = wielder as IReceiveDamage;
-    
+    if(wielderDamage == null){
+        wielderDamage = pastWielder as IReceiveDamage;
+    }
+
     if(receiver != null && receiver != wielderDamage){
       Strike(receiver);
     }

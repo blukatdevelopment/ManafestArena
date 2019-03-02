@@ -184,7 +184,6 @@ public class Arena : Spatial {
       Material material = Util.ColoredMaterial(colors[i]);
       arrMesh.SurfaceSetMaterial(0, material);
     }
-    
   }
 
   public void HandleEvent(SessionEvent sessionEvent){
