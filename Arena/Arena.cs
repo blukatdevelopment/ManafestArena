@@ -181,8 +181,23 @@ public class Arena : Spatial {
 
     for(int i = 0; i < 8; i++){
       ArrayMesh arrMesh = theme.GetItemMesh(i) as ArrayMesh;
-      Material material = GFX.GetColorSpatialMaterial(colors[i]);
+      SpatialMaterial material = GFX.GetColorSpatialMaterial(colors[i]) as SpatialMaterial;
+      
+      material.EmissionEnabled = true;
+      material.Emission = GFX.Color(colors[i]);
+      material.EmissionEnergy = 0.5f;
+      
+      material.TransmissionEnabled = true;
+      material.Transmission = GFX.Color(colors[i]);
+
+      material.RefractionEnabled = false;
+      
+      material.Metallic = 1f;
+      
+      material.Roughness = 0.5f;
+
       arrMesh.SurfaceSetMaterial(0, material);
+
     }
   }
 
