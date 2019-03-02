@@ -163,6 +163,34 @@ public class Arena : Spatial {
     Node instance = ps.Instance();
     AddChild(instance);
     terrain = (Spatial)instance;
+
+    GridMap gm = Util.GetChildByName(terrain, "Map") as GridMap;
+    GD.Print(gm.Theme);
+    gm.Theme = CreateMeshLibrary();
+  }
+
+  // Look, a hack!
+  public MeshLibrary CreateMeshLibrary(){
+    MeshLibrary ret = new MeshLibrary();
+
+    PackedScene ps;
+
+    List<string> meshPaths = new List<String>{
+      "res://Terrain/001Flat.obj",
+      "res://Terrain/002Half.obj",
+      "res://Terrain/003Full.obj",
+      "res://Terrain/004FlatRamp.obj",
+      "res://Terrain/005HalfRamp.obj",
+      "res://Terrain/006FullRamp.obj",
+      "res://Terrain/007FullPyramid.obj",
+      "res://Terrain/008HalfPyramid.obj"
+    };
+
+    for(int i = 0; i < 8; i++){
+      Util.MeshLibraryDotAddItem(ret, i, meshPaths[i]);
+    }
+
+    return ret;
   }
   
   public void HandleEvent(SessionEvent sessionEvent){

@@ -74,6 +74,7 @@ public class Session : Node {
     Test.Init();
     //StatsManager.StatsTests();
     //SpellCaster.SpellCasterTests();
+    
   }
 
   public void InitSettings(){
