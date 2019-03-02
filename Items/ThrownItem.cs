@@ -51,6 +51,7 @@ public class ThrownItem : MeleeWeapon, IWeapon, IEquip {
             actor.DropItem(this);
             SetCollision(true);
             wielder = null;
+            actor.EquipNextItem();
         }
 
         Transform start = this.GetGlobalTransform();
