@@ -85,6 +85,9 @@ public class ThrownItem : MeleeWeapon, IWeapon, IEquip {
     if(receiver != null && receiver != wielderDamage){
       Strike(receiver);
     }
+    else if(receiver == wielderDamage){
+        swinging = true;
+    }
   }
 
   public void HandlePickup(object body){
