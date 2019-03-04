@@ -415,6 +415,7 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         pw.healthDamage = 100;
         pw.maxAmmo = 1;
         pw.ammoType = "Bolt";
+        pw.impulseStrength = 100f;
         dat = new ItemData();
         dat.type = Types.Ammo;
         dat.name = pw.ammoType;
@@ -426,6 +427,7 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         pw.healthDamage = 60;
         pw.maxAmmo = 1;
         pw.ammoType = "MusketBall";
+        pw.impulseStrength = 100f;
         dat = new ItemData();
         dat.type = Types.Ammo;
         dat.name = pw.ammoType;
@@ -435,7 +437,7 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
       case Types.Knife:
         mw = new MeleeWeapon();
         mw.healthDamage = 35;
-        mw.swingSpeed = 1.0f;
+        mw.swingSpeed = 0.5f;
         mw.staminaCost = 15;
         ret = mw as Item;
         break;
@@ -573,7 +575,7 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         ret = new string[]{"Flintlock pistol", "Don't bring a knife to a gunfight.", "res://Models/musket_pistol.obj"};
         break;
       case Types.Knife:
-        ret = new string[]{"Knife", "Don't bring a gun to a knifefight.", "res://Models/Rifle.obj"};
+        ret = new string[]{"Knife", "Don't bring a gun to a knifefight.", "res://Models/dagger.obj"};
         break;
       case Types.FireballSpell:
         ret = new string[]{"Fireball", "Better than a wet match.", ""};

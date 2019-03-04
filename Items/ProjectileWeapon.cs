@@ -10,8 +10,9 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
   
   const int BaseDamage = 10;
   const float ProjectileOffset = 0.1f;
-  const float ImpulseStrength = 50f;
+  const float DefaultImpulseStrength = 50f;
   const float DefaultReloadDelay = 2f;
+  public float impulseStrength;
   public int healthDamage;
   public string ammoType = "Bullet";
   public Inventory inventory;
@@ -30,6 +31,8 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
     healthDamage = BaseDamage;
     reloadDelay = DefaultReloadDelay;
     requireAmmoToFire = true;
+    impulseStrength = DefaultImpulseStrength;
+
   }
 
   // Load weapon without associating it with an external inventory.
@@ -62,7 +65,7 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
     ret.description += "\nDamage: " + healthDamage + "\n";
     ret.description += "Capacity: " + maxAmmo + "\n";
     ret.description += "Ammo Type: " + ammoType + "\n";
-    ret.description += "Range: " + ImpulseStrength;
+    ret.description += "Range: " + impulseStrength;
     
     return ret;
   }
@@ -235,7 +238,7 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
     destination.Translated(new Vector3(0, 0, 1));
     
     Vector3 impulse = start.origin - destination.origin;
-    projectile.SetAxisVelocity(impulse * ImpulseStrength);
+    projectile.SetAxisVelocity(impulse * impulseStrength);
   }
 
   public override void Equip(object wielder){
