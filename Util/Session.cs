@@ -25,6 +25,7 @@ public class Session : Node {
   public DeviceManager.Devices player1Device;
   public Vector2 mousePosition;
   public Vector2 mouseMovement;
+  public Sound.Songs currentSong;
 
   public Actor player;
   public enum Gamemodes{

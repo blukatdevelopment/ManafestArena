@@ -75,12 +75,19 @@ public class Sound {
       return;
     }
     
+    if(song == Session.session.currentSong){
+      GD.Print("Don't restart the current song");
+      return;
+    }
+    GD.Print("Changing " + Session.session.currentSong + " to " + song);
+
     string fileName = SongFile(song);
     AudioStreamOGGVorbis stream = (AudioStreamOGGVorbis)GD.Load(fileName);
     
     Session.InitJukeBox();
     Session.session.jukeBox.Stream = stream;
     Session.session.jukeBox.Playing = true;
+    Session.session.currentSong = song;
   }
   
   public static void PauseSong(){
