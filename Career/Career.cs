@@ -168,6 +168,28 @@ public class Career {
       Session.ChangeMenu(Menu.Menus.EndGame);
     }
 
+    public static StatsManager GetPlayerStats(){
+      return Session.session.career.playerData.stats;
+    }
+
+    // Primarily for rest sites
+    public static void HealPlayer(int health){
+      Damage dmg = new Damage();
+      dmg.health = -health;
+
+      Session.session.career.playerData.stats.ReceiveDamage(dmg);
+
+      int playerHealth = Session.session.career.playerData.stats.GetStat(StatsManager.Stats.Health);
+
+      if(playerHealth <= 0){
+        GD.Print("Career.HealPlayer just killed the player.");
+        Session.session.career.FailEncounter();
+      }
+      else{
+        GD.Print("Player was healed " + health + " health and now has " + playerHealth + " health.");
+      }
+    }
+
     public static Career Factory(string championName){
       Career ret = new Career(championName);
       ret.careerNodes = GenerateCareerTree(championName);

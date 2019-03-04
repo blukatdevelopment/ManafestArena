@@ -85,6 +85,9 @@ public class RestSiteMenu : Container, IMenu {
 
   void HealPlayer1(){
     GD.Print("Healing player1");
+    StatsManager stats = Career.GetPlayerStats();
+    int healing = stats.GetStat(StatsManager.Stats.HealthMax) / 3;
+    Career.HealPlayer(healing);
   }
 
 
