@@ -563,7 +563,7 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         ret = new string[]{"Spear", "One end's pointy. Stab with it, or throw it.", "res://Models/spear.obj"};
         break;
       case Types.Claws:
-        ret = new string[]{"Claws", "Knives conveniently placed on your hands.", "res://Models/Rifle.obj"};
+        ret = new string[]{"Claws", "Knives conveniently placed on your hands.", "res://Models/claw.obj"};
         break;
       case Types.Staff:
         ret = new string[]{"Staff", "Spell crystals on the end of a stick.", "res://Models/staff.obj"};
