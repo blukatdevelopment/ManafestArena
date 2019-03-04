@@ -25,10 +25,6 @@ As a player, I should be confronted with difficult choices to make that will imp
 **Description**:
 As a player, I should see a visual representation of each of the three characters I can choose.
 
-**name**: Skin the UI
-**Description**:
-As a player, I should see a visual theme in the menus that identifies I am playing ManafestArena.
-
 **name**: Finalize rest site menu
 **Description**:
 As a player, I should be able to pick between restoring health and a character upgrade.
@@ -72,6 +68,10 @@ As a player, I should hear sound effects for various actions in the game so that
 
 ## Completed
 These stories have had a first pass. Their acceptance criteria is either completely met, will be scrapped, or will be pushed into new stories.
+
+**name**: Skin the UI
+**Description**:
+DONE - As a player, I should see a visual theme in the menus that identifies I am playing ManafestArena.
 
 **name**: Character abilities
 **Description**:
