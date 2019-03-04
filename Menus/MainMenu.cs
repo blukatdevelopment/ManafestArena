@@ -7,6 +7,7 @@ public class MainMenu : Container, IMenu {
     public Godot.Button continueGameButton;
     public Godot.Button settingsButton;
     public Godot.Button quitButton;
+    public TextEdit background;
 
     public void Init(float minX, float minY, float maxX, float maxY){
       InitControls();
@@ -27,6 +28,9 @@ public class MainMenu : Container, IMenu {
     
 
     void InitControls(){
+      background = Menu.BackgroundBox();
+      AddChild(background);
+
       newGameButton = Menu.Button(text : "New", onClick : NewGame);
       AddChild(newGameButton);
 
@@ -51,6 +55,7 @@ public class MainMenu : Container, IMenu {
       float wu = width/10; // relative height and width units
       float hu = height/10;
       
+      Menu.ScaleControl(background, width, height, 0, 0);
       Menu.ScaleControl(newGameButton, 2 * wu, 2 * hu, 0, 2 * hu);
       if(continueGameButton != null){
         Menu.ScaleControl(continueGameButton, 2 * wu, 2 * hu, 0, 0);

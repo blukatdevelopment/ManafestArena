@@ -10,6 +10,7 @@ public class NewGameMenu : Container, IMenu {
   public Button firstCharacterButton;
   public Button secondCharacterButton;
   public Button thirdCharacterButton;
+  public TextEdit background;
 
 
   public void Init(float minX, float minY, float maxX, float maxY){
@@ -30,12 +31,15 @@ public class NewGameMenu : Container, IMenu {
   }
 
   void InitControls(){
+    background = Menu.BackgroundBox();
+    AddChild(background);
+
     mainMenuButton = Menu.Button("Main Menu", () => { 
       ReturnToMainMenu(); 
     });
     AddChild(mainMenuButton);
 
-    descriptionLabel = Menu.TextBox("Choose a champion.");
+    descriptionLabel = Menu.TextBox("Choose a champion.", true, true);
     AddChild(descriptionLabel);
 
     firstCharacterButton = Menu.Button("Beast", () => {
@@ -92,6 +96,7 @@ public class NewGameMenu : Container, IMenu {
     float wu = width/10; // relative height and width units
     float hu = height/10;
 
+    Menu.ScaleControl(background, width, height, 0, 0);
     Menu.ScaleControl(mainMenuButton, 2 * wu, hu, 0, height - hu);
     Menu.ScaleControl(firstCharacterButton, 2 * wu, 2 * hu, wu, 2 * hu);
     Menu.ScaleControl(secondCharacterButton, 2 * wu, 2 * hu, 4 * wu, 2 * hu);

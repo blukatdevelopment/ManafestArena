@@ -569,7 +569,7 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         ret = new string[]{"Staff", "Spell crystals on the end of a stick.", "res://Models/staff.obj"};
         break;
       case Types.Crossbow:
-        ret = new string[]{"Crossbow", "Smokeless, weather resistant armor-piercing main weapon.", "res://Models/crossbow.obj"};
+        ret = new string[]{"Crossbow", "Smokeless, weather resistant, armor-piercing main weapon.", "res://Models/crossbow.obj"};
         break;
       case Types.FlintlockPistol:
         ret = new string[]{"Flintlock pistol", "Don't bring a knife to a gunfight.", "res://Models/musket_pistol.obj"};

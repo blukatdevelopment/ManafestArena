@@ -252,7 +252,6 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
         inventory.StoreItemData(ammo);
       }
     }
-    
   }
 
   public override void Unequip(){

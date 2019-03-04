@@ -7,6 +7,7 @@ public class CareerMenu : Container, IMenu {
   public Session.Gamemodes activeMode = Session.Gamemodes.None;
   public List<CareerNode> careerNodes;
   public System.Collections.Generic.Dictionary<int, Button> careerButtons;
+  public TextEdit background;
 
 
   public void Init(float minX, float minY, float maxX, float maxY){
@@ -35,6 +36,9 @@ public class CareerMenu : Container, IMenu {
   }
 
   void InitControls(){
+    background = Menu.BackgroundBox();
+    AddChild(background);
+
     mainMenuButton = Menu.Button("Main Menu", () => { 
       ReturnToMainMenu(); 
     });
@@ -95,6 +99,7 @@ public class CareerMenu : Container, IMenu {
     float wu = width/10; // relative height and width units
     float hu = height/10;
 
+    Menu.ScaleControl(background, width, height, 0, 0);
     Menu.ScaleControl(mainMenuButton, 2 * wu, hu, 0, height - hu);
     ScaleNodeButtons();
   }

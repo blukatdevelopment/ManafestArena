@@ -6,6 +6,7 @@ public class PressEventMenu : Container, IMenu {
   public TextEdit promptText;
   public Button option1Button, option2Button, option3Button, option4Button;
   public PressEvent pressEvent;
+  public TextEdit background;
 
   public void Init(float minX, float minY, float maxX, float maxY){
     pressEvent = Session.session.career.pressEvent;
@@ -26,6 +27,9 @@ public class PressEventMenu : Container, IMenu {
   }
 
   void InitControls(){
+    background = Menu.BackgroundBox();
+    AddChild(background);
+
     PressEventNode node = pressEvent.currentNode;
     promptText = Menu.TextBox(node.prompt);
     AddChild(promptText);
@@ -101,6 +105,7 @@ public class PressEventMenu : Container, IMenu {
     float wu = width/10; // relative height and width units
     float hu = height/10;
 
+    Menu.ScaleControl(background, width, height, 0, 0);
     Menu.ScaleControl(promptText, 6 * wu, 4 * hu, 2 * wu, 0);
     if(option1Button != null){
       Menu.ScaleControl(option1Button, 4 * wu, hu, 3 * wu, 4 * hu);

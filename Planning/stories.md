@@ -21,16 +21,6 @@ As a player, I should be confronted with difficult choices to make that will imp
 - Create Press event trees providing compelling prompts
 - Allow outcomes to effect the current playthrough
 
-**name**: Item Models
-**Description**:
-As a player, I would like to see distinct item models to know what I'm looking at.
-- Spear
-- Claw
-- Crossbow
-- Flintlock Pistol
-- Magical Staff
-- Knife
-
 **name**: Create character art
 **Description**:
 As a player, I should see a visual representation of each of the three characters I can choose.
@@ -49,20 +39,11 @@ As a player, I should be able to pick between restoring health and a character u
 **Description**:
 As a player with one playthrough, I should be compelled to return to unlock upgrades I missed on the first pass.
 
-**name**: Character abilities
-**Description**:
-As a player with multiple playthroughs, I should feel each character has a distinct playstyle characterized by their abilities and items.
-
-**name**: Skeletal Arena maps
-**Description**:
-As a player, I should be challenged to fight in maps containing different topography conducive to different tactics.
-- Create roughly 5 different arena maps
-
 **name**: Arena Map visual polish
 **Description**:
 As a player, I should be able to visually differentiate maps through a combination of colors and set pieces.
 - Create and place some set pieces
-- Find some way to introduce color into maps
+DONE - Find some way to introduce color into maps
 - Mitigate roughness and ugliness where possible
 
 **name**: Playtesting Round 1
@@ -91,6 +72,25 @@ As a player, I should hear sound effects for various actions in the game so that
 
 ## Completed
 These stories have had a first pass. Their acceptance criteria is either completely met, will be scrapped, or will be pushed into new stories.
+
+**name**: Character abilities
+**Description**:
+DONE - As a player with multiple playthroughs, I should feel each character has a distinct playstyle characterized by their abilities and items.
+
+**name**: Skeletal Arena maps
+**Description**:
+As a player, I should be challenged to fight in maps containing different topography conducive to different tactics.
+DONE - Create roughly 5 different arena maps
+
+**name**: Item Models
+**Description**:
+As a player, I would like to see distinct item models to know what I'm looking at.
+DONE - Spear
+DONE - Claw
+DONE - Crossbow
+DONE - Flintlock Pistol
+DONE - Magical Staff
+DONE - Knife
 
 **name**: Career map
 **Description**: 

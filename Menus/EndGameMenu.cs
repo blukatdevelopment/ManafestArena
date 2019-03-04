@@ -6,6 +6,7 @@ public class EndGameMenu : Container, IMenu {
   public Button mainMenuButton;
   public Godot.TextEdit titleLabel;
   public Godot.TextEdit creditsLabel;
+  public TextEdit background;
 
   public void Init(float minX, float minY, float maxX, float maxY){
     InitControls();
@@ -26,6 +27,9 @@ public class EndGameMenu : Container, IMenu {
   }
 
   void InitControls(){
+    background = Menu.BackgroundBox();
+    AddChild(background);
+
     mainMenuButton = Menu.Button("Main Menu", () => { 
       ReturnToMainMenu(); 
     });
@@ -69,6 +73,7 @@ public class EndGameMenu : Container, IMenu {
     float wu = width/10; // relative height and width units
     float hu = height/10;
 
+    Menu.ScaleControl(background, width, height, 0, 0);
     Menu.ScaleControl(mainMenuButton, 2 * wu, hu, 0, height - hu);
     Menu.ScaleControl(titleLabel, 2 * wu, hu, 4 * wu, 0);
     Menu.ScaleControl(creditsLabel, 8 * wu, 8 * hu, wu, hu);

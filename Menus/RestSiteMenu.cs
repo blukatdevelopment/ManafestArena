@@ -9,6 +9,7 @@ public class RestSiteMenu : Container, IMenu {
   public List<Button> upgradeButtons;
   public TextEdit descriptionLabel;
   public Button confirmButton;
+  public TextEdit background;
 
   string selection = "";
 
@@ -30,6 +31,9 @@ public class RestSiteMenu : Container, IMenu {
   }
 
   void InitControls(){
+    background = Menu.BackgroundBox();
+    AddChild(background);
+
     restButton = Menu.Button("Rest", () => { 
       HealPlayer1();
       Session.session.career.CompleteEncounter();
@@ -91,6 +95,7 @@ public class RestSiteMenu : Container, IMenu {
     float wu = width/10; // relative height and width units
     float hu = height/10;
 
+    Menu.ScaleControl(background, width, height, 0, 0);
     if(restButton != null &&  upgradeButton != null){
       Menu.ScaleControl(restButton, 2 * wu, 2 * hu, wu, 2 * hu);
       Menu.ScaleControl(upgradeButton, 2 * wu, 2 * hu, width - 3 * wu, 2 * hu);

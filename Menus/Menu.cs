@@ -17,7 +17,6 @@ public class Menu{
     Shop,
     RestSite
   };
-
   public enum SubMenus{
     None
   }
@@ -51,10 +50,12 @@ public class Menu{
       case "disabled":      rgb = new Vector3(0.466f, 0.470f, 0.513f); break;
       case "completion":    rgb = new Vector3(0.090f, 0.101f, 0.227f); break;
       case "panel":         rgb = new Vector3(0.466f, 0.470f, 0.513f); break;
-      case "focus":         rgb = new Vector3(0.203f, 0.207f, 0.258f); break;
-      case "read_only":     rgb = new Vector3(0.466f, 0.470f, 0.513f); break;
-      case "slider":        rgb = new Vector3(0.466f, 0.470f, 0.513f); break;
-      case "grabber_area":  rgb = new Vector3(0.466f, 0.470f, 0.513f); break;
+      case "focus":         rgb = new Vector3(0.211f, 0.219f, 0.349f); break;
+      case "read_only":     rgb = new Vector3(0.211f, 0.219f, 0.349f); break;
+      case "slider":        rgb = new Vector3(0.211f, 0.219f, 0.349f); break;
+      case "grabber_area":  rgb = new Vector3(0.211f, 0.219f, 0.349f); break;
+      case "editable":  rgb = new Vector3(0.466f, 0.470f, 0.513f); break;
+      case "background":  rgb = new Vector3(0.086f, 0.086f, 0.172f); break;
     }
 
     return GFX.Color(rgb);
@@ -82,13 +83,23 @@ public class Menu{
     textBox.Readonly = readOnly;
     textBox.WrapLines = wordWrap;
 
-    textBox.AddStyleboxOverride("normal", ColorStyleBox("normal"));
+    textBox.AddStyleboxOverride("normal", ColorStyleBox("editable"));
     textBox.AddStyleboxOverride("focus", ColorStyleBox("focus"));
     textBox.AddStyleboxOverride("panel", ColorStyleBox("panel"));
     textBox.AddStyleboxOverride("read_only", ColorStyleBox("read_only"));
 
 
     return textBox;
+  }
+
+  public static TextEdit BackgroundBox(){
+    TextEdit ret = TextBox("");
+    StyleBox box = ColorStyleBox(BoxColor("background")); 
+    ret.AddStyleboxOverride("normal", box);
+    ret.AddStyleboxOverride("focus", box);
+    ret.AddStyleboxOverride("panel", box);
+    ret.AddStyleboxOverride("read_only", box);
+    return ret;
   }
 
   public static HSlider HSlider(float min, float max, float val, float step){    

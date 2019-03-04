@@ -18,6 +18,7 @@ public class SettingsMenu : Container, IMenu {
     public Godot.TextEdit userNameBox;
     public Godot.TextEdit deviceLabel;
     public Godot.HSlider deviceSlider;
+    public TextEdit background;
 
     public float deviceFloat;
 
@@ -37,6 +38,9 @@ public class SettingsMenu : Container, IMenu {
     }
 
     public void InitControls(){
+      background = Menu.BackgroundBox();
+      AddChild(background);
+
       mainMenuButton = Menu.Button("Main Menu", MainMenu);
       AddChild(mainMenuButton);
 
@@ -102,6 +106,7 @@ public class SettingsMenu : Container, IMenu {
       float wu = width/10; // relative height and width units
       float hu = height/10;
       
+      Menu.ScaleControl(background, width, height, 0, 0);
       Menu.ScaleControl(mainMenuButton, 2 * wu, hu, 0, height - hu);
       Menu.ScaleControl(revertButton, 2 * wu, hu, 4 * wu, height - hu);
       Menu.ScaleControl(saveButton, 2 * wu, hu, 8 * wu, height - hu);
