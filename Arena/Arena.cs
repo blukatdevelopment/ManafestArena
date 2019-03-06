@@ -148,12 +148,12 @@ public class Arena : Spatial {
     
     MeshLibrary theme = gm.Theme;
     List<Vector3> colors = new List<Vector3>{
-      new Vector3(1,0,0),
-      new Vector3(0,1,0),
-      new Vector3(0,0,1),
-      new Vector3(1,1,0),
-      new Vector3(0,1,1),
-      new Vector3(1,0,1),
+      new Vector3(0.537f, 0.101f, 0.101f),
+      new Vector3(0.141f, 0.313f, 0.125f),
+      new Vector3(0.137f, 0.215f, 0.521f),
+      new Vector3(0.690f, 0.321f, 0.129f),
+      new Vector3(0.490f, 0.168f, 0.490f),
+      new Vector3(0.717f, 0.694f, 0.203f),
       new Vector3(1,1,1),
       new Vector3(0,0,0)
     };
