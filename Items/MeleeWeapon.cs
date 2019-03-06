@@ -87,7 +87,7 @@ public class MeleeWeapon : Item, IWeapon {
     swinging = false;
   }
   
-  public void GiveDamage(IReceiveDamage receiver){
+  public virtual void GiveDamage(IReceiveDamage receiver){
     Damage damage = new Damage(healthDamage);
 
     Node wielderNode = wielder as Node;

@@ -90,6 +90,23 @@ public class ThrownItem : MeleeWeapon, IWeapon, IEquip {
     }
   }
 
+  public override void GiveDamage(IReceiveDamage receiver){
+    Damage damage = new Damage(healthDamage);
+
+    Node wielderNode = wielder as Node;
+    Node pastWielderNode = pastWielder as Node;
+
+    if(wielderNode != null){
+      damage.sender = wielderNode.GetPath();
+    }
+    else if(pastWielderNode != null){
+      damage.sender = pastWielderNode.GetPath();
+    }
+
+    GD.Print("Sender : " + damage.sender);
+    receiver.ReceiveDamage(damage);
+  }
+
   public void HandlePickup(object body){
     if(!thrown || swinging){
         return;
