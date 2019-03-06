@@ -64,6 +64,14 @@ public class SpellCaster : Item, IHasStats {
         }
     }
 
+    public override void Equip(object wielder){
+        ItemBaseEquip(wielder);
+        
+        foreach(Item spellItem in hotbar.GetEveryItem()){
+            spellItem.wielder = wielder;
+        }
+    }
+
     public string ToString(){
         string ret = "SpellCaster: " + hotbar.ActiveSlotsCount() + " spells loaded.\n";
         ret += hotbar.ToString();

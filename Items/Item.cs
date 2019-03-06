@@ -53,13 +53,13 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
   public string description;
   public int weight;
   private bool collisionDisabled = true;
-  protected Speaker speaker;
-  protected object wielder;
-  protected Area area;
-  protected bool stopColliding = false; // Stop applying OnCollide effect
-  protected bool paused = false;
-  protected MeshInstance meshInstance;
-  protected CollisionShape collisionShape;
+  public Speaker speaker;
+  public object wielder;
+  public Area area;
+  public bool stopColliding = false; // Stop applying OnCollide effect
+  public bool paused = false;
+  public MeshInstance meshInstance;
+  public CollisionShape collisionShape;
   public bool stackable;
   public List<int> stack;
   public int manaCost, staminaCost;
