@@ -12,6 +12,7 @@ public class PressEventMenu : Container, IMenu {
     pressEvent = Session.session.career.pressEvent;
     InitControls();
     ScaleControls();
+    GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
   }
   
   public void Resize(float minX, float minY, float maxX, float maxY){

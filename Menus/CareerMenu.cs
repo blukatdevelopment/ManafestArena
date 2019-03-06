@@ -20,6 +20,7 @@ public class CareerMenu : Container, IMenu {
     }
     InitControls();
     ScaleControls();
+    GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
   }
 
   public void Resize(float minX, float minY, float maxX, float maxY){

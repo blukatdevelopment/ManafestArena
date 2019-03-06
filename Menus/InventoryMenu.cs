@@ -29,6 +29,7 @@ public class InventoryMenu : Container, IMenu {
     InitControls();
     UpdateFilter(Item.Categories.Weapons);
     ScaleControls();
+    GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
   }
   
   public void Resize(float minX, float minY, float maxX, float maxY){}

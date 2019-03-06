@@ -11,6 +11,7 @@ public class ShopMenu : Container, IMenu {
   public void Init(float minX, float minY, float maxX, float maxY){
     InitControls();
     ScaleControls();
+    GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
   }
   
   public void Resize(float minX, float minY, float maxX, float maxY){

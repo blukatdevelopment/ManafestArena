@@ -16,6 +16,7 @@ public class EndGameMenu : Container, IMenu {
   
   public void Resize(float minX, float minY, float maxX, float maxY){
     ScaleControls();
+    GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
   }
 
   public bool IsSubMenu(){
