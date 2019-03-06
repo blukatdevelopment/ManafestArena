@@ -358,4 +358,13 @@ public class Util{
     return arr;
   }
 
+  public static List<string> ListOfDupes(string value, int count){
+    List<string> ret = new List<string>();
+    for(int i = 0; i < count; i++){
+      ret.Add(value);
+    }
+
+    return ret;
+  }
+
 }

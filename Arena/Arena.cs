@@ -9,32 +9,29 @@ using System;
 using System.Collections.Generic;
 
 public class Arena : Spatial {
-  public bool local;
   public List<Actor> actors;
   public Spatial terrain;
   public List<Vector3> enemySpawnPoints, playerSpawnPoints, itemSpawnPoints;
   public List<Vector3> usedEnemySpawnPoints;
   public int nextId = -2147483648;
-  public bool gameStarted = false;
   public ArenaSettings settings;
-  const float ScoreDuration = 5f;
   public float roundTimeRemaining, secondCounter;
   public bool roundTimerActive = false;
-  public bool scorePresented = false;
   public System.Collections.Generic.Dictionary<int, int> scores;
   public int playerWorldId = -1;
-  int playersReady = 0;
-  public int totalEnemies;
+  public const int DefaultKillQuota = 5;
+  public int killQuota;
+  
 
-  public void Init(bool local, string terrainFile){
+  public void Init(string terrainFile){
     settings = Session.session.arenaSettings;
-    
+    killQuota = DefaultKillQuota;
+
     if(settings == null){
       GD.Print("Using default arena settings.");
       settings = new ArenaSettings();
     }
-    
-    this.local = local;
+
     actors = new List<Actor>();
     scores = new System.Collections.Generic.Dictionary<int, int>();
 
@@ -59,11 +56,8 @@ public class Arena : Spatial {
   }
   
   public bool PlayerWon(){
-    if(actors.Count > 1){
-      return false;
-    }
-
-    if(actors[0].brainType == Actor.Brains.Player1){
+    GD.Print("Score " + scores[playerWorldId] + ", needed " + killQuota);
+    if(scores[playerWorldId] >= killQuota){
       return true;
     }
     
@@ -71,25 +65,11 @@ public class Arena : Spatial {
   }
 
   public string GetObjectiveText(){
-    if(playerWorldId == -1){
-      return "Player not initialized.";
-    }
-    
-    if(scorePresented){
-      return PlayerWon() ? "Victory!" : "Defeat!";
-    }
-
     string ret = "Arena\n";
     
-    ret += "Score: " + scores[playerWorldId];
-    
+    int remainingEnemies = killQuota - scores[playerWorldId];
 
-    if(totalEnemies == 1){
-      ret += "\n" + totalEnemies + " enemies left.";  
-    }
-    else{
-      ret += "\n" + totalEnemies + " enemy left.";
-    }
+    ret += "Defeat " + remainingEnemies + " enemies to advance.";
     
     return ret;
   }
@@ -144,7 +124,6 @@ public class Arena : Spatial {
 
     foreach(ActorData enemy in settings.enemies){
       Actor enemyActor = InitActor(enemy, NextId());
-      totalEnemies++;
     }
 
     roundTimerActive = false;
@@ -226,7 +205,6 @@ public class Arena : Spatial {
       Session.session.career.FailEncounter();
       return;
     }
-    totalEnemies--;
     
     AwardPoints(actorPaths);
     if(PlayerWon()){

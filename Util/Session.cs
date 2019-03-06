@@ -197,7 +197,7 @@ public class Session : Node {
     Session ses = Session.session;
     ses.arena = new Arena();
     ses.AddChild(ses.arena);
-    ses.arena.Init(true, terrainFile);
+    ses.arena.Init(terrainFile);
   }
 
   public static void ChangeMenu(Menu.Menus menu){

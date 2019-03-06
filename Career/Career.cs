@@ -308,59 +308,29 @@ public class Career {
   public static List<string> EnemyNamesForMap(string mapName){
     switch(mapName){
       case "res://Scenes/Maps/Test.tscn":
-        return new List<string>{
-          "goon1",
-          "goon1"
-        };
+        return Util.ListOfDupes("goon1", 10);
         break;
         case "res://Scenes/Maps/Pillars.tscn":
-        return new List<string>{
-          "goon1",
-          "goon1",
-          "goon1",
-          "goon1",
-          "goon1",
-          "goon1",
-          "goon1",
-          "goon1"
-        };
+        return Util.ListOfDupes("goon1", 10);
         break;
         case "res://Scenes/Maps/Urban.tscn":
-        return new List<string>{
-          "goon1",
-          "goon1",
-          "goon1",
-          "goon1"
-        };
+        return Util.ListOfDupes("goon1", 10);
         break;
         case "res://Scenes/Maps/Maze.tscn":
-        return new List<string>{
-          "goon1",
-          "goon1",
-          "goon1",
-          "goon1",
-          "goon1",
-          "goon1",
-          "goon1",
-          "goon1"
-        };
-        case "res://Scenes/Maps/Levels.tscn":
-        return new List<string>{
-          "goon1",
-          "goon1",
-          "goon1",
-          "goon1",
-          "goon1",
-          "goon1",
-          "goon1",
-          "goon1"
-        };
+        return Util.ListOfDupes("goon1", 10);
         break;
+        case "res://Scenes/Maps/Levels.tscn":
+        return Util.ListOfDupes("goon1", 10);
+        break;
+        case "res://Scenes/Maps/Open.tscn":
+        return Util.ListOfDupes("goon1", 10);
         break;
     }
 
     GD.Print("Invalid map name " + mapName);
     return new List<string>();
   }
+
+
 
 }
