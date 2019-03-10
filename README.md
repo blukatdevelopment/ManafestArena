@@ -7,8 +7,4 @@ that are virtually invisible and under the hood.
 
 ## Premise
 
-Control a fighter in Carthage's **Global Championship**, a gameshow of blood, gore and triumph! 
-Perform valiantly in career of arena matches, attract **corporate sponsors**, and deck out
-your fighter with **items and abilitities** in order to become Carthage's world champion.
-
-For more planning, see planning/README.md
+Control a champion in a series of arena matches to become the victor.
