@@ -9,6 +9,7 @@ public class EndGameMenu : Container, IMenu {
   public TextEdit background;
 
   public void Init(float minX, float minY, float maxX, float maxY){
+    Sound.PlayRandomSong(Sound.GetPlaylist(Sound.Playlists.Menu));
     InitControls();
     ScaleControls();
     CareerDb.ClearCareer();
@@ -54,7 +55,7 @@ public class EndGameMenu : Container, IMenu {
     if(victory == 1){
       return "Congratulations!";
     }
-    return "Too bad!";
+    return "Better luck next time!";
   }
 
 
@@ -64,6 +65,8 @@ public class EndGameMenu : Container, IMenu {
     ret += "\n";
     ret += " Programming - Blukat\n";
     ret += "\n\n\n\n\n\n\n Thanks for playing!\n";
+    ret += " Music - Halley Labs\n";
+    ret += " lapfoxtrax.com/music\n";
     return ret; 
   }
 

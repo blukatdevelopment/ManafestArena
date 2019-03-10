@@ -24,6 +24,7 @@ public class Arena : Spatial {
   
 
   public void Init(string terrainFile){
+    Sound.PlayRandomSong(Sound.GetPlaylist(Sound.Playlists.Arena));
     settings = Session.session.arenaSettings;
     killQuota = DefaultKillQuota;
 

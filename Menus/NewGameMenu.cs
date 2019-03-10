@@ -7,9 +7,6 @@ public class NewGameMenu : Container, IMenu {
   public Button startGameButton;
   public TextEdit descriptionLabel;
   public string selectedChampion;
-  // public Button firstCharacterButton;
-  // public Button secondCharacterButton;
-  // public Button thirdCharacterButton;
 
   public TextureButton firstCharacterButton;
   public TextureButton secondCharacterButton;

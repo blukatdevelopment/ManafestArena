@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/true_fossil_soul_beta.ogg-a09ea7e2c030795b4a65fee96f32b984.oggstr"
+
+[deps]
+
+source_file="res://Audio/Songs/HallyLabs2014-current-selected-research/true_fossil_soul_beta.ogg"
+dest_files=[ "res://.import/true_fossil_soul_beta.ogg-a09ea7e2c030795b4a65fee96f32b984.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

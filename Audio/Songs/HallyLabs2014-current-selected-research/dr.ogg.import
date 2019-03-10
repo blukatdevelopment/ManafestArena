@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/dr.ogg-926f5f6e8590c619d6d48bba76134130.oggstr"
+
+[deps]
+
+source_file="res://Audio/Songs/HallyLabs2014-current-selected-research/dr.ogg"
+dest_files=[ "res://.import/dr.ogg-926f5f6e8590c619d6d48bba76134130.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

@@ -11,6 +11,7 @@ public class CareerMenu : Container, IMenu {
 
 
   public void Init(float minX, float minY, float maxX, float maxY){
+    Sound.PlayRandomSong(Sound.GetPlaylist(Sound.Playlists.Menu));
     int inProgress = Session.session.career.stats.GetBaseStat(StatsManager.Stats.NodeInProgress);
     if(inProgress == 1){
       GD.Print("Node in progress");

@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/bowser_nights.ogg-4bafb3e663fccf8387a4187d20b77bd5.oggstr"
+
+[deps]
+
+source_file="res://Audio/Songs/HallyLabs2014-current-selected-research/bowser_nights.ogg"
+dest_files=[ "res://.import/bowser_nights.ogg-4bafb3e663fccf8387a4187d20b77bd5.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

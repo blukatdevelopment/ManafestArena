@@ -46,7 +46,7 @@ public class MainMenu : Container, IMenu {
       settingsButton = (Godot.Button)Menu.Button(text : "Settings", onClick : Settings);
       AddChild(settingsButton);
       
-      Sound.PlaySong(Sound.Songs.FloatingHorizons);
+      Sound.PlayRandomSong(Sound.GetPlaylist(Sound.Playlists.Menu));
     }
 
     void ScaleControls(){
