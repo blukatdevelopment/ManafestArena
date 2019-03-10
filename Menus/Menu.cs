@@ -40,6 +40,23 @@ public class Menu{
 
     return button;
   }
+
+  public static TexturedButton TexturedButton(
+      string normalTexturePath = "",
+      string selectTexturePath = "",
+      Action onClick = null
+  ){
+    TexturedButton tb = new TexturedButton();
+    if(normalTexturePath != ""){ tb.TextureNormal = ResourceLoader.Load(normalTexturePath) as Texture; }
+    if(selectTexturePath != ""){ 
+      Texture t = ResourceLoader.Load(selectTexturePath) as Texture;
+      tb.TextureFocused = t;
+      tb.TextureHover = t;
+    }
+    if(onClick != null){ tb.SetOnClick(onClick); }
+    tb.Expand = true;
+    return tb;
+  }
   
   public static Color BoxColor(string state){
     Vector3 rgb = new Vector3();

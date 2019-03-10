@@ -242,7 +242,7 @@ public class StatsManager {
     }
 
     public string RandomGoonWeapon(){
-        int rand = Util.RandInt(0, 5);
+        int rand = Util.RandInt(1, 4);
         string ret = "";
         switch(rand){
             case 1: ret = "Crossbow"; break;

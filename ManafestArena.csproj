@@ -65,6 +65,7 @@
     <Compile Include="Ai\RangedCombatState.cs" />
     <Compile Include="Ai\MeleeCombatState.cs" />
     <Compile Include="Menus\Button.cs" />
+    <Compile Include="Menus\TexturedButton.cs" />
     <Compile Include="Menus\MainMenu.cs" />
     <Compile Include="Menus\Menu.cs" />
     <Compile Include="Menus\IMenu.cs" />

@@ -7,9 +7,13 @@ public class NewGameMenu : Container, IMenu {
   public Button startGameButton;
   public TextEdit descriptionLabel;
   public string selectedChampion;
-  public Button firstCharacterButton;
-  public Button secondCharacterButton;
-  public Button thirdCharacterButton;
+  // public Button firstCharacterButton;
+  // public Button secondCharacterButton;
+  // public Button thirdCharacterButton;
+
+  public TextureButton firstCharacterButton;
+  public TextureButton secondCharacterButton;
+  public TextureButton thirdCharacterButton;
   public TextEdit background;
 
 
@@ -40,24 +44,17 @@ public class NewGameMenu : Container, IMenu {
     });
     AddChild(mainMenuButton);
 
-    descriptionLabel = Menu.TextBox("Choose a champion.", true, true);
+    descriptionLabel = Menu.TextBox("Select a champion.", true, true);
     AddChild(descriptionLabel);
 
-    firstCharacterButton = Menu.Button("Beast", () => {
-      SelectChampion("beast");
-    });
+    firstCharacterButton = Menu.TexturedButton("res://Textures/beast_grey.jpg", "res://Textures/beast.jpg", () => { SelectChampion("beast"); });
     AddChild(firstCharacterButton);
 
-    secondCharacterButton = Menu.Button("Mage", () => {
-      SelectChampion("mage");
-    });
+    secondCharacterButton = Menu.TexturedButton("res://Textures/mage_grey.jpg", "res://Textures/mage.jpg", () => { SelectChampion("mage"); });
     AddChild(secondCharacterButton);
 
-    thirdCharacterButton = Menu.Button("Soldier", () => {
-      SelectChampion("soldier");
-    });
+    thirdCharacterButton = Menu.TexturedButton("res://Textures/soldier_grey.jpg", "res://Textures/soldier.jpg", () => { SelectChampion("soldier"); });
     AddChild(thirdCharacterButton);
-
   }
 
   void SelectChampion(string characterName){
@@ -74,13 +71,13 @@ public class NewGameMenu : Container, IMenu {
   string CharacterDescription(string characterName){
     switch(characterName.ToLower()){
       case "beast":
-        return "Extracted from the great plains, this contestant is equal parts bark and bite.\n A beast man of the long house confederacy, he wields a spear and deadly claws.\n If he wins, he'll turn his homeland into a nature preserve so that his\n people can continue to live off the land.";
+        return "A beast man of the great plains, wields\na spear and deadly claws.\n";
         break;
       case "mage":
-        return "A mage of royal Persian blood, this contestant wields a powerful\n magic staff and a lifetime of training in the arcane arts.\n If he wins, he'll open a trade portal in the heart of Persia.";
+        return "A royal Persian mage with a staff\nwith many spells.";
         break;
       case "soldier":
-        return "A mercenary defected from the Han royal guard, this contestant wields\n a crossbow and keeps a black powder pistol on his hip.\n If he wins, he'll use his \nendorsements to expand his fledgeling mercenary business.";
+        return "A mercenary and former Han royal guard.\npacks a crossbow, flintlock pistol, and knife.";
         break;
     }
     return "NULL";
@@ -99,9 +96,9 @@ public class NewGameMenu : Container, IMenu {
 
     Menu.ScaleControl(background, width, height, 0, 0);
     Menu.ScaleControl(mainMenuButton, 2 * wu, hu, 0, height - hu);
-    Menu.ScaleControl(firstCharacterButton, 2 * wu, 2 * hu, wu, 2 * hu);
-    Menu.ScaleControl(secondCharacterButton, 2 * wu, 2 * hu, 4 * wu, 2 * hu);
-    Menu.ScaleControl(thirdCharacterButton, 2 * wu, 2 * hu, 7 * wu, 2 * hu);
+    Menu.ScaleControl(firstCharacterButton, 2 * wu, 4 * hu, wu, 0);
+    Menu.ScaleControl(secondCharacterButton, 2 * wu, 4 * hu, 4 * wu, 0);
+    Menu.ScaleControl(thirdCharacterButton, 2 * wu, 4 * hu, 7 * wu, 0);
     Menu.ScaleControl(descriptionLabel, 4 * wu, 4 * hu, 3 * wu, 4 * hu);
     
     if(startGameButton != null){
