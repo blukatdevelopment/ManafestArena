@@ -8,6 +8,7 @@ public class MainMenu : Container, IMenu {
     public Godot.Button settingsButton;
     public Godot.Button quitButton;
     public TextEdit background;
+    public TexturedButton logo;
 
     public void Init(float minX, float minY, float maxX, float maxY){
       InitControls();
@@ -31,6 +32,9 @@ public class MainMenu : Container, IMenu {
     void InitControls(){
       background = Menu.BackgroundBox();
       AddChild(background);
+
+      logo = Menu.TexturedButton("res://Textures/logo.jpg");
+      AddChild(logo);
 
       newGameButton = Menu.Button(text : "New", onClick : NewGame);
       AddChild(newGameButton);
@@ -57,6 +61,7 @@ public class MainMenu : Container, IMenu {
       float hu = height/10;
       
       Menu.ScaleControl(background, width, height, 0, 0);
+      Menu.ScaleControl(logo, 8 * wu, 3 * hu, 2 * wu, 0);
       Menu.ScaleControl(newGameButton, 2 * wu, 2 * hu, 0, 2 * hu);
       if(continueGameButton != null){
         Menu.ScaleControl(continueGameButton, 2 * wu, 2 * hu, 0, 0);
