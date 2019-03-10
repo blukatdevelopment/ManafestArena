@@ -41,8 +41,8 @@ public class RestSiteMenu : Container, IMenu {
     });
     AddChild(restButton);
 
-    upgradeButton = Menu.Button("Upgrade", DisplayUpgrades);
-    AddChild(upgradeButton);
+    // upgradeButton = Menu.Button("Upgrade", DisplayUpgrades);
+    // AddChild(upgradeButton);
   }
 
   void DisplayUpgrades(){
@@ -100,9 +100,9 @@ public class RestSiteMenu : Container, IMenu {
     float hu = height/10;
 
     Menu.ScaleControl(background, width, height, 0, 0);
-    if(restButton != null &&  upgradeButton != null){
+    if(restButton != null){
       Menu.ScaleControl(restButton, 2 * wu, 2 * hu, wu, 2 * hu);
-      Menu.ScaleControl(upgradeButton, 2 * wu, 2 * hu, width - 3 * wu, 2 * hu);
+      //Menu.ScaleControl(upgradeButton, 2 * wu, 2 * hu, width - 3 * wu, 2 * hu);
     }
     if(upgradeButtons != null && upgradeButtons.Count > 2){
       Menu.ScaleControl(upgradeButtons[0], 2 * wu, 2 * hu, wu, 2 * hu);
