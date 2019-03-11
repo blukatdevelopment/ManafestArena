@@ -84,7 +84,8 @@ public class SpellCaster : Item, IHasStats {
         if(spell == null){
             return "Magic Staff: No spell";
         }
-        return name + ":\n" + spell.name + "\n(" + spell.manaCost + " mana)";
+        return  name + ":\n" + spell.name + "\n(" + spell.manaCost + " mana)\n" + spell.description;
+        
     }
 
     public static void SpellCasterTests(){
