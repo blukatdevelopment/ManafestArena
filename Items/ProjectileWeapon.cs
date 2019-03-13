@@ -239,6 +239,10 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
     
     Vector3 impulse = start.origin - destination.origin;
     projectile.SetAxisVelocity(impulse * impulseStrength);
+
+    if(requireAmmoToFire && inventory.ItemCount() == 0) {
+      StartReload();
+    }
   }
 
   public override void Equip(object wielder){

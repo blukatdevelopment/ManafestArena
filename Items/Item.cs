@@ -35,7 +35,10 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
     // Soldier
     Crossbow,
     FlintlockPistol,
-    Knife
+    Knife,
+
+    RapidCrossbow,
+    DoubleCrossbow
   };
 
   public enum Categories { // Inventory categories.
@@ -422,9 +425,34 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         pw.LoadInternalReserve(dat, 10);
         ret = pw as Item;
         break;
+      case Types.RapidCrossbow:
+        pw = new ProjectileWeapon();
+        pw.healthDamage = 100;
+        pw.maxAmmo = 1;
+        pw.ammoType = "Bolt";
+        pw.impulseStrength = 100f;
+        pw.reloadDelay = 0.5f; // Four times faster
+        dat = new ItemData();
+        dat.type = Types.Ammo;
+        dat.name = pw.ammoType;
+        pw.LoadInternalReserve(dat, 10);
+        ret = pw as Item;
+        break;
+      case Types.DoubleCrossbow:
+        pw = new ProjectileWeapon();
+        pw.healthDamage = 100;
+        pw.maxAmmo = 2;
+        pw.ammoType = "Bolt";
+        pw.impulseStrength = 100f;
+        dat = new ItemData();
+        dat.type = Types.Ammo;
+        dat.name = pw.ammoType;
+        pw.LoadInternalReserve(dat, 10);
+        ret = pw as Item;
+        break;
       case Types.FlintlockPistol:
         pw = new ProjectileWeapon();
-        pw.healthDamage = 60;
+        pw.healthDamage = 100;
         pw.maxAmmo = 1;
         pw.ammoType = "MusketBall";
         pw.impulseStrength = 100f;
@@ -570,6 +598,12 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         break;
       case Types.Crossbow:
         ret = new string[]{"Crossbow", "Smokeless, weather resistant, armor-piercing main weapon.", "res://Models/crossbow.obj"};
+        break;
+      case Types.DoubleCrossbow:
+        ret = new string[]{"Double Crossbow", "Two shots, one price.", "res://Models/crossbow.obj"};
+        break;
+      case Types.RapidCrossbow:
+        ret = new string[]{"Rapid Crossbow", "Advanced Han engineering.", "res://Models/crossbow.obj"};
         break;
       case Types.FlintlockPistol:
         ret = new string[]{"Flintlock pistol", "Don't bring a knife to a gunfight.", "res://Models/musket_pistol.obj"};
