@@ -172,13 +172,13 @@ public class StatsManager {
         SetBaseStat(Stats.Brain, brainInt);
         SetFact(Facts.Name, "Mage");
 
-        SetBaseStat(Stats.Intelligence, 5);
-        SetBaseStat(Stats.Charisma,     5);
-        SetBaseStat(Stats.Endurance,    5);
-        SetBaseStat(Stats.Perception,   5);
-        SetBaseStat(Stats.Agility,      5);
-        SetBaseStat(Stats.Willpower,    5);
-        SetBaseStat(Stats.Strength,     5);
+        SetBaseStat(Stats.Intelligence, 10);
+        SetBaseStat(Stats.Charisma,     2);
+        SetBaseStat(Stats.Endurance,    4);
+        SetBaseStat(Stats.Perception,   4);
+        SetBaseStat(Stats.Agility,      3);
+        SetBaseStat(Stats.Willpower,    10);
+        SetBaseStat(Stats.Strength,     2);
 
         SetFact(Facts.Slot1, "Staff");
 
@@ -207,12 +207,12 @@ public class StatsManager {
         SetBaseStat(Stats.Brain, brainInt);
         SetFact(Facts.Name, "Soldier");
 
-        SetBaseStat(Stats.Intelligence, 5);
+        SetBaseStat(Stats.Intelligence, 4);
         SetBaseStat(Stats.Charisma,     5);
-        SetBaseStat(Stats.Endurance,    5);
-        SetBaseStat(Stats.Perception,   5);
+        SetBaseStat(Stats.Endurance,    6);
+        SetBaseStat(Stats.Perception,   6);
         SetBaseStat(Stats.Agility,      5);
-        SetBaseStat(Stats.Willpower,    5);
+        SetBaseStat(Stats.Willpower,    4);
         SetBaseStat(Stats.Strength,     5);
 
         SetFact(Facts.Slot1, "Crossbow");

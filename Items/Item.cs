@@ -443,10 +443,10 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         break;
       case Types.FireballSpell:
         pw = new ProjectileWeapon();
-        pw.healthDamage = 35;
+        pw.healthDamage = 15;
         pw.requireAmmoToFire = false;
         pw.ammoType = "Fireball";
-        pw.manaCost = 20;
+        pw.manaCost = 10;
         dat = new ItemData();
         dat.type = Types.Ammo;
         dat.name = pw.ammoType;
