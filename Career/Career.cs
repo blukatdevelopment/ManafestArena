@@ -326,6 +326,12 @@ public class Career {
         stats.SetFact(StatsManager.Facts.Slot2, "spear");
         stats.SetFact(StatsManager.Facts.Slot3, "claws");
       break;
+      case "Double crossbow":
+        stats.SetFact(StatsManager.Facts.Slot1, "doublecrossbow");
+      break;
+      case "Rapid crossbow":
+        stats.SetFact(StatsManager.Facts.Slot1, "rapidcrossbow");
+      break;
     }
   }
 
@@ -349,7 +355,14 @@ public class Career {
 
   public static List<string> GetSoldierUpgrades(){
     List<string> ret = new List<string>();
-    
+    StatsManager stats = GetPlayerStats();
+
+    if(stats.GetFact(StatsManager.Facts.Slot1) == "Crossbow"){
+      ret.Add("Double crossbow");
+      ret.Add("Rapid crossbow");
+    }
+
+
     return ret;
   }
 
@@ -367,7 +380,9 @@ public class Career {
       {"Extra endurance","Improved health, take less damage."},
       {"+50 max health", "Take more damage"},
       {"Extra agility", "Run faster"},
-      {"Second spear", "Two spears are better than one."}
+      {"Second spear", "Two spears are better than one."},
+      {"Double crossbow", "Fire twice before reloading"},
+      {"Rapid crossbow", "Reload rapidly."}
 
     };
 
