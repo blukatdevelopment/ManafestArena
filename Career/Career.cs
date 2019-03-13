@@ -295,79 +295,84 @@ public class Career {
       return ret;
     }
 
-    public static void SelectRestSiteUpgrade(string selection){
-      GD.Print("Selected " + selection);
-      StatsManager stats = GetPlayerStats();
-      
-      int intelligenceBuff = stats.GetStatBuff(StatsManager.Stats.Intelligence);
-      int charismaBuff = stats.GetStatBuff(StatsManager.Stats.Charisma);
-      int enduranceBuff = stats.GetStatBuff(StatsManager.Stats.Endurance);
-      int perceptionBuff = stats.GetStatBuff(StatsManager.Stats.Perception);
-      int agilityBuff = stats.GetStatBuff(StatsManager.Stats.Agility);
-      int willpowerBuff = stats.GetStatBuff(StatsManager.Stats.Willpower);
-      int strengthBuff = stats.GetStatBuff(StatsManager.Stats.Strength);
-      int currentHealth = stats.GetStat(StatsManager.Stats.Health);
-      int healthBuff = stats.GetStatBuff(StatsManager.Stats.HealthMax);
+  public static void SelectRestSiteUpgrade(string selection){
+    GD.Print("Selected " + selection);
+    StatsManager stats = GetPlayerStats();
+    
+    int intelligenceBuff = stats.GetStatBuff(StatsManager.Stats.Intelligence);
+    int charismaBuff = stats.GetStatBuff(StatsManager.Stats.Charisma);
+    int enduranceBuff = stats.GetStatBuff(StatsManager.Stats.Endurance);
+    int perceptionBuff = stats.GetStatBuff(StatsManager.Stats.Perception);
+    int agilityBuff = stats.GetStatBuff(StatsManager.Stats.Agility);
+    int willpowerBuff = stats.GetStatBuff(StatsManager.Stats.Willpower);
+    int strengthBuff = stats.GetStatBuff(StatsManager.Stats.Strength);
+    int currentHealth = stats.GetStat(StatsManager.Stats.Health);
+    int healthBuff = stats.GetStatBuff(StatsManager.Stats.HealthMax);
 
 
-      switch(selection){
-        case "Extra endurance":
-          stats.SetStatBuff(StatsManager.Stats.Endurance, enduranceBuff + 2);
-        break;
-        case "Extra agility":
-          stats.SetStatBuff(StatsManager.Stats.Agility, agilityBuff + 2);
-        break;
-        case "+50 max health":
-          stats.SetStatBuff(StatsManager.Stats.HealthMax, healthBuff + 50);
-          stats.SetBaseStat(StatsManager.Stats.Health, currentHealth + 50);
-        break;
-      }
+    switch(selection){
+      case "Extra endurance":
+        stats.SetStatBuff(StatsManager.Stats.Endurance, enduranceBuff + 2);
+      break;
+      case "Extra agility":
+        stats.SetStatBuff(StatsManager.Stats.Agility, agilityBuff + 2);
+      break;
+      case "+50 max health":
+        stats.SetStatBuff(StatsManager.Stats.HealthMax, healthBuff + 50);
+        stats.SetBaseStat(StatsManager.Stats.Health, currentHealth + 50);
+      break;
+      case "Second spear":
+        GD.Print("Awarding spear");
+        stats.SetFact(StatsManager.Facts.Slot2, "spear");
+        stats.SetFact(StatsManager.Facts.Slot3, "claws");
+      break;
     }
+  }
 
-    public static List<string> GetBeastUpgrades(){
-      StatsManager stats = GetPlayerStats();
+  public static List<string> GetBeastUpgrades(){
+    StatsManager stats = GetPlayerStats();
 
-      List<string> ret = new List<string>();
+    List<string> ret = new List<string>();
 
-      if(stats.GetFact(StatsManager.Facts.Slot2) != "spear"){
-        ret.Add("Second spear");
-      }
-      return ret;
+    if(stats.GetFact(StatsManager.Facts.Slot2) != "spear"){
+      ret.Add("Second spear");
     }
+    return ret;
+  }
 
-    public static List<string> GetMageUpgrades(){
-      List<string> ret = new List<string>();
+  public static List<string> GetMageUpgrades(){
+    List<string> ret = new List<string>();
 
 
-      return ret;
-    }
+    return ret;
+  }
 
-    public static List<string> GetSoldierUpgrades(){
-      List<string> ret = new List<string>();
-      
-      return ret;
-    }
+  public static List<string> GetSoldierUpgrades(){
+    List<string> ret = new List<string>();
+    
+    return ret;
+  }
 
-    public static List<string> GetGenericUpgrades(){
-      return new List<string>{
-        "Extra endurance",
-        "Extra agility",
-        "+50 max health"
-      };
-    }
+  public static List<string> GetGenericUpgrades(){
+    return new List<string>{
+      "Extra endurance",
+      "Extra agility",
+      "+50 max health"
+    };
+  }
 
-    public static string UpgradeDescription(string upgradeName){
-      System.Collections.Generic.Dictionary<string, string> descriptionMap;
-      descriptionMap = new System.Collections.Generic.Dictionary<string, string>{
-        {"Extra endurance","Improved health, take less damage."},
-        {"+50 max health", "Take more damage"},
-        {"Extra agility", "Run faster"},
-        {"Second spear", "Two spears are better than one."}
+  public static string UpgradeDescription(string upgradeName){
+    System.Collections.Generic.Dictionary<string, string> descriptionMap;
+    descriptionMap = new System.Collections.Generic.Dictionary<string, string>{
+      {"Extra endurance","Improved health, take less damage."},
+      {"+50 max health", "Take more damage"},
+      {"Extra agility", "Run faster"},
+      {"Second spear", "Two spears are better than one."}
 
-      };
+    };
 
-      return descriptionMap[upgradeName];
-    }
+    return descriptionMap[upgradeName];
+  }
 
 
   public static List<ActorData> EnemiesForMap(string mapName){
