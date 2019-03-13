@@ -41,8 +41,10 @@ public class RestSiteMenu : Container, IMenu {
     });
     AddChild(restButton);
 
-    // upgradeButton = Menu.Button("Upgrade", DisplayUpgrades);
-    // AddChild(upgradeButton);
+    if(Career.RestSiteUpgrades().Count > 0){
+      upgradeButton = Menu.Button("Upgrade", DisplayUpgrades);
+      AddChild(upgradeButton);
+    }
   }
 
   void DisplayUpgrades(){
@@ -81,6 +83,7 @@ public class RestSiteMenu : Container, IMenu {
 
   void Confirm(){
     GD.Print("Confirming selection of " + selection);
+    Career.SelectRestSiteUpgrade(selection);
     Session.session.career.CompleteEncounter();
   }
 
@@ -102,12 +105,20 @@ public class RestSiteMenu : Container, IMenu {
     Menu.ScaleControl(background, width, height, 0, 0);
     if(restButton != null){
       Menu.ScaleControl(restButton, 2 * wu, 2 * hu, wu, 2 * hu);
-      //Menu.ScaleControl(upgradeButton, 2 * wu, 2 * hu, width - 3 * wu, 2 * hu);
+      if(upgradeButton != null){
+        Menu.ScaleControl(upgradeButton, 2 * wu, 2 * hu, width - 3 * wu, 2 * hu);
+      }
     }
-    if(upgradeButtons != null && upgradeButtons.Count > 2){
-      Menu.ScaleControl(upgradeButtons[0], 2 * wu, 2 * hu, wu, 2 * hu);
-      Menu.ScaleControl(upgradeButtons[1], 2 * wu, 2 * hu, 4 * wu, 2 * hu);
-      Menu.ScaleControl(upgradeButtons[2], 2 * wu, 2 * hu, 7 * wu, 2 * hu);
+    if(upgradeButtons != null){
+      if(upgradeButtons.Count > 0){
+        Menu.ScaleControl(upgradeButtons[0], 2 * wu, 2 * hu, wu, 2 * hu);  
+      }
+      if(upgradeButtons.Count > 1){
+        Menu.ScaleControl(upgradeButtons[1], 2 * wu, 2 * hu, 4 * wu, 2 * hu);  
+      }
+      if(upgradeButtons.Count > 2){
+        Menu.ScaleControl(upgradeButtons[2], 2 * wu, 2 * hu, 7 * wu, 2 * hu);
+      }
       Menu.ScaleControl(descriptionLabel, 4 * wu, 4 * hu, 3 * wu, 4 * hu);
     }
     if(confirmButton != null){
