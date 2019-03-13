@@ -578,16 +578,16 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         ret = new string[]{"Knife", "Don't bring a gun to a knifefight.", "res://Models/dagger.obj"};
         break;
       case Types.FireballSpell:
-        ret = new string[]{"Fireball", "Better than a wet match.", ""};
+        ret = new string[]{"Fireball", "Ranged attack", ""};
         break;
       case Types.HealSpell:
-        ret = new string[]{"Restore Health", "That feels better.", ""};
+        ret = new string[]{"Restore Health", "Increase health", ""};
         break;
       case Types.StaminaSpell:
-        ret = new string[]{"Restore Stamina", "Get pumped!", ""};
+        ret = new string[]{"Restore Stamina", "Increase stamina", ""};
         break;
       case Types.ManaSpell:
-        ret = new string[]{"Restore Mana", "Sometimes it takes mana to make mana.", ""};
+        ret = new string[]{"Restore Mana", "Increase mana", ""};
         break;
     }
     return ret;

@@ -93,7 +93,7 @@ public class StateAi : Brain {
     Vector3 end = host.Pointer();
     World world = host.GetWorld();
 
-    List<object> objects = Util.GridCast(start, end, world, 3, 0.5f);
+    List<object> objects = Util.GridCast(start, end, world, 3, 5f);
     List<Actor> ret = new List<Actor>();
     foreach(object obj in objects){
       Actor sighted = obj as Actor;
@@ -126,7 +126,7 @@ public class StateAi : Brain {
 
   // TODO: Replace hardcoding with logic
   public float GetCombatRange(){
-    return 5f;
+    return 20f;
   }
 
   public float DistanceToActor(Actor actor){
