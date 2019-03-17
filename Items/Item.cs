@@ -338,9 +338,17 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
       return null;
     }
 
-    Types type = (Types) Enum.Parse(typeof(Item.Types), itemTypeName, true);
+    return Factory(GetTypeFromString(itemTypeName));
+  }
 
-    return Factory(type);
+  public static Types GetTypeFromString(string itemTypeName){
+    if(itemTypeName == null || itemTypeName == ""){
+      return Types.None;
+    }
+
+    Types type = (Types)Enum.Parse(typeof(Item.Types), itemTypeName, true);
+
+    return type;
   }
 
   public static Item Factory(Types type){

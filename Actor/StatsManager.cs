@@ -83,6 +83,16 @@ public class StatsManager {
         Slot8,
         Slot9,
         Slot10,
+        SpellSlot1,
+        SpellSlot2,
+        SpellSlot3,
+        SpellSlot4,
+        SpellSlot5,
+        SpellSlot6,
+        SpellSlot7,
+        SpellSlot8,
+        SpellSlot9,
+        SpellSlot10,
         ColorX,
         ColorY,
         ColorZ
@@ -181,6 +191,11 @@ public class StatsManager {
         SetBaseStat(Stats.Strength,     2);
 
         SetFact(Facts.Slot1, "Staff");
+
+        SetFact(Facts.SpellSlot1, "" + Item.Types.FireballSpell);
+        SetFact(Facts.SpellSlot2, "" + Item.Types.HealSpell);
+        SetFact(Facts.SpellSlot3, "" + Item.Types.StaminaSpell);
+        SetFact(Facts.SpellSlot4, "" + Item.Types.ManaSpell);
 
         ReplenishStats();
         GD.Print("MageInit");
