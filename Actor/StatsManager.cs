@@ -194,8 +194,8 @@ public class StatsManager {
 
         SetFact(Facts.SpellSlot1, "" + Item.Types.FireballSpell);
         SetFact(Facts.SpellSlot2, "" + Item.Types.HealSpell);
-        SetFact(Facts.SpellSlot3, "" + Item.Types.StaminaSpell);
-        SetFact(Facts.SpellSlot4, "" + Item.Types.ManaSpell);
+        //SetFact(Facts.SpellSlot3, "" + Item.Types.StaminaSpell);
+        //SetFact(Facts.SpellSlot4, "" + Item.Types.ManaSpell);
 
         ReplenishStats();
         GD.Print("MageInit");
