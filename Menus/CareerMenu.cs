@@ -61,7 +61,17 @@ public class CareerMenu : Container, IMenu {
   }
 
   void AddNodeButton(CareerNode node){
-    Button button = NodeButton(node.nodeId, Enum.GetName(typeof(CareerNode.NodeTypes), node.nodeType));
+    CareerNode.NodeTypes nodeType = node.nodeType;
+    string nodeName = "" + nodeType;
+
+    if(nodeType == CareerNode.NodeTypes.ArenaMatch){
+      nodeName = node.extraInfo;
+      nodeName = nodeName.Replace("res://Scenes/Maps/", "");
+      nodeName = nodeName.Replace(".tscn", "");
+      nodeName = nodeType + ": " + nodeName;
+    }
+
+    Button button = NodeButton(node.nodeId, nodeName);
     careerButtons.Add(node.nodeId, button);
     AddChild(button);
   }
