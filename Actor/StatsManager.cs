@@ -178,7 +178,7 @@ public class StatsManager {
 
     public void MageInit(){
         int brainInt = (int)Actor.Brains.Player1;
-        SetFact(Facts.Archetype, CharacterName(Archetypes.One));
+        SetFact(Facts.Archetype, CharacterName(Archetypes.Two));
         SetBaseStat(Stats.Brain, brainInt);
         SetFact(Facts.Name, "Mage");
 

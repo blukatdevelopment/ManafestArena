@@ -359,6 +359,12 @@ public class Career {
       case "Rapid crossbow":
         stats.SetFact(StatsManager.Facts.Slot1, "rapidcrossbow");
       break;
+      case "Fireball II":
+        stats.SetFact(StatsManager.Facts.SpellSlot1, "FireballIISpell");
+      break;
+      case "Fireball III":
+        stats.SetFact(StatsManager.Facts.SpellSlot1, "FireballIIISpell");
+      break;
     }
   }
 
@@ -376,6 +382,14 @@ public class Career {
   public static List<string> GetMageUpgrades(){
     List<string> ret = new List<string>();
 
+    StatsManager stats = GetPlayerStats();
+
+    if(stats.GetFact(StatsManager.Facts.SpellSlot1) == "FireballSpell"){
+      ret.Add("Fireball II");
+    }
+    if(stats.GetFact(StatsManager.Facts.SpellSlot1) == "FireballIISpell"){
+      ret.Add("Fireball III");
+    }
 
     return ret;
   }
@@ -409,8 +423,9 @@ public class Career {
       {"Extra agility", "Run faster"},
       {"Second spear", "Two spears are better than one."},
       {"Double crossbow", "Fire twice before reloading"},
-      {"Rapid crossbow", "Reload rapidly."}
-
+      {"Rapid crossbow", "Reload rapidly."},
+      {"Fireball II", "Stronger projectile attack."},
+      {"Fireball III", "Strongest projectile attack."}
     };
 
     return descriptionMap[upgradeName];

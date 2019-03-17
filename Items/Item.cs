@@ -28,6 +28,8 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
     // Mage
     Staff,
     FireballSpell,
+    FireballIISpell,
+    FireballIIISpell,
     HealSpell,
     StaminaSpell,
     ManaSpell,
@@ -479,14 +481,38 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         break;
       case Types.FireballSpell:
         pw = new ProjectileWeapon();
-        pw.healthDamage = 15;
+        pw.healthDamage = 30;
         pw.requireAmmoToFire = false;
         pw.ammoType = "Fireball";
-        pw.manaCost = 10;
+        pw.manaCost = 15;
         dat = new ItemData();
         dat.type = Types.Ammo;
         dat.name = pw.ammoType;
-        pw.LoadInternalReserve(dat, 6);
+        pw.LoadInternalReserve(dat, 1);
+        ret = pw as Item;
+        break;
+      case Types.FireballIISpell:
+        pw = new ProjectileWeapon();
+        pw.healthDamage = 60;
+        pw.requireAmmoToFire = false;
+        pw.ammoType = "Fireball";
+        pw.manaCost = 20;
+        dat = new ItemData();
+        dat.type = Types.Ammo;
+        dat.name = pw.ammoType;
+        pw.LoadInternalReserve(dat, 1);
+        ret = pw as Item;
+        break;
+      case Types.FireballIIISpell:
+        pw = new ProjectileWeapon();
+        pw.healthDamage = 100;
+        pw.requireAmmoToFire = false;
+        pw.ammoType = "Fireball";
+        pw.manaCost = 50;
+        dat = new ItemData();
+        dat.type = Types.Ammo;
+        dat.name = pw.ammoType;
+        pw.LoadInternalReserve(dat, 1);
         ret = pw as Item;
         break;
       case Types.HealSpell:
@@ -621,6 +647,12 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
         break;
       case Types.FireballSpell:
         ret = new string[]{"Fireball", "Ranged attack", ""};
+        break;
+      case Types.FireballIISpell:
+        ret = new string[]{"Fireball II", "Stronger ranged attack", ""};
+        break;
+      case Types.FireballIIISpell:
+        ret = new string[]{"Fireball III", "Final form of fireball", ""};
         break;
       case Types.HealSpell:
         ret = new string[]{"Restore Health", "Increase health", ""};
