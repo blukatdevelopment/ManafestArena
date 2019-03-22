@@ -212,15 +212,71 @@ public class Career {
     public static List<CareerNode> GenerateCareerTree(string championName){
       List<CareerNode> ret = new List<CareerNode>();
 
-      ret.Add(CareerNode.FromRow(new string[] {"1", "1", "2", "-1", "3", "res://Scenes/Maps/Open.tscn"}));
-      ret.Add(CareerNode.FromRow(new string[] {"2", "1", "4", "-1", "-1", "res://Scenes/Maps/Levels.tscn"}));
-      ret.Add(CareerNode.FromRow(new string[] {"3", "1", "5", "-1", "-1", "res://Scenes/Maps/Pillars.tscn"}));
+      // ret.Add(CareerNode.FromRow(new string[] {"1", "1", "2", "-1", "3", "res://Scenes/Maps/Open.tscn"}));
+      // ret.Add(CareerNode.FromRow(new string[] {"2", "1", "4", "-1", "-1", "res://Scenes/Maps/Levels.tscn"}));
+      // ret.Add(CareerNode.FromRow(new string[] {"3", "1", "5", "-1", "-1", "res://Scenes/Maps/Pillars.tscn"}));
       
-      ret.Add(CareerNode.FromRow(new string[] {"4", "5", "6", "-1", "-1", ""}));
-      ret.Add(CareerNode.FromRow(new string[] {"5", "1", "6", "-1", "-1", "res://Scenes/Maps/Urban.tscn"}));
-      ret.Add(CareerNode.FromRow(new string[] {"6", "1", "-1", "-1", "-1", "res://Scenes/Maps/Urban.tscn"}));
+      // ret.Add(CareerNode.FromRow(new string[] {"4", "5", "6", "-1", "-1", ""}));
+      // ret.Add(CareerNode.FromRow(new string[] {"5", "1", "6", "-1", "-1", "res://Scenes/Maps/Urban.tscn"}));
+      // ret.Add(CareerNode.FromRow(new string[] {"6", "1", "-1", "-1", "-1", "res://Scenes/Maps/Urban.tscn"}));
 
+
+      ret.Add(RandomCareerNode(1, 2, -1, 3));
+      ret.Add(RandomCareerNode(2, 4, -1, -1));
+      ret.Add(RandomCareerNode(3, 4, -1, -1));
+      ret.Add(RandomCareerNode(4, 5, -1, 6));
+      ret.Add(RandomCareerNode(5, 7, -1, -1));
+      ret.Add(RandomCareerNode(6, 8, 9, -1));
+      ret.Add(RandomCareerNode(7, 10, -1, -1));
+      ret.Add(RandomCareerNode(8, 11, -1, -1));
+      ret.Add(RandomCareerNode(9, 12, -1, -1));
+      ret.Add(RandomCareerNode(10, 13, -1, 14));
+      ret.Add(RandomCareerNode(11, 15, -1, -1));
+      ret.Add(RandomCareerNode(12, 15, -1, -1));
+      ret.Add(RandomCareerNode(13, 16, -1, -1));
+      ret.Add(RandomCareerNode(14, 16, -1, -1));
+      ret.Add(RandomCareerNode(15, 17, -1, -1));
+      ret.Add(RandomCareerNode(16, 18, -1, -1));
+      ret.Add(RandomCareerNode(17, 18, -1, -1));
+      ret.Add(RandomCareerNode(18, 19, -1, 20));
+      ret.Add(RandomCareerNode(19, -1, -1, -1));
+      ret.Add(RandomCareerNode(20, -1, -1, -1));
       return ret;
+    }
+
+    public static CareerNode RandomCareerNode(int id, int child1, int child2, int child3){
+      string[] args = new string[6];
+      args[0] = "" + id;
+      args[2] = "" + child1;
+      args[3] = "" + child2;
+      args[4] = "" + child3;
+      args[5] = "";
+
+      int nodeType = 1;
+      
+      if(Util.RandInt(0,100) > 80){
+        nodeType = 5; // Weighted distribution of rest sites
+      }
+
+      args[1] = "" + nodeType;
+
+      if(nodeType == 1){
+        args[5] = RandomArenaMap();
+      }
+
+      return CareerNode.FromRow(args);
+    }
+
+    public static string RandomArenaMap(){
+      List<string> arenaMaps = new List<string>{
+        "res://Scenes/Maps/Levels.tscn",
+        "res://Scenes/Maps/Maze.tscn",
+        "res://Scenes/Maps/Open.tscn",
+        "res://Scenes/Maps/Pillars.tscn",
+        "res://Scenes/Maps/Urban.tscn"
+      };
+      int choice = Util.RandInt(0, arenaMaps.Count-1);
+      return arenaMaps[choice];
     }
 
     public static void StartNewCareer(string championName = ""){
