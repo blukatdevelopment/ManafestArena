@@ -327,9 +327,8 @@ public class Util{
 
   public static Vector2 GetMousePosition(){
     Vector2 ret = Session.session.mousePosition;
-    GD.Print("GetMousePosition" + ret);
+    //GD.Print("GetMousePosition" + ret);
     return ret;
-    //return Session.session.GetViewport().GetMousePosition();
   }
 
   public static List<System.Object> ArrayToList(Godot.Array array){

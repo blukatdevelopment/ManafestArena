@@ -8,9 +8,11 @@ public class CareerMenu : Container, IMenu {
   public List<CareerNode> careerNodes;
   public System.Collections.Generic.Dictionary<int, Button> careerButtons;
   public TextEdit background;
-
+  public int nodeYOffset;
 
   public void Init(float minX, float minY, float maxX, float maxY){
+    nodeYOffset = 0;
+
     Sound.PlayRandomSong(Sound.GetPlaylist(Sound.Playlists.Menu));
     int inProgress = Session.session.career.stats.GetBaseStat(StatsManager.Stats.NodeInProgress);
     if(inProgress == 1){
@@ -22,6 +24,43 @@ public class CareerMenu : Container, IMenu {
     InitControls();
     ScaleControls();
     GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
+  }
+
+  public override void _Process(float delta){
+    HandleScrolling();
+  }
+
+  public void HandleScrolling(){
+    Vector2 mousePos = Util.GetMousePosition();
+    Rect2 screen = this.GetViewportRect();
+    float width = screen.Size.x;
+    float height = screen.Size.y;
+    float wu = width/10; // relative height and width units
+    float hu = height/10;
+
+    if(mousePos.x < 2*wu || mousePos.x > 6*wu){
+      return; // Not in the center of the screen
+    }
+
+    float y = mousePos.y;
+    int increment = 0;
+    int pixelsPast;
+
+    int srs = 3; // Scroll region size
+    int brs = 10 - srs; // Bottom scroll region start
+
+    if(y < srs*hu){
+      pixelsPast = (int)((srs*hu) - y);
+      increment = (int)(pixelsPast / (srs*hu) * 10); 
+    }
+    else if(y > brs*hu){
+      pixelsPast = (int)(y - (brs*hu));
+      increment =  (int)(pixelsPast / (srs*hu) * 10f);
+      increment *= -1;
+    }
+
+    nodeYOffset += increment;
+    ScaleControls();
   }
 
   public void Resize(float minX, float minY, float maxX, float maxY){
@@ -163,6 +202,8 @@ public class CareerMenu : Container, IMenu {
       xSize += scaleOffset;
       ySize += scaleOffset;
     }
+    
+    yPos += nodeYOffset;
 
     Button nodeButton = careerButtons[node];
     Menu.ScaleControl(nodeButton, xSize, ySize, xPos, yPos);
