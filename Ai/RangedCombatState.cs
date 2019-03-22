@@ -13,6 +13,12 @@ public class RangedCombatState : IBehaviorState {
   public bool inRange;
   public float currentRange;
 
+  // A delay after aiming at the enemy, but before firing to make shots 
+  // easier to dodge.
+  public bool aimDelayActive;
+  public float aimDelayTimer;
+  public const float AimDelay = 0.5f;
+
 
   public float attackTimer;
   public const float AttackInterval = 1f;
@@ -25,11 +31,13 @@ public class RangedCombatState : IBehaviorState {
   public RangedCombatState(Actor actor){
     hostActor = actor;
     attackTimer = 0f;
+    aimDelayActive = false;
+    aimDelayTimer = 0;
   }
 
   public void Init(StateAi hostAi){
     this.hostAi = hostAi;
-    
+
     if(hostAi.enemies.Count == 0 || hostAi.enemies[0] == null){
       hostAi.ChangeState(StateAi.States.Roaming);
       return;
@@ -84,9 +92,20 @@ public class RangedCombatState : IBehaviorState {
     }
 
 
-    if(attackTimer >= AttackInterval && aimed){
-      hostActor.Use(Item.Uses.A);
-      attackTimer = 0f;
+    if(!aimDelayActive && attackTimer >= AttackInterval && aimed){
+      aimDelayTimer = 0f;
+      aimDelayActive = true;
+    }
+
+    if(aimDelayActive){
+      aimDelayTimer += delta;
+      if(aimDelayTimer >= AimDelay){
+        aimDelayActive = false;
+        attackTimer = 0f;
+        aimDelayTimer = 0f;
+        hostActor.Use(Item.Uses.A);
+      }
+
     }
   }
 

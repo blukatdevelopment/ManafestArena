@@ -208,19 +208,8 @@ public class Career {
       return ret;
     }
 
-    // TODO: Remove hardcoding and randomize this
     public static List<CareerNode> GenerateCareerTree(string championName){
       List<CareerNode> ret = new List<CareerNode>();
-
-      // ret.Add(CareerNode.FromRow(new string[] {"1", "1", "2", "-1", "3", "res://Scenes/Maps/Open.tscn"}));
-      // ret.Add(CareerNode.FromRow(new string[] {"2", "1", "4", "-1", "-1", "res://Scenes/Maps/Levels.tscn"}));
-      // ret.Add(CareerNode.FromRow(new string[] {"3", "1", "5", "-1", "-1", "res://Scenes/Maps/Pillars.tscn"}));
-      
-      // ret.Add(CareerNode.FromRow(new string[] {"4", "5", "6", "-1", "-1", ""}));
-      // ret.Add(CareerNode.FromRow(new string[] {"5", "1", "6", "-1", "-1", "res://Scenes/Maps/Urban.tscn"}));
-      // ret.Add(CareerNode.FromRow(new string[] {"6", "1", "-1", "-1", "-1", "res://Scenes/Maps/Urban.tscn"}));
-
-
       ret.Add(RandomCareerNode(1, 2, -1, 3));
       ret.Add(RandomCareerNode(2, 4, -1, -1));
       ret.Add(RandomCareerNode(3, 4, -1, -1));
