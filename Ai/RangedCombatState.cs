@@ -55,8 +55,10 @@ public class RangedCombatState : IBehaviorState {
     currentRange = hostAi.DistanceToActor(enemy);
     inRange = currentRange <= RangedRange;
 
-    Strafe(delta);
-    MaintainDistance(delta);
+    if(!aimDelayActive){
+      Strafe(delta);
+      MaintainDistance(delta);
+    }
     Attack(delta);
   }
 
