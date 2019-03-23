@@ -262,7 +262,11 @@ public class Career {
         "res://Scenes/Maps/Maze.tscn",
         "res://Scenes/Maps/Open.tscn",
         "res://Scenes/Maps/Pillars.tscn",
-        "res://Scenes/Maps/Urban.tscn"
+        "res://Scenes/Maps/Urban.tscn",
+	    "res://Scenes/Maps/Colleseum.tscn",
+	    "res://Scenes/Maps/MazeII.tscn",
+	    "res://Scenes/Maps/Rural.tscn",
+	    "res://Scenes/Maps/Town.tscn"
       };
       int choice = Util.RandInt(0, arenaMaps.Count-1);
       return arenaMaps[choice];
@@ -490,29 +494,7 @@ public class Career {
   }
 
   public static List<string> EnemyNamesForMap(string mapName){
-    switch(mapName){
-      case "res://Scenes/Maps/Test.tscn":
-        return Util.ListOfDupes("goon1", 10);
-        break;
-        case "res://Scenes/Maps/Pillars.tscn":
-        return Util.ListOfDupes("goon1", 10);
-        break;
-        case "res://Scenes/Maps/Urban.tscn":
-        return Util.ListOfDupes("goon1", 10);
-        break;
-        case "res://Scenes/Maps/Maze.tscn":
-        return Util.ListOfDupes("goon1", 10);
-        break;
-        case "res://Scenes/Maps/Levels.tscn":
-        return Util.ListOfDupes("goon1", 10);
-        break;
-        case "res://Scenes/Maps/Open.tscn":
-        return Util.ListOfDupes("goon1", 10);
-        break;
-    }
-
-    GD.Print("Invalid map name " + mapName);
-    return new List<string>();
+    return Util.ListOfDupes("goon1", 10);
   }
 
 }
