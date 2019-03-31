@@ -7,5 +7,16 @@ that are virtually invisible and under the hood.
 
 ## Premise
 
-Select your champion and compete in the arena to gain upgrades
-and claim victory.
+
+Control a champion in a series of arena matches to become the victor.
+
+## Development
+
+Manafest: Arena has been completed. A retrospective/post-mortem will be created
+to explore challenges as well as what worked and didn't work. This should
+ideally be created by April 4th, 2019 and come before the start of the next
+project. That document should be the last update for this 3-month build period.
+
+If want to use parts, or the entirety of this repo to make a video game, 
+feel free to do so. It has served its purpose to me as an exercise of 
+programming, art, game design, and project management.
