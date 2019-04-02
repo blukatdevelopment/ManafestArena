@@ -44,13 +44,13 @@ public class NewGameMenu : Container, IMenu {
     descriptionLabel = Menu.TextBox("Select a champion.", true, true);
     AddChild(descriptionLabel);
 
-    firstCharacterButton = Menu.TexturedButton("res://Textures/beast_grey.jpg", "res://Textures/beast.jpg", () => { SelectChampion("beast"); });
+    firstCharacterButton = Menu.TexturedButton("res://Assets/Textures/beast_grey.jpg", "res://Assets/Textures/beast.jpg", () => { SelectChampion("beast"); });
     AddChild(firstCharacterButton);
 
-    secondCharacterButton = Menu.TexturedButton("res://Textures/mage_grey.jpg", "res://Textures/mage.jpg", () => { SelectChampion("mage"); });
+    secondCharacterButton = Menu.TexturedButton("res://Assets/Textures/mage_grey.jpg", "res://Assets/Textures/mage.jpg", () => { SelectChampion("mage"); });
     AddChild(secondCharacterButton);
 
-    thirdCharacterButton = Menu.TexturedButton("res://Textures/soldier_grey.jpg", "res://Textures/soldier.jpg", () => { SelectChampion("soldier"); });
+    thirdCharacterButton = Menu.TexturedButton("res://Assets/Textures/soldier_grey.jpg", "res://Assets/Textures/soldier.jpg", () => { SelectChampion("soldier"); });
     AddChild(thirdCharacterButton);
   }
 

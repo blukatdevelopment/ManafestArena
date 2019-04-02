@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/MODR_something_big.ogg-71cd484e55cedf1fd46b857f2fbce9a9.oggstr"
+
+[deps]
+
+source_file="res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/MODR_something_big.ogg"
+dest_files=[ "res://.import/MODR_something_big.ogg-71cd484e55cedf1fd46b857f2fbce9a9.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

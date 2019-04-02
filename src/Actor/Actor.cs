@@ -55,7 +55,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
   public string name;
 
   // These can change when detailed actor models with animations are added in.
-  public const string ActorMeshPath = "res://Models/Actor.obj";
+  public const string ActorMeshPath = "res://Assets/Models/Actor.obj";
 
   public Actor(){
     brainType = Brains.Ai;

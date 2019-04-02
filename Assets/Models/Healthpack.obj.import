@@ -1,0 +1,17 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/Healthpack.obj-38e6dda27fc16d7bd32e139734e78d03.mesh"
+
+[deps]
+
+files=[ "res://.import/Healthpack.obj-38e6dda27fc16d7bd32e139734e78d03.mesh" ]
+
+source_file="res://Assets/Models/Healthpack.obj"
+dest_files=[ "res://.import/Healthpack.obj-38e6dda27fc16d7bd32e139734e78d03.mesh", "res://.import/Healthpack.obj-38e6dda27fc16d7bd32e139734e78d03.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )

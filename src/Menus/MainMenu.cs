@@ -33,7 +33,7 @@ public class MainMenu : Container, IMenu {
       background = Menu.BackgroundBox();
       AddChild(background);
 
-      logo = Menu.TexturedButton("res://Textures/logo.jpg");
+      logo = Menu.TexturedButton("res://Assets/Textures/logo.jpg");
       AddChild(logo);
 
       newGameButton = Menu.Button(text : "New", onClick : NewGame);

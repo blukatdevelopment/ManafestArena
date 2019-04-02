@@ -258,15 +258,15 @@ public class Career {
 
     public static string RandomArenaMap(){
       List<string> arenaMaps = new List<string>{
-        "res://Scenes/Maps/Levels.tscn",
-        "res://Scenes/Maps/Maze.tscn",
-        "res://Scenes/Maps/Open.tscn",
-        "res://Scenes/Maps/Pillars.tscn",
-        "res://Scenes/Maps/Urban.tscn",
-	    "res://Scenes/Maps/Colleseum.tscn",
-	    "res://Scenes/Maps/MazeII.tscn",
-	    "res://Scenes/Maps/Rural.tscn",
-	    "res://Scenes/Maps/Town.tscn"
+        "res://Assets/Scenes/Maps/Levels.tscn",
+        "res://Assets/Scenes/Maps/Maze.tscn",
+        "res://Assets/Scenes/Maps/Open.tscn",
+        "res://Assets/Scenes/Maps/Pillars.tscn",
+        "res://Assets/Scenes/Maps/Urban.tscn",
+  	    "res://Assets/Scenes/Maps/Colleseum.tscn",
+  	    "res://Assets/Scenes/Maps/MazeII.tscn",
+  	    "res://Assets/Scenes/Maps/Rural.tscn",
+  	    "res://Assets/Scenes/Maps/Town.tscn"
       };
       int choice = Util.RandInt(0, arenaMaps.Count-1);
       return arenaMaps[choice];

@@ -47,49 +47,49 @@ public class Sound {
     string ret = "";
     switch(song){
       case Songs.Menu1: 
-        ret = "res://Audio/Songs/HallyLabs2014-current-selected-research/adam_spc.ogg";
+        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/adam_spc.ogg";
         break;
       case Songs.Menu2: 
-        ret = "res://Audio/Songs/HallyLabs2014-current-selected-research/ssss.ogg";
+        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/ssss.ogg";
         break;
       case Songs.Menu3: 
-        ret = "res://Audio/Songs/HallyLabs2014-current-selected-research/t.ogg";
+        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/t.ogg";
         break;
       case Songs.Menu4: 
-        ret = "res://Audio/Songs/HallyLabs2014-current-selected-research/you_will_know.ogg";
+        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/you_will_know.ogg";
         break;
       case Songs.Arena1: 
-        ret = "res://Audio/Songs/HallyLabs2014-current-selected-research/bowser_nights.ogg";
+        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/bowser_nights.ogg";
         break;
       case Songs.Arena2: 
-        ret = "res://Audio/Songs/HallyLabs2014-current-selected-research/dr.ogg";
+        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/dr.ogg";
         break;
       case Songs.Arena3: 
-        ret = "res://Audio/Songs/HallyLabs2014-current-selected-research/FDBT.ogg";
+        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/FDBT.ogg";
         break;
       case Songs.Arena4: 
-        ret = "res://Audio/Songs/HallyLabs2014-current-selected-research/ffff.ogg";
+        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/ffff.ogg";
         break;
       case Songs.Arena5: 
-        ret = "res://Audio/Songs/HallyLabs2014-current-selected-research/heated_swimmer.ogg";
+        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/heated_swimmer.ogg";
         break;
       case Songs.Arena6: 
-        ret = "res://Audio/Songs/HallyLabs2014-current-selected-research/hot_shit.ogg";
+        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/hot_shit.ogg";
         break;
       case Songs.Arena7: 
-        ret = "res://Audio/Songs/HallyLabs2014-current-selected-research/mbtb_away.ogg";
+        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/mbtb_away.ogg";
         break;
       case Songs.Arena8: 
-        ret = "res://Audio/Songs/HallyLabs2014-current-selected-research/md.ogg";
+        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/md.ogg";
         break;
       case Songs.Arena9: 
-        ret = "res://Audio/Songs/HallyLabs2014-current-selected-research/MODR_something_big.ogg";
+        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/MODR_something_big.ogg";
         break;
       case Songs.Arena10: 
-        ret = "res://Audio/Songs/HallyLabs2014-current-selected-research/true_fossil_soul_beta.ogg";
+        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/true_fossil_soul_beta.ogg";
         break;
       case Songs.Arena11: 
-        ret = "res://Audio/Songs/HallyLabs2014-current-selected-research/you_bet.ogg";
+        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/you_bet.ogg";
         break;
 
     }

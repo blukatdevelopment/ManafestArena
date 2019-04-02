@@ -601,49 +601,49 @@ public class Item : RigidBody, IHasInfo, IUse, IEquip, ICollide, IInteract{
     
     switch(type){
       case Types.Hand:
-        ret = new string[]{"Hand", "Raised in anger, it is a fist!", "res://Models/Hand.obj"};
+        ret = new string[]{"Hand", "Raised in anger, it is a fist!", "res://Assets/Models/Hand.obj"};
         break;
       case Types.Rifle:
-        ret = new string[]{"Rifle", "There are many like it, but this one is yours.", "res://Models/Rifle.obj"};
+        ret = new string[]{"Rifle", "There are many like it, but this one is yours.", "res://Assets/Models/Rifle.obj"};
         break;
       case Types.Bullet:
-        ret = new string[]{"Bullet", "Comes out one end of the rifle. Be sure to know which.", "res://Models/Bullet.obj"};
+        ret = new string[]{"Bullet", "Comes out one end of the rifle. Be sure to know which.", "res://Assets/Models/Bullet.obj"};
         break;
       case Types.HealthPack:
-        ret = new string[]{"HealthPack", "Heals what ails you.", "res://Models/Healthpack.obj"};
+        ret = new string[]{"HealthPack", "Heals what ails you.", "res://Assets/Models/Healthpack.obj"};
         break;
       case Types.AmmoPack:
-        ret = new string[]{"AmmoPack", "Food for your rifle.", "res://Models/Ammopack.obj"};
+        ret = new string[]{"AmmoPack", "Food for your rifle.", "res://Assets/Models/Ammopack.obj"};
         break;
       case Types.Ammo:
-        ret = new string[]{"Bullet", "A casing full of powder capped with a bullet. No further info available.", "res://Models/Ammopack.obj"};
+        ret = new string[]{"Bullet", "A casing full of powder capped with a bullet. No further info available.", "res://Assets/Models/Ammopack.obj"};
         break;
       case Types.AidHealthPack:
-        ret = new string[]{"HealthPack", "Heals what ails you.", "res://Models/Healthpack.obj"};
+        ret = new string[]{"HealthPack", "Heals what ails you.", "res://Assets/Models/Healthpack.obj"};
         break;
       case Types.Spear:
-        ret = new string[]{"Spear", "One end's pointy. Stab with it, or throw it.", "res://Models/spear.obj"};
+        ret = new string[]{"Spear", "One end's pointy. Stab with it, or throw it.", "res://Assets/Models/spear.obj"};
         break;
       case Types.Claws:
-        ret = new string[]{"Claws", "Knives conveniently placed on your hands.", "res://Models/claw.obj"};
+        ret = new string[]{"Claws", "Knives conveniently placed on your hands.", "res://Assets/Models/claw.obj"};
         break;
       case Types.Staff:
-        ret = new string[]{"Staff", "Spell crystals on the end of a stick.", "res://Models/staff.obj"};
+        ret = new string[]{"Staff", "Spell crystals on the end of a stick.", "res://Assets/Models/staff.obj"};
         break;
       case Types.Crossbow:
-        ret = new string[]{"Crossbow", "Smokeless, weather resistant, armor-piercing main weapon.", "res://Models/crossbow.obj"};
+        ret = new string[]{"Crossbow", "Smokeless, weather resistant, armor-piercing main weapon.", "res://Assets/Models/crossbow.obj"};
         break;
       case Types.DoubleCrossbow:
-        ret = new string[]{"Double Crossbow", "Two shots, one price.", "res://Models/crossbow.obj"};
+        ret = new string[]{"Double Crossbow", "Two shots, one price.", "res://Assets/Models/crossbow.obj"};
         break;
       case Types.RapidCrossbow:
-        ret = new string[]{"Rapid Crossbow", "Advanced Han engineering.", "res://Models/crossbow.obj"};
+        ret = new string[]{"Rapid Crossbow", "Advanced Han engineering.", "res://Assets/Models/crossbow.obj"};
         break;
       case Types.FlintlockPistol:
-        ret = new string[]{"Flintlock pistol", "Don't bring a knife to a gunfight.", "res://Models/musket_pistol.obj"};
+        ret = new string[]{"Flintlock pistol", "Don't bring a knife to a gunfight.", "res://Assets/Models/musket_pistol.obj"};
         break;
       case Types.Knife:
-        ret = new string[]{"Knife", "Don't bring a gun to a knifefight.", "res://Models/dagger.obj"};
+        ret = new string[]{"Knife", "Don't bring a gun to a knifefight.", "res://Assets/Models/dagger.obj"};
         break;
       case Types.FireballSpell:
         ret = new string[]{"Fireball", "Ranged attack", ""};

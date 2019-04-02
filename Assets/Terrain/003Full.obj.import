@@ -1,0 +1,17 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/003Full.obj-b02f98efbac06a3e80a6398378704a49.mesh"
+
+[deps]
+
+files=[ "res://.import/003Full.obj-b02f98efbac06a3e80a6398378704a49.mesh" ]
+
+source_file="res://Assets/Terrain/003Full.obj"
+dest_files=[ "res://.import/003Full.obj-b02f98efbac06a3e80a6398378704a49.mesh", "res://.import/003Full.obj-b02f98efbac06a3e80a6398378704a49.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )

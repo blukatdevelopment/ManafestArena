@@ -1,0 +1,17 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/Hand.obj-7dd46d572270d502ffe3700ee7f40f4c.mesh"
+
+[deps]
+
+files=[ "res://.import/Hand.obj-7dd46d572270d502ffe3700ee7f40f4c.mesh" ]
+
+source_file="res://Assets/Models/Hand.obj"
+dest_files=[ "res://.import/Hand.obj-7dd46d572270d502ffe3700ee7f40f4c.mesh", "res://.import/Hand.obj-7dd46d572270d502ffe3700ee7f40f4c.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )

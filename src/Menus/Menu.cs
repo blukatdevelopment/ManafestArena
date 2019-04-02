@@ -126,8 +126,8 @@ public class Menu{
     slider.Value = val;
     slider.Step = step;
     
-    slider.AddIconOverride("grabber", ResourceLoader.Load("res://Textures/UI/grabber.png") as Texture);
-    slider.AddIconOverride("grabber_highlight", ResourceLoader.Load("res://Textures/UI/grabber_highlight.png") as Texture);
+    slider.AddIconOverride("grabber", ResourceLoader.Load("res://Assets/Textures/UI/grabber.png") as Texture);
+    slider.AddIconOverride("grabber_highlight", ResourceLoader.Load("res://Assets/Textures/UI/grabber_highlight.png") as Texture);
 
     slider.AddStyleboxOverride("slider", ColorStyleBox("slider"));
     slider.AddStyleboxOverride("focus", ColorStyleBox("focus"));

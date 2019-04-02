@@ -1,0 +1,17 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/crossbow.obj-46a16e601cfb18d2e4dec168171559f7.mesh"
+
+[deps]
+
+files=[ "res://.import/crossbow.obj-46a16e601cfb18d2e4dec168171559f7.mesh" ]
+
+source_file="res://Assets/Models/crossbow.obj"
+dest_files=[ "res://.import/crossbow.obj-46a16e601cfb18d2e4dec168171559f7.mesh", "res://.import/crossbow.obj-46a16e601cfb18d2e4dec168171559f7.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )

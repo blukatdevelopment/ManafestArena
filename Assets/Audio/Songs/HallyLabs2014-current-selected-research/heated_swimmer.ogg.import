@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/heated_swimmer.ogg-17685880483812db4d8a6417282b015d.oggstr"
+
+[deps]
+
+source_file="res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/heated_swimmer.ogg"
+dest_files=[ "res://.import/heated_swimmer.ogg-17685880483812db4d8a6417282b015d.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

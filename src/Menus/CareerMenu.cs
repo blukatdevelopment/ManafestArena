@@ -105,7 +105,7 @@ public class CareerMenu : Container, IMenu {
 
     if(nodeType == CareerNode.NodeTypes.ArenaMatch){
       nodeName = node.extraInfo;
-      nodeName = nodeName.Replace("res://Scenes/Maps/", "");
+      nodeName = nodeName.Replace("res://Assets/Scenes/Maps/", "");
       nodeName = nodeName.Replace(".tscn", "");
       nodeName = nodeType + ": " + nodeName;
     }

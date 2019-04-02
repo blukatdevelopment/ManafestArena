@@ -1,0 +1,17 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/Rifle.obj-20bd0a3b8f7f7bae5301df3a96f68c7f.mesh"
+
+[deps]
+
+files=[ "res://.import/Rifle.obj-20bd0a3b8f7f7bae5301df3a96f68c7f.mesh" ]
+
+source_file="res://Assets/Models/Rifle.obj"
+dest_files=[ "res://.import/Rifle.obj-20bd0a3b8f7f7bae5301df3a96f68c7f.mesh", "res://.import/Rifle.obj-20bd0a3b8f7f7bae5301df3a96f68c7f.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
