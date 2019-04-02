@@ -1,0 +1,17 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/007FullPyramid.obj-8edb88a090132e1e08785dad44cb27bf.mesh"
+
+[deps]
+
+files=[ "res://.import/007FullPyramid.obj-8edb88a090132e1e08785dad44cb27bf.mesh" ]
+
+source_file="res://Assets/Terrain/007FullPyramid.obj"
+dest_files=[ "res://.import/007FullPyramid.obj-8edb88a090132e1e08785dad44cb27bf.mesh", "res://.import/007FullPyramid.obj-8edb88a090132e1e08785dad44cb27bf.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )

@@ -1,0 +1,17 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/musket_pistol.obj-02377e2ae7432f0ec5240ecbad981fb7.mesh"
+
+[deps]
+
+files=[ "res://.import/musket_pistol.obj-02377e2ae7432f0ec5240ecbad981fb7.mesh" ]
+
+source_file="res://Assets/Models/musket_pistol.obj"
+dest_files=[ "res://.import/musket_pistol.obj-02377e2ae7432f0ec5240ecbad981fb7.mesh", "res://.import/musket_pistol.obj-02377e2ae7432f0ec5240ecbad981fb7.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )

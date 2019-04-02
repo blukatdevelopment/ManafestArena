@@ -1,0 +1,17 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/claw.obj-7c3fdc6dea9c051384aea033d03c18b2.mesh"
+
+[deps]
+
+files=[ "res://.import/claw.obj-7c3fdc6dea9c051384aea033d03c18b2.mesh" ]
+
+source_file="res://Assets/Models/claw.obj"
+dest_files=[ "res://.import/claw.obj-7c3fdc6dea9c051384aea033d03c18b2.mesh", "res://.import/claw.obj-7c3fdc6dea9c051384aea033d03c18b2.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )

@@ -1,0 +1,17 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/spear.obj-1ecf863e93688094e43e71da68266e3d.mesh"
+
+[deps]
+
+files=[ "res://.import/spear.obj-1ecf863e93688094e43e71da68266e3d.mesh" ]
+
+source_file="res://Assets/Models/spear.obj"
+dest_files=[ "res://.import/spear.obj-1ecf863e93688094e43e71da68266e3d.mesh", "res://.import/spear.obj-1ecf863e93688094e43e71da68266e3d.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )

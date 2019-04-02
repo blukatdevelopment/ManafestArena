@@ -1,0 +1,17 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/dagger.obj-0dac97c1614921567575f58a50defbda.mesh"
+
+[deps]
+
+files=[ "res://.import/dagger.obj-0dac97c1614921567575f58a50defbda.mesh" ]
+
+source_file="res://Assets/Models/dagger.obj"
+dest_files=[ "res://.import/dagger.obj-0dac97c1614921567575f58a50defbda.mesh", "res://.import/dagger.obj-0dac97c1614921567575f58a50defbda.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
