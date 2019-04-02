@@ -81,8 +81,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     this.brainType = b;
     switch(b){
       case Brains.Player1:
-        brain = (Brain)new ActorInputHandler(this); 
-        Session.session.player = this;
+        brain = (Brain)new ActorInputHandler(this);
         break;
       case Brains.Ai: 
         brain = (Brain)new StateAi(this); 
@@ -372,16 +371,6 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     }
     return speed;
   }
-  
-  public void ToggleInventory(){
-    if(!menuActive){
-      SetMenuActive(true);
-      Session.ChangeMenu(Menu.Menus.Inventory);  
-    }
-    else{
-      SetMenuActive(false);
-    }
-  }
 
   public void EquipHotbarItem(int slot){
     DeferredEquipItem(hotbar.EquipItem(slot));
@@ -517,7 +506,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     Transform itemTrans = item.GetGlobalTransform();
     
     eyes.RemoveChild(item);
-    Session.session.arena.AddChild(item);
+    Session.GameNode().AddChild(item);
     
     item.GlobalTransform = itemTrans;
     item.Mode = RigidBody.ModeEnum.Rigid;
@@ -794,7 +783,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     
     
     if(!Session.NetActive()){
-      string itemName = Session.NextItemName();
+      string itemName = "Item";
       DeferredDiscardItem(index, itemName);
     }
     else{
@@ -808,7 +797,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
       return;
     }
 
-    string itemName = Session.NextItemName();
+    string itemName = "Item";
     Rpc(nameof(DeferredDiscardItem), index, itemName);
     DeferredDiscardItem(index, itemName);
   }

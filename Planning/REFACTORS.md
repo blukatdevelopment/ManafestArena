@@ -1,6 +1,4 @@
 # Refactors
-**File structure**
-Should be src/ to contain source code, Assets/ to contain assets
 
 **Items**
 Item functionality is currently suspended in an inheritance tree. This makes life difficult
@@ -17,11 +15,6 @@ Most menus implementing IMenu have copy/pasted code. A class to contian these co
 would go a long way to reducing a menu class to some config settings and then menu-specific 
 logic. Ideally, I'd also like to add an Up() Down() Left() Right() Select() Back() Exit() to
 IMenu to allow joypad input for menus.(The implementation might rely on Godot's built-in)
-
-**Session**
-The session should ideally not know anything about the active game mode, and should attempt to
-interact with it through interfaces. Other classes that are curious about the current gamemode
-can then also use interfaces to interact with it.
 
 **Input**
 Currently the abstracions are like so:

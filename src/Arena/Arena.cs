@@ -8,7 +8,9 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class Arena : Spatial {
+public class Arena : Spatial, IGamemode {
+  public static ArenaSettings arenaSettings;
+
   public List<Actor> actors;
   public Spatial terrain;
   public List<Vector3> enemySpawnPoints, playerSpawnPoints, itemSpawnPoints;
@@ -21,11 +23,13 @@ public class Arena : Spatial {
   public int playerWorldId = -1;
   public const int DefaultKillQuota = 5;
   public int killQuota;
+  public Actor player;
   
 
-  public void Init(string terrainFile){
+  public void Init(string[] argv){
+    string terrainFile = argv[0];
     Sound.PlayRandomSong(Sound.GetPlaylist(Sound.Playlists.Arena));
-    settings = Session.session.arenaSettings;
+    settings = Arena.arenaSettings;
     killQuota = DefaultKillQuota;
 
     if(settings == null){
@@ -111,6 +115,21 @@ public class Arena : Spatial {
     return name;
   }
 
+  public static void LocalArena(string terrainFile = "res://Scenes/Maps/Test.tscn"){
+    Session.ChangeMenu(Menu.Menus.HUD);
+    Session ses = Session.session;
+    ses.activeGamemode = new Arena();
+    ses.AddChild(ses.activeGamemode);
+    IGamemode gamemode = ses.activeGamemode as IGamemode;
+    if(gamemode != null){
+      gamemode.Init(new string[]{ terrainFile });
+    }
+  }
+
+  public Actor GetPlayer(){
+    return player;
+  }
+
   public void LocalInit(){
     if(settings.usePowerups){
       for(int i = 0; i < 1; i++){
@@ -119,8 +138,8 @@ public class Arena : Spatial {
       }
     }
 
-    Session.session.player = InitActor(settings.player, NextId());
-    playerWorldId = Session.session.player.id;
+    player = InitActor(settings.player, NextId());
+    playerWorldId = player.id;
     //GD.Print("Session.session.Player set to " + Session.session.player.ToString());
 
     foreach(ActorData enemy in settings.enemies){

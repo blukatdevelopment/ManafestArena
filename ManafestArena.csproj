@@ -72,7 +72,6 @@
     <Compile Include="src/Menus\HUDMenu.cs" />
     <Compile Include="src/Menus\PauseMenu.cs" />
     <Compile Include="src/Menus\TextBox.cs" />
-    <Compile Include="src/Menus\InventoryMenu.cs" />
     <Compile Include="src/Menus\SettingsMenu.cs" />
     <Compile Include="src/Menus\CareerMenu.cs" />
     <Compile Include="src/Menus\NewGameMenu.cs" />
@@ -109,6 +108,7 @@
     <Compile Include="src/Arena\ArenaSettings.cs" />
     <Compile Include="src/Util\NetworkSession.cs" />
     <Compile Include="src/Util\Session.cs" />
+    <Compile Include="src/Util\IGamemode.cs" />
     <Compile Include="src/Util\Sound.cs" />
     <Compile Include="src/Util\PlayerData.cs" />
     <Compile Include="src/Util\Test.cs" />

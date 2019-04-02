@@ -100,9 +100,9 @@ public class Career {
       settings.usePowerups = false;
       settings.enemies = EnemiesForMap(info);
       settings.player = playerData;
-      Session.session.arenaSettings = settings;
+      Arena.arenaSettings = settings;
 
-      Session.LocalArena(info);
+      Arena.LocalArena(info);
     }
 
     public void ShopEncounter(string info = ""){
@@ -123,8 +123,8 @@ public class Career {
     }
 
     public void CompleteEncounter(){
-      if(Session.session.player != null){
-        playerData = Session.session.player.GetData();
+      if(Session.GetPlayer() != null){
+        playerData = Session.GetPlayer().GetData();
         if(playerData != null && playerData.stats != null){
           int health = playerData.stats.GetBaseStat(StatsManager.Stats.Health);
           stats.SetBaseStat(StatsManager.Stats.Health, health);
@@ -145,8 +145,6 @@ public class Career {
       
       CareerDb.SaveCareer(this);
 
-
-      Session.session.player = null;
       if(nextLevel == -1){
         CompleteGame();
       }
@@ -273,7 +271,6 @@ public class Career {
     }
 
     public static void StartNewCareer(string championName = ""){
-        Session.session.player = null;
         Career career = Factory(championName);
         Session.session.career = career;
         Session.ChangeMenu(Menu.Menus.Career);
