@@ -164,22 +164,6 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
       case Uses.D: StartReload(); break;
     }
   }
-  
-  protected virtual void Fire(){
-    if(inventory.ItemCount() < 1 || (Session.NetActive() && !Session.IsServer() )){
-      return;
-    }
-    
-    string name = Session.NextItemName();
-
-    if(Session.IsServer()){
-      DeferredFire(name);
-      Rpc(nameof(DeferredFire), name);
-    }
-    else{
-      DeferredFire(name);
-    }
-  }
 
   public bool ExpendAmmo(){
     if(!requireAmmoToFire && manaCost == 0 && staminaCost == 0){
@@ -205,14 +189,14 @@ public class ProjectileWeapon : Item, IWeapon, IHasAmmo, IEquip {
 
 
   [Remote]
-  public void DeferredFire(string name){
+  public void Fire(){
     if(!ExpendAmmo()){
       return;
     }
     
     speaker.PlayEffect(Sound.Effects.RifleShot);
     Item projectile = Item.Factory(Item.Types.Bullet);
-    projectile.Name = name;
+    projectile.Name = "Projectile";
     Projectile proj = projectile as Projectile;
 
     if(proj != null){

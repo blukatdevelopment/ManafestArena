@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class CareerMenu : Container, IMenu {
   public Button mainMenuButton;
-  public Session.Gamemodes activeMode = Session.Gamemodes.None;
   public List<CareerNode> careerNodes;
   public System.Collections.Generic.Dictionary<int, Button> careerButtons;
   public TextEdit background;

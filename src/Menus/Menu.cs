@@ -8,8 +8,7 @@ public class Menu{
     Main,
     Settings,
     Pause, 
-    HUD, 
-    Inventory,
+    HUD,
     Career,
     NewGame,
     PressEvent,
@@ -160,10 +159,6 @@ public class Menu{
       case Menus.Main: 
         ret = new MainMenu();
         ret.Name = "Main"; 
-        break;
-      case Menus.Inventory: 
-        ret = new InventoryMenu(); 
-        ret.Name = "Inventory";
         break;
       case Menus.Settings: 
         ret = new SettingsMenu(); 

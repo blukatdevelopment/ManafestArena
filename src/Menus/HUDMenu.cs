@@ -36,7 +36,7 @@ public class HUDMenu : Container, IMenu{
   }
 
   public void Update(){
-    Actor player = Session.session.player;
+    Actor player = Session.GetPlayer();
     
     if(player == null){
       GD.Print("Player 1 doesn't exist.");
