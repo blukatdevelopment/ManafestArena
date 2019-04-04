@@ -91,5 +91,9 @@ public class ItemThrower {
             GD.Print("Only the original actor can pick it up at this point in time.");
         }
         
-      }
+    }
+
+    private Node GetParent(){
+        return item.GetNode().GetParent();
+    }
 }
