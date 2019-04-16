@@ -3,6 +3,10 @@
     then snaps back when either a target
     is hit or the stab time runs out.
 */
+using Godot;
+using System;
+using System.Collections.Generic;
+
 public class ItemStabber {
     IItem item;
     public Vector3 wieldedPosition, forwardPosition;
@@ -22,7 +26,7 @@ public class ItemStabber {
         Damage damage, // Damage object passed to stabbed target
         Speaker speaker, // Use this to make noise
         Sound.Effects stabSound,
-        Sound.Effects impactSound,
+        Sound.Effects impactSound
     ){
         this.stabSpeed  = stabSpeed;
         this.damage     = damage;

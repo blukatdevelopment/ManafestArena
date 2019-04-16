@@ -201,7 +201,7 @@ public class StatsManager {
         GD.Print("MageInit");
     }
 
-    public bool CanConsumeStat(stats stat, int quantity){
+    public bool CanConsumeStat(Stats stat, int quantity){
         int available = GetBaseStat(stat);
         if(available < quantity){
             return false;

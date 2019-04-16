@@ -1,3 +1,7 @@
+using Godot;
+using System;
+using System.Collections.Generic;
+
 public class SelfDamager {
     IItem item;
     public Damage damage;
@@ -21,7 +25,7 @@ public class SelfDamager {
         }
 
         if(destroyOnUse){
-            item.GetNode().QueueFree()
+            item.GetNode().QueueFree();
         }
     }
 }

@@ -1,7 +1,7 @@
 // Interface for anything that can hold items.
 using System.Collections.Generic;
 
-public interface IHasItem{
+interface IHasItem{
 
   bool HasItem(string item);
   string ItemInfo();

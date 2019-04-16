@@ -2,6 +2,10 @@
     An ammo store exists as loadedAmmo that overflows into reserveAmmo.
     Reloading replenishes loadedAmmo with reserveAmmo.
 */
+using Godot;
+using System;
+using System.Collections.Generic;
+
 public class AmmoStore {
     IItem item;
     Inventory loadedAmmo, reserveAmmo;

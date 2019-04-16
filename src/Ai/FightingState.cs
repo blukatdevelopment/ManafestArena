@@ -54,28 +54,28 @@ public class FightingState : IBehaviorState {
     int topCandidate = -1;
     int maxDamage = -1;
 
-    Item[] items = hostActor.hotbar.items;
-    for(int i = 0; i < items.Length; i++){
-      ProjectileWeapon pw = items[i] as ProjectileWeapon;
-      if(pw != null && ranged){
-        int dmg = pw.GetBaseDamage().health;
-        int ammo = pw.GetAmmoCount();
-        if(maxDamage < dmg && ammo > 0){
-          maxDamage = dmg;
-          topCandidate = i;
-        }
-      }
+    // Item[] items = hostActor.hotbar.items;
+    // for(int i = 0; i < items.Length; i++){
+    //   ProjectileWeapon pw = items[i] as ProjectileWeapon;
+    //   if(pw != null && ranged){
+    //     int dmg = pw.GetBaseDamage().health;
+    //     int ammo = pw.GetAmmoCount();
+    //     if(maxDamage < dmg && ammo > 0){
+    //       maxDamage = dmg;
+    //       topCandidate = i;
+    //     }
+    //   }
 
-      MeleeWeapon mw = items[i] as MeleeWeapon;
-      if(mw != null && !ranged){
-        int dmg = mw.GetBaseDamage().health;
-        if(maxDamage < dmg){
-          maxDamage = dmg;
-          topCandidate = i;
-        }
-      }
+    //   MeleeWeapon mw = items[i] as MeleeWeapon;
+    //   if(mw != null && !ranged){
+    //     int dmg = mw.GetBaseDamage().health;
+    //     if(maxDamage < dmg){
+    //       maxDamage = dmg;
+    //       topCandidate = i;
+    //     }
+    //   }
 
-    }
+    // }
 
     return topCandidate;
   }

@@ -21,7 +21,7 @@ public class Inventory : IHasItem {
 		Removes items with matching type and name.
 		If max is greater than zero, will return up to that many items.
 	*/
-	public List<ItemData> RetrieveItems(Item.Types itemType, string itemName, int max = 0){
+	public List<ItemData> RetrieveItems(ItemFactory.Items itemType, string itemName, int max = 0){
 		List<ItemData> ret = new List<ItemData>();
 
 		foreach(ItemData data in items){
@@ -46,7 +46,7 @@ public class Inventory : IHasItem {
 		return ret;
 	}
 
-	public int GetQuantity(Item.Types itemType, string itemName){
+	public int GetQuantity(ItemFactory.Items itemType, string itemName){
 		int ret = 0;
 		foreach(ItemData data in items){
 			if(data.type == itemType && itemName == data.name){
@@ -86,7 +86,7 @@ public class Inventory : IHasItem {
 		return ret;
 	}
 
-	public int IndexOf(Item.Types type, string name){
+	public int IndexOf(ItemFactory.Items type, string name){
 		for(int i = 0; i < items.Count; i++){
 			ItemData item = items[i];
 			if(item.type == type && item.name == name){

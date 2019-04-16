@@ -293,42 +293,6 @@ public class Career {
       return ret;
     }
 
-    public List<Item.Types> GetAvailableSpells(){
-      StatsManager stats = GetPlayerStats();
-      List<Item.Types> ret = new List<Item.Types>();
-
-      List<StatsManager.Facts> spellSlots = new List<StatsManager.Facts>{
-      StatsManager.Facts.SpellSlot1,
-      StatsManager.Facts.SpellSlot2,
-      StatsManager.Facts.SpellSlot3,
-      StatsManager.Facts.SpellSlot4,
-      StatsManager.Facts.SpellSlot5,
-      StatsManager.Facts.SpellSlot6,
-      StatsManager.Facts.SpellSlot7,
-      StatsManager.Facts.SpellSlot8,
-      StatsManager.Facts.SpellSlot9,
-      StatsManager.Facts.SpellSlot10
-      };
-
-      int slotsMax = stats.GetStat(StatsManager.Stats.SlotsMax);
-      
-      for(int i = 0; i < slotsMax; i++){
-        string slotContents = stats.GetFact(spellSlots[i]);
-        Item.Types spell = Item.GetTypeFromString(slotContents);
-        if(spell != Item.Types.None){
-          ret.Add(spell);
-        }
-      }
-
-      return ret;
-      return new List<Item.Types>{
-        Item.Types.FireballSpell,
-        Item.Types.HealSpell,
-        Item.Types.StaminaSpell,
-        Item.Types.ManaSpell
-      };
-    }
-
     public static List<string> RandomShopItemNames(){
       return new List<string>{
         "sword",

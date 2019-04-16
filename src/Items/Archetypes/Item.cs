@@ -9,13 +9,20 @@
     If your item looks dramatically different from this class, then don't
     inherit and implement IItem in it.
 */
-public class Item: Rigidbody, IItem, IHasInfo {
+using Godot;
+using System;
+using System.Collections.Generic;
+
+public class Item: RigidBody, IItem, IHasInfo {
     public object wielder;
     public int id;
     public Speaker speaker;
     public string name, description;
     public string meshPath; // Set this before InitNodeStructure
     public ItemFactory.Items itemEnum = ItemFactory.Items.None; // Set this in factory
+    public MeshInstance meshInstance;
+    public CollisionShape collisionShape;
+    public bool collisionDisabled;
 
     public enum ItemInputs{
         APress, ARelease,     // eg. Primary        Left Mouse
@@ -117,6 +124,8 @@ public class Item: Rigidbody, IItem, IHasInfo {
         return itemEnum;
     }
 
+    public virtual void LoadJson(string json){}
+    
     public virtual string GetJson(){
         return "";
     }

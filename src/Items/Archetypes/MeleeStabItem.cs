@@ -1,3 +1,7 @@
+using Godot;
+using System;
+using System.Collections.Generic;
+
 public class MeleeStabItem : Item, IHasDamage {
     public ItemStabber stabber;
     public StatConsumer consumer;
@@ -59,7 +63,7 @@ public class MeleeStabItem : Item, IHasDamage {
         return stabber.damage;
     }
 
-    public override OnCollide(object body){
+    public override void OnCollide(object body){
         stabber.OnCollide(body);
     }
 
@@ -84,7 +88,7 @@ public class MeleeStabItem : Item, IHasDamage {
                         dmg,
                         0,
                         15,
-                        0,
+                        0
                     ) as IItem;
             break;
             case ItemFactory.Items.Claws:
@@ -97,7 +101,7 @@ public class MeleeStabItem : Item, IHasDamage {
                         dmg,
                         0,
                         15,
-                        0,
+                        0
                     ) as IItem;
             break;
         }

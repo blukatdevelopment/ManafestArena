@@ -87,11 +87,11 @@ public class RangedCombatState : IBehaviorState {
   public void Attack(float delta){
     attackTimer += delta;
     
-    ProjectileWeapon pw = hostActor.PrimaryItem() as ProjectileWeapon;
+    // ProjectileWeapon pw = hostActor.PrimaryItem() as ProjectileWeapon;
 
-    if(pw == null || pw.GetAmmoCount() == 0){
-      hostAi.ChangeState(StateAi.States.Fighting);
-    }
+    // if(pw == null || pw.GetAmmoCount() == 0){
+    //   hostAi.ChangeState(StateAi.States.Fighting);
+    // }
 
 
     if(!aimDelayActive && attackTimer >= AttackInterval && aimed){
@@ -105,7 +105,7 @@ public class RangedCombatState : IBehaviorState {
         aimDelayActive = false;
         attackTimer = 0f;
         aimDelayTimer = 0f;
-        hostActor.Use(Item.Uses.A);
+        hostActor.Use(Item.ItemInputs.APress);
       }
 
     }

@@ -9,6 +9,10 @@
 
     In other words, this factory maps an enum to a particular config for a particular item class.
 */
+using System;
+using System.Collections.Generic;
+using Godot;
+
 public class ItemFactory {
 
     public enum Items {
@@ -23,7 +27,7 @@ public class ItemFactory {
 
     public static IItem Factory(Items item){
         foreach(IItem factory in GetDelegateFactories()){
-            List<ItemFactory.Items> supported = factory.SupportedItems();
+            List<ItemFactory.Items> supported = factory.GetSupportedItems();
             if(supported.IndexOf(item) != -1){
                 return factory.Factory(item);
             }

@@ -1,7 +1,11 @@
+using Godot;
+using System;
+using System.Collections.Generic;
+
 public class ProjectileLauncher {
     IItem item;
 
-    public Item.Types projectileType;
+    public ItemFactory.Items projectileType;
     public float launchImpulse;
 
     public ProjectileLauncher(IItem item){
@@ -9,7 +13,7 @@ public class ProjectileLauncher {
     }
 
     public void Config(
-        Item.Types projectileType,
+        ItemFactory.Items projectileType,
         float launchImpulse
     ){
         this.projectileType = projectileType;

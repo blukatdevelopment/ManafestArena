@@ -1,23 +1,27 @@
-interface IItem {
+using Godot;
+using System;
+using System.Collections.Generic;
+
+public interface IItem {
     
-    public void Use(Item.ItemInputs input);
-    public void Equip(object wielder);
-    public void Unequip();
+    void Use(Item.ItemInputs input);
+    void Equip(object wielder);
+    void Unequip();
     
     // Simple Getters
-    public object GetWielder();
-    public int GetId();
-    public Node GetNode();
+    object GetWielder();
+    int GetId();
+    Node GetNode();
 
     // Setters
-    public void SetCollision(bool val);
+    void SetCollision(bool val);
 
     // For serialization
-    public ItemFactory.Items GetItemEnum();
-    public void LoadJson(string json);
-    public string GetJson();
+    ItemFactory.Items GetItemEnum();
+    void LoadJson(string json);
+    string GetJson();
 
     // provide a delegate factory
-    public List<ItemFactory.Items> GetSupportedItems();
-    public IItem Factory(ItemFactory.Items item);
+    List<ItemFactory.Items> GetSupportedItems();
+    IItem Factory(ItemFactory.Items item);
 }

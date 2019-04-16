@@ -8,7 +8,7 @@ using Godot;
 public class ItemData : IHasInfo {
 	
 	public int id;
-	public Item.Types type;
+	public ItemFactory.Items type;
 	public string name;
 	public string description;
 	public int weight;
@@ -84,12 +84,6 @@ public class ItemData : IHasInfo {
   }
 
   public bool Push(ItemData item){
-  	if(!stackable || item.type != this.type || item.name != this.name){
-      return false;
-    }
-
-    stack.Add(item.id);
-    stack.AddRange(item.GetStack());
     return true;
   }
 

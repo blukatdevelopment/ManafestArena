@@ -1,6 +1,10 @@
 /*
     Provides functionality for damage on contact.
 */
+using Godot;
+using System;
+using System.Collections.Generic;
+
 public class CollisionDamager {
     public Damage damage;
     public IItem item;
@@ -25,7 +29,7 @@ public class CollisionDamager {
         this.damageOnce = damageOnce;
     }
 
-    public void OnCollide(body Body){
+    public void OnCollide(object Body){
         if(!active || damage == null){
             return;
         }
