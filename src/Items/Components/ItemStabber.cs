@@ -20,13 +20,17 @@ public class ItemStabber {
     public void Config(
         float stabSpeed, // How long a stab takes to complete
         Damage damage, // Damage object passed to stabbed target
-        Vector3 forwardPosition, // How far forward will they go?
-        Vector3 wieldedPosition, // Where should the item return to?
-        Speaker speaker // Use this to make noise
+        Speaker speaker, // Use this to make noise
+        Sound.Effects stabSound,
+        Sound.Effects impactSound,
     ){
         this.stabSpeed  = stabSpeed;
         this.damage     = damage;
         this.speaker    = speaker;
+        this.stabSound = stabSound;
+        this.impactSound = impactSound;
+        this.forwardPosition = new Vector3();
+        this.wieldedPosition = new Vector3();
     }
 
     public void Update(float delta){
@@ -38,6 +42,32 @@ public class ItemStabber {
                 EndStab();
             }
         }
+    }
+
+    public void OnUpdateWielder(){
+        EndStab();
+
+        object wielder = item.GetWielder();
+        if(wielder == false){
+            damage.sender = "";
+            return;
+        }
+        Node wielderNode = wielder as Node;
+        if(wielderNode != null){
+            damage.sender = wielderNode.GetPath();
+        }
+        
+        Spatial itemSpatial = item.GetNode() as Spatial;
+        if(itemSpatial == null){
+            return;
+        }
+        
+        wieldedPosition = itemSpatial.GetTranslation();
+        forwardPosition = wieldedPosition + new Vector3(0, 0, -1);
+    }
+
+    public void CanStartStab(){
+        return !stabbing;
     }
 
     public void StartStab(){
@@ -57,6 +87,10 @@ public class ItemStabber {
     }
 
     public void EndStab(){
+        if(!stabbing){
+            return;
+        }
+
         stabbing = false;
         stabTimer = 0f;
 
@@ -76,6 +110,10 @@ public class ItemStabber {
         IReceiveDamage receiver = body as IReceiveDamage;
         if(receiver != null){
             receiver.ReceiveDamage(damage);
+
+            if(speaker != null){
+                speaker.PlayEffect(impactSound);
+            }
         }
 
     }

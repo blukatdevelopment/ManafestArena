@@ -14,7 +14,7 @@ public class Damage{
   public int stamina;
   public int mana;
   
-	public string sender; // Actor that is responsible for this damage
+	public string sender; // NodePath of actor that is responsible for this damage
 
     public Damage(int health = 0, string sender = ""){
       this.health = health;

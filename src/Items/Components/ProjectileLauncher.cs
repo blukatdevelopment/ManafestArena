@@ -2,7 +2,6 @@ public class ProjectileLauncher {
     IItem item;
 
     public Item.Types projectileType;
-    public Damage damage;
     public float launchImpulse;
 
     public ProjectileLauncher(IItem item){
@@ -11,7 +10,6 @@ public class ProjectileLauncher {
 
     public void Config(
         Item.Types projectileType,
-        Damage damage,
         float launchImpulse
     ){
         this.projectileType = projectileType;
@@ -21,14 +19,8 @@ public class ProjectileLauncher {
 
     public void Fire(){
         speaker.PlayEffect(Sound.Effects.RifleShot);
-        Item projectile = Item.Factory(projectileType);
-        projectile.Name = "Projectile";
-        Projectile proj = projectile as Projectile;
-
-        if(proj != null && damage != null){
-            proj.damage = damage;
-        }
-
+        IItem projectile = ItemFactory.Factory(projectileType);
+        
         Actor wielderActor = item.GetWielder() as Actor;
         
         if(wielderActor != null){

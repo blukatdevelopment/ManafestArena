@@ -12,9 +12,16 @@ public class ItemThrower {
         this.item = item;
     }
 
+    public void Config(
+        float thrownImpulseStrength,
+        Damage damage
+    ){
+        this.thrownImpulseStrength = thrownImpulseStrength;
+        this.damage = damage;
+    }
+
     public void Throw(){
         if(thrown){
-            GD.Print("Can only throw item once");
             return;
         }
         thrown = true;
@@ -30,7 +37,7 @@ public class ItemThrower {
             actor.EquipNextItem();
         }
 
-        Transform start = this.GetGlobalTransform();
+        Transform start = item.GetNode().GetGlobalTransform();
         Transform destination = start;
         destination.Translated(new Vector3(0, 0, 1));
         
@@ -38,7 +45,19 @@ public class ItemThrower {
 
         RigidBody rigidBody = item.GetNode() as RigidBody;
         if(rigidBody != null){
-            rigidBody.SetAxisVelocity(impulse * impulseStrength);
+            rigidBody.SetAxisVelocity(impulse * thrownImpulseStrength);
+        }
+    }
+
+    public void OnUpdateWielder(){
+        object wielder = item.GetWielder();
+        if(wielder == false){
+            damage.sender = "";
+            return;
+        }
+        Node wielderNode = wielder as Node;
+        if(wielderNode != null){
+            damage.sender = wielderNode.GetPath();
         }
     }
 
@@ -67,7 +86,7 @@ public class ItemThrower {
     }
 
     public void HandlePickup(object body){
-        if(!thrown || damgeActive || damage == null){
+        if(!thrown || damageActive){
             return;
         }
 
