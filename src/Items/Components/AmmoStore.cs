@@ -8,14 +8,14 @@ using System.Collections.Generic;
 
 public class AmmoStore {
     IItem item;
-    Inventory loadedAmmo, reserveAmmo;
+    List<ItemData> loadedAmmo, reserveAmmo;
 
     public int ammoCapacity;
 
     public AmmoStore(IItem item){
         this.item   = item;
-        loadedAmmo  = new Inventory();
-        reserveAmmo = new Inventory();
+        loadedAmmo  = new List<ItemData>();
+        reserveAmmo = new List<ItemData>();
     }
 
     public void Config(
@@ -23,15 +23,16 @@ public class AmmoStore {
         List<ItemData> ammo
     ){
         this.ammoCapacity = ammoCapacity;
+        LoadAmmo(ammo);
     }
 
     // Trickle fill loadedAmmo and trickle to reserveAmmo
     // Don't feed it stacked items, and never after midnight
     public void LoadAmmo(List<ItemData> ammo){
-        loadedAmmo.StoreItemDataRange(ammo);
+        loadedAmmo.AddRange(ammo);
 
-        while(loadedAmmo.ItemCount() > ammoCapacity){
-            reserveAmmo.StoreItemData(loadedAmmo.RetrieveItem(0));
+        while(loadedAmmo.Count > ammoCapacity){
+            reserveAmmo.Add(loadedAmmo[0]);
         }
     }
 
@@ -39,34 +40,34 @@ public class AmmoStore {
         int ammoNeeded = ammoCapacity - loadedAmmo.Count;
 
         for(int i = 0; i < ammoNeeded; i++){
-            if(reserveAmmo.ItemCount() < 1){
+            if(reserveAmmo.Count < 1){
                 return;
             }
             else{
-                loadedAmmo.StoreItemData(reserveAmmo.RetrieveItem(0));
+                loadedAmmo.Add(reserveAmmo[0]);
             }
         }
     }
 
     public int LoadedAmmoCount(){
-        return loadedAmmo.ItemCount();
+        return loadedAmmo.Count;
     }
 
     public int ReserveAmmoCount(){
-        return reserveAmmo.ItemCount();
+        return reserveAmmo.Count;
     }
 
     public bool CanExpendAmmo(){
-        return loadedAmmo.ItemCount() > 0;
+        return loadedAmmo.Count > 0;
     }
 
     // Attempts to expend loaded ammo, returns true if successful
     public bool ExpendAmmo(){
-        if(loadedAmmo.ItemCount() < 1){
+        if(loadedAmmo.Count < 1){
             return false;
         }
 
-        loadedAmmo.RetrieveItem(0);
+        loadedAmmo.RemoveAt(0);
         return true;
     }
 

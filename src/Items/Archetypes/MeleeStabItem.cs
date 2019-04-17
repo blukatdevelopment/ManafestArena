@@ -6,6 +6,8 @@ public class MeleeStabItem : Item, IHasDamage {
     public ItemStabber stabber;
     public StatConsumer consumer;
 
+    public MeleeStabItem(){}
+
     public MeleeStabItem(
         string name,
         string description,
@@ -14,7 +16,9 @@ public class MeleeStabItem : Item, IHasDamage {
         Damage damage,
         int healthCost,
         int manaCost,
-        int staminaCost
+        int staminaCost,
+        Sound.Effects stabSound,
+        Sound.Effects impactSound
     ){
         this.name = name;
         this.description = description;
@@ -26,9 +30,9 @@ public class MeleeStabItem : Item, IHasDamage {
         stabber.Config(
             stabSpeed,
             damage,
-            forewardPosition,
-            wieldedPosition,
-            speaker
+            speaker,
+            stabSound,
+            impactSound
         );
 
         consumer = new StatConsumer(healthCost, manaCost, staminaCost);
@@ -47,7 +51,7 @@ public class MeleeStabItem : Item, IHasDamage {
 
     }
 
-    public override void Use(ItemInputs use){
+    public override void Use(ItemInputs input){
         if(input == Item.ItemInputs.ARelease){
             Stab();
         }

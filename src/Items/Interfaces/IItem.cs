@@ -15,6 +15,7 @@ public interface IItem {
 
     // Setters
     void SetCollision(bool val);
+    void SetId(int id);
 
     // For serialization
     ItemFactory.Items GetItemEnum();

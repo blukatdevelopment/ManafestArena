@@ -23,6 +23,7 @@ public class Item: RigidBody, IItem, IHasInfo {
     public MeshInstance meshInstance;
     public CollisionShape collisionShape;
     public bool collisionDisabled;
+    public Area area;
 
     public enum ItemInputs{
         APress, ARelease,     // eg. Primary        Left Mouse
@@ -110,6 +111,38 @@ public class Item: RigidBody, IItem, IHasInfo {
         }
     }
 
+    public  void InitArea(){
+        if(area != null){
+          return;
+        }
+        List<CollisionShape> shapes = GetCollisionShapes();
+        this.area = new Area();
+        CollisionShape areaShape = new CollisionShape();
+        area.AddChild(areaShape);
+        Godot.Array areaShapeOwners = area.GetShapeOwners();
+        for(int i = 0; i < areaShapeOwners.Count; i++){
+          int ownerInt = (int)areaShapeOwners[i];
+          for(int j = 0; j < shapes.Count; j++){
+            area.ShapeOwnerAddShape(ownerInt, shapes[i].Shape);
+          }
+        }
+        area.Connect("body_entered", this, nameof(OnCollide));
+        AddChild(area);
+    }
+
+    public List<CollisionShape> GetCollisionShapes(){
+        List<CollisionShape> shapes = new List<CollisionShape>();
+        Godot.Array owners = GetShapeOwners();
+        foreach(object owner in owners){
+          int ownerInt = (int)owner;
+          CollisionShape cs = (CollisionShape)ShapeOwnerGetOwner(ownerInt);
+          if(cs != null){
+            shapes.Add(cs);
+          }
+        }
+        return shapes;
+    }
+
     public virtual void Equip(object wielder){
         this.wielder = wielder;
         SetCollision(false);
@@ -138,4 +171,7 @@ public class Item: RigidBody, IItem, IHasInfo {
         return null;
     }
     
+    public void SetId(int id){
+        this.id = id;
+    }
 }

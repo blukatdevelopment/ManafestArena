@@ -33,23 +33,23 @@ public class ShopMenu : Container, IMenu {
     AddChild(finishedButton);
 
 
-    itemButtons = new List<Button>();
-    List<ItemData> items = Career.ShopItems();
-    itemsDict = new System.Collections.Generic.Dictionary<string, ItemData>();
+    // itemButtons = new List<Button>();
+    // List<ItemData> items = Career.ShopItems();
+    // itemsDict = new System.Collections.Generic.Dictionary<string, ItemData>();
 
-    foreach(ItemData item in items){
-      string shopName = item.extra["shop_name"];
-      Button itemButton = Menu.Button(item.name, () => {
-        PurchaseItem(shopName);
-      });
+    // foreach(ItemData item in items){
+    //   string shopName = item.extra["shop_name"];
+    //   Button itemButton = Menu.Button(item.name, () => {
+    //     PurchaseItem(shopName);
+    //   });
 
-      AddChild(itemButton);
-      itemButtons.Add(itemButton);
+    //   AddChild(itemButton);
+    //   itemButtons.Add(itemButton);
       
-      if(!itemsDict.ContainsKey(shopName)){
-        itemsDict.Add(shopName, item);
-      }
-    }
+    //   if(!itemsDict.ContainsKey(shopName)){
+    //     itemsDict.Add(shopName, item);
+    //   }
+    // }
   }
 
   void PurchaseItem(string name){

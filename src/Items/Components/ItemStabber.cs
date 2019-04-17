@@ -14,7 +14,7 @@ public class ItemStabber {
     public float stabSpeed, stabTimer;
     public Damage damage;
     public Speaker speaker;
-    public Sound.Effects stabSound;
+    public Sound.Effects stabSound, impactSound;
 
     public ItemStabber(IItem item){
         this.item = item;
@@ -52,7 +52,7 @@ public class ItemStabber {
         EndStab();
 
         object wielder = item.GetWielder();
-        if(wielder == false){
+        if(wielder == null){
             damage.sender = "";
             return;
         }
@@ -70,7 +70,7 @@ public class ItemStabber {
         forwardPosition = wieldedPosition + new Vector3(0, 0, -1);
     }
 
-    public void CanStartStab(){
+    public bool CanStartStab(){
         return !stabbing;
     }
 
@@ -86,7 +86,10 @@ public class ItemStabber {
             speaker.PlayEffect(stabSound);
         }
 
-        item.GetNode().Translation = forwardPosition;
+        Spatial itemSpatial = item.GetNode() as Spatial;
+        if(itemSpatial != null){
+            itemSpatial.Translation = forwardPosition;
+        }
         item.SetCollision(true);
     }
 
@@ -97,8 +100,11 @@ public class ItemStabber {
 
         stabbing = false;
         stabTimer = 0f;
-
-        item.GetNode().Translation = wieldedPosition;
+        
+        Spatial itemSpatial = item.GetNode() as Spatial;
+        if(itemSpatial != null){
+            itemSpatial.Translation = wieldedPosition;
+        }
         item.SetCollision(false);
     }
 

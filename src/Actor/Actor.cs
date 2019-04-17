@@ -8,7 +8,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class Actor : KinematicBody, IReceiveDamage, IHasItem, IHasInfo, ILook, IHasStats {
+public class Actor : KinematicBody, IReceiveDamage, IHasInfo, ILook, IHasStats {
   
   public enum Brains{
     Player1, // Local player leveraging keyboard input.
@@ -42,8 +42,7 @@ public class Actor : KinematicBody, IReceiveDamage, IHasItem, IHasInfo, ILook, I
   // Inventory
   private Item activeItem;
   private Item hand; // Weapon for unarmed actors.
-  private bool unarmed = true; 
-  private Inventory inventory;
+  private bool unarmed = true;
   public HotBar hotbar;
   
   // Handpos
@@ -61,7 +60,6 @@ public class Actor : KinematicBody, IReceiveDamage, IHasItem, IHasInfo, ILook, I
     brainType = Brains.Ai;
     InitChildren();
     InitBrain(brainType);
-    inventory = new Inventory();
     InitHand();
     id = -1;
     stats = new StatsManager();
@@ -71,7 +69,6 @@ public class Actor : KinematicBody, IReceiveDamage, IHasItem, IHasInfo, ILook, I
     brainType = b;
     InitChildren();
     InitBrain(b);
-    inventory = new Inventory();
     InitHand();
     id = -1;
     stats = new StatsManager();
@@ -134,19 +131,6 @@ public class Actor : KinematicBody, IReceiveDamage, IHasItem, IHasInfo, ILook, I
     mesh.SurfaceSetMaterial(0, material);
   }
 
-
-  public void LoadData(ActorData dat){
-    // FIXME add remaining fields to ActorData and this method
-    Translation = dat.pos;
-    name = dat.name;
-    id = dat.id;
-    inventory = dat.inventory;
-
-    if(dat.stats != null){
-      LoadStats(dat.stats);
-    }
-  }
-
   public void LoadStats(StatsManager stats){
     GD.Print("Loading stats " + stats.GetFact(StatsManager.Facts.Name));
     hotbar = new HotBar(stats);
@@ -155,18 +139,6 @@ public class Actor : KinematicBody, IReceiveDamage, IHasItem, IHasInfo, ILook, I
     }
     this.stats = stats;
     Brains brain = (Brains)stats.GetStat(StatsManager.Stats.Brain);
-  }
-
-  public ActorData GetData(){
-    ActorData data = new ActorData();
-    data.pos = Translation;
-    data.brain = brainType;
-    data.id = id;
-    data.name = name;
-    data.inventory = inventory;
-    data.stats = stats;
-    
-    return data;
   }
   
   public Item PrimaryItem(){
@@ -635,10 +607,6 @@ public class Actor : KinematicBody, IReceiveDamage, IHasItem, IHasInfo, ILook, I
     RpcUnreliable(nameof(SetRotation), x, y);
   }
 
-  public ItemData RetrieveItem(int index){
-    return inventory.RetrieveItem(index); 
-  }
-
   [Remote]
   public void SetRotation(float x, float y){
     Vector3 bodyRot = this.GetRotationDegrees();
@@ -696,27 +664,6 @@ public class Actor : KinematicBody, IReceiveDamage, IHasItem, IHasInfo, ILook, I
 
     return "Unequipped";
   }
-
-  public bool ReceiveItem(Item item){
-    return inventory.ReceiveItem(item);
-  }
-
-  public bool ReceiveItems(List<Item> items){
-    foreach(Item item in items){
-      if(!inventory.ReceiveItem(item)){
-        return false;
-      }
-    }
-
-    return false;
-  }
-
-  [Remote]
-  public void DeferredReceiveItem(string json){
-    ItemData dat = null;
-    Item item = Item.FromData(dat);
-    inventory.ReceiveItem(item);
-  }
   
   public bool IsPaused(){
     return paused;
@@ -734,14 +681,6 @@ public class Actor : KinematicBody, IReceiveDamage, IHasItem, IHasInfo, ILook, I
 
     }
     
-  }
-
-  public int ItemCount(){
-    return inventory.ItemCount();
-  }
-
-  public List<ItemData> GetAllItems(){
-    return inventory.GetAllItems();
   }
 
   public List<Item> GetHotbarItems(){

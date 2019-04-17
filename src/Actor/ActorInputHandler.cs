@@ -211,7 +211,7 @@ public class ActorInputHandler : Brain {
       case InputEvent.Buttons.Start: 
         Session.Event(SessionEvent.PauseEvent());
         break;
-      case InputEvent.Buttons.Square: actor.Use(Item.ItemInputs.D); break;
+      case InputEvent.Buttons.Square: actor.Use(Item.ItemInputs.DPress); break;
       case InputEvent.Buttons.Triangle: break;
       case InputEvent.Buttons.O: break;
       case InputEvent.Buttons.X: actor.Jump(); break;
@@ -224,7 +224,7 @@ public class ActorInputHandler : Brain {
       case InputEvent.Buttons.DLeft: break;
       case InputEvent.Buttons.DDown: break;
       case InputEvent.Buttons.Select: break;
-      case InputEvent.Buttons.RClick: actor.Use(Item.ItemInputs.C); break;
+      case InputEvent.Buttons.RClick: actor.Use(Item.ItemInputs.CPress); break;
       case InputEvent.Buttons.LClick: actor.SetSprint(true); break;
     }
   }
@@ -262,7 +262,6 @@ public class ActorInputHandler : Brain {
       case InputEvent.Buttons.CUp: actor.Use(Item.ItemInputs.CPress); break;
       case InputEvent.Buttons.CDown: actor.Jump(); break;
       case InputEvent.Buttons.B: actor.Use(Item.ItemInputs.DPress); break;
-      case InputEvent.Buttons.A: actor.InitiateInteraction(); break;
     }
   }
 

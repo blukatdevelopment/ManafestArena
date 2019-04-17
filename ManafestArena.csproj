@@ -115,7 +115,6 @@
     <Compile Include="src/Util/Speaker.cs" />
     <Compile Include="src/Util/SessionEvent.cs" />
     <Compile Include="src/Db/SettingsDb.cs" />
-    <Compile Include="src/Inventory/Inventory.cs" />
     <Compile Include="src/Inventory/HotBar.cs" />
     <Compile Include="src/Career/Career.cs" />
     <Compile Include="src/Career/CareerNode.cs" />
