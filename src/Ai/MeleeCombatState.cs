@@ -70,7 +70,7 @@ public class MeleeCombatState : IBehaviorState {
     attackTimer += delta;
     
     if(attackTimer >= AttackInterval && aimed && inRange){
-      hostActor.Use(Item.Uses.A);
+      hostActor.Use(Item.ItemInputs.APress);
       attackTimer = 0f;
     }
   }

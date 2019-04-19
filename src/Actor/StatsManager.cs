@@ -192,8 +192,8 @@ public class StatsManager {
 
         SetFact(Facts.Slot1, "Staff");
 
-        SetFact(Facts.SpellSlot1, "" + Item.Types.FireballSpell);
-        SetFact(Facts.SpellSlot2, "" + Item.Types.HealSpell);
+        // SetFact(Facts.SpellSlot1, "" + Item.Types.FireballSpell);
+        // SetFact(Facts.SpellSlot2, "" + Item.Types.HealSpell);
         //SetFact(Facts.SpellSlot3, "" + Item.Types.StaminaSpell);
         //SetFact(Facts.SpellSlot4, "" + Item.Types.ManaSpell);
 
@@ -201,14 +201,20 @@ public class StatsManager {
         GD.Print("MageInit");
     }
 
-    // For consuming mana, stamina, health, etc
-    public bool ConsumeStat(Stats stat, int quantity){
+    public bool CanConsumeStat(Stats stat, int quantity){
         int available = GetBaseStat(stat);
         if(available < quantity){
             return false;
         }
+        return true;
+    }
 
-        GD.Print("a, q: "+available+","+quantity);
+    // For consuming mana, stamina, health, etc
+    public bool ConsumeStat(Stats stat, int quantity){
+        int available = GetBaseStat(stat);
+        if(!CanConsumeStat(stat, quantity)){
+            return false;
+        }
         available -= quantity;
 
         SetBaseStat(stat, available);

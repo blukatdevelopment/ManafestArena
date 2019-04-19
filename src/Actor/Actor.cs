@@ -8,7 +8,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IHasAmmo, ILook, IInteract, IHasStats {
+public class Actor : KinematicBody, IReceiveDamage, IHasInfo, ILook, IHasStats {
   
   public enum Brains{
     Player1, // Local player leveraging keyboard input.
@@ -42,8 +42,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
   // Inventory
   private Item activeItem;
   private Item hand; // Weapon for unarmed actors.
-  private bool unarmed = true; 
-  private Inventory inventory;
+  private bool unarmed = true;
   public HotBar hotbar;
   
   // Handpos
@@ -61,7 +60,6 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     brainType = Brains.Ai;
     InitChildren();
     InitBrain(brainType);
-    inventory = new Inventory();
     InitHand();
     id = -1;
     stats = new StatsManager();
@@ -71,7 +69,6 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     brainType = b;
     InitChildren();
     InitBrain(b);
-    inventory = new Inventory();
     InitHand();
     id = -1;
     stats = new StatsManager();
@@ -134,39 +131,14 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     mesh.SurfaceSetMaterial(0, material);
   }
 
-
-  public void LoadData(ActorData dat){
-    // FIXME add remaining fields to ActorData and this method
-    Translation = dat.pos;
-    name = dat.name;
-    id = dat.id;
-    inventory = dat.inventory;
-
-    if(dat.stats != null){
-      LoadStats(dat.stats);
-    }
-  }
-
   public void LoadStats(StatsManager stats){
     GD.Print("Loading stats " + stats.GetFact(StatsManager.Facts.Name));
     hotbar = new HotBar(stats);
     if(hotbar != null && hotbar.EquipItem(0) != null){
-      DeferredEquipItem(hotbar.EquipItem(0));
+      EquipItem(hotbar.EquipItem(0));
     }
     this.stats = stats;
     Brains brain = (Brains)stats.GetStat(StatsManager.Stats.Brain);
-  }
-
-  public ActorData GetData(){
-    ActorData data = new ActorData();
-    data.pos = Translation;
-    data.brain = brainType;
-    data.id = id;
-    data.name = name;
-    data.inventory = inventory;
-    data.stats = stats;
-    
-    return data;
   }
   
   public Item PrimaryItem(){
@@ -177,7 +149,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     if(hand != null){
       GD.Print("Hand already initialized.");
     }
-    hand = Item.Factory(Item.Types.Hand);
+    //hand = Item.Factory(Item.Types.Hand);
     //EquipHand(); 
   }
 
@@ -229,40 +201,6 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     World world = GetWorld();
     return Util.RayCast(start, end, world);
   }
-
-  /* Returns quantity of specified ammo.
-     If max is greater than zero, will return at most max.
-  */
-  public int CheckAmmo(string ammoType, int max = 0){
-    int quantity = inventory.GetQuantity(Item.Types.Ammo, ammoType);
-    
-    if(max > 0 && max > quantity){
-      return quantity;
-    }
-    else if(max <= 0){
-      return quantity;
-    }
-    
-    return max;
-  }
-  
-  /* Return up to max ammo, removing that ammo from inventory. */
-  public List<ItemData> RequestAmmo(string ammoType, int max){
-    return inventory.RetrieveItems(Item.Types.Ammo, ammoType, max);
-  }
-  
-  public List<ItemData> StoreAmmo(List<ItemData> items){
-    foreach(ItemData item in items){
-      inventory.StoreItemData(item);
-    }
-    
-    return new List<ItemData>();
-  }
-  
-  public string[] AmmoTypes(){
-    
-    return new string[]{"Bullet"};
-  }
   
   public string GetInfo(){
     switch(brainType){
@@ -279,43 +217,6 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     return "Actor";
   }
 
-  /* Return which interaction is currently going to take place. */
-  public Item.Uses GetActiveInteraction(){
-    return Item.Uses.A;
-  }
-
-  public string GetInteractionText(Item.Uses interaction = Item.Uses.A){
-    return "";
-    string ret = "Talk to " + GetInfo() + ".";
-    switch(interaction){
-      case Item.Uses.A:
-        ret = "Talk to " + GetInfo() + ".";
-        break;
-      case Item.Uses.B:
-        ret = "Pickpocket " + GetInfo() + ".";
-        break;
-    }
-    return ret;
-  }
-
-  public void InitiateInteraction(){
-    IInteract interactor = VisibleObject() as IInteract;
-    if(interactor == null){
-      //GD.Print("Nothing in range.");
-      return;
-    }
-    Item.Uses interaction = GetActiveInteraction();
-
-    Item item = interactor as Item;
-    if(item != null && (item == hand || item == activeItem)){
-      return;
-    }    
-
-    interactor.Interact((object)this, interaction);
-  }
-
-  public void Interact(object interactor, Item.Uses interaction = Item.Uses.A){  }
-  
   public string GetMoreInfo(){
     return "A character in this game.";
   }
@@ -373,7 +274,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
   }
 
   public void EquipHotbarItem(int slot){
-    DeferredEquipItem(hotbar.EquipItem(slot));
+    EquipItem(hotbar.EquipItem(slot));
   }
   
   /* Equip item to hotbar immediately. */
@@ -388,52 +289,13 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     hotbar.SetItemSlot(slot, item);
     hotbar.EquipItem(slot);
 
-    DeferredEquipItem(item);
+    EquipItem(item);
 
   }
 
-  /* Equip item based on inventory index. */
-  public void EquipItem(int index){
-    if(inventory.GetItem(index) == null){
-      GD.Print("Item at index " + index + " does not exist.");
-      return;
-    }
-
-    DeferredEquipItem(index);
-    if(Session.NetActive() && Session.IsServer()){
-      Rpc(nameof(DeferredEquipItem), index);
-    }
-    else if(Session.NetActive()){
-      RpcId(1, nameof(ServerEquipItem), index);
-    }
-  }
-
-  [Remote]
-  public void ServerEquipItem(int caller,  int index){
-    DeferredEquipItem(index);
-
-    foreach(KeyValuePair<int, PlayerData> entry in Session.session.netSes.playerData){
-      if(entry.Key != caller){
-        RpcId(entry.Key, nameof(DeferredEquipItem), index);
-      }
-    }
-  }
-
-  [Remote]
-  public void DeferredEquipItem(int index){
-    ItemData dat = inventory.RetrieveItem(index);
-    if(dat == null){
-      GD.Print("Actor.DeferredEquipItem: Item at index " + index + " was null.");
-      return;
-    }
-    
-    Item item = Item.FromData(dat);
-    DeferredEquipItem(item);
-  }
-
-  public void DeferredEquipItem(Item item){
+  public void EquipItem(Item item){
     if(item == null){
-      GD.Print("Actor.DeferredEquipItem: Can't equip null item");
+      GD.Print("Actor.EquipItem: Can't equip null item");
       return;
     }
     if(unarmed){
@@ -444,7 +306,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     }
 
     if(eyes == null){
-      GD.Print("Actor.DeferredEquipItem: No eyes.");
+      GD.Print("Actor.EquipItem: No eyes.");
       return;
     }
 
@@ -475,7 +337,7 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
   }
 
   public void EquipNextItem(){
-    DeferredEquipItem(hotbar.EquipNextItem());
+    EquipItem(hotbar.EquipNextItem());
   }
   
   /* Removes activeItem from hands. */
@@ -561,38 +423,8 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     activeItem.Equip(this);
     unarmed = true;
   }
-  
-  public bool IsBusy(){
-    if(activeItem == null){
-      return false;
-    }
-    return activeItem.IsBusy();
-  }
-  
-  public void Use(Item.Uses use, bool released = false){
-    DeferredUse(use, released);
 
-    if(Session.NetActive() && Session.IsServer()){
-      Rpc(nameof(DeferredUse), use, released);
-    }
-    else if(Session.NetActive()){
-      RpcId(1, nameof(ServerUse), Session.session.netSes.selfPeerId, use, released);
-    }
-  }
-
-  [Remote]
-  public void ServerUse(int caller, Item.Uses use, bool released){
-    DeferredUse(use, released);
-
-    foreach(KeyValuePair<int, PlayerData> entry in Session.session.netSes.playerData){
-      if(caller != entry.Key){
-        RpcId(entry.Key, nameof(DeferredUse), use, released);
-      }
-    }
-  }
-
-  [Remote]
-  public void DeferredUse(Item.Uses use, bool released = false){
+  public void Use(Item.ItemInputs use, bool released = false){
     if(activeItem == null){
       return;
     }
@@ -775,60 +607,6 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
     RpcUnreliable(nameof(SetRotation), x, y);
   }
 
-  public void DiscardItem(int index){
-    ItemData data = inventory.GetItem(index);
-    if(data == null){
-      return;
-    }
-    
-    
-    if(!Session.NetActive()){
-      string itemName = "Item";
-      DeferredDiscardItem(index, itemName);
-    }
-    else{
-      Rpc(nameof(ServerDiscardItem), index);
-    }
-  }
-
-  [Remote]
-  public void ServerDiscardItem(int index){
-    if(Session.NetActive() && !Session.IsServer()){
-      return;
-    }
-
-    string itemName = "Item";
-    Rpc(nameof(DeferredDiscardItem), index, itemName);
-    DeferredDiscardItem(index, itemName);
-  }
-
-  [Remote]
-  public void DeferredDiscardItem(int index, string itemName){
-
-    ItemData data = inventory.RetrieveItem(index);
-    if(data == null){
-      return;
-    }
-
-    Item item = Item.FromData(data);
-    item.Name = itemName;
-    Session.GameNode().AddChild(item);
-
-    Transform trans = item.GlobalTransform;
-    trans.origin = ToGlobal(new Vector3(HandPosX, HandPosY, HandPosZ));
-    item.GlobalTransform = trans;
-
-    Session.Event(SessionEvent.ItemDiscardedEvent(NodePath().ToString()));
-  }
-
-  public int IndexOf(Item.Types type, string name){
-    return inventory.IndexOf(type, name);
-  }
-
-  public ItemData RetrieveItem(int index){
-    return inventory.RetrieveItem(index); 
-  }
-
   [Remote]
   public void SetRotation(float x, float y){
     Vector3 bodyRot = this.GetRotationDegrees();
@@ -886,27 +664,6 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
 
     return "Unequipped";
   }
-
-  public bool ReceiveItem(Item item){
-    return inventory.ReceiveItem(item);
-  }
-
-  public bool ReceiveItems(List<Item> items){
-    foreach(Item item in items){
-      if(!inventory.ReceiveItem(item)){
-        return false;
-      }
-    }
-
-    return false;
-  }
-
-  [Remote]
-  public void DeferredReceiveItem(string json){
-    ItemData dat = null;
-    Item item = Item.FromData(dat);
-    inventory.ReceiveItem(item);
-  }
   
   public bool IsPaused(){
     return paused;
@@ -924,14 +681,6 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
 
     }
     
-  }
-
-  public int ItemCount(){
-    return inventory.ItemCount();
-  }
-
-  public List<ItemData> GetAllItems(){
-    return inventory.GetAllItems();
   }
 
   public List<Item> GetHotbarItems(){
@@ -969,20 +718,12 @@ public class Actor : KinematicBody, IReceiveDamage, IUse, IHasItem, IHasInfo, IH
 
   }
   
-  public static Actor Factory(ActorData data){
-    return Factory(data.GetBrain(), data);
-  }
 
   public static Actor Factory(Brains brain = Brains.Player1, ActorData data = null){
     
     Actor actor = new Actor(brain);
 
-    if(data != null){
-      actor.LoadData(data);
-      if(actor.id != -1){
-        actor.Name = "Actor" + actor.id;
-      }
-    }
+    // TODO: Fix this to work
 
     return actor;
   }

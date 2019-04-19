@@ -123,34 +123,34 @@ public class Career {
     }
 
     public void CompleteEncounter(){
-      if(Session.GetPlayer() != null){
-        playerData = Session.GetPlayer().GetData();
-        if(playerData != null && playerData.stats != null){
-          int health = playerData.stats.GetBaseStat(StatsManager.Stats.Health);
-          stats.SetBaseStat(StatsManager.Stats.Health, health);
-          playerData.stats = stats;
-        }
-      }
+      // if(Session.GetPlayer() != null){
+      //   //playerData = Session.GetPlayer().GetData();
+      //   if(playerData != null && playerData.stats != null){
+      //     int health = playerData.stats.GetBaseStat(StatsManager.Stats.Health);
+      //     stats.SetBaseStat(StatsManager.Stats.Health, health);
+      //     playerData.stats = stats;
+      //   }
+      // }
 
-      Session.ClearGame();
-      int id = stats.GetStat(StatsManager.Stats.CurrentNode);
-      CareerNode node = CareerNode.GetNode(id, careerNodes);
-      int nodeLevel = CareerNode.GetLevel(node, careerNodes);
-      int nextLevel = nodeLevel -1;
+      // Session.ClearGame();
+      // int id = stats.GetStat(StatsManager.Stats.CurrentNode);
+      // CareerNode node = CareerNode.GetNode(id, careerNodes);
+      // int nodeLevel = CareerNode.GetLevel(node, careerNodes);
+      // int nextLevel = nodeLevel -1;
 
-      stats.SetBaseStat(StatsManager.Stats.CurrentLevel, nextLevel);
-      stats.SetBaseStat(StatsManager.Stats.LastNode, id);
-      stats.SetBaseStat(StatsManager.Stats.CurrentNode, 0);
-      stats.SetBaseStat(StatsManager.Stats.NodeInProgress, 0);
+      // stats.SetBaseStat(StatsManager.Stats.CurrentLevel, nextLevel);
+      // stats.SetBaseStat(StatsManager.Stats.LastNode, id);
+      // stats.SetBaseStat(StatsManager.Stats.CurrentNode, 0);
+      // stats.SetBaseStat(StatsManager.Stats.NodeInProgress, 0);
       
-      CareerDb.SaveCareer(this);
+      // CareerDb.SaveCareer(this);
 
-      if(nextLevel == -1){
-        CompleteGame();
-      }
-      else{
-        Session.ChangeMenu(Menu.Menus.Career);
-      }
+      // if(nextLevel == -1){
+      //   CompleteGame();
+      // }
+      // else{
+      //   Session.ChangeMenu(Menu.Menus.Career);
+      // }
     }
 
     public void CompleteGame(){
@@ -167,7 +167,8 @@ public class Career {
     }
 
     public static StatsManager GetPlayerStats(){
-      return Session.session.career.playerData.stats;
+      return null;
+      //return Session.session.career.playerData.stats;
     }
 
     // Primarily for rest sites
@@ -175,17 +176,17 @@ public class Career {
       Damage dmg = new Damage();
       dmg.health = -health;
 
-      Session.session.career.playerData.stats.ReceiveDamage(dmg);
+      //Session.session.career.playerData.stats.ReceiveDamage(dmg);
 
-      int playerHealth = Session.session.career.playerData.stats.GetStat(StatsManager.Stats.Health);
+      // int playerHealth = Session.session.career.playerData.stats.GetStat(StatsManager.Stats.Health);
 
-      if(playerHealth <= 0){
-        GD.Print("Career.HealPlayer just killed the player.");
-        Session.session.career.FailEncounter();
-      }
-      else{
-        GD.Print("Player was healed " + health + " health and now has " + playerHealth + " health.");
-      }
+      // if(playerHealth <= 0){
+      //   GD.Print("Career.HealPlayer just killed the player.");
+      //   Session.session.career.FailEncounter();
+      // }
+      // else{
+      //   GD.Print("Player was healed " + health + " health and now has " + playerHealth + " health.");
+      // }
     }
 
     public static Career Factory(string championName){
@@ -287,46 +288,10 @@ public class Career {
       List<ItemData> ret = new List<ItemData>();
       
       foreach(string name in names){
-        ret.Add(ItemData.Factory(name));
+        //ret.Add(ItemData.Factory(name));
       }
       
       return ret;
-    }
-
-    public List<Item.Types> GetAvailableSpells(){
-      StatsManager stats = GetPlayerStats();
-      List<Item.Types> ret = new List<Item.Types>();
-
-      List<StatsManager.Facts> spellSlots = new List<StatsManager.Facts>{
-      StatsManager.Facts.SpellSlot1,
-      StatsManager.Facts.SpellSlot2,
-      StatsManager.Facts.SpellSlot3,
-      StatsManager.Facts.SpellSlot4,
-      StatsManager.Facts.SpellSlot5,
-      StatsManager.Facts.SpellSlot6,
-      StatsManager.Facts.SpellSlot7,
-      StatsManager.Facts.SpellSlot8,
-      StatsManager.Facts.SpellSlot9,
-      StatsManager.Facts.SpellSlot10
-      };
-
-      int slotsMax = stats.GetStat(StatsManager.Stats.SlotsMax);
-      
-      for(int i = 0; i < slotsMax; i++){
-        string slotContents = stats.GetFact(spellSlots[i]);
-        Item.Types spell = Item.GetTypeFromString(slotContents);
-        if(spell != Item.Types.None){
-          ret.Add(spell);
-        }
-      }
-
-      return ret;
-      return new List<Item.Types>{
-        Item.Types.FireballSpell,
-        Item.Types.HealSpell,
-        Item.Types.StaminaSpell,
-        Item.Types.ManaSpell
-      };
     }
 
     public static List<string> RandomShopItemNames(){

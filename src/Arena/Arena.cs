@@ -131,12 +131,6 @@ public class Arena : Spatial, IGamemode {
   }
 
   public void LocalInit(){
-    if(settings.usePowerups){
-      for(int i = 0; i < 1; i++){
-        SpawnItem(Item.Types.AmmoPack, 10);
-        SpawnItem(Item.Types.HealthPack);  
-      }
-    }
 
     player = InitActor(settings.player, NextId());
     playerWorldId = player.id;
@@ -297,9 +291,9 @@ public class Arena : Spatial, IGamemode {
     return ret;
   }
 
-  public void SpawnItem(Item.Types type, int quantity = 1){
+  public void SpawnItem(ItemFactory.Items type, int quantity = 1){
     Vector3 pos = RandomItemSpawn();
-    Item item = Item.Factory(type);
+    Item item = ItemFactory.Factory(type) as Item;
     item.Translation = pos;
     AddChild(item);
   }
@@ -311,7 +305,7 @@ public class Arena : Spatial, IGamemode {
   }
   
   public Actor SpawnActor(ActorData dat){
-    Actor.Brains brain = dat.GetBrain();
+    Actor.Brains brain = Actor.Brains.Player1;
 
     Vector3 pos;
     if(brain == Actor.Brains.Player1){
@@ -322,7 +316,6 @@ public class Arena : Spatial, IGamemode {
       usedEnemySpawnPoints.Add(pos);
     }
 
-    dat.pos = pos;
 
     Actor actor = Actor.Factory(brain, dat);
     actor.NameHand(actor.Name + "(Hand)");  
@@ -371,14 +364,4 @@ public class Arena : Spatial, IGamemode {
 
   public void PlayerReady(){}
 
-  public void EquipActor(Actor actor, Item.Types itemType, string itemName){
-    int index = actor.IndexOf(itemType, itemName);
-    if(index == -1){
-      GD.Print("Actor doesn't have this weapon.");
-    }
-    else{
-      GD.Print("Equipping Actor with " + itemType.ToString());
-      actor.EquipItem(index);
-    }
-  }
 }

@@ -189,10 +189,10 @@ public class ActorInputHandler : Brain {
       case InputEvent.Buttons.Tab: actor.EquipNextItem(); break;
       case InputEvent.Buttons.Space: actor.Jump(); break;
       case InputEvent.Buttons.Shift: actor.SetSprint(true); break;
-      case InputEvent.Buttons.M1: actor.Use(Item.Uses.A); break;
-      case InputEvent.Buttons.M2: actor.Use(Item.Uses.B); break;
-      case InputEvent.Buttons.M3: actor.Use(Item.Uses.C); break;
-      case InputEvent.Buttons.R: actor.Use(Item.Uses.D); break;
+      case InputEvent.Buttons.M1: actor.Use(Item.ItemInputs.APress); break;
+      case InputEvent.Buttons.M2: actor.Use(Item.ItemInputs.BPress); break;
+      case InputEvent.Buttons.M3: actor.Use(Item.ItemInputs.CPress); break;
+      case InputEvent.Buttons.R: actor.Use(Item.ItemInputs.DPress); break;
       case InputEvent.Buttons.One: actor.EquipHotbarItem(0); break;
       case InputEvent.Buttons.Two: actor.EquipHotbarItem(1); break;
       case InputEvent.Buttons.Three: actor.EquipHotbarItem(2); break;
@@ -211,20 +211,20 @@ public class ActorInputHandler : Brain {
       case InputEvent.Buttons.Start: 
         Session.Event(SessionEvent.PauseEvent());
         break;
-      case InputEvent.Buttons.Square: actor.Use(Item.Uses.D); break;
+      case InputEvent.Buttons.Square: actor.Use(Item.ItemInputs.DPress); break;
       case InputEvent.Buttons.Triangle: break;
       case InputEvent.Buttons.O: break;
       case InputEvent.Buttons.X: actor.Jump(); break;
-      case InputEvent.Buttons.R1: actor.Use(Item.Uses.A); break;
-      case InputEvent.Buttons.R2: actor.Use(Item.Uses.C); break;
-      case InputEvent.Buttons.L1: actor.Use(Item.Uses.B); break;
+      case InputEvent.Buttons.R1: actor.Use(Item.ItemInputs.APress); break;
+      case InputEvent.Buttons.R2: actor.Use(Item.ItemInputs.CPress); break;
+      case InputEvent.Buttons.L1: actor.Use(Item.ItemInputs.BPress); break;
       case InputEvent.Buttons.L2: break;
       case InputEvent.Buttons.DUp: break;
       case InputEvent.Buttons.DRight: break;
       case InputEvent.Buttons.DLeft: break;
       case InputEvent.Buttons.DDown: break;
       case InputEvent.Buttons.Select: break;
-      case InputEvent.Buttons.RClick: actor.Use(Item.Uses.C); break;
+      case InputEvent.Buttons.RClick: actor.Use(Item.ItemInputs.CPress); break;
       case InputEvent.Buttons.LClick: actor.SetSprint(true); break;
     }
   }
@@ -235,7 +235,7 @@ public class ActorInputHandler : Brain {
         Session.Event(SessionEvent.PauseEvent());
         break;
       case InputEvent.Buttons.B: actor.Jump(); break;
-      case InputEvent.Buttons.A: actor.Use(Item.Uses.A); break;
+      case InputEvent.Buttons.A: actor.Use(Item.ItemInputs.APress); break;
     }
   }
 
@@ -245,9 +245,9 @@ public class ActorInputHandler : Brain {
         Session.Event(SessionEvent.PauseEvent());
         break;
       case InputEvent.Buttons.B: actor.Jump(); break;
-      case InputEvent.Buttons.A: actor.Use(Item.Uses.A); break;
+      case InputEvent.Buttons.A: actor.Use(Item.ItemInputs.APress); break;
       case InputEvent.Buttons.X: actor.EquipNextItem(); break;
-      case InputEvent.Buttons.Y: actor.Use(Item.Uses.B); break;
+      case InputEvent.Buttons.Y: actor.Use(Item.ItemInputs.BPress); break;
     }
   }
 
@@ -257,12 +257,11 @@ public class ActorInputHandler : Brain {
         Session.Event(SessionEvent.PauseEvent());
         break;
       case InputEvent.Buttons.L: actor.SetSprint(true); break;
-      case InputEvent.Buttons.Z: actor.Use(Item.Uses.A); break;
-      case InputEvent.Buttons.R: actor.Use(Item.Uses.B); break;
-      case InputEvent.Buttons.CUp: actor.Use(Item.Uses.C); break;
+      case InputEvent.Buttons.Z: actor.Use(Item.ItemInputs.APress); break;
+      case InputEvent.Buttons.R: actor.Use(Item.ItemInputs.BPress); break;
+      case InputEvent.Buttons.CUp: actor.Use(Item.ItemInputs.CPress); break;
       case InputEvent.Buttons.CDown: actor.Jump(); break;
-      case InputEvent.Buttons.B: actor.Use(Item.Uses.D); break;
-      case InputEvent.Buttons.A: actor.InitiateInteraction(); break;
+      case InputEvent.Buttons.B: actor.Use(Item.ItemInputs.DPress); break;
     }
   }
 

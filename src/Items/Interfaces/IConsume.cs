@@ -1,4 +1,4 @@
-// Anything that can be consumed
+// Consumables like potions
 interface IConsume {
 	void Consume(object consumer);
 }

@@ -36,7 +36,7 @@ public class HotBar : IHasItem {
     items = new Item[slotsMax];
     for(int i = 0; i < slotsMax; i++){
       string slotContents = stats.GetFact(slots[i]);
-      Item item = Item.Factory(slotContents); 
+      Item item = ItemFactory.Factory(slotContents, "") as Item; 
       if(item != null){
         items[i] = item;
       }
