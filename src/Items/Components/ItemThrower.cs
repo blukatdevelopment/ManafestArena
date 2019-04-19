@@ -1,3 +1,6 @@
+/*
+    Throws an item and uses an attached CollisionDamager to damage targets
+*/
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -22,6 +25,7 @@ public class ItemThrower {
     ){
         this.thrownImpulseStrength = thrownImpulseStrength;
         this.damage = damage;
+
     }
 
     public void Throw(){
@@ -35,13 +39,14 @@ public class ItemThrower {
         pastWielder = wielder;
 
         if (actor != null) {
-            actor.DropItem(this);
-            SetCollision(true);
+            // TODO: Fix this actor.DropItem(item);
+            item.SetCollision(true);
             wielder = null;
             actor.EquipNextItem();
         }
 
-        Transform start = item.GetNode().GetGlobalTransform();
+        Spatial spat = item.GetNode() as Spatial;
+        Transform start = spat.GetGlobalTransform();
         Transform destination = start;
         destination.Translated(new Vector3(0, 0, 1));
         
@@ -55,7 +60,7 @@ public class ItemThrower {
 
     public void OnUpdateWielder(){
         object wielder = item.GetWielder();
-        if(wielder == false){
+        if(wielder == null){
             damage.sender = "";
             return;
         }
@@ -67,12 +72,16 @@ public class ItemThrower {
 
     public void OnCollide(object body){
         HandlePickup(body);
-        if(!swinging){
+        object wielder = item.GetWielder();
+        if(!damageActive){
           return;
         }
         if(thrown){
-            swinging = false;
-            this.SetAxisVelocity(new Vector3());
+            damageActive = false;
+            RigidBody spat = item.GetNode() as RigidBody;
+            if(spat != null){
+                spat.SetAxisVelocity(new Vector3());                
+            }
         }
         
         IReceiveDamage receiver = body as IReceiveDamage;
@@ -82,10 +91,10 @@ public class ItemThrower {
         }
 
         if(receiver != null && receiver != wielderDamage){
-          Strike(receiver);
+          //Strike(receiver);
         }
         else if(receiver == wielderDamage){
-            swinging = true;
+            damageActive = true;
         }
     }
 
@@ -104,11 +113,11 @@ public class ItemThrower {
         if(pastActor == currentActor){
             GD.Print("Picking item back up");
             thrown = false;
-            if(GetParent() != null){
-                GetParent().RemoveChild(this);
+            if(item.GetNode().GetParent() != null){
+                item.GetNode().GetParent().RemoveChild(item.GetNode());
             }
             
-            currentActor.PickUpAndEquipItem(this);
+            //currentActor.PickUpAndEquipItem(this);
         }
         else{
             GD.Print("Only the original actor can pick it up at this point in time.");

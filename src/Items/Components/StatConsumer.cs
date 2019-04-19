@@ -18,10 +18,11 @@ public class StatConsumer{
     }
 
     public bool ConsumeStats(){
-        IHasStats stats = wielder as IHasStats;
-        if(stats == null){
+        IHasStats statsHolder = wielder as IHasStats;
+        if(statsHolder == null){
             return false;
         }
+        StatsManager stats = statsHolder.GetStats();
 
         bool healthCheck  = stats.CanConsumeStat(StatsManager.Stats.Health, health);
         bool staminaCheck = stats.CanConsumeStat(StatsManager.Stats.Stamina, stamina);

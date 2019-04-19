@@ -718,20 +718,12 @@ public class Actor : KinematicBody, IReceiveDamage, IHasInfo, ILook, IHasStats {
 
   }
   
-  public static Actor Factory(ActorData data){
-    return Factory(data.GetBrain(), data);
-  }
 
   public static Actor Factory(Brains brain = Brains.Player1, ActorData data = null){
     
     Actor actor = new Actor(brain);
 
-    if(data != null){
-      actor.LoadData(data);
-      if(actor.id != -1){
-        actor.Name = "Actor" + actor.id;
-      }
-    }
+    // TODO: Fix this to work
 
     return actor;
   }

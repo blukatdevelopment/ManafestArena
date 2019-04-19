@@ -14,8 +14,8 @@ public class SelfDamager {
         Damage damage,
         bool destroyOnUse
     ){
-        self.damage = damage;
-        self.destroyOnUse = desttroyOnUse;
+        this.damage = damage;
+        this.destroyOnUse = destroyOnUse;
     }
 
     public void ApplyDamage(){

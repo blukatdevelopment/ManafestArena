@@ -87,6 +87,7 @@
     <Compile Include="src/Items/Archetypes/Item.cs" />
     <Compile Include="src/Items/Archetypes/ItemFactory.cs" />
     <Compile Include="src/Items/Archetypes/MeleeStabItem.cs" />
+    <Compile Include="src/Items/Archetypes/ProjectileItem.cs" />
     <Compile Include="src/Items/Interfaces/IHasItem.cs" />
     <Compile Include="src/Items/Interfaces/IHasInfo.cs" />
     <Compile Include="src/Items/Interfaces/IHasDamage.cs" />

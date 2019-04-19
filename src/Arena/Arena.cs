@@ -305,7 +305,7 @@ public class Arena : Spatial, IGamemode {
   }
   
   public Actor SpawnActor(ActorData dat){
-    Actor.Brains brain = dat.GetBrain();
+    Actor.Brains brain = Actor.Brains.Player1;
 
     Vector3 pos;
     if(brain == Actor.Brains.Player1){
@@ -316,7 +316,6 @@ public class Arena : Spatial, IGamemode {
       usedEnemySpawnPoints.Add(pos);
     }
 
-    dat.pos = pos;
 
     Actor actor = Actor.Factory(brain, dat);
     actor.NameHand(actor.Name + "(Hand)");  

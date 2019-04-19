@@ -1,6 +1,11 @@
 // Throw this out of a projectile launcher
+using Godot;
+using System;
+using System.Collections.Generic;
+
 public class ProjectileItem : Item {
     public CollisionDamager collision;
+    public string sender;
 
     public ProjectileItem(
         string name,
@@ -16,14 +21,14 @@ public class ProjectileItem : Item {
         InitNodeStructure();        
 
         collision = new CollisionDamager(this as IItem);
-        collsion.Config(
+        collision.Config(
             damage,
             speaker,
             impactSound
         );
     }
 
-    public override OnCollide(object body){
+    public override void OnCollide(object body){
         collision.OnCollide(body);
         QueueFree();
     }

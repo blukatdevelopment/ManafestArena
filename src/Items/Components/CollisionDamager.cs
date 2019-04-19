@@ -29,7 +29,7 @@ public class CollisionDamager {
         this.damageOnce = damageOnce;
     }
 
-    public void OnCollide(object Body){
+    public void OnCollide(object body){
         if(!active || damage == null){
             return;
         }
@@ -40,7 +40,7 @@ public class CollisionDamager {
 
         IReceiveDamage receiver = body as IReceiveDamage;
         if(receiver != null){
-            receiver.ReceiveDamage(receiver);
+            receiver.ReceiveDamage(damage);
         }
 
         if(damageOnce){

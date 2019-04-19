@@ -36,6 +36,10 @@ public class ItemFactory {
         return null;
     }
 
+    public static IItem Factory(string name, string json){
+        return null;
+    }
+
     public static IItem Factory(Items item, string json){
         IItem ret = Factory(item);
         if(ret != null){

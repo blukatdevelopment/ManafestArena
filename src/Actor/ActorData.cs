@@ -8,4 +8,7 @@ using System.Collections.Generic;
 public class ActorData {
 	public int id;
 	public string json;
+
+  public ActorData(){}
+  public ActorData(StatsManager stats){}
 }

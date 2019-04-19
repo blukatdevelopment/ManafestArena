@@ -92,7 +92,9 @@ public class MeleeStabItem : Item, IHasDamage {
                         dmg,
                         0,
                         15,
-                        0
+                        0,
+                        Sound.Effects.None,
+                        Sound.Effects.None
                     ) as IItem;
             break;
             case ItemFactory.Items.Claws:
@@ -105,7 +107,9 @@ public class MeleeStabItem : Item, IHasDamage {
                         dmg,
                         0,
                         15,
-                        0
+                        0,
+                        Sound.Effects.None,
+                        Sound.Effects.None
                     ) as IItem;
             break;
         }
