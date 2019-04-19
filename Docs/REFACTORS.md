@@ -1,14 +1,9 @@
 # Refactors
 
-**Items**
-Item functionality is currently suspended in an inheritance tree. This makes life difficult
-when a specific item mixes in multiple behaviors that live on different branches of the tree.
-The solution is to make components/modules for item behavior, convert items into an IItem 
-interface, store the state of an item as JSON, and provide a factory to convert from JSON
-into a particular item. Item.Factory(string json) should delegate to factories in order to 
-prevent a single giant factory like the one that currently exists. That should allow items to 
-have arbitrary data footprints, functionality, and still allow re-use of code by virtue of
-compisition over inheritance.
+**JSON**
+There's currently no JSON for the other refactored parts. A dynamic JSON object 
+would go a long way to get various forms of data saved interchangeably as well
+as providing an easy way to interpret results from a server.
 
 **Menus**
 Most menus implementing IMenu have copy/pasted code. A class to contian these common elements 
