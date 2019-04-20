@@ -64,6 +64,7 @@
     <Compile Include="src/Ai/FightingState.cs" />
     <Compile Include="src/Ai/RangedCombatState.cs" />
     <Compile Include="src/Ai/MeleeCombatState.cs" />
+    <Compile Include="src/Input/DeviceState.cs" />
     <Compile Include="src/Menus/Button.cs" />
     <Compile Include="src/Menus/TexturedButton.cs" />
     <Compile Include="src/Menus/MainMenu.cs" />
