@@ -67,6 +67,8 @@
     <Compile Include="src/Input/DeviceState.cs" />
     <Compile Include="src/Input/InputMapping.cs" />
     <Compile Include="src/Input/MappedInputEvent.cs" />
+    <Compile Include="src/Input/IInputSource.cs" />
+    <Compile Include="src/Input/IInputHandler.cs" />
     <Compile Include="src/Menus/Button.cs" />
     <Compile Include="src/Menus/TexturedButton.cs" />
     <Compile Include="src/Menus/MainMenu.cs" />
