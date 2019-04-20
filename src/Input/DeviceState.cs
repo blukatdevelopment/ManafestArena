@@ -79,6 +79,14 @@ public class DeviceState : Node {
     return keys[key];
   }
 
+  // You don't need to add  mouseAxes. They are listened to automagically.
+  public float GetMouseAxis(int axis){
+    if(axis == 0){
+      return mouseMovement.x;
+    }
+    return mouseMovement.y;
+  }
+
   public Vector2 GetMousePosition(){
     return mousePosition;
   }

@@ -29,6 +29,9 @@ public class Session : Node {
   public string userName;
   public float mouseSensitivityX, mouseSensitivityY;
   public DeviceManager.Devices player1Device;
+
+  // Input
+  List<DeviceState> deviceStates;
   
 
   public static int NextItemId(){
@@ -61,8 +64,6 @@ public class Session : Node {
 
   public void PerformTests(){
     Test.Init();
-    //StatsManager.StatsTests();
-    //SpellCaster.SpellCasterTests(); 
   }
 
   public void InitSettings(){
@@ -75,7 +76,26 @@ public class Session : Node {
     mouseSensitivityY = Util.ToFloat(db.SelectSetting("mouse_sensitivity_y"));
     player1Device = (DeviceManager.Devices)Util.ToInt(db.SelectSetting("player1_device"));
 
+    deviceStates = new List<DeviceState>();
+    AddDevice(0); // Input player1, as they can be assumed to exist
+
     Sound.RefreshVolume();
+  }
+
+  public static void AddDevice(int joypad){
+    if(GetDevice(0) != null){
+      return;
+    }
+    Session.session.deviceStates.Add(new DeviceState(joypad));
+  }
+
+  public static DeviceState GetDevice(int joypad){
+    foreach(DeviceState device in Session.session.deviceStates){
+      if(device.joypad == joypad){
+        return device;
+      }
+    }
+    return null;
   }
 
   public static void SaveSettings(){
