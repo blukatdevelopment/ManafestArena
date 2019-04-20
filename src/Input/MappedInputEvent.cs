@@ -18,6 +18,13 @@ public class MappedInputEvent {
     this.inputType = inputType;
   }
 
+  public string ToString(){
+    string output = "[ID: " + mappedEventId + ", ";
+    output += "type: " + inputType + ", ";
+    output += "value: " + inputValue + "]";
+    return output;
+  }
+
   public static MappedInputEvent Release(float inputValue, int mappedEventId){
     return new MappedInputEvent(inputValue, mappedEventId, Inputs.Release);
   }
