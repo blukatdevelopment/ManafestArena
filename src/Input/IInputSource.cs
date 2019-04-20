@@ -6,5 +6,5 @@ using System;
 using System.Collections.Generic;
 
 public interface IInputSource {
-  List<MappedInputEvent> GetInputs(); 
+  List<MappedInputEvent> GetInputs(float delta); 
 }
