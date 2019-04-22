@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 
 public class DebugInputHandler : IInputHandler{
-  public void IInputSource source;
+  public IInputSource source;
   public long lineNumber; // Differentiate each line
 
   public DebugInputHandler(){

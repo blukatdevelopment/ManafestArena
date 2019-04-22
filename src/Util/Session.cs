@@ -48,6 +48,32 @@ public class Session : Node {
     InitJukeBox();
     InitSettings();
     PerformTests();
+
+    // REMOVE BELOW THIS LINE
+    AddDevice(0);
+
+    List<InputMapping> mappings = new List<InputMapping>();
+    for(int i = 0; i< 200; i++){
+      mappings.Add(new InputMapping(
+        InputMapping.Inputs.KeyboardKey,
+        i,
+        i
+      ));
+    }
+
+    DeviceState device = deviceStates[0];
+
+    source = new MappedInputSource(device, mappings);
+    handler = new DebugInputHandler();
+    handler.RegisterInputSource(source);
+  }
+
+  public MappedInputSource source;
+  public DebugInputHandler handler;
+
+  public override void _Process(float delta){
+    // REMOVE BELOW THIS LINE
+    handler.Update(delta);
   }
 
   public override void _Input(Godot.InputEvent evt){
@@ -56,10 +82,6 @@ public class Session : Node {
       mousePosition = mot.GlobalPosition;
       mouseMovement = mot.Relative;
     }
-  }
-
-  public override void _Process(float delta){
-    //DeviceManager.SpamJoyPadInput(0);
   }
 
   public void PerformTests(){
@@ -86,7 +108,9 @@ public class Session : Node {
     if(GetDevice(0) != null){
       return;
     }
-    Session.session.deviceStates.Add(new DeviceState(joypad));
+    DeviceState ds = new DeviceState(joypad);
+    Session.session.deviceStates.Add(ds);
+    Session.session.AddChild(ds);
   }
 
   public static DeviceState GetDevice(int joypad){

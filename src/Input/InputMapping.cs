@@ -18,7 +18,8 @@ public class InputMapping {
     JoyButton,
     JoyAxis,
     MouseButton,
-    MouseAxis
+    MouseAxis,
+    KeyboardKey
   };
 
   public const float LongHoldTime = 1f;
@@ -55,6 +56,7 @@ public class InputMapping {
       case Inputs.JoyButton:    device.AddJoyButton(inputId); break;
       case Inputs.JoyAxis:      device.AddJoyAxis(inputId); break;
       case Inputs.MouseButton:  device.AddMouseButton(inputId); break;
+      case Inputs.KeyboardKey:  device.AddKey(inputId); break;
     }
   }
 
@@ -85,6 +87,7 @@ public class InputMapping {
     else if(currentValue != 0f){
       ret.Add(MappedInputEvent.Hold(currentValue, mappedEventId));
     }
+    lastValue = currentValue;
 
     return ret;
   }
@@ -104,9 +107,12 @@ public class InputMapping {
         ret = device.GetMouseButton(inputId); 
         break;
       case Inputs.MouseAxis:
-        ret = device.GetKey(inputId);
+        ret = device.GetMouseAxis(inputId);
         ret = ApplyDeadZone(ret);
         ret = ApplySensitivity(ret);
+        break;
+      case Inputs.KeyboardKey:
+        ret = device.GetKey(inputId);
         break;
     }
     return ret;

@@ -96,19 +96,23 @@ public class DeviceState : Node {
   }
 
   public override void _Process(float delta){
-    foreach(int button in joyButtons.Keys){
+    List<int> joyButtonKeys = new List<int>(joyButtons.Keys);
+    foreach(int button in joyButtonKeys){
       joyButtons[button] = Input.IsJoyButtonPressed(joypad, button) ? 1f : 0f;
     }
 
-    foreach(int axis in joyAxes.Keys){
+    List<int> joyAxisKeys = new List<int>(joyAxes.Keys);
+    foreach(int axis in joyAxisKeys){
       joyAxes[axis] = Input.GetJoyAxis(joypad, axis);
     }
 
-    foreach(int button in mouseButtons.Keys){
+    List<int> mouseButtonKeys = new List<int>(mouseButtons.Keys);
+    foreach(int button in mouseButtonKeys){
       mouseButtons[button] = Input.IsMouseButtonPressed(button) ? 1f : 0f;
     }
 
-    foreach(int key in keys.Keys){
+    List<int> keysKeys = new List<int>(keys.Keys);
+    foreach(int key in keysKeys){
       keys[key] = Input.IsKeyPressed(key) ? 1f : 0f;
     }
   }
