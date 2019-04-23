@@ -71,6 +71,7 @@
     <Compile Include="src/Input/IInputSource.cs" />
     <Compile Include="src/Input/IInputHandler.cs" />
     <Compile Include="src/Input/DebugInputHandler.cs" />
+    <Compile Include="src/Input/FPSInputHandler.cs" />
     <Compile Include="src/Menus/Button.cs" />
     <Compile Include="src/Menus/TexturedButton.cs" />
     <Compile Include="src/Menus/MainMenu.cs" />

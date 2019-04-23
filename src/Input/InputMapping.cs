@@ -11,6 +11,8 @@
   A negative sensitivity inverts an axis.
   
 */
+using Godot;
+using System;
 using System.Collections.Generic;
 
 public class InputMapping {
@@ -127,6 +129,31 @@ public class InputMapping {
 
   public float ApplySensitivity(float val){
     return sensitivity * val;
+  }
+
+  // Convert to and from string represantation
+  public string Flatten(){
+    string ret = "";
+    ret += (int)inputType + ";";
+    ret += inputId + ";";
+    ret += mappedEventId + ";";
+    ret += deadZone + ";";
+    ret += sensitivity;
+    return ret;
+  }
+
+  public static InputMapping Unflatten(string flat){
+    GD.Print("Unflattening " + flat);
+    string[] values = flat.Split(';');
+    if(values.Length != 5){
+      GD.Print("Invalid flat mapping: " + flat);
+    }
+    Inputs inputType = (Inputs)Util.ToInt(values[0]);
+    int inputId = Util.ToInt(values[1]);
+    int mappedEventId = Util.ToInt(values[2]);
+    float deadZone = Util.ToFloat(values[3]);
+    float sensitivity = Util.ToFloat(values[4]);
+    return new InputMapping( inputType, inputId, mappedEventId, deadZone, sensitivity);
   }
 
 }

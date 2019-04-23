@@ -49,21 +49,14 @@ public class Session : Node {
     InitSettings();
     PerformTests();
 
-    // REMOVE BELOW THIS LINE
-    AddDevice(0);
 
-    List<InputMapping> mappings = new List<InputMapping>();
-    for(int i = 0; i< 200; i++){
-      mappings.Add(new InputMapping(
-        InputMapping.Inputs.KeyboardKey,
-        i,
-        i
-      ));
-    }
+    // REMOVE BELOW THIS LINE
+
+    AddDevice(0);
 
     DeviceState device = deviceStates[0];
 
-    source = new MappedInputSource(device, mappings);
+    source = new MappedInputSource(device, FPSInputHandler.GetMappings());
     handler = new DebugInputHandler();
     handler.RegisterInputSource(source);
   }

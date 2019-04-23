@@ -1,3 +1,7 @@
+using Godot;
+using System;
+using System.Collections.Generic;
+
 public class MappedInputEvent {
 
   public enum Inputs{
