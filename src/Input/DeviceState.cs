@@ -115,6 +115,7 @@ public class DeviceState : Node {
     foreach(int key in keysKeys){
       keys[key] = Input.IsKeyPressed(key) ? 1f : 0f;
     }
+    mouseMovement = new Vector2();
   }
 
   public override void _Input(Godot.InputEvent evt){
