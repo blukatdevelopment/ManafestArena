@@ -65,7 +65,6 @@ public class SettingsDb{
         settings.Add("first_login", DateTime.Today.ToString("MM/dd/yyyy"));
         settings.Add("mouse_sensitivity_x", "1.0");
         settings.Add("mouse_sensitivity_y", "1.0");
-        settings.Add("player1_device", "" + DeviceManager.Devices.MouseAndKeyboard);
         StoreSettings();
     }
 

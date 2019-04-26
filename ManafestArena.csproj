@@ -52,10 +52,7 @@
   <ItemGroup>
     <Compile Include="src/Actor/Actor.cs" />
     <Compile Include="src/Actor/ActorData.cs" />
-    <Compile Include="src/Actor/ActorInputHandler.cs" />
     <Compile Include="src/Actor/Brain.cs" />
-    <Compile Include="src/Actor/DeviceManager.cs" />
-    <Compile Include="src/Actor/InputEvent.cs" />
     <Compile Include="src/Actor/ILook.cs" />
     <Compile Include="src/Ai/IBehaviorState.cs" />
     <Compile Include="src/Ai/StateAi.cs" />

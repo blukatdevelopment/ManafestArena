@@ -28,7 +28,6 @@ public class Session : Node {
   public float masterVolume, sfxVolume, musicVolume;
   public string userName;
   public float mouseSensitivityX, mouseSensitivityY;
-  public DeviceManager.Devices player1Device;
 
   // Input
   List<DeviceState> deviceStates;
@@ -75,7 +74,6 @@ public class Session : Node {
     userName = db.SelectSetting("username");
     mouseSensitivityX = Util.ToFloat(db.SelectSetting("mouse_sensitivity_x"));
     mouseSensitivityY = Util.ToFloat(db.SelectSetting("mouse_sensitivity_y"));
-    player1Device = (DeviceManager.Devices)Util.ToInt(db.SelectSetting("player1_device"));
 
     deviceStates = new List<DeviceState>();
     AddDevice(0); // Input player1, as they can be assumed to exist
@@ -110,8 +108,6 @@ public class Session : Node {
     db.StoreSetting("mouse_sensitivity_x", "" + Session.session.mouseSensitivityX);
     db.StoreSetting("mouse_sensitivity_y", "" + Session.session.mouseSensitivityY);
     db.StoreSetting("username", Session.session.userName);
-    db.StoreSetting("player1_device", "" + (int)Session.session.player1Device);
-    GD.Print("Saving player device as "  + (int)Session.session.player1Device);
     Sound.RefreshVolume();
   }
   

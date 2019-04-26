@@ -7,6 +7,7 @@ using System.Collections.Generic;
 
 public class FPSInputHandler : IInputHandler {
   public Actor actor;
+  private IInputSource source;
 
   public FPSInputHandler(){}
 
@@ -14,8 +15,64 @@ public class FPSInputHandler : IInputHandler {
     this.actor = actor;
   }
 
-  public void RegisterInputSource(IInputSource source){}
-  public void Update(float delta){}
+  public void RegisterInputSource(IInputSource source){
+    this.source = source;
+  }
+  public void Update(float delta){
+    List<MappedInputEvent> inputEvents = source.GetInputs(delta);
+    foreach(MappedInputEvent inputEvent in inputEvents){
+      HandleSingleInput(inputEvent, delta);
+    }
+  }
+
+  public void HandleSingleInput(MappedInputEvent inputEvent, float delta){
+    Inputs input = (Inputs)inputEvent.mappedEventId;
+    float val = inputEvent.inputValue;
+    switch(input){
+      case Inputs.MoveForward:
+        actor.Move(new Vector3(0, 0, -val), delta);
+        break;
+      case Inputs.MoveBackward:
+        actor.Move(new Vector3(0, 0, val), delta);
+        break;
+      case Inputs.MoveLeft:
+        actor.Move(new Vector3(-val, 0, 0), delta); 
+        break;
+      case Inputs.MoveRight:
+        actor.Move(new Vector3(val, 0, 0), delta);
+        break;
+      case Inputs.PrimaryUse:
+        break;
+      case Inputs.SecondaryUse: 
+        break;
+      case Inputs.Reload: 
+        break;
+      case Inputs.Interact: 
+        break;
+      case Inputs.Sprint: 
+        break;
+      case Inputs.Crouch: 
+        break;
+      case Inputs.Jump: 
+        break;
+      case Inputs.Inventory: 
+        break;
+      case Inputs.NextItem: 
+        break;
+      case Inputs.PreviousItem: 
+        break;
+      case Inputs.Pause: 
+        break;
+      case Inputs.LookUp: 
+        break;
+      case Inputs.LookDown: 
+        break;
+      case Inputs.LookLeft: 
+        break;
+      case Inputs.LookRight: 
+        break;
+    }
+  }
 
   public enum Inputs{
     MoveForward,
