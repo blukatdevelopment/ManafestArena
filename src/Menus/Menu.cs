@@ -7,6 +7,7 @@ public class Menu{
     None, 
     Main,
     Settings,
+    Controls,
     Pause, 
     HUD,
     Career,
@@ -163,6 +164,10 @@ public class Menu{
       case Menus.Settings: 
         ret = new SettingsMenu(); 
         ret.Name = "Settings";
+        break;
+      case Menus.Controls: 
+        ret = new ControlsMenu(); 
+        ret.Name = "Controls";
         break;
       case Menus.Career:
         ret = new CareerMenu();

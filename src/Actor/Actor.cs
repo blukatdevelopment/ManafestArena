@@ -77,9 +77,6 @@ public class Actor : KinematicBody, IReceiveDamage, IHasInfo, ILook, IHasStats {
   public void InitBrain(Brains b){
     this.brainType = b;
     switch(b){
-      case Brains.Player1:
-        brain = (Brain)new ActorInputHandler(this);
-        break;
       case Brains.Ai: 
         brain = (Brain)new StateAi(this); 
         break;
@@ -701,10 +698,6 @@ public class Actor : KinematicBody, IReceiveDamage, IHasInfo, ILook, IHasStats {
 
   public void SetPaused(bool val){
     paused = val;
-
-    if(brain as ActorInputHandler == null){
-      return;
-    }
 
     menuActive = val;
     if(menuActive){

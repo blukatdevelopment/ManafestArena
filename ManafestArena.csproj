@@ -52,10 +52,7 @@
   <ItemGroup>
     <Compile Include="src/Actor/Actor.cs" />
     <Compile Include="src/Actor/ActorData.cs" />
-    <Compile Include="src/Actor/ActorInputHandler.cs" />
     <Compile Include="src/Actor/Brain.cs" />
-    <Compile Include="src/Actor/DeviceManager.cs" />
-    <Compile Include="src/Actor/InputEvent.cs" />
     <Compile Include="src/Actor/ILook.cs" />
     <Compile Include="src/Ai/IBehaviorState.cs" />
     <Compile Include="src/Ai/StateAi.cs" />
@@ -64,6 +61,14 @@
     <Compile Include="src/Ai/FightingState.cs" />
     <Compile Include="src/Ai/RangedCombatState.cs" />
     <Compile Include="src/Ai/MeleeCombatState.cs" />
+    <Compile Include="src/Input/DeviceState.cs" />
+    <Compile Include="src/Input/InputMapping.cs" />
+    <Compile Include="src/Input/MappedInputEvent.cs" />
+    <Compile Include="src/Input/MappedInputSource.cs" />
+    <Compile Include="src/Input/IInputSource.cs" />
+    <Compile Include="src/Input/IInputHandler.cs" />
+    <Compile Include="src/Input/DebugInputHandler.cs" />
+    <Compile Include="src/Input/FPSInputHandler.cs" />
     <Compile Include="src/Menus/Button.cs" />
     <Compile Include="src/Menus/TexturedButton.cs" />
     <Compile Include="src/Menus/MainMenu.cs" />
@@ -73,6 +78,7 @@
     <Compile Include="src/Menus/PauseMenu.cs" />
     <Compile Include="src/Menus/TextBox.cs" />
     <Compile Include="src/Menus/SettingsMenu.cs" />
+    <Compile Include="src/Menus/ControlsMenu.cs" />
     <Compile Include="src/Menus/CareerMenu.cs" />
     <Compile Include="src/Menus/NewGameMenu.cs" />
     <Compile Include="src/Menus/PressEventMenu.cs" />

@@ -28,7 +28,9 @@ public class Session : Node {
   public float masterVolume, sfxVolume, musicVolume;
   public string userName;
   public float mouseSensitivityX, mouseSensitivityY;
-  public DeviceManager.Devices player1Device;
+
+  // Input
+  List<DeviceState> deviceStates;
   
 
   public static int NextItemId(){
@@ -45,6 +47,11 @@ public class Session : Node {
     InitJukeBox();
     InitSettings();
     PerformTests();
+
+    AddDevice(0);
+  }
+
+  public override void _Process(float delta){
   }
 
   public override void _Input(Godot.InputEvent evt){
@@ -55,14 +62,8 @@ public class Session : Node {
     }
   }
 
-  public override void _Process(float delta){
-    //DeviceManager.SpamJoyPadInput(0);
-  }
-
   public void PerformTests(){
     Test.Init();
-    //StatsManager.StatsTests();
-    //SpellCaster.SpellCasterTests(); 
   }
 
   public void InitSettings(){
@@ -73,9 +74,29 @@ public class Session : Node {
     userName = db.SelectSetting("username");
     mouseSensitivityX = Util.ToFloat(db.SelectSetting("mouse_sensitivity_x"));
     mouseSensitivityY = Util.ToFloat(db.SelectSetting("mouse_sensitivity_y"));
-    player1Device = (DeviceManager.Devices)Util.ToInt(db.SelectSetting("player1_device"));
+
+    deviceStates = new List<DeviceState>();
+    AddDevice(0); // Input player1, as they can be assumed to exist
 
     Sound.RefreshVolume();
+  }
+
+  public static void AddDevice(int joypad){
+    if(GetDevice(0) != null){
+      return;
+    }
+    DeviceState ds = new DeviceState(joypad);
+    Session.session.deviceStates.Add(ds);
+    Session.session.AddChild(ds);
+  }
+
+  public static DeviceState GetDevice(int joypad){
+    foreach(DeviceState device in Session.session.deviceStates){
+      if(device.joypad == joypad){
+        return device;
+      }
+    }
+    return null;
   }
 
   public static void SaveSettings(){
@@ -87,8 +108,6 @@ public class Session : Node {
     db.StoreSetting("mouse_sensitivity_x", "" + Session.session.mouseSensitivityX);
     db.StoreSetting("mouse_sensitivity_y", "" + Session.session.mouseSensitivityY);
     db.StoreSetting("username", Session.session.userName);
-    db.StoreSetting("player1_device", "" + (int)Session.session.player1Device);
-    GD.Print("Saving player device as "  + (int)Session.session.player1Device);
     Sound.RefreshVolume();
   }
   
