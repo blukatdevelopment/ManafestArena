@@ -49,24 +49,10 @@ public class Session : Node {
     InitSettings();
     PerformTests();
 
-
-    // REMOVE BELOW THIS LINE
-
     AddDevice(0);
-
-    DeviceState device = deviceStates[0];
-
-    source = new MappedInputSource(device, FPSInputHandler.GetMappings());
-    handler = new DebugInputHandler();
-    handler.RegisterInputSource(source);
   }
 
-  public MappedInputSource source;
-  public DebugInputHandler handler;
-
   public override void _Process(float delta){
-    // REMOVE BELOW THIS LINE
-    handler.Update(delta);
   }
 
   public override void _Input(Godot.InputEvent evt){

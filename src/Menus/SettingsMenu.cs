@@ -18,6 +18,7 @@ public class SettingsMenu : Container, IMenu {
     public Godot.TextEdit userNameBox;
     public Godot.TextEdit deviceLabel;
     public Godot.HSlider deviceSlider;
+    public Godot.Button controlsButton;
     public TextEdit background;
 
     public float deviceFloat;
@@ -50,6 +51,9 @@ public class SettingsMenu : Container, IMenu {
 
       saveButton = Menu.Button("Save", SaveSettings);
       AddChild(saveButton);      
+
+      controlsButton = Menu.Button("Controls", ToControlsMenu);
+      AddChild(controlsButton);
 
       masterVolumeSlider = Menu.HSlider(0f, 1.0f, Session.session.masterVolume, 0.05f);
       AddChild(masterVolumeSlider);
@@ -111,6 +115,7 @@ public class SettingsMenu : Container, IMenu {
       Menu.ScaleControl(mainMenuButton, 2 * wu, hu, 0, height - hu);
       Menu.ScaleControl(revertButton, 2 * wu, hu, 4 * wu, height - hu);
       Menu.ScaleControl(saveButton, 2 * wu, hu, 8 * wu, height - hu);
+      Menu.ScaleControl(controlsButton, 2 * wu, hu, 8 * wu, 0);
       Menu.ScaleControl(masterVolumeLabel, 2 * wu, 0.5f * hu, 0, 2 * hu);
       Menu.ScaleControl(masterVolumeSlider, 2 * wu, 0.5f * hu, 0, 2.5f * hu);
       Menu.ScaleControl(sfxVolumeLabel, 2 * wu, 0.5f * hu, 0, 3 * hu);
@@ -124,6 +129,10 @@ public class SettingsMenu : Container, IMenu {
       Menu.ScaleControl(userNameBox, 2 * wu, 0.5f * hu, 0, 7 * hu);
       Menu.ScaleControl(deviceLabel, 2 * wu, 0.5f * hu, 0, 7.5f * hu);
       Menu.ScaleControl(deviceSlider, 2 * wu, 0.5f * hu, 0, 8 * hu);
+    }
+
+    public void ToControlsMenu(){
+      Session.ChangeMenu(Menu.Menus.Controls);
     }
 
     public void MainMenu(){

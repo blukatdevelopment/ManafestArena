@@ -81,6 +81,7 @@
     <Compile Include="src/Menus/PauseMenu.cs" />
     <Compile Include="src/Menus/TextBox.cs" />
     <Compile Include="src/Menus/SettingsMenu.cs" />
+    <Compile Include="src/Menus/ControlsMenu.cs" />
     <Compile Include="src/Menus/CareerMenu.cs" />
     <Compile Include="src/Menus/NewGameMenu.cs" />
     <Compile Include="src/Menus/PressEventMenu.cs" />
