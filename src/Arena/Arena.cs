@@ -252,15 +252,13 @@ public class Arena : Spatial, IGamemode {
 
   public void SetPause(bool val){
     foreach(Actor actor in actors){
-      if(actor.IsPaused() != val){
-        actor.TogglePause();
-      }
+      // Do pausing here.
     }
   }
   
   public void TogglePause(){
     foreach(Actor actor in actors){
-      actor.TogglePause();
+      // Do pause toggling here
     }
   }
   
