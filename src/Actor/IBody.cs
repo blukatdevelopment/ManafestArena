@@ -11,4 +11,7 @@ public interface IBody {
   void InitCam(int index);
   void Move(Vector3 movement, float moveDelta);
   void Jump();
+  Speaker GetSpeaker();
+  MeshInstance GetMesh();
+  void Die();
 }

@@ -34,13 +34,14 @@ public class ActorFactory {
     InventoryHandlers inventoryHandler
   ){
     Actor actor = new Actor();
-    InitInputSource(inputSource, actor);
-    InitStats(statHandler, actor);
+    InitInputHandler(inputSource, actor);
+    InitStats(statsHandler, actor);
     InitBody(body, actor);
     InitInventory(inventoryHandler, actor);
+    return actor;
   }
 
-  public static void InitInputSourceHandler(InputSources inputSource, Actor actor){
+  public static void InitInputHandler(InputSources inputSource, Actor actor){
     switch(inputSource){
       case InputSources.Player1:
         // Set up devicestate[0]
@@ -63,9 +64,9 @@ public class ActorFactory {
   }
 
   public static void InitBody(Bodies body, Actor actor){
-    switch(){
+    switch(body){
       case Bodies.PillBody:
-        // Init pill body
+        actor.body = new PillBody(actor);
       break;
     }
   }
@@ -78,11 +79,11 @@ public class ActorFactory {
     }
   }
 
-  public static void InitHotbar {
+  public static void InitHotbar() {
     // TODO
   }
 
-  public static void InitPaperDoll {
+  public static void InitPaperDoll() {
     // TODO
   }
 
@@ -97,5 +98,6 @@ public class ActorFactory {
 
   public static Actor DebugCharacter(){
     Actor actor = FromComponentTypes(InputSources.Player1, StatsHandlers.None, Bodies.PillBody, InventoryHandlers.None);
+    return actor;
   }
 }

@@ -29,4 +29,13 @@ public class Actor : IHasInputHandler, IHasStats, IHasBody, IHasInventory {
   public IInventory GetInventory(){
     return inventory;
   }
+
+  public void Update(float delta){
+    if(inputHandler != null){
+      inputHandler.Update(delta);
+    }
+    if(stats != null){
+      stats.Update(delta);
+    }
+  }
 }
