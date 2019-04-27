@@ -30,16 +30,16 @@ public class FPSInputHandler : IInputHandler {
     float val = inputEvent.inputValue;
     switch(input){
       case Inputs.MoveForward:
-        actor.Move(new Vector3(0, 0, -val), delta);
+        //actor.Move(new Vector3(0, 0, -val), delta);
         break;
       case Inputs.MoveBackward:
-        actor.Move(new Vector3(0, 0, val), delta);
+        //actor.Move(new Vector3(0, 0, val), delta);
         break;
       case Inputs.MoveLeft:
-        actor.Move(new Vector3(-val, 0, 0), delta); 
+        //actor.Move(new Vector3(-val, 0, 0), delta); 
         break;
       case Inputs.MoveRight:
-        actor.Move(new Vector3(val, 0, 0), delta);
+        //actor.Move(new Vector3(val, 0, 0), delta);
         break;
       case Inputs.PrimaryUse:
         break;

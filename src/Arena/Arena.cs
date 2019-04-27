@@ -211,7 +211,7 @@ public class Arena : Spatial, IGamemode {
     }
 
     Node actorNode = GetNode(new NodePath(actorPaths[0]));
-    Actor actor = actorNode as Actor;
+    Actor actor = null; //actorNode as Actor;
     ClearActor(actor);
 
     // Check that player has died
@@ -226,10 +226,10 @@ public class Arena : Spatial, IGamemode {
     if(actor == null){
       return;
     }
-    int id = actor.id;
+    // int id = actor.id;
 
-    actor.QueueFree();
-    actors.Remove(actor);
+    // actor.QueueFree();
+    // actors.Remove(actor);
   }
 
   public void AwardPoints(string[] actorPaths){
@@ -239,11 +239,11 @@ public class Arena : Spatial, IGamemode {
     }
 
     Node killerNode = GetNode(new NodePath(actorPaths[1]));
-    Actor killer = killerNode as Actor;
+    Actor killer = null;//killerNode as Actor;
 
-    if(killer != null && killer.id != -1){
-      scores[killer.id]++;
-    }
+    // if(killer != null && killer.id != -1){
+    //   scores[killer.id]++;
+    // }
   }
 
   public void SetPause(bool val){

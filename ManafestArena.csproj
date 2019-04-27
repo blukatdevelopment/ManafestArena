@@ -55,15 +55,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src/Actor/Actor.cs" />
+    <Compile Include="src/Actor/ActorFactory.cs" />
     <Compile Include="src/Actor/IBody.cs" />
     <Compile Include="src/Actor/PillBody.cs" />
-    <Compile Include="src/Ai/IBehaviorState.cs" />
-    <Compile Include="src/Ai/StateAi.cs" />
-    <Compile Include="src/Ai/RoamingState.cs" />
-    <Compile Include="src/Ai/PursuingState.cs" />
-    <Compile Include="src/Ai/FightingState.cs" />
-    <Compile Include="src/Ai/RangedCombatState.cs" />
-    <Compile Include="src/Ai/MeleeCombatState.cs" />
     <Compile Include="src/Input/DeviceState.cs" />
     <Compile Include="src/Input/InputMapping.cs" />
     <Compile Include="src/Input/MappedInputEvent.cs" />
@@ -126,6 +120,8 @@
     <Compile Include="src/Util/SessionEvent.cs" />
     <Compile Include="src/Db/SettingsDb.cs" />
     <Compile Include="src/Inventory/HotBar.cs" />
+    <Compile Include="src/Inventory/PaperDoll.cs" />
+    <Compile Include="src/Inventory/IInventory.cs" />
     <Compile Include="src/Career/Career.cs" />
     <Compile Include="src/Career/CareerNode.cs" />
     <Compile Include="src/Career/PressEvent.cs" />
@@ -133,6 +129,7 @@
     <Compile Include="src/Db/CSV.cs" />
     <Compile Include="src/Db/CareerDb.cs" />
     <Compile Include="src/Actor/StatsManager.cs" />
+    <Compile Include="src/Stats/IStats.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
 </Project>

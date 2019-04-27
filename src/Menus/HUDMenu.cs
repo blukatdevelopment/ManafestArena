@@ -44,9 +44,9 @@ public class HUDMenu : Container, IMenu{
     }
     
     
-    healthBox.Text = player.GetStatusText();
+    healthBox.Text = "";//player.GetStatusText();
 
-    string itemText = player.ItemInfo();
+    string itemText = "";//player.ItemInfo();
     itemBox.Text = itemText;
     
     string objectiveText = Session.GetObjectiveText();
