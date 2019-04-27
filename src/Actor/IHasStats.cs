@@ -1,3 +1,3 @@
 public interface IHasStats {
-    StatsManager GetStats();
+    IStats GetStats();
 }
