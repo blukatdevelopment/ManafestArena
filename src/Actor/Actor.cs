@@ -178,9 +178,6 @@ public class Actor : KinematicBody, IReceiveDamage, IHasInfo, ILook, IHasStats {
     Point at end of ray in looking direction.
   */
   public Vector3 Pointer(float distance = 100f){
-    if(IsPaused()){
-      return new Vector3();
-    }
     Vector3 start = GlobalHeadPosition();
     Transform headTrans = GlobalHeadTransform();
     Vector3 end = Util.TForward(headTrans);
@@ -190,9 +187,6 @@ public class Actor : KinematicBody, IReceiveDamage, IHasInfo, ILook, IHasStats {
   }
 
   public object VisibleObject(){
-    if(IsPaused()){
-      return null;
-    }
     Vector3 start = GlobalHeadPosition();
     Vector3 end = Pointer();
     World world = GetWorld();
@@ -298,9 +292,6 @@ public class Actor : KinematicBody, IReceiveDamage, IHasInfo, ILook, IHasStats {
     if(unarmed){
       StashHand();
     }
-    else{
-      StashItem();
-    }
 
     if(eyes == null){
       GD.Print("Actor.EquipItem: No eyes.");
@@ -336,30 +327,6 @@ public class Actor : KinematicBody, IReceiveDamage, IHasInfo, ILook, IHasStats {
   public void EquipNextItem(){
     EquipItem(hotbar.EquipNextItem());
   }
-  
-  /* Removes activeItem from hands. */
-  public void StashItem(){
-    if(unarmed){
-      return;
-    }
-
-    if(activeItem == null){
-      return;
-    }
-    
-    if(activeItem.GetParent() == null){
-      return;
-    }
-
-    DeferredStashItem();
-    
-    if(Session.NetActive() && Session.IsServer()){
-      Rpc(nameof(DeferredStashItem));
-    }
-    else if(Session.NetActive()){
-      RpcId(1, nameof(ServerStashItem), Session.session.netSes.selfPeerId);
-    }
-  }
 
   public void DropItem(Item item){
     Transform itemTrans = item.GetGlobalTransform();
@@ -371,28 +338,6 @@ public class Actor : KinematicBody, IReceiveDamage, IHasInfo, ILook, IHasStats {
     item.Mode = RigidBody.ModeEnum.Rigid;
     activeItem = null;
     hotbar.DropEquippedItem();
-  }
-
-  [Remote]
-  public void ServerStashItem(int caller){
-    DeferredStashItem();
-
-    foreach(KeyValuePair<int, PlayerData> entry in Session.session.netSes.playerData){
-      if(caller != entry.Key){
-        RpcId(entry.Key, nameof(DeferredStashItem));
-      }
-    }
-  }
-
-  [Remote]
-  public void DeferredStashItem(){
-    activeItem.Unequip();
-    //inventory.ReceiveItem(activeItem);
-    eyes.RemoveChild(activeItem);
-
-    //activeItem.QueueFree();
-    activeItem = null;
-    //EquipHand();
   }
 
   /* Remove hand in preparation of equipping an item */
@@ -588,23 +533,7 @@ public class Actor : KinematicBody, IReceiveDamage, IHasInfo, ILook, IHasStats {
   public int GetHealthMax(){
     return stats.GetStat(StatsManager.Stats.HealthMax);
   }
-  
-  public void SyncPosition(){
-    Vector3 pos = GetTranslation();
-    RpcUnreliable(nameof(SetPosition), pos.x, pos.y, pos.z);
-  }
 
-  public void SyncAim(){
-    Vector3 headRot = RotationDegrees();
-    Vector3 bodyRot = GetRotationDegrees();
-
-    float x = bodyRot.y;
-    float y = headRot.x;
-
-    RpcUnreliable(nameof(SetRotation), x, y);
-  }
-
-  [Remote]
   public void SetRotation(float x, float y){
     Vector3 bodyRot = this.GetRotationDegrees();
     bodyRot.y = x;
@@ -621,7 +550,6 @@ public class Actor : KinematicBody, IReceiveDamage, IHasInfo, ILook, IHasStats {
     eyes.SetRotationDegrees(headRot);
   }
 
-  [Remote]
   public void SetPosition(float x, float y, float z){
     Vector3 pos = new Vector3(x, y, z);
     SetTranslation(pos);
@@ -650,10 +578,6 @@ public class Actor : KinematicBody, IReceiveDamage, IHasInfo, ILook, IHasStats {
     SetTranslation(pos);
   }
   
-  public bool HasItem(string item){
-    return false;
-  }
-
   public string ItemInfo(){
     if(activeItem != null){
       return activeItem.GetInfo();
@@ -661,56 +585,6 @@ public class Actor : KinematicBody, IReceiveDamage, IHasInfo, ILook, IHasStats {
 
     return "Unequipped";
   }
-  
-  public bool IsPaused(){
-    return paused;
-  }
-
-  public void SetMenuActive(bool val){
-    menuActive = val;
-
-    if(menuActive){
-      Input.SetMouseMode(Input.MouseMode.Visible);
-    }
-    else{
-      Session.ChangeMenu(Menu.Menus.HUD);
-      Input.SetMouseMode(Input.MouseMode.Captured);
-
-    }
-    
-  }
-
-  public List<Item> GetHotbarItems(){
-    return hotbar.GetEveryItem();
-  }
-  
-  public void TogglePause(){
-    SetPaused(!paused);
-  }
-
-  public void Pause(){
-    SetPaused(true);
-  }
-
-  public void Unpause(){
-    SetPaused(false);
-  }
-
-  public void SetPaused(bool val){
-    paused = val;
-
-    menuActive = val;
-    if(menuActive){
-      Session.ChangeMenu(Menu.Menus.Pause);
-      Input.SetMouseMode(Input.MouseMode.Visible);
-    }
-    else{
-      Session.ChangeMenu(Menu.Menus.HUD);
-      Input.SetMouseMode(Input.MouseMode.Captured);
-    }
-
-  }
-  
 
   public static Actor Factory(Brains brain = Brains.Player1, ActorData data = null){
     

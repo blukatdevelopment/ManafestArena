@@ -33,10 +33,6 @@ public class StateAi : Brain {
     if(host == null){
       return;
     }
-
-    if(host.IsPaused()){
-      return;
-    }
     
     if(activeState == null){
       ChangeState(DefaultState);
@@ -85,7 +81,7 @@ public class StateAi : Brain {
   //############################################################################
 
   public List<Item> GetItems(){
-    return actor.GetHotbarItems();
+    return new List<Item>();//actor.GetHotbarItems();
   }
   
   public List<Actor> ActorsInSight(){
