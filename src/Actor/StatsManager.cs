@@ -156,8 +156,8 @@ public class StatsManager {
     }
 
     public void BeastInit(){
-        int brainInt = (int)Actor.Brains.Player1;
-        SetBaseStat(Stats.Brain, brainInt);
+        // int brainInt = (int)Actor.Brains.Player1;
+        // SetBaseStat(Stats.Brain, brainInt);
         SetFact(Facts.Archetype, CharacterName(Archetypes.One));
         SetFact(Facts.Name, "Beast");
 
@@ -177,9 +177,9 @@ public class StatsManager {
     }
 
     public void MageInit(){
-        int brainInt = (int)Actor.Brains.Player1;
+        //int brainInt = (int)Actor.Brains.Player1;
         SetFact(Facts.Archetype, CharacterName(Archetypes.Two));
-        SetBaseStat(Stats.Brain, brainInt);
+        //SetBaseStat(Stats.Brain, brainInt);
         SetFact(Facts.Name, "Mage");
 
         SetBaseStat(Stats.Intelligence, 10);
@@ -223,9 +223,9 @@ public class StatsManager {
     }
 
     public void SoldierInit(){
-        int brainInt = (int)Actor.Brains.Player1;
+        //int brainInt = (int)Actor.Brains.Player1;
         SetFact(Facts.Archetype, CharacterName(Archetypes.Three));
-        SetBaseStat(Stats.Brain, brainInt);
+        //SetBaseStat(Stats.Brain, brainInt);
         SetFact(Facts.Name, "Soldier");
 
         SetBaseStat(Stats.Intelligence, 4);
@@ -245,9 +245,9 @@ public class StatsManager {
     }
 
     public void GoonInit(){
-        int brainInt = (int)Actor.Brains.Ai;
+        //int brainInt = (int)Actor.Brains.Ai;
         SetFact(Facts.Archetype, CharacterName(Archetypes.EnemyOne));
-        SetBaseStat(Stats.Brain, brainInt);
+        //SetBaseStat(Stats.Brain, brainInt);
         SetFact(Facts.Name, "Goon");
 
         SetBaseStat(Stats.Intelligence, 5);

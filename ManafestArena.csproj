@@ -55,9 +55,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src/Actor/Actor.cs" />
-    <Compile Include="src/Actor/ActorData.cs" />
-    <Compile Include="src/Actor/Brain.cs" />
-    <Compile Include="src/Actor/ILook.cs" />
+    <Compile Include="src/Actor/IBody.cs" />
+    <Compile Include="src/Actor/PillBody.cs" />
     <Compile Include="src/Ai/IBehaviorState.cs" />
     <Compile Include="src/Ai/StateAi.cs" />
     <Compile Include="src/Ai/RoamingState.cs" />

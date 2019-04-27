@@ -8,7 +8,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class StateAi : Brain {
+public class StateAi {
   public enum States {
     Idling,
     Roaming,
@@ -24,12 +24,12 @@ public class StateAi : Brain {
 
   public List<Actor> enemies;
 
-  public StateAi(Actor actor) : base (actor){
+  public StateAi(Actor actor){
     host = actor;
     enemies = new List<Actor>();
   }
 
-  public override void Update(float delta){
+  public void Update(float delta){
     if(host == null){
       return;
     }
@@ -117,7 +117,7 @@ public class StateAi : Brain {
 
   // TODO: Make this rely on StatsManager
   public bool ActorIsEnemy(Actor actor){
-    return actor.brainType == Actor.Brains.Player1;
+    return true;
   }
 
   // TODO: Replace hardcoding with logic

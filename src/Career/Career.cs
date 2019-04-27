@@ -10,7 +10,7 @@ public class Career {
     public CareerNode root;
     public StatsManager stats;
     public PressEvent pressEvent;
-    public ActorData playerData;
+//    public ActorData playerData;
 
     public Career(string championName = ""){
       careerNodes = new List<CareerNode>();
@@ -18,7 +18,7 @@ public class Career {
       leaves = new List<CareerNode>();
       if(championName != ""){
         stats = new StatsManager(championName);
-        playerData = new ActorData(stats);
+        //playerData = new ActorData(stats);
       }
     }
 
@@ -98,8 +98,8 @@ public class Career {
       ArenaSettings settings = new ArenaSettings();
       settings.useKits = false;
       settings.usePowerups = false;
-      settings.enemies = EnemiesForMap(info);
-      settings.player = playerData;
+      //settings.enemies = EnemiesForMap(info);
+      //settings.player = playerData;
       Arena.arenaSettings = settings;
 
       Arena.LocalArena(info);
@@ -203,7 +203,7 @@ public class Career {
       ret.root = CareerNode.Root(ret.careerNodes);
       ret.leaves = CareerNode.Leaves(ret.careerNodes);
       ret.stats = stats;
-      ret.playerData = new ActorData(ret.stats);
+      //ret.playerData = new ActorData(ret.stats);
       return ret;
     }
 
@@ -443,17 +443,17 @@ public class Career {
   }
 
 
-  public static List<ActorData> EnemiesForMap(string mapName){
-    List<string> enemyNames = EnemyNamesForMap(mapName);
-    List<ActorData> ret = new List<ActorData>();
+  // public static List<ActorData> EnemiesForMap(string mapName){
+  //   List<string> enemyNames = EnemyNamesForMap(mapName);
+  //   List<ActorData> ret = new List<ActorData>();
 
-    foreach(string name in enemyNames){
-      StatsManager sm = new StatsManager(name);
-      ret.Add(new ActorData(sm));
-    }
+  //   foreach(string name in enemyNames){
+  //     StatsManager sm = new StatsManager(name);
+  //     ret.Add(new ActorData(sm));
+  //   }
 
-    return ret;
-  }
+  //   return ret;
+  // }
 
   public static List<string> EnemyNamesForMap(string mapName){
     return Util.ListOfDupes("goon1", 10);

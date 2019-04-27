@@ -8,16 +8,8 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class Actor : KinematicBody, IReceiveDamage, IHasInfo, ILook, IHasStats {
+public class Actor : KinematicBody, IReceiveDamage, IHasInfo, IHasStats {
   
-  public enum Brains{
-    Player1, // Local player leveraging keyboard input.
-    Ai,      // Computer player
-    Remote   // Remote player controlled via RPC calls
-  };
-  
-  private Brain brain;
-  public Brains brainType;
   private Spatial eyes;
   
   const int maxY = 90;
@@ -57,33 +49,10 @@ public class Actor : KinematicBody, IReceiveDamage, IHasInfo, ILook, IHasStats {
   public const string ActorMeshPath = "res://Assets/Models/Actor.obj";
 
   public Actor(){
-    brainType = Brains.Ai;
     InitChildren();
-    InitBrain(brainType);
     InitHand();
     id = -1;
     stats = new StatsManager();
-  }
-
-  public Actor(Brains b){
-    brainType = b;
-    InitChildren();
-    InitBrain(b);
-    InitHand();
-    id = -1;
-    stats = new StatsManager();
-  }
-
-  public void InitBrain(Brains b){
-    this.brainType = b;
-    switch(b){
-      case Brains.Ai: 
-        brain = (Brain)new StateAi(this); 
-        break;
-      case Brains.Remote:
-        brain = null;
-        break;
-    }
   }
 
   /* Construct node tree. */
@@ -101,22 +70,12 @@ public class Actor : KinematicBody, IReceiveDamage, IHasInfo, ILook, IHasStats {
 
     // Eyes
     Spatial eyesInstance;
-
-    if(brainType == Brains.Player1){
-      Camera cam = new Camera();
-      cam.Far = 1000f; // Render EVERYTHING possible
-      eyesInstance = (Spatial)cam;
-    }
-    else{
-      eyesInstance = new Spatial();
-    }
-
-    eyesInstance.Name = "Eyes";
-    AddChild(eyesInstance);
+    //eyesInstance.Name = "Eyes";
+    //AddChild(eyesInstance);
     Vector3 eyesPos = EyesPos();
-    eyesInstance.TranslateObjectLocal(eyesPos);
-    eyes = eyesInstance;
-    eyes.SetRotationDegrees(new Vector3(0, 0, 0));
+    //eyesInstance.TranslateObjectLocal(eyesPos);
+    // eyes = eyesInstance;
+    // eyes.SetRotationDegrees(new Vector3(0, 0, 0));
 
     // Speaker
     speaker = new Speaker();
@@ -135,7 +94,6 @@ public class Actor : KinematicBody, IReceiveDamage, IHasInfo, ILook, IHasStats {
       EquipItem(hotbar.EquipItem(0));
     }
     this.stats = stats;
-    Brains brain = (Brains)stats.GetStat(StatsManager.Stats.Brain);
   }
   
   public Item PrimaryItem(){
@@ -194,17 +152,7 @@ public class Actor : KinematicBody, IReceiveDamage, IHasInfo, ILook, IHasStats {
   }
   
   public string GetInfo(){
-    switch(brainType){
-      case Brains.Player1:
-        return "You.";
-        break;
-      case Brains.Ai:
-        return "AI";
-        break;
-      case Brains.Remote:
-        return "Online player";
-        break;
-    }
+
     return "Actor";
   }
 
@@ -382,10 +330,9 @@ public class Actor : KinematicBody, IReceiveDamage, IHasInfo, ILook, IHasStats {
       if(IsDead()){
         return;
       }
-      if(brainType != Brains.Remote){ 
-        brain.Update(delta); 
-        Gravity(delta);
-      }
+      
+      Gravity(delta);
+      
       StatsUpdate(delta);
       KillActorsThatFallOutOfTheMap();
   }
@@ -515,7 +462,6 @@ public class Actor : KinematicBody, IReceiveDamage, IHasInfo, ILook, IHasStats {
     ret += "\tName: " + name + "\n";
     ret += "\tHealth: " + GetHealth() + "/" +  GetHealthMax() + "\n";
     ret += "\tID: " + id + "\n";
-    ret += "\t" + brain.ToString() + "\n";
     if(hotbar != null){
       ret += "\t" + hotbar.ToString() + "\n";
     }
@@ -584,12 +530,5 @@ public class Actor : KinematicBody, IReceiveDamage, IHasInfo, ILook, IHasStats {
     }
 
     return "Unequipped";
-  }
-
-  public static Actor Factory(Brains brain = Brains.Player1, ActorData data = null){
-    
-    Actor actor = new Actor(brain);
-
-    return actor;
   }
 }
