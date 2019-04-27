@@ -5,10 +5,20 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using Newtonsoft.Json;
 
 public class Util{
   
   private static Random random;
+
+  // newtonsoft Wrapper
+  public static string ToJson(object obj){
+    return JsonConvert.SerializeObject(obj, Formatting.Indented);
+  }
+
+  public static T FromJson<T>(string json){
+    return JsonConvert.DeserializeObject<T>(json);
+  }
 
   public static int RandInt(int min, int max){
     if(random == null){

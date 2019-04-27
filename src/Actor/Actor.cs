@@ -590,8 +590,6 @@ public class Actor : KinematicBody, IReceiveDamage, IHasInfo, ILook, IHasStats {
     
     Actor actor = new Actor(brain);
 
-    // TODO: Fix this to work
-
     return actor;
   }
 }
