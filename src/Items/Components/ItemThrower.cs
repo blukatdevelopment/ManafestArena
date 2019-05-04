@@ -42,7 +42,7 @@ public class ItemThrower {
             // TODO: Fix this actor.DropItem(item);
             item.SetCollision(true);
             wielder = null;
-            actor.EquipNextItem();
+            //actor.EquipNextItem();
         }
 
         Spatial spat = item.GetNode() as Spatial;

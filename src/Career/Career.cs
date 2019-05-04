@@ -8,17 +8,17 @@ using System.Collections.Generic;
 public class Career {
     public List<CareerNode> careerNodes, leaves;
     public CareerNode root;
-    public StatsManager stats;
+    //public StatsManager stats;
     public PressEvent pressEvent;
-    public ActorData playerData;
+//    public ActorData playerData;
 
     public Career(string championName = ""){
       careerNodes = new List<CareerNode>();
       root = null;
       leaves = new List<CareerNode>();
       if(championName != ""){
-        stats = new StatsManager(championName);
-        playerData = new ActorData(stats);
+        //stats = new StatsManager(championName);
+        //playerData = new ActorData(stats);
       }
     }
 
@@ -62,9 +62,9 @@ public class Career {
         return;
       }
 
-      stats.SetBaseStat(StatsManager.Stats.LastNode, stats.GetStat(StatsManager.Stats.CurrentNode));
-      stats.SetBaseStat(StatsManager.Stats.CurrentNode, id);
-      stats.SetBaseStat(StatsManager.Stats.NodeInProgress, 1);
+      // stats.SetBaseStat(StatsManager.Stats.LastNode, stats.GetStat(StatsManager.Stats.CurrentNode));
+      // stats.SetBaseStat(StatsManager.Stats.CurrentNode, id);
+      // stats.SetBaseStat(StatsManager.Stats.NodeInProgress, 1);
       CareerDb.SaveCareer(this);
 
       switch(node.nodeType){
@@ -98,8 +98,8 @@ public class Career {
       ArenaSettings settings = new ArenaSettings();
       settings.useKits = false;
       settings.usePowerups = false;
-      settings.enemies = EnemiesForMap(info);
-      settings.player = playerData;
+      //settings.enemies = EnemiesForMap(info);
+      //settings.player = playerData;
       Arena.arenaSettings = settings;
 
       Arena.LocalArena(info);
@@ -156,7 +156,7 @@ public class Career {
     public void CompleteGame(){
       GD.Print("CompleteGame");
       Session.ClearGame();
-      stats.SetBaseStat(StatsManager.Stats.Victory, 1);
+      //stats.SetBaseStat(StatsManager.Stats.Victory, 1);
       Session.ChangeMenu(Menu.Menus.EndGame);
     }
 
@@ -166,10 +166,10 @@ public class Career {
       Session.ChangeMenu(Menu.Menus.EndGame);
     }
 
-    public static StatsManager GetPlayerStats(){
-      return null;
-      //return Session.session.career.playerData.stats;
-    }
+    // public static StatsManager GetPlayerStats(){
+    //   return null;
+    //   //return Session.session.career.playerData.stats;
+    // }
 
     // Primarily for rest sites
     public static void HealPlayer(int health){
@@ -197,15 +197,15 @@ public class Career {
       return ret;
     }
 
-    public static Career Factory(List<CareerNode> careerNodes, StatsManager stats){
-      Career ret = new Career();
-      ret.careerNodes = careerNodes;
-      ret.root = CareerNode.Root(ret.careerNodes);
-      ret.leaves = CareerNode.Leaves(ret.careerNodes);
-      ret.stats = stats;
-      ret.playerData = new ActorData(ret.stats);
-      return ret;
-    }
+    // public static Career Factory(List<CareerNode> careerNodes, StatsManager stats){
+    //   Career ret = new Career();
+    //   ret.careerNodes = careerNodes;
+    //   ret.root = CareerNode.Root(ret.careerNodes);
+    //   ret.leaves = CareerNode.Leaves(ret.careerNodes);
+    //   ret.stats = stats;
+    //   //ret.playerData = new ActorData(ret.stats);
+    //   return ret;
+    // }
 
     public static List<CareerNode> GenerateCareerTree(string championName){
       List<CareerNode> ret = new List<CareerNode>();
@@ -308,7 +308,7 @@ public class Career {
     }
 
     public static List<string> RestSiteUpgrades(){
-      string archetype = GetPlayerStats().GetFact(StatsManager.Facts.Archetype);
+      string archetype = "";//GetPlayerStats().GetFact(StatsManager.Facts.Archetype);
       GD.Print("Archetype " + archetype);
       List<string> ret = new List<string>();
       switch(archetype){
@@ -333,86 +333,86 @@ public class Career {
       return ret;
     }
 
-  public static void SelectRestSiteUpgrade(string selection){
-    GD.Print("Selected " + selection);
-    StatsManager stats = GetPlayerStats();
+  // public static void SelectRestSiteUpgrade(string selection){
+  //   GD.Print("Selected " + selection);
+  //   StatsManager stats = GetPlayerStats();
     
-    int intelligenceBuff = stats.GetStatBuff(StatsManager.Stats.Intelligence);
-    int charismaBuff = stats.GetStatBuff(StatsManager.Stats.Charisma);
-    int enduranceBuff = stats.GetStatBuff(StatsManager.Stats.Endurance);
-    int perceptionBuff = stats.GetStatBuff(StatsManager.Stats.Perception);
-    int agilityBuff = stats.GetStatBuff(StatsManager.Stats.Agility);
-    int willpowerBuff = stats.GetStatBuff(StatsManager.Stats.Willpower);
-    int strengthBuff = stats.GetStatBuff(StatsManager.Stats.Strength);
-    int currentHealth = stats.GetStat(StatsManager.Stats.Health);
-    int healthBuff = stats.GetStatBuff(StatsManager.Stats.HealthMax);
+  //   int intelligenceBuff = stats.GetStatBuff(StatsManager.Stats.Intelligence);
+  //   int charismaBuff = stats.GetStatBuff(StatsManager.Stats.Charisma);
+  //   int enduranceBuff = stats.GetStatBuff(StatsManager.Stats.Endurance);
+  //   int perceptionBuff = stats.GetStatBuff(StatsManager.Stats.Perception);
+  //   int agilityBuff = stats.GetStatBuff(StatsManager.Stats.Agility);
+  //   int willpowerBuff = stats.GetStatBuff(StatsManager.Stats.Willpower);
+  //   int strengthBuff = stats.GetStatBuff(StatsManager.Stats.Strength);
+  //   int currentHealth = stats.GetStat(StatsManager.Stats.Health);
+  //   int healthBuff = stats.GetStatBuff(StatsManager.Stats.HealthMax);
 
 
-    switch(selection){
-      case "Extra endurance":
-        stats.SetStatBuff(StatsManager.Stats.Endurance, enduranceBuff + 2);
-      break;
-      case "Extra agility":
-        stats.SetStatBuff(StatsManager.Stats.Agility, agilityBuff + 2);
-      break;
-      case "+50 max health":
-        stats.SetStatBuff(StatsManager.Stats.HealthMax, healthBuff + 50);
-        stats.SetBaseStat(StatsManager.Stats.Health, currentHealth + 50);
-      break;
-      case "Second spear":
-        GD.Print("Awarding spear");
-        stats.SetFact(StatsManager.Facts.Slot2, "spear");
-        stats.SetFact(StatsManager.Facts.Slot3, "claws");
-      break;
-      case "Double crossbow":
-        stats.SetFact(StatsManager.Facts.Slot1, "doublecrossbow");
-      break;
-      case "Rapid crossbow":
-        stats.SetFact(StatsManager.Facts.Slot1, "rapidcrossbow");
-      break;
-      case "Fireball II":
-        stats.SetFact(StatsManager.Facts.SpellSlot1, "FireballIISpell");
-      break;
-      case "Fireball III":
-        stats.SetFact(StatsManager.Facts.SpellSlot1, "FireballIIISpell");
-      break;
-    }
-  }
+  //   switch(selection){
+  //     case "Extra endurance":
+  //       stats.SetStatBuff(StatsManager.Stats.Endurance, enduranceBuff + 2);
+  //     break;
+  //     case "Extra agility":
+  //       stats.SetStatBuff(StatsManager.Stats.Agility, agilityBuff + 2);
+  //     break;
+  //     case "+50 max health":
+  //       stats.SetStatBuff(StatsManager.Stats.HealthMax, healthBuff + 50);
+  //       stats.SetBaseStat(StatsManager.Stats.Health, currentHealth + 50);
+  //     break;
+  //     case "Second spear":
+  //       GD.Print("Awarding spear");
+  //       stats.SetFact(StatsManager.Facts.Slot2, "spear");
+  //       stats.SetFact(StatsManager.Facts.Slot3, "claws");
+  //     break;
+  //     case "Double crossbow":
+  //       stats.SetFact(StatsManager.Facts.Slot1, "doublecrossbow");
+  //     break;
+  //     case "Rapid crossbow":
+  //       stats.SetFact(StatsManager.Facts.Slot1, "rapidcrossbow");
+  //     break;
+  //     case "Fireball II":
+  //       stats.SetFact(StatsManager.Facts.SpellSlot1, "FireballIISpell");
+  //     break;
+  //     case "Fireball III":
+  //       stats.SetFact(StatsManager.Facts.SpellSlot1, "FireballIIISpell");
+  //     break;
+  //   }
+  // }
 
   public static List<string> GetBeastUpgrades(){
-    StatsManager stats = GetPlayerStats();
+    //StatsManager stats = GetPlayerStats();
 
     List<string> ret = new List<string>();
 
-    if(stats.GetFact(StatsManager.Facts.Slot2) != "spear"){
-      ret.Add("Second spear");
-    }
+    // if(stats.GetFact(StatsManager.Facts.Slot2) != "spear"){
+    //   ret.Add("Second spear");
+    // }
     return ret;
   }
 
   public static List<string> GetMageUpgrades(){
     List<string> ret = new List<string>();
 
-    StatsManager stats = GetPlayerStats();
+    // StatsManager stats = GetPlayerStats();
 
-    if(stats.GetFact(StatsManager.Facts.SpellSlot1) == "FireballSpell"){
-      ret.Add("Fireball II");
-    }
-    if(stats.GetFact(StatsManager.Facts.SpellSlot1) == "FireballIISpell"){
-      ret.Add("Fireball III");
-    }
+    // if(stats.GetFact(StatsManager.Facts.SpellSlot1) == "FireballSpell"){
+    //   ret.Add("Fireball II");
+    // }
+    // if(stats.GetFact(StatsManager.Facts.SpellSlot1) == "FireballIISpell"){
+    //   ret.Add("Fireball III");
+    // }
 
     return ret;
   }
 
   public static List<string> GetSoldierUpgrades(){
     List<string> ret = new List<string>();
-    StatsManager stats = GetPlayerStats();
+    // StatsManager stats = GetPlayerStats();
 
-    if(stats.GetFact(StatsManager.Facts.Slot1) == "Crossbow"){
-      ret.Add("Double crossbow");
-      ret.Add("Rapid crossbow");
-    }
+    // if(stats.GetFact(StatsManager.Facts.Slot1) == "Crossbow"){
+    //   ret.Add("Double crossbow");
+    //   ret.Add("Rapid crossbow");
+    // }
 
 
     return ret;
@@ -443,17 +443,17 @@ public class Career {
   }
 
 
-  public static List<ActorData> EnemiesForMap(string mapName){
-    List<string> enemyNames = EnemyNamesForMap(mapName);
-    List<ActorData> ret = new List<ActorData>();
+  // public static List<ActorData> EnemiesForMap(string mapName){
+  //   List<string> enemyNames = EnemyNamesForMap(mapName);
+  //   List<ActorData> ret = new List<ActorData>();
 
-    foreach(string name in enemyNames){
-      StatsManager sm = new StatsManager(name);
-      ret.Add(new ActorData(sm));
-    }
+  //   foreach(string name in enemyNames){
+  //     StatsManager sm = new StatsManager(name);
+  //     ret.Add(new ActorData(sm));
+  //   }
 
-    return ret;
-  }
+  //   return ret;
+  // }
 
   public static List<string> EnemyNamesForMap(string mapName){
     return Util.ListOfDupes("goon1", 10);

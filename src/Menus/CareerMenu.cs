@@ -13,10 +13,10 @@ public class CareerMenu : Container, IMenu {
     nodeYOffset = 0;
 
     Sound.PlayRandomSong(Sound.GetPlaylist(Sound.Playlists.Menu));
-    int inProgress = Session.session.career.stats.GetBaseStat(StatsManager.Stats.NodeInProgress);
+    int inProgress = 0; //Session.session.career.stats.GetBaseStat(StatsManager.Stats.NodeInProgress);
     if(inProgress == 1){
       GD.Print("Node in progress");
-      int currentNode = Session.session.career.stats.GetBaseStat(StatsManager.Stats.CurrentNode);
+      int currentNode = 0; //Session.session.career.stats.GetBaseStat(StatsManager.Stats.CurrentNode);
       Session.session.career.ExecuteNode(currentNode);
       Clear();
     }
@@ -164,8 +164,8 @@ public class CareerMenu : Container, IMenu {
 
   void  ScaleLevel(int level, CareerNode[] levelNodes, List<CareerNode> nodes){
     Career career = Session.session.career;
-    int currentLevel = career.stats.GetStat(StatsManager.Stats.CurrentLevel);
-    int lastNode = career.stats.GetStat(StatsManager.Stats.LastNode);
+    int currentLevel = 0; //career.stats.GetStat(StatsManager.Stats.CurrentLevel);
+    int lastNode = 0; //career.stats.GetStat(StatsManager.Stats.LastNode);
 
     for(int i = 0; i < levelNodes.Length; i++){
       bool active = CareerNode.NodeIsActive(levelNodes[i], nodes, currentLevel, lastNode);

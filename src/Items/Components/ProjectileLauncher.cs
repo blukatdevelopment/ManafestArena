@@ -36,7 +36,7 @@ public class ProjectileLauncher {
         ProjectileItem proj = ItemFactory.Factory(projectileType) as ProjectileItem;
 
         if(wielderActor != null){
-          proj.sender = wielderActor.NodePath();
+          //proj.sender = wielderActor.NodePath();
         }
         
         Spatial spat = item.GetNode() as Spatial;

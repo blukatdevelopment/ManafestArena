@@ -18,24 +18,26 @@ public class StatConsumer{
     }
 
     public bool ConsumeStats(){
-        IHasStats statsHolder = wielder as IHasStats;
-        if(statsHolder == null){
-            return false;
-        }
-        StatsManager stats = statsHolder.GetStats();
+        // FIXME rewrite to use IStats
+        // IHasStats statsHolder = wielder as IHasStats;
+        // if(statsHolder == null){
+        //     return false;
+        // }
+        // StatsManager stats = statsHolder.GetStats();
 
-        bool healthCheck  = stats.CanConsumeStat(StatsManager.Stats.Health, health);
-        bool staminaCheck = stats.CanConsumeStat(StatsManager.Stats.Stamina, stamina);
-        bool manaCheck    = stats.CanConsumeStat(StatsManager.Stats.Mana, mana);
+        // bool healthCheck  = stats.CanConsumeStat(StatsManager.Stats.Health, health);
+        // bool staminaCheck = stats.CanConsumeStat(StatsManager.Stats.Stamina, stamina);
+        // bool manaCheck    = stats.CanConsumeStat(StatsManager.Stats.Mana, mana);
         
-        if(!healthCheck || !staminaCheck || !manaCheck){
-            return false;
-        }
+        // if(!healthCheck || !staminaCheck || !manaCheck){
+        //     return false;
+        // }
 
-        stats.ConsumeStat(StatsManager.Stats.Health, health);
-        stats.ConsumeStat(StatsManager.Stats.Stamina, stamina);
-        stats.ConsumeStat(StatsManager.Stats.Mana, mana);
+        // stats.ConsumeStat(StatsManager.Stats.Health, health);
+        // stats.ConsumeStat(StatsManager.Stats.Stamina, stamina);
+        // stats.ConsumeStat(StatsManager.Stats.Mana, mana);
 
+        // return true;
         return true;
     }
 }

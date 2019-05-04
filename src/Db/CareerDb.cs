@@ -18,14 +18,15 @@ public class CareerDb {
 
   public static Career LoadCareer(){
     GD.Print("CareerDb.LoadCareer");
-    List<CareerNode> nodes = CareerNode.FromRows(CSV.ReadRows(CareerFile));
-    StatsManager stats = StatsManager.FromRows(CSV.ReadRows(StatsFile));
-    return Career.Factory(nodes, stats);
+    // List<CareerNode> nodes = CareerNode.FromRows(CSV.ReadRows(CareerFile));
+    // StatsManager stats = StatsManager.FromRows(CSV.ReadRows(StatsFile));
+    // return Career.Factory(nodes, stats);
+    return null;
   }
 
   public static void SaveCareer(Career career){
     GD.Print("CareerDb.SaveCareer");
-    CSV.WriteToFile(StatsFile, career.stats.GetRows());
+    //CSV.WriteToFile(StatsFile, career.stats.GetRows());
     CSV.WriteToFile(CareerFile, CareerNode.ToRows(career.careerNodes));
   }
 

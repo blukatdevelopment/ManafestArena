@@ -48,14 +48,15 @@ public class EndGameMenu : Container, IMenu {
   public string EndCopy(){
     int victory = 0;
 
-    if(Session.session.career != null){
-      victory = Session.session.career.stats.GetStat(StatsManager.Stats.Victory);
-    }
+    // if(Session.session.career != null){
+    //   victory = 1;Session.session.career.stats.GetStat(StatsManager.Stats.Victory);
+    // }
     
-    if(victory == 1){
-      return "Congratulations!";
-    }
-    return "Better luck next time!";
+    // if(victory == 1){
+    //   return "Congratulations!";
+    // }
+    // return "Better luck next time!";
+    return "Thanks for playing!";
   }
 
 

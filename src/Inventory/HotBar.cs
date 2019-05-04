@@ -15,37 +15,6 @@ public class HotBar : IHasItem {
     equippedSlot = 0;
   }
 
-  public HotBar(StatsManager stats){
-    if(stats == null){
-      return;
-    }
-    List<StatsManager.Facts> slots = new List<StatsManager.Facts>{
-      StatsManager.Facts.Slot1,
-      StatsManager.Facts.Slot2,
-      StatsManager.Facts.Slot3,
-      StatsManager.Facts.Slot4,
-      StatsManager.Facts.Slot5,
-      StatsManager.Facts.Slot6,
-      StatsManager.Facts.Slot7,
-      StatsManager.Facts.Slot8,
-      StatsManager.Facts.Slot9,
-      StatsManager.Facts.Slot10
-    };
-
-    int slotsMax = stats.GetStat(StatsManager.Stats.SlotsMax);
-    items = new Item[slotsMax];
-    for(int i = 0; i < slotsMax; i++){
-      string slotContents = stats.GetFact(slots[i]);
-      Item item = ItemFactory.Factory(slotContents, "") as Item; 
-      if(item != null){
-        items[i] = item;
-      }
-    }
-    equippedSlot = 0;
-
-    GD.Print(this.ToString());
-  }
-
   public void SetItemSlot(int slot, Item item){
     if(slot < 0 || slot >= items.Length){
       GD.Print("HotBar.SetItemSlot: Slot " + slot + " is invalid.");

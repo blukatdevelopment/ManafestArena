@@ -132,24 +132,24 @@ public class Arena : Spatial, IGamemode {
 
   public void LocalInit(){
 
-    player = InitActor(settings.player, NextId());
-    playerWorldId = player.id;
+    // player = InitActor(settings.player, NextId());
+    // playerWorldId = player.id;
     //GD.Print("Session.session.Player set to " + Session.session.player.ToString());
 
-    foreach(ActorData enemy in settings.enemies){
-      Actor enemyActor = InitActor(enemy, NextId());
-    }
+    // foreach(ActorData enemy in settings.enemies){
+    //   Actor enemyActor = InitActor(enemy, NextId());
+    // }
 
     roundTimerActive = false;
   }
 
-  public Actor InitActor(ActorData dat, int id){
-    scores.Add(id, 0);
-    dat.id = id;
-    Actor ret = SpawnActor(dat);
+  // public Actor InitActor(ActorData dat, int id){
+  //   scores.Add(id, 0);
+  //   dat.id = id;
+  //   Actor ret = SpawnActor(dat);
 
-    return ret;
-  }
+  //   return ret;
+  // }
 
   public void InitTerrain(string terrainFile){
     PackedScene ps = (PackedScene)GD.Load(terrainFile);
@@ -211,14 +211,10 @@ public class Arena : Spatial, IGamemode {
     }
 
     Node actorNode = GetNode(new NodePath(actorPaths[0]));
-    Actor actor = actorNode as Actor;
-    Actor.Brains brain = actor.brainType;
+    Actor actor = null; //actorNode as Actor;
     ClearActor(actor);
 
-    if(actor.brainType == Actor.Brains.Player1){
-      Session.session.career.FailEncounter();
-      return;
-    }
+    // Check that player has died
     
     AwardPoints(actorPaths);
     if(PlayerWon()){
@@ -230,10 +226,10 @@ public class Arena : Spatial, IGamemode {
     if(actor == null){
       return;
     }
-    int id = actor.id;
+    // int id = actor.id;
 
-    actor.QueueFree();
-    actors.Remove(actor);
+    // actor.QueueFree();
+    // actors.Remove(actor);
   }
 
   public void AwardPoints(string[] actorPaths){
@@ -243,11 +239,11 @@ public class Arena : Spatial, IGamemode {
     }
 
     Node killerNode = GetNode(new NodePath(actorPaths[1]));
-    Actor killer = killerNode as Actor;
+    Actor killer = null;//killerNode as Actor;
 
-    if(killer != null && killer.id != -1){
-      scores[killer.id]++;
-    }
+    // if(killer != null && killer.id != -1){
+    //   scores[killer.id]++;
+    // }
   }
 
   public void SetPause(bool val){
@@ -302,27 +298,27 @@ public class Arena : Spatial, IGamemode {
     return itemSpawnPoints[randInt];
   }
   
-  public Actor SpawnActor(ActorData dat){
-    Actor.Brains brain = Actor.Brains.Player1;
+  // public Actor SpawnActor(ActorData dat){
+  //   Actor.Brains brain = Actor.Brains.Player1;
 
-    Vector3 pos;
-    if(brain == Actor.Brains.Player1){
-      pos = RandomSpawn(playerSpawnPoints);
-    }
-    else{
-      pos = RandomSpawn(enemySpawnPoints, usedEnemySpawnPoints);
-      usedEnemySpawnPoints.Add(pos);
-    }
+  //   Vector3 pos;
+  //   if(brain == Actor.Brains.Player1){
+  //     pos = RandomSpawn(playerSpawnPoints);
+  //   }
+  //   else{
+  //     pos = RandomSpawn(enemySpawnPoints, usedEnemySpawnPoints);
+  //     usedEnemySpawnPoints.Add(pos);
+  //   }
 
 
-    Actor actor = Actor.Factory(brain, dat);
-    actor.NameHand(actor.Name + "(Hand)");  
+  //   Actor actor = null;// FIXME Actor.Factory(brain, dat);
+  //   actor.NameHand(actor.Name + "(Hand)");  
     
-    actors.Add(actor);
-    AddChild(actor);
+  //   actors.Add(actor);
+  //   AddChild(actor);
 
-    return actor;
-  }
+  //   return actor;
+  // }
   
   public Vector3 RandomSpawn(List<Vector3> spawnList){
     System.Random rand = Session.GetRandom();
