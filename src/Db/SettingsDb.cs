@@ -9,6 +9,7 @@ using System.Text;
 using System.Collections.Generic;
 
 public class SettingsDb{
+    const string SavesDirectory = "Saves/";
     const string SettingsPath = "Saves/settings.csv";
     System.Collections.Generic.Dictionary<string, string> settings;
 
@@ -29,6 +30,9 @@ public class SettingsDb{
     }
 
     public void FetchSettings(){
+        if(!System.IO.File.Exists(SavesDirectory)){
+            System.IO.Directory.CreateDirectory(SavesDirectory);
+        }
 
         if(!System.IO.File.Exists(SettingsPath)){
             InitSettings();

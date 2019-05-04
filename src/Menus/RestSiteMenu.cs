@@ -32,53 +32,53 @@ public class RestSiteMenu : Container, IMenu {
   }
 
   void InitControls(){
-    background = Menu.BackgroundBox();
-    AddChild(background);
+    // background = Menu.BackgroundBox();
+    // AddChild(background);
 
-    restButton = Menu.Button("Rest", () => { 
-      HealPlayer1();
-      Session.session.career.CompleteEncounter();
-    });
-    AddChild(restButton);
+    // restButton = Menu.Button("Rest", () => { 
+    //   HealPlayer1();
+    //   Session.session.career.CompleteEncounter();
+    // });
+    // AddChild(restButton);
 
-    if(Career.RestSiteUpgrades().Count > 0){
-      upgradeButton = Menu.Button("Upgrade", DisplayUpgrades);
-      AddChild(upgradeButton);
-    }
+    // if(Career.RestSiteUpgrades().Count > 0){
+    //   upgradeButton = Menu.Button("Upgrade", DisplayUpgrades);
+    //   AddChild(upgradeButton);
+    // }
   }
 
   void DisplayUpgrades(){
-    GD.Print("DisplayUpgrades");
-    restButton.QueueFree();
-    upgradeButton.QueueFree();
+    // GD.Print("DisplayUpgrades");
+    // restButton.QueueFree();
+    // upgradeButton.QueueFree();
 
-    upgradeButtons = new List<Button>();
-    List<string> upgrades = Career.RestSiteUpgrades();
+    // upgradeButtons = new List<Button>();
+    // List<string> upgrades = Career.RestSiteUpgrades();
 
-    foreach(string upgrade in upgrades){
-      Button button = Menu.Button(upgrade, () => {
-        SelectUpgrade(upgrade);
-      });
-      upgradeButtons.Add(button);
-      AddChild(button);
-    }
+    // foreach(string upgrade in upgrades){
+    //   Button button = Menu.Button(upgrade, () => {
+    //     SelectUpgrade(upgrade);
+    //   });
+    //   upgradeButtons.Add(button);
+    //   AddChild(button);
+    // }
 
-    descriptionLabel = Menu.TextBox("Select an option");
-    AddChild(descriptionLabel);
-    ScaleControls();
+    // descriptionLabel = Menu.TextBox("Select an option");
+    // AddChild(descriptionLabel);
+    // ScaleControls();
 
   }
 
   void SelectUpgrade(string upgrade){
-    GD.Print("Selected " + upgrade);
-    selection = upgrade;
-    descriptionLabel.Text = Career.UpgradeDescription(upgrade);
+    // GD.Print("Selected " + upgrade);
+    // selection = upgrade;
+    // descriptionLabel.Text = Career.UpgradeDescription(upgrade);
 
-    if(confirmButton == null){
-      confirmButton = Menu.Button("Confirm", Confirm);
-      AddChild(confirmButton);
-      ScaleControls();
-    }
+    // if(confirmButton == null){
+    //   confirmButton = Menu.Button("Confirm", Confirm);
+    //   AddChild(confirmButton);
+    //   ScaleControls();
+    // }
   }
 
   void Confirm(){

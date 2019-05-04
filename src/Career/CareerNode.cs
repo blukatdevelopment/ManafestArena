@@ -9,19 +9,9 @@ public class CareerNode {
     public int nodeId;
     public int child1, child2, child3; // -1 if null
     public string extraInfo; // Extra data
-    public enum NodeTypes{
-        None,
-        ArenaMatch,
-        BossMatch,
-        FinalBoss,
-        Shop,
-        RestSite,
-        PressEvent
-    };
-    public NodeTypes nodeType;
+    public IEncounter encounter;
 
     public CareerNode(){
-        nodeType = NodeTypes.None;
         nodeId = -1;
         child1 = -1;
         child2 = -1;
@@ -45,43 +35,8 @@ public class CareerNode {
         return false;
     }
 
-    // Get params for csv file
-    public string[] ToRow(){
-        int category = (int)nodeType;
-
-        string[] ret = new string[6];
-        ret[0] = "" + nodeId;
-        ret[1] = "" + category;
-        ret[2] = "" + child1;
-        ret[3] = "" + child2;
-        ret[4] = "" + child3;
-        ret[5] = "" + extraInfo;
-
-        return ret;
-    }
-
-    public static CareerNode FromRow(string[] row){
-        if(row.Length != 6){
-            GD.Print("CareerNode.FromRow invalid row length: " + row.Length);
-            return null;
-        }
-        
-        CareerNode ret = new CareerNode();
-        ret.nodeId = Util.ToInt(row[0]);
-        
-        int category = Util.ToInt(row[1]);
-        ret.nodeType = (NodeTypes)category;
-        
-        ret.child1 = Util.ToInt(row[2]);
-        ret.child2 = Util.ToInt(row[3]);
-        ret.child3 = Util.ToInt(row[4]);
-        ret.extraInfo = row[5];
-
-        return ret;
-    }
-
     public string ToString(){
-        string  ret = "CareerNode[" + nodeId + "," + Enum.GetName(typeof(NodeTypes), nodeType) + "][";
+        string  ret = "CareerNode[" + nodeId + "," + 0 + "][";
         ret += child1 + "," + child2 + "," + child3 + "]";
         return ret;
     }
@@ -273,24 +228,4 @@ public class CareerNode {
         return ret;
     }
 
-    public static System.Collections.Generic.Dictionary<int, string[]> ToRows(List<CareerNode> nodes){
-        System.Collections.Generic.Dictionary<int, string[]> ret;
-        ret = new System.Collections.Generic.Dictionary<int, string[]>();
-
-        for(int i = 0; i < nodes.Count; i++){
-            ret.Add(i, nodes[i].ToRow());
-        }
-
-        return ret;
-    }
-
-    public static List<CareerNode> FromRows(System.Collections.Generic.Dictionary<int, string[]> rows){
-        List<CareerNode> ret = new List<CareerNode>();
-
-        foreach(int key in rows.Keys){
-            ret.Add(FromRow(rows[key]));
-        }
-        
-        return ret;
-    }
 }
