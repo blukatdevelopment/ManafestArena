@@ -83,15 +83,15 @@ public class RestSiteMenu : Container, IMenu {
 
   void Confirm(){
     GD.Print("Confirming selection of " + selection);
-    Career.SelectRestSiteUpgrade(selection);
+    //Career.SelectRestSiteUpgrade(selection);
     Session.session.career.CompleteEncounter();
   }
 
   void HealPlayer1(){
     GD.Print("Healing player1");
-    StatsManager stats = Career.GetPlayerStats();
-    int healing = stats.GetStat(StatsManager.Stats.HealthMax) / 3;
-    Career.HealPlayer(healing);
+    // StatsManager stats = Career.GetPlayerStats();
+    // int healing = stats.GetStat(StatsManager.Stats.HealthMax) / 3;
+    // Career.HealPlayer(healing);
   }
 
 

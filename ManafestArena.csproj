@@ -102,7 +102,7 @@
     <Compile Include="src/Items/Components/ProjectileLauncher.cs" />
     <Compile Include="src/Items/Components/SelfDamager.cs" />
     <Compile Include="src/Items/Components/StatConsumer.cs" />
-    <Compile Include="src/Actor/IHasStats.cs" />
+    
     <Compile Include="src/Actor/IHasBody.cs" />
     <Compile Include="src/Actor/IHasInventory.cs" />
     <Compile Include="src/Actor/IHasInputHandler.cs" />
@@ -131,8 +131,9 @@
     <Compile Include="src/Career/PressEventNode.cs" />
     <Compile Include="src/Db/CSV.cs" />
     <Compile Include="src/Db/CareerDb.cs" />
-    <Compile Include="src/Actor/StatsManager.cs" />
     <Compile Include="src/Stats/IStats.cs" />
+    <Compile Include="src/Stats/IcepawsStats.cs" />
+    <Compile Include="src/Stats/IHasStats.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
 </Project>
