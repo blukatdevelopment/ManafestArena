@@ -9,7 +9,7 @@ public class PressEventMenu : Container, IMenu {
   public TextEdit background;
 
   public void Init(float minX, float minY, float maxX, float maxY){
-    pressEvent = Session.session.career.pressEvent;
+    pressEvent = null;//Session.session.career.pressEvent;
     InitControls();
     ScaleControls();
     GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");

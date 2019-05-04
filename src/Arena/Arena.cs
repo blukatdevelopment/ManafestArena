@@ -45,6 +45,14 @@ public class Arena : Spatial, IGamemode {
     LocalInit();
   }
 
+  public bool GameOver(){
+    return false;
+  }
+
+  public bool Victory(){
+    return false;
+  }
+
   public override void _Process(float delta){
     if(roundTimerActive){
       Timer(delta);
@@ -117,10 +125,10 @@ public class Arena : Spatial, IGamemode {
 
   public static void LocalArena(string terrainFile = "res://Scenes/Maps/Test.tscn"){
     Session.ChangeMenu(Menu.Menus.HUD);
-    Session ses = Session.session;
-    ses.activeGamemode = new Arena();
-    ses.AddChild(ses.activeGamemode);
-    IGamemode gamemode = ses.activeGamemode as IGamemode;
+    Arena arena = new Arena();
+    Session.AddGamemode(arena);
+
+    IGamemode gamemode = arena as IGamemode;
     if(gamemode != null){
       gamemode.Init(new string[]{ terrainFile });
     }

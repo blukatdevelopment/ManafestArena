@@ -22,7 +22,7 @@ public class Session : Node {
   public Sound.Songs currentSong;
 
   public Node activeMenu;
-  public Node activeGamemode;
+  public List<Node> activeGamemodes;
 
   // Settings
   public float masterVolume, sfxVolume, musicVolume;
@@ -42,6 +42,7 @@ public class Session : Node {
   }
 
   public override void _Ready() {
+    activeGamemodes = new List<Node>();
     EnforceSingleton();
     ChangeMenu(Menu.Menus.Main);
     InitJukeBox();
@@ -64,6 +65,11 @@ public class Session : Node {
 
   public void PerformTests(){
     Test.Init();
+  }
+
+  public static void AddGamemode(Node node){
+    Session.session.activeGamemodes.Add(node);
+    Session.session.AddChild(node);
   }
 
   public void InitSettings(){
@@ -116,11 +122,20 @@ public class Session : Node {
   }
   
   public static Actor GetPlayer(){
-    IGamemode gamemode = Session.session.activeGamemode as IGamemode;
-    if(gamemode != null){
-      return gamemode.GetPlayer();
+    foreach(Node gamemodeNode in Session.session.activeGamemodes){
+      Actor actor = GetPlayer(gamemodeNode as IGamemode);
+      if(actor != null){
+        return actor;
+      }
     }
     return null;
+  }
+
+  public static Actor GetPlayer(IGamemode gamemode){
+    if(gamemode == null){
+      return null;
+    }
+    return gamemode.GetPlayer();
   }
 
   public static void InitJukeBox(){
@@ -179,17 +194,18 @@ public class Session : Node {
   /* Remove game nodes/variables in order to return it to a menu. */
   public static void ClearGame(bool keepNet = false){
     Session ses = Session.session;
-    if(ses.activeGamemode != null){
-      ses.activeGamemode.QueueFree();
-      ses.activeGamemode = null;
+    foreach(Node node in ses.activeGamemodes){
+      node.QueueFree();
     }
+    ses.activeGamemodes = new List<Node>();
     Input.SetMouseMode(Input.MouseMode.Visible);
   }
   
+  // Returns the first if there are more than one gamemode, or else the session
   public static Node GameNode(){
     Session ses = Session.session;
-    if(ses.activeGamemode != null){
-      return ses.activeGamemode;
+    foreach(Node node in ses.activeGamemodes){
+      return node;
     }
     
     return ses;
@@ -241,20 +257,23 @@ public class Session : Node {
   
   public static string GetObjectiveText(){
     Session ses = Session.session;
-    IGamemode gamemode = ses.activeGamemode as IGamemode;
-
-    if(gamemode != null){
-      return gamemode.GetObjectiveText();
+    
+    foreach(Node gamemodeNode in ses.activeGamemodes){
+      IGamemode gamemode = gamemodeNode as IGamemode;
+      if(gamemode != null){
+        return gamemode.GetObjectiveText();
+      }
     }
     
     return "No gamemode active";
   }
   
   public void HandleEvent(SessionEvent sessionEvent){
-    IGamemode gamemode = Session.session.activeGamemode as IGamemode;
-
-    if(gamemode != null){
-      gamemode.HandleEvent(sessionEvent);
+    foreach(Node gamemodeNode in Session.session.activeGamemodes){
+      IGamemode gamemode = gamemodeNode as IGamemode;
+      if(gamemode != null){
+        gamemode.HandleEvent(sessionEvent);
+      }
     }
   }
   

@@ -17,7 +17,7 @@ public class CareerMenu : Container, IMenu {
     if(inProgress == 1){
       GD.Print("Node in progress");
       int currentNode = 0; //Session.session.career.stats.GetBaseStat(StatsManager.Stats.CurrentNode);
-      Session.session.career.ExecuteNode(currentNode);
+      //Session.session.career.ExecuteNode(currentNode);
       Clear();
     }
     InitControls();
@@ -99,19 +99,19 @@ public class CareerMenu : Container, IMenu {
   }
 
   void AddNodeButton(CareerNode node){
-    CareerNode.NodeTypes nodeType = node.nodeType;
-    string nodeName = "" + nodeType;
+    // CareerNode.NodeTypes nodeType = node.nodeType;
+    // string nodeName = "" + nodeType;
 
-    if(nodeType == CareerNode.NodeTypes.ArenaMatch){
-      nodeName = node.extraInfo;
-      nodeName = nodeName.Replace("res://Assets/Scenes/Maps/", "");
-      nodeName = nodeName.Replace(".tscn", "");
-      nodeName = nodeType + ": " + nodeName;
-    }
+    // if(nodeType == CareerNode.NodeTypes.ArenaMatch){
+    //   nodeName = node.extraInfo;
+    //   nodeName = nodeName.Replace("res://Assets/Scenes/Maps/", "");
+    //   nodeName = nodeName.Replace(".tscn", "");
+    //   nodeName = nodeType + ": " + nodeName;
+    // }
 
-    Button button = NodeButton(node.nodeId, nodeName);
-    careerButtons.Add(node.nodeId, button);
-    AddChild(button);
+    // Button button = NodeButton(node.nodeId, nodeName);
+    // careerButtons.Add(node.nodeId, button);
+    // AddChild(button);
   }
 
   Button NodeButton(int id, string type){
@@ -122,7 +122,7 @@ public class CareerMenu : Container, IMenu {
 
   void ExecuteNode(int id){
     GD.Print("Executing node " + id + ".");
-    Session.session.career.ExecuteNode(id);
+    //Session.session.career.ExecuteNode(id);
     return;
 
     Career career = Session.session.career;

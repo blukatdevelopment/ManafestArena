@@ -27,7 +27,7 @@ public class CareerDb {
   public static void SaveCareer(Career career){
     GD.Print("CareerDb.SaveCareer");
     //CSV.WriteToFile(StatsFile, career.stats.GetRows());
-    CSV.WriteToFile(CareerFile, CareerNode.ToRows(career.careerNodes));
+    //CSV.WriteToFile(CareerFile, CareerNode.ToRows(career.careerNodes));
   }
 
   public static void ClearCareer(){
