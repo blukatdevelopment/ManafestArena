@@ -79,14 +79,6 @@ public class ActorFactory {
     }
   }
 
-  public static void InitHotbar() {
-    // TODO
-  }
-
-  public static void InitPaperDoll() {
-    // TODO
-  }
-
   public static Actor FromCharacter(Characters character){
     switch(character){
       case Characters.Debug:
@@ -98,6 +90,7 @@ public class ActorFactory {
 
   public static Actor DebugCharacter(){
     Actor actor = FromComponentTypes(InputSources.Player1, StatsHandlers.None, Bodies.PillBody, InventoryHandlers.None);
+    actor.hotbar = new HotBar(10);
     return actor;
   }
 }
