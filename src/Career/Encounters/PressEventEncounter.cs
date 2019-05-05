@@ -13,7 +13,7 @@ public class PressEventEncounter : IEncounter {
     GD.Print("PressEventEncounter -info " + info);
     //pressEvent = CareerDb.LoadPressEvent(info);
     
-    Session.ChangeMenu(Menu.Menus.PressEvent);
+    Session.ChangeMenu("PressEventMenu");
     // TODO: Load this info into menu
   }
   

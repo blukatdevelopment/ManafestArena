@@ -9,18 +9,10 @@ public class LocalMenu : Container, IMenu {
   public IMenu arenaConfig;
   public IMenu adventureConfig;
 
-  public void Init(float minX, float minY, float maxX, float maxY){
+  public void Init(){
     InitControls();
     ScaleControls();
     GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
-  }
-  
-  public void Resize(float minX, float minY, float maxX, float maxY){
-  	ScaleControls();
-  }
-
-  public bool IsSubMenu(){
-    return true;
   }
 
   public void Clear(){

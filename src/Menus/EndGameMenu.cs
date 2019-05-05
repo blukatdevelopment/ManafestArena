@@ -8,24 +8,12 @@ public class EndGameMenu : Container, IMenu {
   public Godot.TextEdit creditsLabel;
   public TextEdit background;
 
-  public void Init(float minX, float minY, float maxX, float maxY){
+  public void Init(){
     Sound.PlayRandomSong(Sound.GetPlaylist(Sound.Playlists.Menu));
     InitControls();
     ScaleControls();
     CareerDb.ClearCareer();
-  }
-  
-  public void Resize(float minX, float minY, float maxX, float maxY){
-    ScaleControls();
     GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
-  }
-
-  public bool IsSubMenu(){
-    return false;
-  }
-
-  public void Clear(){
-    this.QueueFree();
   }
 
   void InitControls(){
@@ -86,6 +74,6 @@ public class EndGameMenu : Container, IMenu {
   }
 
   public void ReturnToMainMenu(){
-    Session.ChangeMenu(Menu.Menus.Main);
+    Session.ChangeMenu("MainMenu");
   }
 }

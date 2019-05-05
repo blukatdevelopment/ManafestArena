@@ -44,7 +44,7 @@ public class Session : Node {
   public override void _Ready() {
     activeGamemodes = new List<Node>();
     EnforceSingleton();
-    ChangeMenu(Menu.Menus.Main);
+    ChangeMenu("MainMenu");
     InitJukeBox();
     InitSettings();
     PerformTests();
@@ -212,41 +212,25 @@ public class Session : Node {
   }
   
   public static void QuitToMainMenu(){
-    Session.ChangeMenu(Menu.Menus.Main);
+    Session.ChangeMenu("MainMenu");
     Session.ClearGame();
   }
 
-  public static void ChangeMenu(Menu.Menus menu){
+  public static void ChangeMenu(string menuName){
     Session ses = Session.session;
     if(ses.activeMenu != null){
-      IMenu menuInstance = ses.activeMenu as IMenu;
-      
-      if(menuInstance != null){
-        GD.Print("menuInstance.Clear() " + menu);
-        menuInstance.Clear();
-      }
-      else{
-        GD.Print("ChangeMenu.QueueFree ses.activeMenu" + menu);
-        ses.activeMenu.QueueFree();
-      }
-      
-      ses.activeMenu = null;
-    }
-    else{
-      GD.Print("ChangeMenu: ses.activeMenu already null when setting " + menu);
+      ses.activeMenu.QueueFree();
     }
 
-    Node createdMenu = Menu.MenuFactory(menu);
-    if(ses.activeMenu != null){
-      GD.Print("Menu Changed menu in its Init().");
-      return;
+    Node menuNode = Menu.MenuFactory(menuName);
+    IMenu menu = menuNode as IMenu;
+    if(menu == null){
+      GD.Print("Menu " + menuName + " was null.");
     }
     else{
-      ses.activeMenu = createdMenu;
-    }
-
-    if(ses.activeMenu == null){
-      GD.Print("Session.ChangeMenu: menu null for " + menu);
+      ses.activeMenu = menuNode;
+      ses.AddChild(menuNode);
+      menu.Init();
     }
   }
   

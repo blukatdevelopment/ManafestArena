@@ -18,16 +18,10 @@ public class ControlsMenu : Container, IMenu {
     public const float InputDelay = 0.25f;
 
     
-    public void Init(float minX, float minY, float maxX, float maxY){
+    public void Init(){
       InitControls();
       ScaleControls();
       GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
-    }
-    
-    public void Resize(float minX, float minY, float maxX, float maxY){}
-
-    public bool IsSubMenu(){
-      return false;
     }
 
     public void Clear(){
@@ -174,7 +168,7 @@ public class ControlsMenu : Container, IMenu {
     }
 
     public void Back(){
-      Session.ChangeMenu(Menu.Menus.Settings);
+      Session.ChangeMenu("SettingsMenu");
     }
 
 }

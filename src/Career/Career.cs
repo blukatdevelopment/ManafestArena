@@ -97,13 +97,13 @@ public class Career {
     GD.Print("CompleteGame");
     Session.ClearGame();
     //stats.SetBaseStat(StatsManager.Stats.Victory, 1);
-    Session.ChangeMenu(Menu.Menus.EndGame);
+    Session.ChangeMenu("EndGameMenu");
   }
 
   public void FailEncounter(){
     Session.ClearGame();
     GD.Print("FailEncounter");
-    Session.ChangeMenu(Menu.Menus.EndGame);
+    Session.ChangeMenu("EndGameMenu");
   }
 
   public static Career Factory(string championName){
@@ -164,7 +164,7 @@ public class Career {
   public static void StartNewCareer(string championName = ""){
       Career career = Factory(championName);
       Session.session.career = career;
-      Session.ChangeMenu(Menu.Menus.Career);
+      Session.ChangeMenu("CareerMenu");
       CareerDb.SaveCareer(career);
   }
 
