@@ -8,23 +8,11 @@ public class PressEventMenu : Container, IMenu {
   public PressEvent pressEvent;
   public TextEdit background;
 
-  public void Init(float minX, float minY, float maxX, float maxY){
+  public void Init(){
     pressEvent = null;//Session.session.career.pressEvent;
     InitControls();
     ScaleControls();
     GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
-  }
-  
-  public void Resize(float minX, float minY, float maxX, float maxY){
-    ScaleControls();
-  }
-
-  public bool IsSubMenu(){
-    return false;
-  }
-
-  public void Clear(){
-    this.QueueFree();
   }
 
   void InitControls(){

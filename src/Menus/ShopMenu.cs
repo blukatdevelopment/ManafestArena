@@ -8,22 +8,10 @@ public class ShopMenu : Container, IMenu {
   public System.Collections.Generic.Dictionary<string, ItemData> itemsDict;
 
 
-  public void Init(float minX, float minY, float maxX, float maxY){
+  public void Init(){
     InitControls();
     ScaleControls();
     GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
-  }
-  
-  public void Resize(float minX, float minY, float maxX, float maxY){
-    ScaleControls();
-  }
-
-  public bool IsSubMenu(){
-    return false;
-  }
-
-  public void Clear(){
-    this.QueueFree();
   }
 
   void InitControls(){

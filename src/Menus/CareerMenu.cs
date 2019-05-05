@@ -9,7 +9,7 @@ public class CareerMenu : Container, IMenu {
   public TextEdit background;
   public int nodeYOffset;
 
-  public void Init(float minX, float minY, float maxX, float maxY){
+  public void Init(){
     nodeYOffset = 0;
 
     Sound.PlayRandomSong(Sound.GetPlaylist(Sound.Playlists.Menu));
@@ -60,14 +60,6 @@ public class CareerMenu : Container, IMenu {
 
     nodeYOffset += increment;
     ScaleControls();
-  }
-
-  public void Resize(float minX, float minY, float maxX, float maxY){
-    ScaleControls();
-  }
-
-  public bool IsSubMenu(){
-    return false;
   }
 
   public void Clear(){

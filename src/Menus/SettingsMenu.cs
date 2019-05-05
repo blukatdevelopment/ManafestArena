@@ -19,20 +19,10 @@ public class SettingsMenu : Container, IMenu {
     public Godot.Button controlsButton;
     public TextEdit background;
 
-    public void Init(float minX, float minY, float maxX, float maxY){
+    public void Init(){
       InitControls();
       ScaleControls();
       GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
-    }
-    
-    public void Resize(float minX, float minY, float maxX, float maxY){}
-
-    public bool IsSubMenu(){
-      return false;
-    }
-
-    public void Clear(){
-      this.QueueFree();
     }
 
     public void InitControls(){

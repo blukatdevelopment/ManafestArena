@@ -142,6 +142,12 @@ public class Menu{
     return label;
   }
   
+  public static Node MenuFactory(string name){
+    object menuObj = Activator.CreateInstance(Type.GetType(name));
+
+    return menuObj as Node;
+  }
+
   public static Node MenuFactory(Menus menu){
     Node ret = null;
     switch(menu){
@@ -199,7 +205,7 @@ public class Menu{
     IMenu menuInstance = ret as IMenu;
     
     if(menuInstance != null){
-      menuInstance.Init(0, 0, 0, 0); // Assuiming these are not subMenus
+      menuInstance.Init();
     }
     if(ret == null){
       GD.Print("Menu.MenuFactory returning null for " + menu);

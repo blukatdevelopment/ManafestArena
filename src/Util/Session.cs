@@ -44,7 +44,7 @@ public class Session : Node {
   public override void _Ready() {
     activeGamemodes = new List<Node>();
     EnforceSingleton();
-    ChangeMenu(Menu.Menus.Main);
+    ChangeMenu("MainMenu");
     InitJukeBox();
     InitSettings();
     PerformTests();
@@ -216,20 +216,29 @@ public class Session : Node {
     Session.ClearGame();
   }
 
+  public static void ChangeMenu(string menuName){
+    Session ses = Session.session;
+    if(ses.activeMenu != null){
+      ses.activeMenu.QueueFree();
+    }
+
+    Node menuNode = Menu.MenuFactory(menuName);
+    IMenu menu = menuNode as IMenu;
+    if(menu == null){
+      GD.Print("Menu " + menuName + " was null.");
+    }
+    else{
+      ses.activeMenu = menuNode;
+      ses.AddChild(menuNode);
+      menu.Init();
+    }
+  }
+
   public static void ChangeMenu(Menu.Menus menu){
     Session ses = Session.session;
     if(ses.activeMenu != null){
       IMenu menuInstance = ses.activeMenu as IMenu;
-      
-      if(menuInstance != null){
-        GD.Print("menuInstance.Clear() " + menu);
-        menuInstance.Clear();
-      }
-      else{
-        GD.Print("ChangeMenu.QueueFree ses.activeMenu" + menu);
-        ses.activeMenu.QueueFree();
-      }
-      
+      ses.activeMenu.QueueFree();
       ses.activeMenu = null;
     }
     else{
