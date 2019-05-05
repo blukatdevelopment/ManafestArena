@@ -74,6 +74,6 @@ public class EndGameMenu : Container, IMenu {
   }
 
   public void ReturnToMainMenu(){
-    Session.ChangeMenu(Menu.Menus.Main);
+    Session.ChangeMenu("MainMenu");
   }
 }

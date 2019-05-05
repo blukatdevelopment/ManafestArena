@@ -124,7 +124,7 @@ public class Arena : Spatial, IGamemode {
   }
 
   public static void LocalArena(string terrainFile = "res://Scenes/Maps/Test.tscn"){
-    Session.ChangeMenu(Menu.Menus.HUD);
+    Session.ChangeMenu("HUDMenu");
     Arena arena = new Arena();
     Session.AddGamemode(arena);
 

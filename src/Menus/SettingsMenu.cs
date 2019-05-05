@@ -106,11 +106,11 @@ public class SettingsMenu : Container, IMenu {
     }
 
     public void ToControlsMenu(){
-      Session.ChangeMenu(Menu.Menus.Controls);
+      Session.ChangeMenu("ControlsMenu");
     }
 
     public void MainMenu(){
-      Session.ChangeMenu(Menu.Menus.Main);
+      Session.ChangeMenu("MainMenu");
     }
 
     public void UpdateMasterVolume(float val){

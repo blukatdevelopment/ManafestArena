@@ -168,7 +168,7 @@ public class ControlsMenu : Container, IMenu {
     }
 
     public void Back(){
-      Session.ChangeMenu(Menu.Menus.Settings);
+      Session.ChangeMenu("SettingsMenu");
     }
 
 }

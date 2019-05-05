@@ -212,7 +212,7 @@ public class Session : Node {
   }
   
   public static void QuitToMainMenu(){
-    Session.ChangeMenu(Menu.Menus.Main);
+    Session.ChangeMenu("MainMenu");
     Session.ClearGame();
   }
 
@@ -231,31 +231,6 @@ public class Session : Node {
       ses.activeMenu = menuNode;
       ses.AddChild(menuNode);
       menu.Init();
-    }
-  }
-
-  public static void ChangeMenu(Menu.Menus menu){
-    Session ses = Session.session;
-    if(ses.activeMenu != null){
-      IMenu menuInstance = ses.activeMenu as IMenu;
-      ses.activeMenu.QueueFree();
-      ses.activeMenu = null;
-    }
-    else{
-      GD.Print("ChangeMenu: ses.activeMenu already null when setting " + menu);
-    }
-
-    Node createdMenu = Menu.MenuFactory(menu);
-    if(ses.activeMenu != null){
-      GD.Print("Menu Changed menu in its Init().");
-      return;
-    }
-    else{
-      ses.activeMenu = createdMenu;
-    }
-
-    if(ses.activeMenu == null){
-      GD.Print("Session.ChangeMenu: menu null for " + menu);
     }
   }
   

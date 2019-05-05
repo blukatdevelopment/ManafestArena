@@ -1,25 +1,10 @@
+/*
+  Menu utilities
+*/
 using Godot;
 using System;
 
 public class Menu{
-  public enum Controls{ Button, TextBox }; 
-  public enum Menus{
-    None, 
-    Main,
-    Settings,
-    Controls,
-    Pause, 
-    HUD,
-    Career,
-    NewGame,
-    PressEvent,
-    EndGame,
-    Shop,
-    RestSite
-  };
-  public enum SubMenus{
-    None
-  }
   
   public static Button Button(string text = "", Action onClick = null){
     Button button = new Button();
@@ -144,85 +129,9 @@ public class Menu{
   
   public static Node MenuFactory(string name){
     object menuObj = Activator.CreateInstance(Type.GetType(name));
-
     return menuObj as Node;
   }
 
-  public static Node MenuFactory(Menus menu){
-    Node ret = null;
-    switch(menu){
-      case Menus.None: 
-        Sound.PauseSong();
-        return null; 
-        break;
-      case Menus.HUD:
-        ret = new HUDMenu(); 
-        ret.Name = "HUD";
-        break;
-      case Menus.Pause: 
-        ret = new PauseMenu();
-        ret.Name = "Pause"; 
-      break;
-      case Menus.Main: 
-        ret = new MainMenu();
-        ret.Name = "Main"; 
-        break;
-      case Menus.Settings: 
-        ret = new SettingsMenu(); 
-        ret.Name = "Settings";
-        break;
-      case Menus.Controls: 
-        ret = new ControlsMenu(); 
-        ret.Name = "Controls";
-        break;
-      case Menus.Career:
-        ret = new CareerMenu();
-        ret.Name = "Career";
-        break;
-      case Menus.NewGame:
-        ret = new NewGameMenu();
-        ret.Name = "NewGame";
-        break;
-      case Menus.PressEvent:
-        ret = new PressEventMenu();
-        ret.Name = "PressEvent";
-        break;
-      case Menus.EndGame:
-        ret = new EndGameMenu();
-        ret.Name = "EndGame";
-        break;
-      case Menus.Shop:
-        ret = new ShopMenu();
-        ret.Name = "Shop";
-        break;
-      case Menus.RestSite:
-        ret = new RestSiteMenu();
-        ret.Name = "Rest Site";
-        break;
-    }
-    
-    Session.session.AddChild(ret);
-    IMenu menuInstance = ret as IMenu;
-    
-    if(menuInstance != null){
-      menuInstance.Init();
-    }
-    if(ret == null){
-      GD.Print("Menu.MenuFactory returning null for " + menu);
-    }
-    return ret;
-  }
-
-  public static Node SubMenuFactory(SubMenus menu){
-    Node ret = null;
-    switch(menu){
-      case SubMenus.None: 
-        return null;
-        break;
-    }
-    return ret;
-  }
-  
   public static void ScaleControl(Control control, float width, float height, float x, float y){
     if(control == null){ return; }
     

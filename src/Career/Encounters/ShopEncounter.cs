@@ -9,7 +9,7 @@ public class ShopEncounter : IEncounter {
 
 
   public void StartEncounter(){
-    Session.ChangeMenu(Menu.Menus.Shop);
+    Session.ChangeMenu("ShopMenu");
     // TODO Add items to shop menu here
   }
   

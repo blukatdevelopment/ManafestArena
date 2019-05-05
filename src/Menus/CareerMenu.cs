@@ -193,7 +193,7 @@ public class CareerMenu : Container, IMenu {
       xSize += scaleOffset;
       ySize += scaleOffset;
     }
-    
+
     yPos += nodeYOffset;
 
     Button nodeButton = careerButtons[node];
@@ -202,6 +202,6 @@ public class CareerMenu : Container, IMenu {
   }
 
   public void ReturnToMainMenu(){
-    Session.ChangeMenu(Menu.Menus.Main);
+    Session.ChangeMenu("MainMenu");
   }
 }
