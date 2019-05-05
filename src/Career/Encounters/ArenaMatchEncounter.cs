@@ -3,10 +3,16 @@ using System;
 using System.Collections.Generic;
 
 public class ArenaMatchEncounter : IEncounter {
-  string info;
+  string mapName;
+
+  public ArenaMatchEncounter(){}
+
+  public ArenaMatchEncounter(string mapName){
+    this.mapName = mapName;
+  }
 
   public string GetDisplayName(){
-    return "";
+    return "Arena Match";
   }  
 
   public void StartEncounter(){
@@ -17,11 +23,11 @@ public class ArenaMatchEncounter : IEncounter {
     //settings.player = playerData;
     Arena.arenaSettings = settings;
 
-    Arena.LocalArena(info);
+    Arena.LocalArena(mapName);
   }
   
   public IEncounter GetRandomEncounter(){
-    return null;
+    return new ArenaMatchEncounter(RandomArenaMap()) as IEncounter;
   }
 
   private string RandomArenaMap(){

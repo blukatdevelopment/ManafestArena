@@ -3,8 +3,11 @@ using System;
 using System.Collections.Generic;
 
 public class RestSiteEncounter : IEncounter {
+
+  public RestSiteEncounter(){}
+
   public string GetDisplayName(){
-    return "";
+    return "Rest Site";
   }
 
 
@@ -14,7 +17,7 @@ public class RestSiteEncounter : IEncounter {
   }
   
   public IEncounter GetRandomEncounter(){
-    return null;
+    return new RestSiteEncounter();
   }
 
   private List<string> RestSiteUpgrades(){

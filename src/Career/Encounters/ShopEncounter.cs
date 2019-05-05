@@ -3,6 +3,9 @@ using System;
 using System.Collections.Generic;
 
 public class ShopEncounter : IEncounter {
+
+  public ShopEncounter(){}
+
   public string GetDisplayName(){
     return "shop";
   }
@@ -14,7 +17,7 @@ public class ShopEncounter : IEncounter {
   }
   
   public IEncounter GetRandomEncounter(){
-    return null;
+    return new ShopEncounter();
   }
 
   private List<ItemData> ShopItems(){

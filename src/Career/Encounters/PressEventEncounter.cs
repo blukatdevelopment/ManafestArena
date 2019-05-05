@@ -3,14 +3,20 @@ using System;
 using System.Collections.Generic;
 
 public class PressEventEncounter : IEncounter {
-  string info;
+  string pressEventName;
+
+  public PressEventEncounter(){}
+
+  public PressEventEncounter(string pressEventName){
+    this.pressEventName = pressEventName;
+  }
 
   public string GetDisplayName(){
-    return "";
+    return "Press Event";
   }
 
   public void StartEncounter(){
-    GD.Print("PressEventEncounter -info " + info);
+    GD.Print("PressEventEncounter -info " + pressEventName);
     //pressEvent = CareerDb.LoadPressEvent(info);
     
     Session.ChangeMenu("PressEventMenu");
@@ -18,6 +24,10 @@ public class PressEventEncounter : IEncounter {
   }
   
   public IEncounter GetRandomEncounter(){
-    return null;
+    return new PressEventEncounter(GetRandomPressEventName());
+  }
+
+  public static string GetRandomPressEventName(){
+    return "Implement this, dog";
   }
 }

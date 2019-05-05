@@ -232,13 +232,16 @@ public class Arena : Spatial, IGamemode {
   }
 
   public void ClearActor(Actor actor){
-    if(actor == null){
+    if(actor == null || actors == null){
+      GD.Print("ClearActor: actor or actors were null");
       return;
     }
-    // int id = actor.id;
 
-    // actor.QueueFree();
-    // actors.Remove(actor);
+    Node body = actor.body as Node;
+    if(body != null){
+      body.QueueFree();
+    }
+    actors.Remove(actor);
   }
 
   public void AwardPoints(string[] actorPaths){

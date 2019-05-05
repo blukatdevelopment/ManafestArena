@@ -14,7 +14,7 @@ public class CareerMenu : Container, IMenu {
     nodeYOffset = 0;
 
     career = Career.GetActiveCareer();
-
+    careerNodes = career.careerNodes;
     Sound.PlayRandomSong(Sound.GetPlaylist(Sound.Playlists.Menu));
     int inProgress = 0; //Session.session.career.stats.GetBaseStat(StatsManager.Stats.NodeInProgress);
     if(inProgress == 1){
@@ -87,19 +87,9 @@ public class CareerMenu : Container, IMenu {
   }
 
   void AddNodeButton(CareerNode node){
-    // CareerNode.NodeTypes nodeType = node.nodeType;
-    // string nodeName = "" + nodeType;
-
-    // if(nodeType == CareerNode.NodeTypes.ArenaMatch){
-    //   nodeName = node.extraInfo;
-    //   nodeName = nodeName.Replace("res://Assets/Scenes/Maps/", "");
-    //   nodeName = nodeName.Replace(".tscn", "");
-    //   nodeName = nodeType + ": " + nodeName;
-    // }
-
-    // Button button = NodeButton(node.nodeId, nodeName);
-    // careerButtons.Add(node.nodeId, button);
-    // AddChild(button);
+    Button button = NodeButton(node.nodeId, node.encounter.GetDisplayName());
+    careerButtons.Add(node.nodeId, button);
+    AddChild(button);
   }
 
   Button NodeButton(int id, string type){
