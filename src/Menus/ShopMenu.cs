@@ -3,12 +3,14 @@ using System;
 using System.Collections.Generic;
 
 public class ShopMenu : Container, IMenu {
+  public Career career;
   public Button finishedButton;
   public List<Button> itemButtons;
   public System.Collections.Generic.Dictionary<string, ItemData> itemsDict;
 
 
   public void Init(){
+    career = Career.GetActiveCareer();
     InitControls();
     ScaleControls();
     GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
@@ -16,7 +18,7 @@ public class ShopMenu : Container, IMenu {
 
   void InitControls(){
     finishedButton = Menu.Button("Finish shopping", () => { 
-      Session.session.career.CompleteEncounter();
+      career.CompleteEncounter();
     });
     AddChild(finishedButton);
 

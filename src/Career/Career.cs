@@ -5,7 +5,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class Career {
+public class Career : Node {
   public List<CareerNode> careerNodes, leaves;
   public CareerNode root;
 
@@ -163,13 +163,35 @@ public class Career {
 
   public static void StartNewCareer(string championName = ""){
       Career career = Factory(championName);
-      Session.session.career = career;
+      Session.AddGamemode(career as Node);
       Session.ChangeMenu("CareerMenu");
       CareerDb.SaveCareer(career);
   }
 
+  public static void ContinueCareer(){
+    Career career = CareerDb.LoadCareer();
+    Session.AddGamemode(career as Node);
+    Session.ChangeMenu("CareerMenu");
+  }
+
   public static void Save(){
-    CareerDb.SaveCareer(Session.session.career);
+    Career career = Career.GetActiveCareer();
+    if(career != null){
+      CareerDb.SaveCareer(career);
+    }
+    else{
+      GD.Print("Cannot save null career");
+    }
+  }
+
+  public static Career GetActiveCareer(){
+    foreach(Node gamemodeNode in Session.session.activeGamemodes){
+      Career career = gamemodeNode as Career;
+      if(career != null){
+        return career;
+      }
+    }
+    return null;
   }
 
 }

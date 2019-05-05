@@ -225,8 +225,9 @@ public class Arena : Spatial, IGamemode {
     // Check that player has died
     
     AwardPoints(actorPaths);
-    if(PlayerWon()){
-      Session.session.career.CompleteEncounter();
+    Career career = Career.GetActiveCareer();
+    if(PlayerWon() && career != null){
+      career.CompleteEncounter();
     }
   }
 

@@ -13,7 +13,6 @@ using System.Text;
 public class Session : Node {
   public static Session session;
   
-  public Career career;
   public NetworkSession netSes;
   public Random random;
   public AudioStreamPlayer jukeBox;

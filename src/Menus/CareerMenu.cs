@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 
 public class CareerMenu : Container, IMenu {
+  public Career career;
   public Button mainMenuButton;
   public List<CareerNode> careerNodes;
   public System.Collections.Generic.Dictionary<int, Button> careerButtons;
@@ -11,6 +12,8 @@ public class CareerMenu : Container, IMenu {
 
   public void Init(){
     nodeYOffset = 0;
+
+    career = Career.GetActiveCareer();
 
     Sound.PlayRandomSong(Sound.GetPlaylist(Sound.Playlists.Menu));
     int inProgress = 0; //Session.session.career.stats.GetBaseStat(StatsManager.Stats.NodeInProgress);
@@ -78,13 +81,6 @@ public class CareerMenu : Container, IMenu {
 
     careerButtons = new System.Collections.Generic.Dictionary<int, Button>();
 
-    if(Session.session.career == null || Session.session.career.careerNodes == null){
-      GD.Print("Session's Career not initialized");
-      return;
-    }
-
-    careerNodes = Session.session.career.careerNodes;
-
     foreach(CareerNode node in careerNodes){
       AddNodeButton(node);
     }
@@ -117,7 +113,7 @@ public class CareerMenu : Container, IMenu {
     //Session.session.career.ExecuteNode(id);
     return;
 
-    Career career = Session.session.career;
+
     CareerNode node = CareerNode.GetNode(id, career.careerNodes);
     int nodeLevel = CareerNode.GetLevel(node, career.careerNodes);
     int nextLevel = nodeLevel -1;
@@ -148,14 +144,13 @@ public class CareerMenu : Container, IMenu {
 
   void ScaleNodeButtons(){
     System.Collections.Generic.Dictionary<int, CareerNode[]> levels = CareerNode.GetLevels(careerNodes);
-    List<CareerNode> nodes = Session.session.career.careerNodes;
+    List<CareerNode> nodes = careerNodes;
     foreach(int key in levels.Keys){
       ScaleLevel(key, levels[key], nodes);
     }
   }
 
   void  ScaleLevel(int level, CareerNode[] levelNodes, List<CareerNode> nodes){
-    Career career = Session.session.career;
     int currentLevel = 0; //career.stats.GetStat(StatsManager.Stats.CurrentLevel);
     int lastNode = 0; //career.stats.GetStat(StatsManager.Stats.LastNode);
 

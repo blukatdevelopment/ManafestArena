@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 
 public class RestSiteMenu : Container, IMenu {
+  public Career career;
   public Button restButton;
   public Button upgradeButton;
 
@@ -14,6 +15,7 @@ public class RestSiteMenu : Container, IMenu {
   string selection = "";
 
   public void Init(){
+    career = Career.GetActiveCareer();
     InitControls();
     ScaleControls();
     GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
@@ -72,7 +74,9 @@ public class RestSiteMenu : Container, IMenu {
   void Confirm(){
     GD.Print("Confirming selection of " + selection);
     //Career.SelectRestSiteUpgrade(selection);
-    Session.session.career.CompleteEncounter();
+    if(career != null){
+      career.CompleteEncounter();
+    }
   }
 
   void HealPlayer1(){
