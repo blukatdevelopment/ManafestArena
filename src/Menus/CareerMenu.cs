@@ -16,12 +16,9 @@ public class CareerMenu : Container, IMenu {
     career = Career.GetActiveCareer();
     careerNodes = career.careerNodes;
     Sound.PlayRandomSong(Sound.GetPlaylist(Sound.Playlists.Menu));
-    int inProgress = 0; //Session.session.career.stats.GetBaseStat(StatsManager.Stats.NodeInProgress);
-    if(inProgress == 1){
+    if(career.encounterInProgress){
       GD.Print("Node in progress");
-      int currentNode = 0; //Session.session.career.stats.GetBaseStat(StatsManager.Stats.CurrentNode);
-      //Session.session.career.ExecuteNode(currentNode);
-      Clear();
+      career.BeginEncounter(career.lastNode);
     }
     InitControls();
     ScaleControls();
@@ -65,12 +62,7 @@ public class CareerMenu : Container, IMenu {
     ScaleControls();
   }
 
-  public void Clear(){
-    GD.Print("CareerMenu.Clear");
-    this.QueueFree();
-  }
-
-  void InitControls(){
+  public void InitControls(){
     background = Menu.BackgroundBox();
     AddChild(background);
 
@@ -86,13 +78,13 @@ public class CareerMenu : Container, IMenu {
     }
   }
 
-  void AddNodeButton(CareerNode node){
-    Button button = NodeButton(node.nodeId, node.encounter.GetDisplayName());
-    careerButtons.Add(node.nodeId, button);
+  public void AddNodeButton(CareerNode node){
+    Button button = NodeButton(node.id, node.encounter.GetDisplayName());
+    careerButtons.Add(node.id, button);
     AddChild(button);
   }
 
-  Button NodeButton(int id, string type){
+  public Button NodeButton(int id, string type){
     return Menu.Button(type, () => {
       ExecuteNode(id);
     });
@@ -100,23 +92,8 @@ public class CareerMenu : Container, IMenu {
 
   void ExecuteNode(int id){
     GD.Print("Executing node " + id + ".");
-    //Session.session.career.ExecuteNode(id);
-    return;
 
-
-    CareerNode node = CareerNode.GetNode(id, career.careerNodes);
-    int nodeLevel = CareerNode.GetLevel(node, career.careerNodes);
-    int nextLevel = nodeLevel -1;
-
-
-
-    if(nodeLevel == 0){
-      GD.Print("Final boss time!");
-      return;
-    }
-    else{
-      GD.Print("Changing current level to " + nextLevel);
-    }
+    career.lastNode = id;
     ScaleControls();
   }
 
@@ -129,61 +106,60 @@ public class CareerMenu : Container, IMenu {
 
     Menu.ScaleControl(background, width, height, 0, 0);
     Menu.ScaleControl(mainMenuButton, 2 * wu, hu, 0, height - hu);
-    ScaleNodeButtons();
-  }
-
-  void ScaleNodeButtons(){
-    System.Collections.Generic.Dictionary<int, CareerNode[]> levels = CareerNode.GetLevels(careerNodes);
-    List<CareerNode> nodes = careerNodes;
-    foreach(int key in levels.Keys){
-      ScaleLevel(key, levels[key], nodes);
+    for(int i = 0; i < Career.CareerLevels; i++){
+      ScaleLevel(i);
     }
   }
 
-  void  ScaleLevel(int level, CareerNode[] levelNodes, List<CareerNode> nodes){
-    int currentLevel = 0; //career.stats.GetStat(StatsManager.Stats.CurrentLevel);
-    int lastNode = 0; //career.stats.GetStat(StatsManager.Stats.LastNode);
-
-    for(int i = 0; i < levelNodes.Length; i++){
-      bool active = CareerNode.NodeIsActive(levelNodes[i], nodes, currentLevel, lastNode);
-      ScaleNodeButton(levelNodes[i].nodeId, level, i, levelNodes.Length, active);
-    }
-  }
-
-  void ScaleNodeButton(int node, int level, int x, int xMax, bool active){
+  public void ScaleLevel(int level){
+    List<CareerNode> nodes = CareerNode.GetByLevel(careerNodes, level);
     Rect2 screen = this.GetViewportRect();
     float width = screen.Size.x;
     float height = screen.Size.y;
-    float wu = width/10; // relative height and width units
+
+    float nodeSpacing = nodes.Count + 1;
+    float wu = width/nodeSpacing;
     float hu = height/10;
 
-    if(!careerButtons.ContainsKey(node)){
-      GD.Print("Node " + node + " has no button.");
-      return;
+    for(int i = 0; i < nodes.Count; i++){
+      int nodeId = nodes[i].id;
+      float padding = wu / ((float)nodes.Count);
+      float xPos = (wu + padding/2f) * i;
+      xPos += (padding/2f);
+      // We want the tree to display upside-down
+      float effectiveLevel = Career.CareerLevels - level;
+      float yPos = effectiveLevel * (hu * 2);
+      yPos += nodeYOffset;
+
+      float xSize = wu;
+      float ySize = hu;
+
+      bool active = CareerNodeActive(nodeId); 
+      if(active){
+        float scaleOffset = hu/2f;
+        xPos -= (scaleOffset / 2.0f);
+        yPos -= (scaleOffset / 2.0f);
+        xSize += scaleOffset;
+        ySize += scaleOffset;
+      }
+
+      Menu.ScaleControl(careerButtons[nodeId], xSize, ySize, xPos, yPos);
+      careerButtons[nodeId].Disabled = !active;
     }
 
-    float xSpace = 6 * wu;
-    float xSpaceUnits = xSpace / (xMax + 1);
-    float xPos = wu + (x + 1) * xSpaceUnits;
+  }
 
-    float yPos = hu * (1+level);
-
-    float xSize = wu;
-    float ySize = hu;
-
-    if(active){
-      float scaleOffset = 50;
-      xPos -= (scaleOffset / 2.0f);
-      yPos -= (scaleOffset / 2.0f);
-      xSize += scaleOffset;
-      ySize += scaleOffset;
+  public bool CareerNodeActive(int id){
+    CareerNode lastNode = CareerNode.GetById(careerNodes, career.lastNode);
+    CareerNode node = CareerNode.GetById(careerNodes, id);
+    bool active = false;
+    if(node.level == 0 && lastNode == null){
+      active = true;
     }
-
-    yPos += nodeYOffset;
-
-    Button nodeButton = careerButtons[node];
-    Menu.ScaleControl(nodeButton, xSize, ySize, xPos, yPos);
-    nodeButton.Disabled = !active;
+    else if(lastNode != null && lastNode.children.IndexOf(id) != -1){
+      active = true;
+    }
+    return active;
   }
 
   public void ReturnToMainMenu(){

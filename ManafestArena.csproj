@@ -127,6 +127,7 @@
     <Compile Include="src/Inventory/IInventory.cs" />
     <Compile Include="src/Career/Career.cs" />
     <Compile Include="src/Career/CareerNode.cs" />
+    <Compile Include="src/Career/CareerTreeFactory.cs" />
     <Compile Include="src/Career/IEncounter.cs" />
     <Compile Include="src/Career/Encounters/ArenaMatchEncounter.cs" />
     <Compile Include="src/Career/Encounters/PressEventEncounter.cs" />

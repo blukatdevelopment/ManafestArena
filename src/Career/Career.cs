@@ -6,50 +6,32 @@ using System;
 using System.Collections.Generic;
 
 public class Career : Node {
-  public List<CareerNode> careerNodes, leaves;
-  public CareerNode root;
+  public List<CareerNode> careerNodes;
+  public int lastNode;
+  public bool encounterInProgress;
+  public const int CareerLevels = 15;
+  public const int MaxCareerNodesPerLevel = 3;
 
   public Career(string championName = ""){
     careerNodes = new List<CareerNode>();
-    root = null;
-    leaves = new List<CareerNode>();
-    if(championName != ""){
-      //stats = new StatsManager(championName);
-      //playerData = new ActorData(stats);
-    }
   }
 
   public string ToString(){
     string text = "Career:\n";
 
-    text += "Root: " + root.ToString() + "\n";
-
-    text += "\nLeaves:\n";
-
-    foreach(CareerNode leaf in leaves){
-      text += "\t" + leaf.ToString() + "\n";
-    }
-
-    text += "\nNodes:\n";
-    foreach(CareerNode node in careerNodes){
-      text += "\t" + node.ToString() + "\n";
-    }
-
-    text += "Levels:\n";
-
-    System.Collections.Generic.Dictionary<int, CareerNode[]> levels;
-    levels = CareerNode.GetLevels(careerNodes);
-
-    foreach(int key in levels.Keys){
-        text += "\n level[" + key + "]:"; 
-        CareerNode[] level = levels[key];
-        for(int i = 0; i < level.Length; i++){
-          text += level[i].ToString();
-        }
-        text += "\n";
-    }
-
     return text;
+  }
+
+  public void BeginEncounter(int id){
+    CareerNode node = CareerNode.GetById(careerNodes, id);
+    if(node != null){
+      node.encounter.StartEncounter();
+      encounterInProgress = true;
+      lastNode = id;
+    }
+    else{
+      GD.Print("BeginEncounter: id " + id + " doesn't exist.");
+    }
   }
 
   public void CompleteEncounter(){
@@ -91,8 +73,6 @@ public class Career : Node {
     return false;
   }
 
-
-
   public void CompleteGame(){
     GD.Print("CompleteGame");
     Session.ClearGame();
@@ -108,46 +88,13 @@ public class Career : Node {
 
   public static Career Factory(string championName){
     Career ret = new Career(championName);
-    ret.careerNodes = GenerateCareerTree(championName);
-    ret.root = CareerNode.Root(ret.careerNodes);
-    ret.leaves = CareerNode.Leaves(ret.careerNodes);
+    
+    CareerTreeFactory factory = new CareerTreeFactory();
+    factory.Generate();
+    ret.careerNodes = factory.careerNodes;
+    ret.lastNode = -1;
+
     return ret;
-  }
-
-  public static List<CareerNode> GenerateCareerTree(string championName){
-    List<CareerNode> ret = new List<CareerNode>();
-    ret.Add(RandomCareerNode(1, 2, -1, 3));
-    ret.Add(RandomCareerNode(2, 4, -1, -1));
-    ret.Add(RandomCareerNode(3, 4, -1, -1));
-    ret.Add(RandomCareerNode(4, 5, -1, 6));
-    ret.Add(RandomCareerNode(5, 7, -1, -1));
-    ret.Add(RandomCareerNode(6, 8, 9, -1));
-    ret.Add(RandomCareerNode(7, 10, -1, -1));
-    ret.Add(RandomCareerNode(8, 11, -1, -1));
-    ret.Add(RandomCareerNode(9, 12, -1, -1));
-    ret.Add(RandomCareerNode(10, 13, -1, 14));
-    ret.Add(RandomCareerNode(11, 15, -1, -1));
-    ret.Add(RandomCareerNode(12, 15, -1, -1));
-    ret.Add(RandomCareerNode(13, 16, -1, -1));
-    ret.Add(RandomCareerNode(14, 16, -1, -1));
-    ret.Add(RandomCareerNode(15, 17, -1, -1));
-    ret.Add(RandomCareerNode(16, 18, -1, -1));
-    ret.Add(RandomCareerNode(17, 18, -1, -1));
-    ret.Add(RandomCareerNode(18, 19, -1, 20));
-    ret.Add(RandomCareerNode(19, -1, -1, -1));
-    ret.Add(RandomCareerNode(20, -1, -1, -1));
-    return ret;
-  }
-
-  public static CareerNode RandomCareerNode(int id, int child1, int child2, int child3){
-    CareerNode node = new CareerNode();
-    node.nodeId = id;
-    node.child1 = child1;
-    node.child2 = child2;
-    node.child3 = child3;
-
-    node.encounter = RandomEncounter();
-    return node;
   }
 
   public static IEncounter RandomEncounter(){
