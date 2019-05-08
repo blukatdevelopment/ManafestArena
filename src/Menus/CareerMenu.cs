@@ -11,7 +11,7 @@ public class CareerMenu : Container, IMenu {
   public int nodeYOffset;
 
   public void Init(){
-    nodeYOffset = 0;
+    nodeYOffset = CurrentYPos();
 
     career = Career.GetActiveCareer();
     careerNodes = career.careerNodes;
@@ -109,6 +109,14 @@ public class CareerMenu : Container, IMenu {
     for(int i = 0; i < Career.CareerLevels; i++){
       ScaleLevel(i);
     }
+  }
+
+  public int CurrentYPos(){
+    float effectiveLevel = Career.CareerLevels;
+    float hu = this.GetViewportRect().Size.y /10;
+    float ret = (int)effectiveLevel * hu * 2;
+    ret -= (hu * 8);
+    return -(int)ret;
   }
 
   public void ScaleLevel(int level){
