@@ -1,3 +1,7 @@
+using Godot;
+using System;
+using System.Collections.Generic;
+
 public class ActorFactory {
   public enum InputSources {
     None,
@@ -79,13 +83,19 @@ public class ActorFactory {
     }
   }
 
+  public static Actor FromName(string name){
+      GD.Print("Making character: " + name);
+      return FromCharacter(Characters.Debug);
+  }
+
   public static Actor FromCharacter(Characters character){
+    Actor ret = null;
     switch(character){
       case Characters.Debug:
-        return DebugCharacter();
+        ret = DebugCharacter();
       break;
     }
-    return null;
+    return ret;
   }
 
   public static Actor DebugCharacter(){

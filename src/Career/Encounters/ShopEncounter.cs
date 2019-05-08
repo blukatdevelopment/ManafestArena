@@ -12,8 +12,12 @@ public class ShopEncounter : IEncounter {
 
 
   public void StartEncounter(){
-    Session.ChangeMenu("ShopMenu");
+    //Session.ChangeMenu("ShopMenu");
     // TODO Add items to shop menu here
+    Career career = Career.GetActiveCareer();
+    if(career != null){
+      career.CompleteEncounter();
+    }
   }
   
   public IEncounter GetRandomEncounter(){

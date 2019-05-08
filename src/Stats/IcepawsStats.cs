@@ -27,6 +27,8 @@ public class IcepawsStats : IStats {
   public virtual List<string> GetStatList(){
     List<string> statList = new List<string>();
     statList.AddRange(IcepawsStatList());
+    statList.AddRange(SkillsStatList());
+    statList.AddRange(MiscStatList());
     return statList;
   }
 
@@ -57,6 +59,12 @@ public class IcepawsStats : IStats {
       "athletics", "acrobatics", "light armor",   // agility
       "alteration", "destruction", "restoration", // willpower
       "blade", "blunt", "unarmed"                 // strength
+    };
+  }
+
+  protected List<string> MiscStatList(){
+    return new List<string>{
+      "id"
     };
   }
 
@@ -100,6 +108,10 @@ public class IcepawsStats : IStats {
     stat = stat.ToLower();
     if(stats.ContainsKey(stat)){
       stats[stat] = val;
+      return;
+    }
+    if(GetStatList().IndexOf(stat) != -1){
+      stats.Add(stat, val);
     }
   }
 

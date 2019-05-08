@@ -19,8 +19,12 @@ public class PressEventEncounter : IEncounter {
     GD.Print("PressEventEncounter -info " + pressEventName);
     //pressEvent = CareerDb.LoadPressEvent(info);
     
-    Session.ChangeMenu("PressEventMenu");
+    //Session.ChangeMenu("PressEventMenu");
     // TODO: Load this info into menu
+    Career career = Career.GetActiveCareer();
+    if(career != null){
+      career.CompleteEncounter();
+    }
   }
   
   public IEncounter GetRandomEncounter(){

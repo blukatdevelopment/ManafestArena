@@ -84,4 +84,16 @@ public class CareerTreeFactory {
     return ret;
   }
 
+  public static Career Factory(string championName){
+    Career ret = new Career();
+    ret.player = ActorFactory.FromName(championName);
+    
+    CareerTreeFactory factory = new CareerTreeFactory();
+    factory.Generate();
+    ret.careerNodes = factory.careerNodes;
+    ret.lastNode = -1;
+
+    return ret;
+  }
+
 }

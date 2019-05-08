@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 
 public interface IBody {
+  Actor GetActor();
   List<Node> GetHands();
   Node GetNode();
   void InitCam(int index);

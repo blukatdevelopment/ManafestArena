@@ -12,8 +12,13 @@ public class RestSiteEncounter : IEncounter {
 
 
   public void StartEncounter(){
-    Session.ChangeMenu("RestSiteMenu");
+    //Session.ChangeMenu("RestSiteMenu");
     // TODO: Populate menu with rest site upgrades.
+    Career career = Career.GetActiveCareer();
+    if(career != null){
+      career.CompleteEncounter();
+      return;
+    }
   }
   
   public IEncounter GetRandomEncounter(){

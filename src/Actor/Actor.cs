@@ -38,4 +38,12 @@ public class Actor : IHasInputHandler, IHasStats, IHasBody, IHasInventory {
       stats.Update(delta);
     }
   }
+
+  public static Actor GetActorFromNode(Node node){
+    IBody actorBody = node as IBody;
+    if(actorBody != null){
+      return actorBody.GetActor();
+    }
+    return null;
+  }
 }

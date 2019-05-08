@@ -12,6 +12,7 @@ public class PillBody : KinematicBody , IBody {
   Actor actor;
   Spatial eyes, hand;
   Speaker speaker;
+  string meshPath;
   MeshInstance meshInstance;
   CollisionShape collisionShape;
   
@@ -21,9 +22,14 @@ public class PillBody : KinematicBody , IBody {
   const float GravityAcceleration = -9.81f;
   const float TerminalVelocity = -53;
 
-  public PillBody(Actor actor){
+  public PillBody(Actor actor, string meshPath = "res://Models/Actor.obj"){
     this.actor = actor;
+    this.meshPath = meshPath;
     InitChildren();
+  }
+  
+  public Actor GetActor(){
+    return actor;
   }
 
   private void InitChildren(){
@@ -33,7 +39,6 @@ public class PillBody : KinematicBody , IBody {
     speaker = new Speaker();
     AddChild(speaker);
 
-    string meshPath = "";
     meshInstance = new MeshInstance();
     meshInstance.Mesh = ResourceLoader.Load(meshPath) as Mesh;
     AddChild(meshInstance);

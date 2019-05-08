@@ -9,40 +9,31 @@ using System;
 using System.Collections.Generic;
 
 public class Arena : Spatial, IGamemode {
-  public static ArenaSettings arenaSettings;
-
-  public List<Actor> actors;
   public Spatial terrain;
   public List<Vector3> enemySpawnPoints, playerSpawnPoints, itemSpawnPoints;
   public List<Vector3> usedEnemySpawnPoints;
-  public int nextId = -2147483648;
-  public ArenaSettings settings;
   public float roundTimeRemaining, secondCounter;
   public bool roundTimerActive = false;
-  public System.Collections.Generic.Dictionary<int, int> scores;
   public int playerWorldId = -1;
   public const int DefaultKillQuota = 5;
   public int killQuota;
   public Actor player;
+
+  public int nextId = 1;
+  public System.Collections.Generic.Dictionary<int, int> scores;
+  public System.Collections.Generic.Dictionary<int, Actor> actors;
   
 
   public void Init(string[] argv){
     string terrainFile = argv[0];
     Sound.PlayRandomSong(Sound.GetPlaylist(Sound.Playlists.Arena));
-    settings = Arena.arenaSettings;
     killQuota = DefaultKillQuota;
 
-    if(settings == null){
-      GD.Print("Using default arena settings.");
-      settings = new ArenaSettings();
-    }
-
-    actors = new List<Actor>();
+    actors = new System.Collections.Generic.Dictionary<int, Actor>();
     scores = new System.Collections.Generic.Dictionary<int, int>();
 
     InitTerrain(terrainFile);
     InitSpawnPoints();
-    LocalInit();
   }
 
   public bool GameOver(){
@@ -53,7 +44,7 @@ public class Arena : Spatial, IGamemode {
     return false;
   }
 
-  public override void _Process(float delta){
+  public void Update(float delta){
     if(roundTimerActive){
       Timer(delta);
     }
@@ -123,20 +114,50 @@ public class Arena : Spatial, IGamemode {
     return name;
   }
 
-  public static void LocalArena(string terrainFile = "res://Scenes/Maps/Test.tscn"){
-    Session.ChangeMenu("HUDMenu");
-    Arena arena = new Arena();
-    Session.AddGamemode(arena);
-
-    IGamemode gamemode = arena as IGamemode;
-    if(gamemode != null){
-      gamemode.Init(new string[]{ terrainFile });
-    }
-  }
-
   public Actor GetPlayer(){
     return player;
   }
+
+
+  public Actor InitializeActor(Actor actor){
+    int id = NextId();
+    if(actor.stats != null && actor.stats.HasStat("id")){
+      actor.stats.SetStat("id", id);
+      scores.Add(id, 0);
+      actors.Add(id, actor);
+    }
+    else{
+      GD.Print("Actor without proper stats was initialized");
+    }
+
+    return SpawnActor(actor);
+  }
+
+  public Actor SpawnActor(Actor actor){
+    return actor;
+  }
+
+  // public Actor SpawnActor(ActorData dat){
+  //   Actor.Brains brain = Actor.Brains.Player1;
+
+  //   Vector3 pos;
+  //   if(brain == Actor.Brains.Player1){
+  //     pos = RandomSpawn(playerSpawnPoints);
+  //   }
+  //   else{
+  //     pos = RandomSpawn(enemySpawnPoints, usedEnemySpawnPoints);
+  //     usedEnemySpawnPoints.Add(pos);
+  //   }
+
+
+  //   Actor actor = null;// FIXME Actor.Factory(brain, dat);
+  //   actor.NameHand(actor.Name + "(Hand)");  
+    
+  //   actors.Add(actor);
+  //   AddChild(actor);
+
+  //   return actor;
+  // }
 
   public void LocalInit(){
 
@@ -211,6 +232,11 @@ public class Arena : Spatial, IGamemode {
     }
   }
 
+  public Actor ActorFromPath(string actorPath){
+    Node actorNode = GetNode(new NodePath(actorPath));
+    return Actor.GetActorFromNode(actorNode);
+  }
+
   public void HandleActorDead(SessionEvent sessionEvent){
     string[] actorPaths = sessionEvent.args;  
     
@@ -218,56 +244,74 @@ public class Arena : Spatial, IGamemode {
       return;
     }
 
-    Node actorNode = GetNode(new NodePath(actorPaths[0]));
-    Actor actor = null; //actorNode as Actor;
-    ClearActor(actor);
+    Actor killed = ActorFromPath(actorPaths[0]);
 
-    // Check that player has died
+    if(killed == null || killed.stats == null || killed.stats.GetStat("id") < 1){
+      GD.Print("Inadequate info in a SessionEvent to handle killed actor death");
+      return;
+    }
+    ClearActor(killed.stats.GetStat("id"));
     
-    AwardPoints(actorPaths);
+    Actor killer = ActorFromPath(actorPaths[1]);
+    if(killer == null || killer.stats == null || killer.stats.GetStat("id") < 1){
+      GD.Print("Inadequate info in a SessionEvent to award killer");
+      return;
+    }
+    
+    AwardForKill(killer.stats.GetStat("id"));
+    
     Career career = Career.GetActiveCareer();
+    
+    if(killed.stats.GetStat("id") == playerWorldId && career != null){
+      career.FailEncounter();
+    }
+
     if(PlayerWon() && career != null){
       career.CompleteEncounter();
     }
   }
 
-  public void ClearActor(Actor actor){
-    if(actor == null || actors == null){
-      GD.Print("ClearActor: actor or actors were null");
-      return;
+  public void AwardForKill(int id){
+    if(scores.ContainsKey(id)){
+      scores[id]++;
     }
-
-    Node body = actor.body as Node;
-    if(body != null){
-      body.QueueFree();
+    else{
+      GD.Print("Actor " + id + " doesn't exist.");
     }
-    actors.Remove(actor);
   }
 
-  public void AwardPoints(string[] actorPaths){
-    if(actorPaths.Length < 2 || actorPaths[1] == ""){
-     GD.Print("No killer specified");
-     return; 
+  public void ClearActor(int id){
+    if(actors.ContainsKey(id)){
+      Actor actor = actors[id];
+      Node actorNode = actor.body as Node;
+      if(actorNode != null){
+        actorNode.QueueFree();
+      }
+      actors.Remove(id);
+
     }
-
-    Node killerNode = GetNode(new NodePath(actorPaths[1]));
-    Actor killer = null;//killerNode as Actor;
-
-    // if(killer != null && killer.id != -1){
-    //   scores[killer.id]++;
-    // }
+    if(scores.ContainsKey(id)){
+      scores.Remove(id);
+    }
   }
+
+  // public void ClearActor(Actor actor){
+  //   if(actor == null || actors == null){
+  //     GD.Print("ClearActor: actor or actors were null");
+  //     return;
+  //   }
+
+  //   Node body = actor.body as Node;
+  //   if(body != null){
+  //     body.QueueFree();
+  //   }
+  //   actors.Remove(actor);
+  // }
 
   public void SetPause(bool val){
-    foreach(Actor actor in actors){
-      // Do pausing here.
-    }
   }
   
   public void TogglePause(){
-    foreach(Actor actor in actors){
-      // Do pause toggling here
-    }
   }
   
   public void InitSpawnPoints(){
@@ -309,28 +353,6 @@ public class Arena : Spatial, IGamemode {
     int randInt = rand.Next(itemSpawnPoints.Count);
     return itemSpawnPoints[randInt];
   }
-  
-  // public Actor SpawnActor(ActorData dat){
-  //   Actor.Brains brain = Actor.Brains.Player1;
-
-  //   Vector3 pos;
-  //   if(brain == Actor.Brains.Player1){
-  //     pos = RandomSpawn(playerSpawnPoints);
-  //   }
-  //   else{
-  //     pos = RandomSpawn(enemySpawnPoints, usedEnemySpawnPoints);
-  //     usedEnemySpawnPoints.Add(pos);
-  //   }
-
-
-  //   Actor actor = null;// FIXME Actor.Factory(brain, dat);
-  //   actor.NameHand(actor.Name + "(Hand)");  
-    
-  //   actors.Add(actor);
-  //   AddChild(actor);
-
-  //   return actor;
-  // }
   
   public Vector3 RandomSpawn(List<Vector3> spawnList){
     System.Random rand = Session.GetRandom();

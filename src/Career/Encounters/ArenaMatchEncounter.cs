@@ -16,14 +16,17 @@ public class ArenaMatchEncounter : IEncounter {
   }  
 
   public void StartEncounter(){
-    ArenaSettings settings = new ArenaSettings();
-    settings.useKits = false;
-    settings.usePowerups = false;
-    //settings.enemies = EnemiesForMap(info);
-    //settings.player = playerData;
-    Arena.arenaSettings = settings;
+    Career career = Career.GetActiveCareer();
+    if(career == null){
+      return;
+    }
 
-    Arena.LocalArena(mapName);
+    Arena arena = new Arena();
+    arena.player = career.GetPlayer();
+    Session.AddGamemode(arena as Node);
+    arena.Init(new string[]{ mapName });
+    Session.ChangeMenu("HUDMenu");
+
   }
   
   public IEncounter GetRandomEncounter(){

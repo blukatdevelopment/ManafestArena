@@ -95,6 +95,7 @@ public class CareerMenu : Container, IMenu {
 
     career.lastNode = id;
     ScaleControls();
+    career.BeginEncounter(id);
   }
 
   void ScaleControls(){

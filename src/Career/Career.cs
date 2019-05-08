@@ -5,14 +5,15 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class Career : Node {
+public class Career : Node , IGamemode{
   public List<CareerNode> careerNodes;
   public int lastNode;
   public bool encounterInProgress;
   public const int CareerLevels = 15;
   public const int MaxCareerNodesPerLevel = 3;
+  public Actor player;
 
-  public Career(string championName = ""){
+  public Career(){
     careerNodes = new List<CareerNode>();
   }
 
@@ -25,16 +26,22 @@ public class Career : Node {
   public void BeginEncounter(int id){
     CareerNode node = CareerNode.GetById(careerNodes, id);
     if(node != null){
-      node.encounter.StartEncounter();
       encounterInProgress = true;
       lastNode = id;
+      node.encounter.StartEncounter();
     }
     else{
       GD.Print("BeginEncounter: id " + id + " doesn't exist.");
     }
   }
 
+  public void Update(float delta){}
+
   public void CompleteEncounter(){
+    GD.Print("CompleteEncounter");
+    encounterInProgress = false;
+    Session.ChangeMenu("CareerMenu");
+
     // if(Session.GetPlayer() != null){
     //   //playerData = Session.GetPlayer().GetData();
     //   if(playerData != null && playerData.stats != null){
@@ -65,6 +72,22 @@ public class Career : Node {
     // }
   }
 
+  public Actor GetPlayer(){
+    return player;
+  }
+
+  public string GetObjectiveText(){
+    return "";
+  }
+
+  public void HandleEvent(SessionEvent evt){
+
+  }
+
+  public void Init(string[] args){
+
+  }
+
   public bool GameOver(){
     return false;
   }
@@ -76,7 +99,6 @@ public class Career : Node {
   public void CompleteGame(){
     GD.Print("CompleteGame");
     Session.ClearGame();
-    //stats.SetBaseStat(StatsManager.Stats.Victory, 1);
     Session.ChangeMenu("EndGameMenu");
   }
 
@@ -86,30 +108,19 @@ public class Career : Node {
     Session.ChangeMenu("EndGameMenu");
   }
 
-  public static Career Factory(string championName){
-    Career ret = new Career(championName);
-    
-    CareerTreeFactory factory = new CareerTreeFactory();
-    factory.Generate();
-    ret.careerNodes = factory.careerNodes;
-    ret.lastNode = -1;
-
-    return ret;
-  }
-
   public static IEncounter RandomEncounter(){
     List<IEncounter> encounterTypes = new List<IEncounter>{
-      new ArenaMatchEncounter() as IEncounter,
-      new PressEventEncounter() as IEncounter,
-      new RestSiteEncounter() as IEncounter,
-      new ShopEncounter() as IEncounter
+      new ArenaMatchEncounter() as IEncounter//,
+      //new PressEventEncounter() as IEncounter,
+      //new RestSiteEncounter() as IEncounter,
+      //new ShopEncounter() as IEncounter
     };
     int choice = Util.RandInt(0, encounterTypes.Count);
     return encounterTypes[choice].GetRandomEncounter();
   }
 
   public static void StartNewCareer(string championName = ""){
-      Career career = Factory(championName);
+      Career career = CareerTreeFactory.Factory(championName);
       Session.AddGamemode(career as Node);
       Session.ChangeMenu("CareerMenu");
       CareerDb.SaveCareer(career);
