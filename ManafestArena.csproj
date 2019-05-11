@@ -70,6 +70,8 @@
     <Compile Include="src/Menus/TexturedButton.cs" />
     <Compile Include="src/Menus/MainMenu.cs" />
     <Compile Include="src/Menus/Menu.cs" />
+    <Compile Include="src/Menus/MenuInputHandler.cs" />
+    <Compile Include="src/Menus/IInputHandledMenu.cs" />
     <Compile Include="src/Menus/IMenu.cs" />
     <Compile Include="src/Menus/HUDMenu.cs" />
     <Compile Include="src/Menus/PauseMenu.cs" />
@@ -102,7 +104,6 @@
     <Compile Include="src/Items/Components/ProjectileLauncher.cs" />
     <Compile Include="src/Items/Components/SelfDamager.cs" />
     <Compile Include="src/Items/Components/StatConsumer.cs" />
-    
     <Compile Include="src/Actor/IHasBody.cs" />
     <Compile Include="src/Actor/IHasInventory.cs" />
     <Compile Include="src/Actor/IHasInputHandler.cs" />

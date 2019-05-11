@@ -94,6 +94,7 @@ public class Session : Node {
 
   public static void AddDevice(int joypad){
     if(GetDevice(0) != null){
+      GD.Print("Multiple devices are not currently supported");
       return;
     }
     DeviceState ds = new DeviceState(joypad);
