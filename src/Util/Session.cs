@@ -227,6 +227,7 @@ public class Session : Node {
       ses.activeMenu.QueueFree();
     }
 
+    Input.SetMouseMode(Input.MouseMode.Visible);
     Node menuNode = Menu.MenuFactory(menuName);
     IMenu menu = menuNode as IMenu;
     if(menu == null){

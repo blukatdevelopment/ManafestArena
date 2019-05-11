@@ -100,7 +100,10 @@ public class FPSInputHandler : IInputHandler {
         break;
       case Inputs.PreviousItem: 
         break;
-      case Inputs.Pause: 
+      case Inputs.Pause:
+        if(inputEvent.inputType == MappedInputEvent.Inputs.Press){
+          Session.Event(SessionEvent.PauseEvent());
+        }
         break;
       case Inputs.LookUp:
         HandleLook(new Vector3(0f, inputEvent.inputValue, 0f), delta);

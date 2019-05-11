@@ -17,6 +17,7 @@ public class Arena : Spatial, IGamemode {
   public int playerWorldId = -1;
   public const int DefaultKillQuota = 5;
   public int killQuota;
+  public bool paused;
   
   public Actor player;
   public List<Actor> enemies;
@@ -27,6 +28,7 @@ public class Arena : Spatial, IGamemode {
   
 
   public void Init(string[] argv){
+    paused = false;
     string terrainFile = argv[0];
     Sound.PlayRandomSong(Sound.GetPlaylist(Sound.Playlists.Arena));
     killQuota = DefaultKillQuota;
@@ -49,6 +51,9 @@ public class Arena : Spatial, IGamemode {
   }
 
   public void Update(float delta){
+    if(paused){
+      return;
+    }
     if(roundTimerActive){
       Timer(delta);
     }
@@ -250,6 +255,11 @@ public class Arena : Spatial, IGamemode {
     }
   }
 
+  public void TogglePause(){
+    Menu.TogglePause();
+    paused = !Menu.HudActive();
+  }
+
   public Actor ActorFromPath(string actorPath){
     Node actorNode = GetNode(new NodePath(actorPath));
     return Actor.GetActorFromNode(actorNode);
@@ -326,11 +336,6 @@ public class Arena : Spatial, IGamemode {
   //   actors.Remove(actor);
   // }
 
-  public void SetPause(bool val){
-  }
-  
-  public void TogglePause(){
-  }
   
   public void InitSpawnPoints(){
     SceneTree st = GetTree();
