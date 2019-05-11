@@ -10,6 +10,7 @@ public class FPSInputHandler : IInputHandler {
   private IInputSource source;
   private float speed;
   public const float SpeedBase = 3f;
+  public const float DefaultMouseSensitivity = 4f;
 
   public FPSInputHandler(){}
 
@@ -88,7 +89,7 @@ public class FPSInputHandler : IInputHandler {
         break;
       case Inputs.Crouch: 
         break;
-      case Inputs.Jump: 
+      case Inputs.Jump:
         break;
       case Inputs.Inventory: 
         break;
@@ -99,15 +100,24 @@ public class FPSInputHandler : IInputHandler {
       case Inputs.Pause: 
         break;
       case Inputs.LookUp:
-
+        HandleLook(new Vector3(0f, inputEvent.inputValue, 0f), delta);
         break;
       case Inputs.LookDown: 
+        HandleLook(new Vector3(0f, -inputEvent.inputValue, 0f), delta);
         break;
       case Inputs.LookLeft: 
+        HandleLook(new Vector3(-inputEvent.inputValue, 0f, 0f), delta);
         break;
-      case Inputs.LookRight: 
+      case Inputs.LookRight:
+        HandleLook(new Vector3(inputEvent.inputValue, 0f, 0f), delta);
         break;
     }
+  }
+
+  private void HandleLook(Vector3 direction, float delta){
+    if(actor.body != null){
+      actor.body.Turn(direction, delta);
+    } 
   }
 
   private void HandleMovement(MappedInputEvent input, float delta, Vector3 direction){
@@ -298,7 +308,7 @@ public class FPSInputHandler : IInputHandler {
       1,
       (int)Inputs.LookUp,
       0f,
-      1f
+      -DefaultMouseSensitivity
     ));
 
     mappings.Add(new InputMapping(
@@ -306,7 +316,7 @@ public class FPSInputHandler : IInputHandler {
       1,
       (int)Inputs.LookDown,
       0f,
-      -1f
+      DefaultMouseSensitivity
     ));
 
     mappings.Add(new InputMapping(
@@ -314,7 +324,7 @@ public class FPSInputHandler : IInputHandler {
       0,
       (int)Inputs.LookLeft,
       0f,
-      -1f
+      DefaultMouseSensitivity
     ));
 
     mappings.Add(new InputMapping(
@@ -322,7 +332,7 @@ public class FPSInputHandler : IInputHandler {
       0,
       (int)Inputs.LookRight,
       0f,
-      1f
+      -DefaultMouseSensitivity
     ));
 
     

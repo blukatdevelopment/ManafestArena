@@ -19,6 +19,7 @@ public class HUDMenu : Container, IMenu{
   }
 
   public void Init(){
+    Input.SetMouseMode(Input.MouseMode.Captured);
     InitControls();
     ScaleControls();
     GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
