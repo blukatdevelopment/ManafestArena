@@ -31,5 +31,6 @@ public interface IStats {
     The caller doesn't care about the outcome of ReceiveDamage.
   */
   void ReceiveDamage(Damage damage);
+  void RestoreCondition(); // Heal completely, lose status conditions
   void Update(float delta);
 }

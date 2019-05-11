@@ -43,9 +43,10 @@ public class IcepawsStats : IStats {
       "perception", "perceptionbonus",
       "agility", "agilitybonus",
       "willpower", "willpowerbonus",
-      "strength", "strength",
+      "strength", "strengthmax",
       "jumpcost", 
-      "sprintcost"
+      "sprintcost", "sprintbonus",
+      "speed"
     };
   }
 
@@ -78,6 +79,7 @@ public class IcepawsStats : IStats {
 
   protected virtual int GetIcepawsStat(string stat){
     stat = stat.ToLower();
+    int agility, strength;
     switch(stat){
       case "healthmax":
         return 50 + (GetStat("endurance") * 10);
@@ -89,13 +91,22 @@ public class IcepawsStats : IStats {
         return (GetStat("intelligence") + (GetStat("willpower") * 10));
         break;
       case "jumpcost":
-        int agility = GetStat("agility");
+        agility = GetStat("agility");
         if(agility == 0){
           return 100;
         }
         return 100 / agility;
         break;
       case "sprintcost":
+        break;
+      case "sprintbonus": // out of 100
+        strength = GetStat("strength");
+        agility = GetStat("agility");
+        return (agility * 5) + (strength * 5); 
+        break;
+      case "speed": // Out of 100
+        agility = GetStat("agility");
+        return agility * 10;
         break;
     }
     if(stats.ContainsKey(stat)){
@@ -183,5 +194,11 @@ public class IcepawsStats : IStats {
     if(stats["mana"] > stats["manamax"]){
       stats["mana"] = stats["manamax"];
     }
+  }
+
+  public void RestoreCondition(){
+    stats["health"] = stats["healthmax"];
+    stats["stamina"] = stats["staminamax"];
+    stats["mana"] = stats["manamax"];
   }
 }

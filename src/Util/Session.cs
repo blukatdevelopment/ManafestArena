@@ -52,6 +52,12 @@ public class Session : Node {
   }
 
   public override void _Process(float delta){
+    foreach(Node modeNode in activeGamemodes){
+      IGamemode gamemode = modeNode as IGamemode;
+      if(gamemode != null){
+        gamemode.Update(delta);
+      }
+    }
   }
 
   public override void _Input(Godot.InputEvent evt){

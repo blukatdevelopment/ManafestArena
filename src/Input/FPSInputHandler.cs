@@ -8,21 +8,50 @@ using System.Collections.Generic;
 public class FPSInputHandler : IInputHandler {
   public Actor actor;
   private IInputSource source;
+  private float speed;
+  public const float SpeedBase = 3f;
 
   public FPSInputHandler(){}
 
   public FPSInputHandler(Actor actor){
     this.actor = actor;
+    SetSpeed(false);
   }
 
   public void RegisterInputSource(IInputSource source){
     this.source = source;
   }
   public void Update(float delta){
+    if(actor.body == null){
+      GD.Print("No body, therefore no input handling ¯\\_(ツ)_/¯");
+      return;
+    }
     List<MappedInputEvent> inputEvents = source.GetInputs(delta);
     foreach(MappedInputEvent inputEvent in inputEvents){
       HandleSingleInput(inputEvent, delta);
     }
+  }
+
+  public void SetSpeed(bool sprinting){
+    GD.Print("Set speed " + sprinting);
+    if(actor != null && actor.stats != null){
+      speed = (float)actor.stats.GetStat("speed") / 100f;
+      speed += SpeedBase;
+      GD.Print("Stat speed = " + speed);
+      if(sprinting){
+        speed += ((float)actor.stats.GetStat("sprintbonus"))/ 100f;
+      }
+    }
+    else{
+      if(sprinting){
+        speed = SpeedBase * 2;
+      }
+      else{
+        speed = SpeedBase;
+      }
+    }
+    GD.Print("Speed set to " + speed);
+
   }
 
   public void HandleSingleInput(MappedInputEvent inputEvent, float delta){
@@ -30,16 +59,16 @@ public class FPSInputHandler : IInputHandler {
     float val = inputEvent.inputValue;
     switch(input){
       case Inputs.MoveForward:
-        //actor.Move(new Vector3(0, 0, -val), delta);
+        HandleMovement(inputEvent, delta, new Vector3(0, 0, -1f));
         break;
       case Inputs.MoveBackward:
-        //actor.Move(new Vector3(0, 0, val), delta);
+        HandleMovement(inputEvent, delta, new Vector3(0, 0, 1f));
         break;
       case Inputs.MoveLeft:
-        //actor.Move(new Vector3(-val, 0, 0), delta); 
+        HandleMovement(inputEvent, delta, new Vector3(-1f, 0, 0));
         break;
       case Inputs.MoveRight:
-        //actor.Move(new Vector3(val, 0, 0), delta);
+        HandleMovement(inputEvent, delta, new Vector3(1f, 0, 0f));
         break;
       case Inputs.PrimaryUse:
         break;
@@ -50,6 +79,12 @@ public class FPSInputHandler : IInputHandler {
       case Inputs.Interact: 
         break;
       case Inputs.Sprint: 
+        if(inputEvent.inputType == MappedInputEvent.Inputs.Release){
+          SetSpeed(false);
+        }
+        else if(inputEvent.inputType == MappedInputEvent.Inputs.Press){
+          SetSpeed(true);
+        }
         break;
       case Inputs.Crouch: 
         break;
@@ -63,7 +98,8 @@ public class FPSInputHandler : IInputHandler {
         break;
       case Inputs.Pause: 
         break;
-      case Inputs.LookUp: 
+      case Inputs.LookUp:
+
         break;
       case Inputs.LookDown: 
         break;
@@ -72,6 +108,15 @@ public class FPSInputHandler : IInputHandler {
       case Inputs.LookRight: 
         break;
     }
+  }
+
+  private void HandleMovement(MappedInputEvent input, float delta, Vector3 direction){
+    if(input.inputType != MappedInputEvent.Inputs.Press && input.inputType != MappedInputEvent.Inputs.Hold){
+      return;
+    }
+    direction *= (speed * SpeedBase);
+    direction *= input.inputValue;
+    actor.body.Move(direction, delta);
   }
 
   public enum Inputs{
@@ -139,7 +184,7 @@ public class FPSInputHandler : IInputHandler {
     mappings.Add(new InputMapping(
       InputMapping.Inputs.KeyboardKey,
       65,
-      (int)Inputs.MoveBackward,
+      (int)Inputs.MoveLeft,
       0f,
       1f
     ));
@@ -147,7 +192,7 @@ public class FPSInputHandler : IInputHandler {
     mappings.Add(new InputMapping(
       InputMapping.Inputs.KeyboardKey,
       83,
-      (int)Inputs.MoveLeft,
+      (int)Inputs.MoveBackward,
       0f,
       1f
     ));

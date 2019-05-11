@@ -22,7 +22,9 @@ public class ArenaMatchEncounter : IEncounter {
     }
 
     Arena arena = new Arena();
+    arena.killQuota = 5;
     arena.player = career.GetPlayer();
+
     Session.AddGamemode(arena as Node);
     arena.Init(new string[]{ mapName });
     Session.ChangeMenu("HUDMenu");

@@ -46,9 +46,14 @@ public class ActorFactory {
   }
 
   public static void InitInputHandler(InputSources inputSource, Actor actor){
+    FPSInputHandler fps;
+    MappedInputSource mapped;
     switch(inputSource){
       case InputSources.Player1:
-        // Set up devicestate[0]
+        mapped = new MappedInputSource(Session.GetDevice(0), FPSInputHandler.GetMappings());
+        fps = new FPSInputHandler(actor);
+        fps.RegisterInputSource(mapped as IInputSource);
+        actor.inputHandler = fps as IInputHandler;
       break;
       case InputSources.Remote:
         // Set up net source
@@ -62,7 +67,7 @@ public class ActorFactory {
   public static void InitStats(StatsHandlers statsHandler, Actor actor){
     switch(statsHandler){
       case StatsHandlers.Icepaws:
-        // Set up an ICEPAWS based IStats
+        actor.stats = new IcepawsStats();
       break;
     }
   }
@@ -93,14 +98,23 @@ public class ActorFactory {
     switch(character){
       case Characters.Debug:
         ret = DebugCharacter();
+        ret.body.InitCam(0);
       break;
     }
     return ret;
   }
 
   public static Actor DebugCharacter(){
-    Actor actor = FromComponentTypes(InputSources.Player1, StatsHandlers.None, Bodies.PillBody, InventoryHandlers.None);
+    Actor actor = FromComponentTypes(InputSources.Player1, StatsHandlers.Icepaws, Bodies.PillBody, InventoryHandlers.None);
     actor.hotbar = new HotBar(10);
+    actor.stats.SetStat("intelligence", 5);
+    actor.stats.SetStat("charisma", 5);
+    actor.stats.SetStat("endurance", 5);
+    actor.stats.SetStat("perception", 5);
+    actor.stats.SetStat("agility", 5);
+    actor.stats.SetStat("willpower", 5);
+    actor.stats.SetStat("strength", 5);
+    actor.stats.RestoreCondition();
     return actor;
   }
 }

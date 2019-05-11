@@ -24,11 +24,6 @@ public class HUDMenu : Container, IMenu{
     GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
   }
 
-  public void Clear(){
-    GD.Print("HUDMenu.clear()");
-    this.QueueFree();
-  }
-
   public void Update(){
     Actor player = Session.GetPlayer();
     
@@ -37,7 +32,6 @@ public class HUDMenu : Container, IMenu{
       return;
     }
     
-    
     healthBox.Text = "";//player.GetStatusText();
 
     string itemText = "";//player.ItemInfo();
@@ -45,18 +39,6 @@ public class HUDMenu : Container, IMenu{
     
     string objectiveText = Session.GetObjectiveText();
     objectiveBox.Text = objectiveText;
-
-    //IInteract interactor = player.VisibleObject() as IInteract;
-    
-    // if(interactor == null){
-    //   interactionBox.Hide();
-    // }
-    // else{
-    //   Item.Uses interaction = player.GetActiveInteraction();
-    //   string interactionText = interactor.GetInteractionText(interaction);
-    //   interactionBox.Show();
-    //   interactionBox.SetText(interactionText);
-    // }
   }
 
   void InitControls(){

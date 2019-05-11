@@ -18,11 +18,13 @@ public class PillBody : KinematicBody , IBody {
   
   bool grounded;
   float gravityVelocity = 0f;
+  const int maxY = 90;
+  const int minY = -40;
 
   const float GravityAcceleration = -9.81f;
   const float TerminalVelocity = -53;
 
-  public PillBody(Actor actor, string meshPath = "res://Models/Actor.obj"){
+  public PillBody(Actor actor, string meshPath = "res://Assets/Models/Actor.obj"){
     this.actor = actor;
     this.meshPath = meshPath;
     InitChildren();
@@ -73,6 +75,7 @@ public class PillBody : KinematicBody , IBody {
   }
 
   public void Move(Vector3 movement, float moveDelta = 1f){
+      GD.Print("Move " + movement);
       movement *= moveDelta;
       
       Transform current = GetTransform();
@@ -96,6 +99,25 @@ public class PillBody : KinematicBody , IBody {
           gravityVelocity = 0f;
         }
       }
+  }
+  public void Turn(Vector3 movement, float moveDelta = 1f){
+    movement *= moveDelta;
+    Vector3 bodyRot = this.GetRotationDegrees();
+    bodyRot.y += movement.x;
+    this.SetRotationDegrees(bodyRot);
+    
+    Vector3 headRot = eyes.GetRotationDegrees();
+    headRot.x += movement.y;
+
+    if(headRot.x < minY){
+      headRot.x = minY;
+    }
+
+    if(headRot.x > maxY){
+      headRot.x = maxY;
+    }
+
+    eyes.SetRotationDegrees(headRot);
   }
 
   public override void _Process(float delta){

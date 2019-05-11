@@ -17,7 +17,9 @@ public class Arena : Spatial, IGamemode {
   public int playerWorldId = -1;
   public const int DefaultKillQuota = 5;
   public int killQuota;
+  
   public Actor player;
+  public List<Actor> enemies;
 
   public int nextId = 1;
   public System.Collections.Generic.Dictionary<int, int> scores;
@@ -29,9 +31,11 @@ public class Arena : Spatial, IGamemode {
     Sound.PlayRandomSong(Sound.GetPlaylist(Sound.Playlists.Arena));
     killQuota = DefaultKillQuota;
 
+    enemies = new List<Actor>();
     actors = new System.Collections.Generic.Dictionary<int, Actor>();
     scores = new System.Collections.Generic.Dictionary<int, int>();
 
+    InitActors();
     InitTerrain(terrainFile);
     InitSpawnPoints();
   }
@@ -47,6 +51,9 @@ public class Arena : Spatial, IGamemode {
   public void Update(float delta){
     if(roundTimerActive){
       Timer(delta);
+    }
+    foreach(int id in actors.Keys){
+      actors[id].Update(delta);
     }
   }
 
@@ -119,7 +126,7 @@ public class Arena : Spatial, IGamemode {
   }
 
 
-  public Actor InitializeActor(Actor actor){
+  public Actor InitActor(Actor actor){
     int id = NextId();
     if(actor.stats != null && actor.stats.HasStat("id")){
       actor.stats.SetStat("id", id);
@@ -134,6 +141,7 @@ public class Arena : Spatial, IGamemode {
   }
 
   public Actor SpawnActor(Actor actor){
+    AddChild(actor.body as Node);
     return actor;
   }
 
@@ -158,6 +166,16 @@ public class Arena : Spatial, IGamemode {
 
   //   return actor;
   // }
+
+  public void InitActors(){
+    Career career = Career.GetActiveCareer();
+    if(career == null){
+      return;
+    }
+
+    InitActor(player);
+
+  }
 
   public void LocalInit(){
 
