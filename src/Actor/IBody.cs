@@ -15,5 +15,6 @@ public interface IBody {
   void Jump();
   Speaker GetSpeaker();
   MeshInstance GetMesh();
+  void Update(float delta);
   void Die();
 }

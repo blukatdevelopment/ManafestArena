@@ -37,6 +37,9 @@ public class Actor : IHasInputHandler, IHasStats, IHasBody, IHasInventory {
     if(stats != null){
       stats.Update(delta);
     }
+    if(body != null){
+      body.Update(delta);
+    }
   }
 
   public static Actor GetActorFromNode(Node node){

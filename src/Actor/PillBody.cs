@@ -15,6 +15,7 @@ public class PillBody : KinematicBody , IBody {
   string meshPath;
   MeshInstance meshInstance;
   CollisionShape collisionShape;
+  public bool dead;
   
   bool grounded;
   float gravityVelocity = 0f;
@@ -27,6 +28,7 @@ public class PillBody : KinematicBody , IBody {
   public PillBody(Actor actor, string meshPath = "res://Assets/Models/Actor.obj"){
     this.actor = actor;
     this.meshPath = meshPath;
+    this.dead = false;
     InitChildren();
   }
   
@@ -48,6 +50,7 @@ public class PillBody : KinematicBody , IBody {
     collisionShape = new CollisionShape();
     AddChild(collisionShape);
     collisionShape.MakeConvexFromBrothers();
+    grounded = true;
   }
 
   public List<Node> GetHands(){ 
@@ -75,7 +78,6 @@ public class PillBody : KinematicBody , IBody {
   }
 
   public void Move(Vector3 movement, float moveDelta = 1f){
-      GD.Print("Move " + movement);
       movement *= moveDelta;
       
       Transform current = GetTransform();
@@ -92,7 +94,7 @@ public class PillBody : KinematicBody , IBody {
           collider.OnCollide(this as object);
         }
       }
-      
+
       if(!grounded && collision != null && collision.Position.y < GetTranslation().y){
         if(gravityVelocity < 0){
           grounded = true;
@@ -120,8 +122,8 @@ public class PillBody : KinematicBody , IBody {
     eyes.SetRotationDegrees(headRot);
   }
 
-  public override void _Process(float delta){
-    if(actor.stats != null && actor.stats.HasStat("health") && actor.stats.GetStat("health") > 0){
+  public void Update(float delta){
+    if(!dead){
       Gravity(delta);
     }
   }
@@ -147,7 +149,7 @@ public class PillBody : KinematicBody , IBody {
 
   public void Jump(){
     if(!grounded){ return; }
-    
+    GD.Print("Jump");
     float jumpForce = 10;
     gravityVelocity = jumpForce;
     grounded = false; 
@@ -170,5 +172,6 @@ public class PillBody : KinematicBody , IBody {
 
   public void Die(){
     Transform = Transform.Rotated(new Vector3(0, 0, 1), 1.5f);
+    dead = true;
   }
 }

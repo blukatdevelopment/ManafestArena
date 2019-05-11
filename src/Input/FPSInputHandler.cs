@@ -90,6 +90,9 @@ public class FPSInputHandler : IInputHandler {
       case Inputs.Crouch: 
         break;
       case Inputs.Jump:
+        if(inputEvent.inputType == MappedInputEvent.Inputs.Press){
+          actor.body.Jump();
+        }
         break;
       case Inputs.Inventory: 
         break;
