@@ -1,165 +1,144 @@
 /*
-    An array of items with some convenience methods attached.
+    This provides functionality for cycling through a list
+    of N item slots. If it helps, you can think of them 
+    as holsters and pockets, highly-accessible storage.
+
+    A hotbar assumes an actor has a non-null body with a non-null node from IBody.GetNode(). 
+    If you want to violate this assumption, you'll need to rewrite stuff.
 */
 
 using System.Collections.Generic;
 using Godot;
 
-public class HotBar : IHasItem {
-  public Item[] items;
+public class HotBar : IHasInfo {
+  public Actor actor;
+  public IItem[] itemSlots;
   public int equippedSlot;
 
-
-  public HotBar(int slots){
-    items = new Item[slots];
+  public HotBar(int slots, Actor actor){
+    itemSlots = new IItem[slots];
     equippedSlot = 0;
+    this.actor = actor;
   }
 
-  public void SetItemSlot(int slot, Item item){
-    if(slot < 0 || slot >= items.Length){
-      GD.Print("HotBar.SetItemSlot: Slot " + slot + " is invalid.");
-      return;
-    }
+  public List<int> GetEmptySlots(){
+    List<int> ret = new List<int>();
 
-    items[slot] = item;
-  }
-
-  public int FirstEmptySlot(){
-    for(int i = 0; i < items.Length; i++){
-      if(items[i] == null){
-        return i;
-      }
-    }
-
-    return -1;
-  }
-
-  public int EquippedSlot(){
-    return equippedSlot;
-  }
-
-  public Item EquippedItem(){
-    return items[equippedSlot];
-  }
-
-  public void DropEquippedItem(){
-    items[equippedSlot] = null;
-  }
-
-  public void SetEquippedSlot(int slot){
-    if(slot < 0 || slot >= items.Length){
-      GD.Print("HotBar.EquipItem: Out of range");
-      return;
-    }
-
-    equippedSlot = slot;
-  }
-
-  public Item EquipItem(int slot){
-    if(slot < 0 || slot >= items.Length){
-      GD.Print("HotBar.EquipItem: Out of range");
-      return null;
-    }
-
-    if(items[slot] == null){
-      GD.Print("Can't equip an empty slot");
-      return null;
-    }
-
-    equippedSlot = slot;
-    return items[slot];
-  }
-
-  public Item EquipNextItem(){
-    equippedSlot++;
-    
-    if(equippedSlot >= items.Length){
-      equippedSlot = 0;
-    }
-
-    if(ActiveSlotsCount() > 0 && items[equippedSlot] == null){
-      equippedSlot = GetNextActiveSlot();
-    }
-    
-    return items[equippedSlot];
-  }
-
-  public int GetNextActiveSlot(){
-    // Check after equppedSlot
-    for(int i = equippedSlot + 1; i < items.Length; i++){
-      if(items[i] != null){
-        return i;
-      }
-    }
-
-    //Check before equippedSlot
-    for(int i = 0; i < equippedSlot; i++){
-      if(items[i] != null){
-        return i;
-      }
-    }
-
-    return -1;
-  }
-
-  public Item EquipPreviousItem(){
-    equippedSlot--;
-    
-    if(equippedSlot < 0){
-      equippedSlot = items.Length -1;
-    }
-
-    return items[equippedSlot];
-  }
-
-
-  public int GetSlotsCount(){
-    return items.Length;
-  }
-
-  public int ActiveSlotsCount(){
-    int ret = 0;
-
-    for(int i = 0; i < items.Length; i++){
-      if(items[i] != null){
-        ret++;
-      }
-    }
-
-    return ret;
-  }
-
-  public string ToString(){
-    string ret = "HotBar: [" + items.Length + "]\n";
-    for(int i = 0; i < items.Length; i++){
-      if(items[i] == null){
-        ret += "\tNULL\n";
-      }
-      else{
-        ret += "\t" + items[i].ToString() + "\n";
+    for(int i = 0; i < itemSlots.Length; i++){
+      if(itemSlots[i] == null){
+        ret.Add(i);
       }
     }
     return ret;
   }
 
+  public IItem GetActiveSlot(){
+    return itemSlots[equippedSlot];
+  }
 
-  public bool HasItem(string itemName){ return false; }
-  public string ItemInfo(){ return ""; }
-  public bool ReceiveItem(Item item){ return true; }
-  public Item PrimaryItem(){ return items[equippedSlot]; }
-  public int ItemCount(){ return GetSlotsCount(); }
-  public List<ItemData> GetAllItems(){ return null; }
+  public string GetInfo(){
+    string ret = "";
+    IHasInfo itemInfo = itemSlots[equippedSlot] as IHasInfo;
+    if(itemInfo == null){
+      ret = "";
+    }
+    else{
+      ret = itemInfo.GetInfo();
+    }
+    return ret;
+  }
   
-  public List<Item> GetEveryItem(){
-    List<Item> ret = new List<Item>();
-
-    for(int i = 0; i < items.Length; i++){
-      if(items[i] != null){
-        ret.Add(items[i]);
-      }
-    }
+  public string GetMoreInfo(){
+    string ret = "";
 
     return ret;
+  }
+
+  public bool ValidSlot(int i){
+    if(i < 0 || i >= itemSlots.Length){
+      return false;
+    }
+    return true;
+  }
+
+  public IItem GetSlot(int i){
+    return ValidSlot(i) ? itemSlots[i] : null;
+  }
+
+  public IItem RemoveItem(int i){
+    IItem ret = GetSlot(i);
+    if(ret != null){
+      itemSlots[i] = null;
+      ret.Unequip();
+    }
+    return ret;
+  }
+
+  public void AddItem(int i, IItem item){
+    if(!ValidSlot(i)){
+      GD.Print(i + " is not a valid slot. Aborting");
+      return;
+    }
+
+    itemSlots[i] = item;
+
+    if(i == equippedSlot){
+      item.Equip(actor.body);
+    }
+  }
+
+  public void AddItemToNextSlot(IItem item){
+    if(GetEmptySlots().Count == 0){
+      GD.Print("No slots to add to");
+      return;
+    }
+    bool added = false;
+    int slot = NextSlot();
+    while(!added){
+      if(itemSlots[slot] == null){
+        AddItem(slot, item);
+        added = true;
+      }
+    }
+  }
+
+  public void EquipSlot(int i){
+    if(!ValidSlot(i)){
+      GD.Print(i + " is an invalid hotbar slot");
+      return;
+    }
+    if(itemSlots[equippedSlot] != null){
+      itemSlots[equippedSlot].Unequip();
+    }
+  }
+
+  public int NextSlot(int i = -1){
+    if(i == -1){
+      i = equippedSlot;
+    }
+    int ret = i++;
+    if(!ValidSlot(ret)){
+      ret = 0;
+    }
+    return ret;
+  }
+
+  public int PrevSlot(int i = -1){
+    if(i == -1){
+      i = equippedSlot;
+    }
+    int ret = i--;
+    if(!ValidSlot(ret)){
+      ret = itemSlots.Length -1;
+    }
+    return ret;
+  }
+
+  public void UseEquippedItem(MappedInputEvent inputEvent){
+    if(itemSlots[equippedSlot] == null){
+      return;
+    }
+    itemSlots[equippedSlot].Use(inputEvent);
   }
 
 }

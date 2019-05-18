@@ -100,22 +100,22 @@ public class Sound {
     string ret = "";
     switch(effect){
       case Effects.RifleShot:
-        ret = "res://Audio/Effects/pew.wav";
+        ret = "res://Assets/Audio/Effects/pew.wav";
         break;
       case Effects.RifleReload:
-        ret = "res://Audio/Effects/chtcht.wav";
+        ret = "res://Assets/Audio/Effects/chtcht.wav";
         break;
       case Effects.FistSwing:
-        ret = "res://Audio/Effects/swing.wav";
+        ret = "res://Assets/Audio/Effects/swing.wav";
         break;
       case Effects.FistImpact:
-        ret = "res://Audio/Effects/impact.wav";
+        ret = "res://Assets/Audio/Effects/impact.wav";
         break;
       case Effects.ActorDamage:
-        ret = "res://Audio/Effects/actor_damage.wav";
+        ret = "res://Assets/Audio/Effects/actor_damage.wav";
         break;
       case Effects.ActorDeath:
-        ret = "res://Audio/Effects/actor_die.wav";
+        ret = "res://Assets/Audio/Effects/actor_die.wav";
         break;
     }
     return ret;

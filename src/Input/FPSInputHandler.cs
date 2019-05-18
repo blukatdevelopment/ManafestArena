@@ -8,7 +8,9 @@ using System.Collections.Generic;
 public class FPSInputHandler : IInputHandler {
   public Actor actor;
   private IInputSource source;
-  private float speed;
+  private float walkSpeed, sprintSpeed;
+  private bool activelySprinting, sprintWasPressed;
+
   public const float SpeedBase = 3f;
   public const float DefaultMouseSensitivity = 4f;
 
@@ -16,43 +18,41 @@ public class FPSInputHandler : IInputHandler {
 
   public FPSInputHandler(Actor actor){
     this.actor = actor;
-    SetSpeed(false);
+    UpdateSpeed();
   }
 
   public void RegisterInputSource(IInputSource source){
     this.source = source;
   }
   public void Update(float delta){
+    if(actor.stats != null){
+      UpdateSpeed();
+    }
     if(actor.body == null){
       GD.Print("No body, therefore no input handling ¯\\_(ツ)_/¯");
       return;
     }
     List<MappedInputEvent> inputEvents = source.GetInputs(delta);
+    sprintWasPressed = false;
     foreach(MappedInputEvent inputEvent in inputEvents){
       HandleSingleInput(inputEvent, delta);
     }
+    if(activelySprinting && !sprintWasPressed){
+      activelySprinting = false;
+    }
   }
 
-  public void SetSpeed(bool sprinting){
-    GD.Print("Set speed " + sprinting);
+  public void UpdateSpeed(){
     if(actor != null && actor.stats != null){
-      speed = (float)actor.stats.GetStat("speed") / 100f;
-      speed += SpeedBase;
-      GD.Print("Stat speed = " + speed);
-      if(sprinting){
-        speed += ((float)actor.stats.GetStat("sprintbonus"))/ 100f;
-      }
+      walkSpeed = (float)actor.stats.GetStat("speed") / 100f;
+      walkSpeed += SpeedBase;
+      
+      sprintSpeed = walkSpeed + ((float)actor.stats.GetStat("sprintbonus"))/ 100f;
     }
     else{
-      if(sprinting){
-        speed = SpeedBase * 2;
-      }
-      else{
-        speed = SpeedBase;
-      }
+      walkSpeed = SpeedBase;
+      sprintSpeed = SpeedBase * 2;
     }
-    GD.Print("Speed set to " + speed);
-
   }
 
   public void HandleSingleInput(MappedInputEvent inputEvent, float delta){
@@ -72,19 +72,30 @@ public class FPSInputHandler : IInputHandler {
         HandleMovement(inputEvent, delta, new Vector3(1f, 0, 0f));
         break;
       case Inputs.PrimaryUse:
+        inputEvent.mappedEventId = (int)Item.ItemInputs.A;
+        actor.hotbar.UseEquippedItem(inputEvent);
         break;
-      case Inputs.SecondaryUse: 
+      case Inputs.SecondaryUse:
+        inputEvent.mappedEventId = (int)Item.ItemInputs.B;
+        actor.hotbar.UseEquippedItem(inputEvent);
         break;
       case Inputs.Reload: 
+        inputEvent.mappedEventId = (int)Item.ItemInputs.C;
+        actor.hotbar.UseEquippedItem(inputEvent);
         break;
       case Inputs.Interact: 
         break;
       case Inputs.Sprint: 
         if(inputEvent.inputType == MappedInputEvent.Inputs.Release){
-          SetSpeed(false);
+          activelySprinting = false;
         }
         else if(inputEvent.inputType == MappedInputEvent.Inputs.Press){
-          SetSpeed(true);
+          activelySprinting = true;
+          sprintWasPressed = true;
+        }
+        else if(inputEvent.inputType == MappedInputEvent.Inputs.Hold){
+          activelySprinting = true; // Protect against missed release events
+          sprintWasPressed = true;
         }
         break;
       case Inputs.Crouch: 
@@ -130,7 +141,21 @@ public class FPSInputHandler : IInputHandler {
     if(input.inputType != MappedInputEvent.Inputs.Press && input.inputType != MappedInputEvent.Inputs.Hold){
       return;
     }
-    direction *= (speed * SpeedBase);
+    float currentSpeed = walkSpeed;
+
+    int sprintCost = 1;
+    if(actor.stats != null){
+      sprintCost = actor.stats.GetStat("sprintcost");
+    }
+
+    if(activelySprinting && actor.stats == null){
+      currentSpeed = sprintSpeed;
+    }
+    else if(activelySprinting && actor.stats.ConsumeStat("stamina", sprintCost)){
+      currentSpeed = sprintSpeed;
+    }
+
+    direction *= (currentSpeed * SpeedBase);
     direction *= input.inputValue;
     actor.body.Move(direction, delta);
   }

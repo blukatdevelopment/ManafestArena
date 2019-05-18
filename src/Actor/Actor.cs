@@ -14,6 +14,10 @@ public class Actor : IHasInputHandler, IHasStats, IHasBody, IHasInventory {
   public HotBar hotbar;
   public PaperDoll paperdoll;
 
+  public Actor(){
+    hotbar = new HotBar(10, this);
+  }
+
   public IInputHandler GetInputHandler(){
     return inputHandler;
   }
@@ -40,6 +44,17 @@ public class Actor : IHasInputHandler, IHasStats, IHasBody, IHasInventory {
     if(body != null){
       body.Update(delta);
     }
+
+    if(hotbar.GetActiveSlot() != null){
+      hotbar.GetActiveSlot().Update(delta);
+    }
+  }
+
+  public Node GetNode(){
+    if(body != null){
+      return body.GetNode();
+    }
+    return null;
   }
 
   public static Actor GetActorFromNode(Node node){

@@ -4,9 +4,10 @@ using System.Collections.Generic;
 
 public interface IItem {
     
-    void Use(Item.ItemInputs input);
+    void Use(MappedInputEvent inputEvent);
     void Equip(object wielder);
     void Unequip();
+    void Update(float delta);
     
     // Simple Getters
     object GetWielder();

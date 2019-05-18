@@ -33,13 +33,29 @@ public class HUDMenu : Container, IMenu{
       return;
     }
     
-    healthBox.Text = "";//player.GetStatusText();
+    healthBox.Text = StatusText(player);
 
-    string itemText = "";//player.ItemInfo();
+    string itemText = player.hotbar.GetInfo();
+
     itemBox.Text = itemText;
     
     string objectiveText = Session.GetObjectiveText();
     objectiveBox.Text = objectiveText;
+  }
+
+  private string StatusText(Actor player){
+    if(player.stats == null){
+      return "";
+    }
+    IStats stats = player.stats;
+
+    string ret = "";
+
+    ret += "Health: " + stats.GetStat("health") + "/" + stats.GetStat("healthmax");
+    ret += "\nStamina: " + stats.GetStat("stamina") + "/" + stats.GetStat("staminamax");
+    ret += "\nMana: " + stats.GetStat("mana") + "/" + stats.GetStat("manamax");
+    return ret;
+
   }
 
   void InitControls(){

@@ -106,7 +106,6 @@ public class ActorFactory {
 
   public static Actor DebugCharacter(){
     Actor actor = FromComponentTypes(InputSources.Player1, StatsHandlers.Icepaws, Bodies.PillBody, InventoryHandlers.None);
-    actor.hotbar = new HotBar(10);
     actor.stats.SetStat("intelligence", 5);
     actor.stats.SetStat("charisma", 5);
     actor.stats.SetStat("endurance", 5);
@@ -115,6 +114,9 @@ public class ActorFactory {
     actor.stats.SetStat("willpower", 5);
     actor.stats.SetStat("strength", 5);
     actor.stats.RestoreCondition();
+    IItem item = ItemFactory.Factory(ItemFactory.Items.Knife);
+    actor.hotbar.AddItem(0, item);
+    
     return actor;
   }
 }

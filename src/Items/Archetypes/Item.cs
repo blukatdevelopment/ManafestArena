@@ -26,13 +26,13 @@ public class Item: RigidBody, IItem, IHasInfo {
     public Area area;
 
     public enum ItemInputs{
-        APress, ARelease,     // eg. Primary        Left Mouse
-        BPress, BRelease,     // eg. Secondary      Right Mouse
-        CPress, CRelease,     // eg. Reload         R
-        DPress, DRelease,     // eg. Melee          F
-        EPress, ERelease,     // eg. Middle         Middle Mouse button
-        FPress, FRelease,     // eg. Next           Mouse Wheel forward
-        GPress, GRelease      // eg. previous       Mouse Wheel Backward
+        A,     // eg. Primary        Left Mouse
+        B,     // eg. Secondary      Right Mouse
+        C,     // eg. Reload         R
+        D,     // eg. Melee          F
+        E,     // eg. Middle         Middle Mouse button
+        F,     // eg. Next           Mouse Wheel forward
+        G      // eg. previous       Mouse Wheel Backward
     };
 
     // Should take place after Item has been configured.
@@ -61,7 +61,7 @@ public class Item: RigidBody, IItem, IHasInfo {
         return description;
     }
 
-    public virtual void Use(ItemInputs input){}
+    public virtual void Use(MappedInputEvent inputEvent){}
 
     public virtual void OnCollide(object body){}
 
@@ -75,6 +75,9 @@ public class Item: RigidBody, IItem, IHasInfo {
 
     public virtual Node GetNode(){
         return this;
+    }
+
+    public virtual void Update(float delta){
     }
 
     public virtual void SetCollision(bool val){
@@ -109,6 +112,10 @@ public class Item: RigidBody, IItem, IHasInfo {
         else{
           ContactsReported = 0;
         }
+    }
+
+    public virtual void SetPhysics(bool val){
+        Mode = val ? RigidBody.ModeEnum.Rigid : RigidBody.ModeEnum.Static;
     }
 
     public  void InitArea(){
@@ -146,9 +153,19 @@ public class Item: RigidBody, IItem, IHasInfo {
     public virtual void Equip(object wielder){
         this.wielder = wielder;
         SetCollision(false);
+
+        Node node = wielder as Node;
+        if(node != null){
+            node.AddChild(this);
+        }
     }
 
     public virtual void Unequip(){
+        Node node = wielder as Node;
+        if(node != null){
+            node.RemoveChild(this);
+        }
+
         this.wielder = null;
         SetCollision(true);
     }

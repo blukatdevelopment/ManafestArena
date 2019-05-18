@@ -21,6 +21,7 @@ public class MeleeStabItem : Item, IHasDamage {
         Sound.Effects impactSound
     ){
         this.name = name;
+        Name = name;
         this.description = description;
         this.meshPath = meshPath;
         InitNodeStructure();
@@ -38,21 +39,40 @@ public class MeleeStabItem : Item, IHasDamage {
         consumer = new StatConsumer(healthCost, manaCost, staminaCost);
     }
 
+    public override void Update(float delta){
+        stabber.Update(delta);
+    }
+
     public override void Equip(object wielder){
         this.wielder = wielder;
+        IBody body = wielder as IBody;
+        if(body != null){
+            body.HoldItem(0, this as IItem);
+        }
+
         SetCollision(false);
+        SetPhysics(false);
         stabber.OnUpdateWielder();
     }
 
     public override void Unequip(){
+        Node node = wielder as Node;
+
+        IBody body = wielder as IBody;
+        if(body != null){
+            body.ReleaseItem(0, this as IItem);
+        }
+
         this.wielder = null;
         stabber.OnUpdateWielder();
         SetCollision(true);
+        SetPhysics(true);
 
     }
 
-    public override void Use(ItemInputs input){
-        if(input == Item.ItemInputs.ARelease){
+    public override void Use(MappedInputEvent inputEvent){
+        Item.ItemInputs input = (Item.ItemInputs)inputEvent.mappedEventId;
+        if(input == Item.ItemInputs.A && inputEvent.inputType == MappedInputEvent.Inputs.Press){
             Stab();
         }
     }
@@ -93,8 +113,8 @@ public class MeleeStabItem : Item, IHasDamage {
                         0,
                         15,
                         0,
-                        Sound.Effects.None,
-                        Sound.Effects.None
+                        Sound.Effects.FistSwing,
+                        Sound.Effects.FistImpact
                     ) as IItem;
             break;
             case ItemFactory.Items.Claws:
@@ -108,8 +128,8 @@ public class MeleeStabItem : Item, IHasDamage {
                         0,
                         15,
                         0,
-                        Sound.Effects.None,
-                        Sound.Effects.None
+                        Sound.Effects.FistSwing,
+                        Sound.Effects.FistImpact
                     ) as IItem;
             break;
         }

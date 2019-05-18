@@ -37,8 +37,13 @@ public class PillBody : KinematicBody , IBody {
   }
 
   private void InitChildren(){
+
     eyes = new Spatial();
     AddChild(eyes);
+
+    hand = new Spatial();
+    eyes.AddChild(hand);
+    hand.Translation = new Vector3(0, 0f, -1f);
     
     speaker = new Speaker();
     AddChild(speaker);
@@ -65,6 +70,7 @@ public class PillBody : KinematicBody , IBody {
     if(index != 0){
       return; // Splitscreen cameras not implemented
     }
+    eyes.RemoveChild(hand);
 
     RemoveChild(eyes);
     
@@ -75,6 +81,7 @@ public class PillBody : KinematicBody , IBody {
     eyes.SetRotationDegrees(new Vector3());
 
     AddChild(eyes);
+    eyes.AddChild(hand);
   }
 
   public void Move(Vector3 movement, float moveDelta = 1f){
@@ -102,6 +109,7 @@ public class PillBody : KinematicBody , IBody {
         }
       }
   }
+
   public void Turn(Vector3 movement, float moveDelta = 1f){
     movement *= moveDelta;
     Vector3 bodyRot = this.GetRotationDegrees();
@@ -128,6 +136,19 @@ public class PillBody : KinematicBody , IBody {
     }
   }
 
+  public void HoldItem(int hand, IItem item){
+    Node node = item.GetNode();
+    this.hand.AddChild(node);
+    Spatial spat = node as Spatial;
+    if(spat != null){
+      spat.Translation = new Vector3(0, 0, -1);
+    }
+  }
+
+  public void ReleaseItem(int hand, IItem item){
+    this.hand.RemoveChild(item.GetNode());
+  }
+
   private void Gravity(float delta){
     float gravityForce = GravityAcceleration * delta;
     gravityVelocity += gravityForce;
@@ -149,16 +170,20 @@ public class PillBody : KinematicBody , IBody {
 
   public void Jump(){
     if(!grounded){ return; }
-    GD.Print("Jump");
     float jumpForce = 10;
-    gravityVelocity = jumpForce;
-    grounded = false; 
     
+    if(actor.stats == null){
+      gravityVelocity = jumpForce;
+      grounded = false;
+      return;  
+    }
+
     if(actor.stats != null && actor.stats.HasStat("jumpcost")){
       int jumpCost = actor.stats.GetStat("jumpcost");
-      Damage dmg = new Damage();
-      dmg.stamina = jumpCost;
-      actor.stats.ReceiveDamage(dmg);  
+      if(actor.stats.ConsumeStat("stamina", jumpCost)){
+        gravityVelocity = jumpForce;
+        grounded = false;
+      }
     }
   }
 
