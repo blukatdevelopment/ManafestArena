@@ -4,7 +4,7 @@ using System.Collections.Generic;
 /*
   Base class for stats handlers that use ICEPAWS stats.
 */
-public class IcepawsStats : IStats {
+public class IcepawsStats : IStats, IReceiveDamage {
   System.Collections.Generic.Dictionary<string, int> stats;
   System.Collections.Generic.Dictionary<string, string> facts;
   private float updateTimer;
@@ -187,7 +187,6 @@ public class IcepawsStats : IStats {
 
     if(fullPointsConsumed == 0){
       stats["staminaregenstored"] -= partialPointsConsumed;
-      GD.Print("Consuming partial");
       return true;
     }
     else if(fullPointsConsumed < stats["stamina"]){
@@ -204,11 +203,16 @@ public class IcepawsStats : IStats {
   }
   
   public void ReceiveDamage(Damage damage){
+    GD.Print("ReceivedDamage stats " + Util.ToJson(damage));
     stats["health"] = GetStat("health") - damage.health;
     stats["stamina"] = GetStat("stamina") - damage.stamina;
     stats["mana"] = GetStat("mana") - damage.mana;
 
     EnforceMaxValues();
+  }
+
+  public int GetHealth(){
+    return GetStat("health");
   }
   
   public void Update(float delta){

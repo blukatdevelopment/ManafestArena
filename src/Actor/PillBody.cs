@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 
 
-public class PillBody : KinematicBody , IBody {
+public class PillBody : KinematicBody , IBody, IReceiveDamage {
   Actor actor;
   Spatial eyes, hand;
   Speaker speaker;
@@ -56,6 +56,25 @@ public class PillBody : KinematicBody , IBody {
     AddChild(collisionShape);
     collisionShape.MakeConvexFromBrothers();
     grounded = true;
+  }
+
+  public void ReceiveDamage(Damage damage){
+    IReceiveDamage receiver = actor.stats as IReceiveDamage;
+    if(receiver == null){
+      return;
+    }
+
+    receiver.ReceiveDamage(damage);
+
+    if(GetHealth() < 1){
+      GD.Print("Died because health was" + GetHealth());
+      Die();
+    }
+  }
+
+  public int GetHealth(){
+    IReceiveDamage receiver = actor.stats as IReceiveDamage;
+    return receiver == null ? 0 : receiver.GetHealth();
   }
 
   public List<Node> GetHands(){ 
@@ -196,7 +215,11 @@ public class PillBody : KinematicBody , IBody {
   }
 
   public void Die(){
-    Transform = Transform.Rotated(new Vector3(0, 0, 1), 1.5f);
+    Transform trans = Transform;
+    Vector3 pos = trans.origin;
+    trans = trans.Rotated(new Vector3(0, 0, 1), 1.5f);
+    trans.origin = pos;
+    Transform = trans;
     dead = true;
   }
 }

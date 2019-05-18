@@ -28,7 +28,8 @@ public class ActorFactory {
 
   public enum Characters {
     None,
-    Debug
+    Debug,
+    Target
   };
 
   public static Actor FromComponentTypes(
@@ -96,10 +97,12 @@ public class ActorFactory {
   public static Actor FromCharacter(Characters character){
     Actor ret = null;
     switch(character){
-      case Characters.Debug:
+      case Characters.Debug: // Test player1
         ret = DebugCharacter();
-        ret.body.InitCam(0);
       break;
+      case Characters.Target: // Won't fight back.
+        ret = TargetCharacter();
+        break;
     }
     return ret;
   }
@@ -116,7 +119,22 @@ public class ActorFactory {
     actor.stats.RestoreCondition();
     IItem item = ItemFactory.Factory(ItemFactory.Items.Knife);
     actor.hotbar.AddItem(0, item);
-    
+    actor.body.InitCam(0);
+    return actor;
+  }
+
+  public static Actor TargetCharacter(){
+    Actor actor = FromComponentTypes(InputSources.None, StatsHandlers.Icepaws, Bodies.PillBody, InventoryHandlers.None);
+    actor.stats.SetStat("intelligence", 5);
+    actor.stats.SetStat("charisma", 5);
+    actor.stats.SetStat("endurance", 5);
+    actor.stats.SetStat("perception", 5);
+    actor.stats.SetStat("agility", 5);
+    actor.stats.SetStat("willpower", 5);
+    actor.stats.SetStat("strength", 5);
+    actor.stats.RestoreCondition();
+    IItem item = ItemFactory.Factory(ItemFactory.Items.Knife);
+    actor.hotbar.AddItem(0, item);
     return actor;
   }
 }
