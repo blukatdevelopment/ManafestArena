@@ -67,7 +67,6 @@ public class MeleeStabItem : Item, IHasDamage {
         stabber.OnUpdateWielder();
         SetCollision(true);
         SetPhysics(true);
-
     }
 
     public override void Use(MappedInputEvent inputEvent){

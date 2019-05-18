@@ -203,7 +203,6 @@ public class IcepawsStats : IStats, IReceiveDamage {
   }
   
   public void ReceiveDamage(Damage damage){
-    GD.Print("ReceivedDamage stats " + Util.ToJson(damage));
     stats["health"] = GetStat("health") - damage.health;
     stats["stamina"] = GetStat("stamina") - damage.stamina;
     stats["mana"] = GetStat("mana") - damage.mana;

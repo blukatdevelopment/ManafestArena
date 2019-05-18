@@ -152,22 +152,26 @@ public class Item: RigidBody, IItem, IHasInfo {
 
     public virtual void Equip(object wielder){
         this.wielder = wielder;
-        SetCollision(false);
-
-        Node node = wielder as Node;
-        if(node != null){
-            node.AddChild(this);
+        IBody body = wielder as IBody;
+        if(body != null){
+            body.HoldItem(0, this as IItem);
         }
+
+        SetCollision(false);
+        SetPhysics(false);
     }
 
     public virtual void Unequip(){
         Node node = wielder as Node;
-        if(node != null){
-            node.RemoveChild(this);
+
+        IBody body = wielder as IBody;
+        if(body != null){
+            body.ReleaseItem(0, this as IItem);
         }
 
         this.wielder = null;
         SetCollision(true);
+        SetPhysics(true);
     }
 
     public virtual ItemFactory.Items GetItemEnum(){

@@ -22,7 +22,9 @@ public class ItemFactory {
         Claws,
         // ProjectileItem
         MusketBall,
-        CrossbowBolt
+        CrossbowBolt,
+        // ProjectileLauncher
+        Crossbow
     };
 
     public static IItem Factory(Items item){

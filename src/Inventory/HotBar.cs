@@ -112,22 +112,50 @@ public class HotBar : IHasInfo {
     }
   }
 
-  public int NextSlot(int i = -1){
+  private void UnequipActive(){
+    if(itemSlots[equippedSlot] == null){
+      return;
+    }
+    itemSlots[equippedSlot].Unequip();
+  }
+
+  private void EquipActive(){
+    if(itemSlots[equippedSlot] == null){
+      GD.Print("Active slot is null. Not equipping.");
+      return;
+    }
+    itemSlots[equippedSlot].Equip(actor.body);
+  }
+
+  public void EquipNext(){
+    UnequipActive();
+    equippedSlot = NextSlot(equippedSlot);
+    EquipActive();
+  }
+
+  public void EquipPrevious(){
+    UnequipActive();
+    equippedSlot = PrevSlot(equippedSlot);
+    EquipActive();
+  }
+
+
+  private int NextSlot(int i = -1){
     if(i == -1){
       i = equippedSlot;
     }
-    int ret = i++;
+    int ret = i + 1;
     if(!ValidSlot(ret)){
       ret = 0;
     }
     return ret;
   }
 
-  public int PrevSlot(int i = -1){
+  private int PrevSlot(int i = -1){
     if(i == -1){
       i = equippedSlot;
     }
-    int ret = i--;
+    int ret = i -1;
     if(!ValidSlot(ret)){
       ret = itemSlots.Length -1;
     }

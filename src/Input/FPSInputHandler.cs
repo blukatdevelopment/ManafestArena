@@ -107,9 +107,15 @@ public class FPSInputHandler : IInputHandler {
         break;
       case Inputs.Inventory: 
         break;
-      case Inputs.NextItem: 
+      case Inputs.NextItem:
+        if(inputEvent.inputType == MappedInputEvent.Inputs.Press){
+          actor.hotbar.EquipNext();
+        }
         break;
       case Inputs.PreviousItem: 
+        if(inputEvent.inputType == MappedInputEvent.Inputs.Press){
+          actor.hotbar.EquipPrevious();
+        }
         break;
       case Inputs.Pause:
         if(inputEvent.inputType == MappedInputEvent.Inputs.Press){

@@ -143,7 +143,7 @@ public class InputMapping {
   }
 
   public static InputMapping Unflatten(string flat){
-    GD.Print("Unflattening " + flat);
+    //GD.Print("Unflattening " + flat);
     string[] values = flat.Split(';');
     if(values.Length != 5){
       GD.Print("Invalid flat mapping: " + flat);
