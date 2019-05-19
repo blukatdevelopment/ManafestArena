@@ -59,6 +59,10 @@ public class PillBody : KinematicBody , IBody, IReceiveDamage {
   }
 
   public void ReceiveDamage(Damage damage){
+    if(dead){
+      return;
+    }
+    
     IReceiveDamage receiver = actor.stats as IReceiveDamage;
     if(receiver == null){
       return;

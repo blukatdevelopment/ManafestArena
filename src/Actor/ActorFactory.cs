@@ -117,8 +117,8 @@ public class ActorFactory {
     actor.stats.SetStat("willpower", 5);
     actor.stats.SetStat("strength", 5);
     actor.stats.RestoreCondition();
-    IItem item = ItemFactory.Factory(ItemFactory.Items.Knife);
-    actor.hotbar.AddItem(0, item);
+    actor.hotbar.AddItem(0, ItemFactory.Factory(ItemFactory.Items.Knife));
+    actor.hotbar.AddItem(1, ItemFactory.Factory(ItemFactory.Items.Crossbow));
     actor.body.InitCam(0);
     return actor;
   }
@@ -135,7 +135,6 @@ public class ActorFactory {
     actor.stats.RestoreCondition();
     actor.hotbar = new HotBar(10, actor);
     actor.hotbar.AddItem(0, ItemFactory.Factory(ItemFactory.Items.Knife));
-    actor.hotbar.AddItem(1, ItemFactory.Factory(ItemFactory.Items.Crossbow));
     return actor;
   }
 }

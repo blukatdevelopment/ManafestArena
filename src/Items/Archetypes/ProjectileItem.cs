@@ -7,6 +7,9 @@ public class ProjectileItem : Item {
     public CollisionDamager collision;
     public string sender;
 
+
+    public ProjectileItem(){}
+
     public ProjectileItem(
         string name,
         string description,
@@ -26,9 +29,19 @@ public class ProjectileItem : Item {
             speaker,
             impactSound
         );
+        InitArea();
     }
 
     public override void OnCollide(object body){
+        ProjectileItem proj = body as ProjectileItem;
+        if(proj != null){
+            GD.Print("Colliding with a projectile");
+            if(proj == this){
+                GD.Print("Colliding with self");
+                return;
+            }
+        }
+        
         collision.OnCollide(body);
         QueueFree();
     }

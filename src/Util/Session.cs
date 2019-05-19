@@ -207,7 +207,6 @@ public class Session : Node {
     Input.SetMouseMode(Input.MouseMode.Visible);
   }
   
-  // Returns the first if there are more than one gamemode, or else the session
   public static Node GameNode(){
     Session ses = Session.session;
     foreach(Node node in ses.activeGamemodes){
@@ -215,6 +214,18 @@ public class Session : Node {
     }
     
     return ses;
+  }
+
+  public static Spatial GameSpatial(){
+    Session ses = Session.session;
+    foreach(Node node in ses.activeGamemodes){
+      Spatial spat = node as Spatial;
+      if(spat != null){
+        return spat;
+      }
+    }
+    
+    return null;
   }
   
   public static void QuitToMainMenu(){

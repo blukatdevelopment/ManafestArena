@@ -124,7 +124,9 @@ public class Item: RigidBody, IItem, IHasInfo {
         }
         List<CollisionShape> shapes = GetCollisionShapes();
         this.area = new Area();
+        this.area.Name = "Area";
         CollisionShape areaShape = new CollisionShape();
+        areaShape.Name = "AreaShape";
         area.AddChild(areaShape);
         Godot.Array areaShapeOwners = area.GetShapeOwners();
         for(int i = 0; i < areaShapeOwners.Count; i++){

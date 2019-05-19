@@ -33,6 +33,7 @@ public class AmmoStore {
 
         while(loadedAmmo.Count > ammoCapacity){
             reserveAmmo.Add(loadedAmmo[0]);
+            loadedAmmo.RemoveAt(0);
         }
     }
 
@@ -45,8 +46,13 @@ public class AmmoStore {
             }
             else{
                 loadedAmmo.Add(reserveAmmo[0]);
+                reserveAmmo.RemoveAt(0);
             }
         }
+    }
+
+    public int AmmoCapacity(){
+        return ammoCapacity;
     }
 
     public int LoadedAmmoCount(){
