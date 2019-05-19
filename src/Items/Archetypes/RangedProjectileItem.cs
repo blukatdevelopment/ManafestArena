@@ -5,12 +5,12 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class RangedProjectileItem : Item {
+public class RangedProjectileItem : Item, IWeapon, IRangedWeapon {
   ProjectileLauncher launcher;
   AmmoStore ammoStorage;
   Speaker speaker;
-  bool reloadActive;
-  float reloadTimer, reloadDelay;
+  bool reloadActive, fireActive;
+  float reloadTimer, reloadDelay, fireTimer, fireDelay;
 
   public RangedProjectileItem(){
   }
@@ -23,7 +23,8 @@ public class RangedProjectileItem : Item {
     Damage damage, 
     float launchImpulse,
     int ammoCapacity,
-    float reloadDelay
+    float reloadDelay,
+    float fireDelay
   ){
     this.name = name;
     Name = name;
@@ -55,6 +56,12 @@ public class RangedProjectileItem : Item {
   }
 
   public override void Update(float delta){
+    if(fireActive){
+      fireTimer -= delta;
+      if(fireTimer <= 0f){
+        fireActive = false;
+      }
+    }
     if(reloadActive){
       reloadTimer -= delta;
       if(reloadTimer <= 0f){
@@ -71,7 +78,7 @@ public class RangedProjectileItem : Item {
   }
 
   public override void Use(MappedInputEvent inputEvent){
-    if(inputEvent.inputType != MappedInputEvent.Inputs.Press || reloadActive){
+    if(inputEvent.inputType != MappedInputEvent.Inputs.Press || reloadActive || fireActive){
       return;
     }
     Item.ItemInputs input = (Item.ItemInputs)inputEvent.mappedEventId;
@@ -79,6 +86,11 @@ public class RangedProjectileItem : Item {
       case Item.ItemInputs.A:
         if(ammoStorage.ExpendAmmo()){
           launcher.Fire();
+          fireTimer = fireDelay;
+          fireActive = true;
+          if(ammoStorage.LoadedAmmoCount() == 0 && ammoStorage.ReserveAmmoCount() > 0){
+            StartReload();
+          }
         }
         else if(ammoStorage.ReserveAmmoCount() != 0){
           StartReload();
@@ -108,6 +120,23 @@ public class RangedProjectileItem : Item {
     return new List<ItemFactory.Items>(){ ItemFactory.Items.Crossbow };
   }
 
+  public Damage GetDamage(){
+    return launcher.damage;
+  }
+
+  public float AttackDelay(){
+    return fireDelay;
+  }
+
+  public float GetEffectiveRange(){
+    // TODO: Calculate bullet drop from 2m height here
+    return 20f;
+  }
+
+  public int GetAmmo(){
+    return ammoStorage.LoadedAmmoCount() + ammoStorage.ReserveAmmoCount(); 
+  }
+
   public override IItem Factory(ItemFactory.Items item){
     RangedProjectileItem ret = null;
     Damage damage = new Damage();
@@ -122,7 +151,8 @@ public class RangedProjectileItem : Item {
         damage,
         50f,
         1,
-        1f
+        1f,
+        0.5f
       );
       ret.LoadAmmo(CreateAmmo(12, ItemFactory.Items.CrossbowBolt));
       break;

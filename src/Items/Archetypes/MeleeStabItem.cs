@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class MeleeStabItem : Item, IHasDamage {
+public class MeleeStabItem : Item, IHasDamage, IWeapon {
     public ItemStabber stabber;
     public StatConsumer consumer;
 
@@ -84,6 +84,10 @@ public class MeleeStabItem : Item, IHasDamage {
 
     public Damage GetDamage(){
         return stabber.damage;
+    }
+
+    public float AttackDelay(){
+        return stabber.stabSpeed;
     }
 
     public override void OnCollide(object body){

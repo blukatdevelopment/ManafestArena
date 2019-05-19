@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 
 public class ProjectileLauncher {
-  IItem item;
-  Damage damage;
-  Speaker speaker;
+  public IItem item;
+  public Damage damage;
+  public Speaker speaker;
 
   public ItemFactory.Items projectileType;
   public float launchImpulse;
