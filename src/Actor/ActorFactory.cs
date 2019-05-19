@@ -28,8 +28,9 @@ public class ActorFactory {
 
   public enum Characters {
     None,
-    Debug,
-    Target
+    DebugPlayer,
+    Target,
+    DebugEnemy
   };
 
   public static Actor FromComponentTypes(
@@ -91,23 +92,26 @@ public class ActorFactory {
 
   public static Actor FromName(string name){
       GD.Print("Making character: " + name);
-      return FromCharacter(Characters.Debug);
+      return FromCharacter(Characters.DebugPlayer);
   }
 
   public static Actor FromCharacter(Characters character){
     Actor ret = null;
     switch(character){
-      case Characters.Debug: // Test player1
-        ret = DebugCharacter();
+      case Characters.DebugPlayer: // Test player1
+        ret = DebugPlayerCharacter();
       break;
-      case Characters.Target: // Won't fight back.
+      case Characters.Target: // For target practice
         ret = TargetCharacter();
+        break;
+      case Characters.DebugEnemy: // For live fire practice
+        ret = DebugEnemyCharacter();
         break;
     }
     return ret;
   }
 
-  public static Actor DebugCharacter(){
+  public static Actor DebugPlayerCharacter(){
     Actor actor = FromComponentTypes(InputSources.Player1, StatsHandlers.Icepaws, Bodies.PillBody, InventoryHandlers.None);
     actor.stats.SetStat("intelligence", 5);
     actor.stats.SetStat("charisma", 5);
@@ -124,6 +128,21 @@ public class ActorFactory {
   }
 
   public static Actor TargetCharacter(){
+    Actor actor = FromComponentTypes(InputSources.None, StatsHandlers.Icepaws, Bodies.PillBody, InventoryHandlers.None);
+    actor.stats.SetStat("intelligence", 5);
+    actor.stats.SetStat("charisma", 5);
+    actor.stats.SetStat("endurance", 5);
+    actor.stats.SetStat("perception", 5);
+    actor.stats.SetStat("agility", 5);
+    actor.stats.SetStat("willpower", 5);
+    actor.stats.SetStat("strength", 5);
+    actor.stats.RestoreCondition();
+    actor.hotbar = new HotBar(10, actor);
+    actor.hotbar.AddItem(0, ItemFactory.Factory(ItemFactory.Items.Knife));
+    return actor;
+  }
+
+  public static Actor DebugEnemyCharacter(){
     Actor actor = FromComponentTypes(InputSources.None, StatsHandlers.Icepaws, Bodies.PillBody, InventoryHandlers.None);
     actor.stats.SetStat("intelligence", 5);
     actor.stats.SetStat("charisma", 5);

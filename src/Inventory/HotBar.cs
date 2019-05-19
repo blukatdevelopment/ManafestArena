@@ -65,6 +65,46 @@ public class HotBar : IHasInfo {
     return ValidSlot(i) ? itemSlots[i] : null;
   }
 
+    /* How many times do you need to hit NextItem to get from the
+     the start to finish.
+  */
+  public int SlotDistance(int start, int finish){
+    if(start < finish){
+      return finish - start;
+    }
+    if(start > finish){
+      int ret = itemSlots.Length -1;
+      ret -= start;
+      ret += finish;
+      return ret;
+    }
+    return 0;
+
+  }
+
+  public int GetEquippedSlot(){
+    return equippedSlot;
+  }
+
+  public int GetSlotByItem(IItem item){
+    for(int i = 0; i < itemSlots.Length; i++){
+      if(itemSlots[i] == item){
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  public List<IItem> Getitems(){
+    List<IItem> ret = new List<IItem>();
+    for(int i = 0; i < itemSlots.Length; i++){
+      if(itemSlots[i] != null){
+        ret.Add(itemSlots[i]);
+      }
+    }
+    return ret;
+  }
+
   public IItem RemoveItem(int i){
     IItem ret = GetSlot(i);
     if(ret != null){

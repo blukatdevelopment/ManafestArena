@@ -58,6 +58,10 @@ public class Actor : IHasInputHandler, IHasStats, IHasBody, IHasInventory {
   }
 
   public static Actor GetActorFromNode(Node node){
+    if(node == null){
+      return null;
+    }
+    
     IBody actorBody = node as IBody;
     if(actorBody != null){
       return actorBody.GetActor();

@@ -25,7 +25,7 @@ public class ArenaMatchEncounter : IEncounter {
     arena.killQuota = 5;
     arena.player = career.GetPlayer();
     for(int i = 0; i < 10; i++){
-      arena.enemies.Add(ActorFactory.FromCharacter(ActorFactory.Characters.Target));
+      arena.enemies.Add(ActorFactory.FromCharacter(ActorFactory.Characters.DebugEnemy));
     }
 
     Session.AddGamemode(arena as Node);
@@ -39,6 +39,7 @@ public class ArenaMatchEncounter : IEncounter {
   }
 
   private string RandomArenaMap(){
+    return "res://Assets/Scenes/Maps/MazeII.tscn"; // TODO: Remove
     List<string> arenaMaps = new List<string>{
       "res://Assets/Scenes/Maps/Levels.tscn",
       "res://Assets/Scenes/Maps/Maze.tscn",

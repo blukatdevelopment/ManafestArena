@@ -19,4 +19,5 @@ public interface IBody {
   MeshInstance GetMesh();
   void Update(float delta);
   void Die();
+  List<Actor> ActorsInSight();
 }

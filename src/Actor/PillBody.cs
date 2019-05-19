@@ -226,4 +226,30 @@ public class PillBody : KinematicBody , IBody, IReceiveDamage {
     Transform = trans;
     dead = true;
   }
+
+  public List<Actor> ActorsInSight(){
+    Vector3 start = eyes.Transform.origin;
+    Vector3 end = Get3DCursor();
+    World world = GetWorld();
+
+    List<object> objects = Util.GridCast(start, end, world, 3, 5f);
+    List<Actor> ret = new List<Actor>();
+    foreach(object obj in objects){
+      Actor sightedActor = Actor.GetActorFromNode(obj as Node);
+      if(sightedActor != null){
+        ret.Add(sightedActor);
+      }
+    }
+
+    return ret;
+  }
+
+  public Vector3 Get3DCursor(float distance = 100f){
+    Vector3 start = eyes.Transform.origin;
+    Transform headTrans = eyes.Transform;
+    Vector3 end = Util.TForward(headTrans);
+    end *= distance;
+    end += start;
+    return end;
+  }
 }

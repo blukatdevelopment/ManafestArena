@@ -380,4 +380,9 @@ public class Util{
     return ret;
   }
 
+  // Damage per second
+  public static float DPS(float damage, float delay){
+    return damage * (1f/delay);
+  }
+
 }
