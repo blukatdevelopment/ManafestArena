@@ -260,4 +260,8 @@ public class PillBody : KinematicBody , IBody, IReceiveDamage {
     end += start;
     return end;
   }
+
+  public Vector3 LookingDegrees(){
+    return GetRotationDegrees();
+  }
 }

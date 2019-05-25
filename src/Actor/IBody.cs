@@ -21,4 +21,5 @@ public interface IBody {
   void Die();
   bool IsDead();
   List<Actor> ActorsInSight();
+  Vector3 LookingDegrees();
 }

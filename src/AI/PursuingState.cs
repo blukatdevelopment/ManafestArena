@@ -56,7 +56,6 @@ public class PursuingState : IBehaviorState {
   }
 
   public void Pursue(float delta){
-    GD.Print("pursuing the enemy");
     Spatial enemySpat = enemy.GetNode() as Spatial;
     if(enemySpat == null){
       GD.Print("Enemy has no spatial");

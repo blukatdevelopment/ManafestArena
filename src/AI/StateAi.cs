@@ -148,15 +148,14 @@ public class StateAi : IInputSource {
     Transform hostTrans = hostSpat.Transform;
     Transform lookingAt = hostTrans.LookingAt(point, Util.TUp(hostTrans));
     
-    // Get horizontal rotation based on host body.
-    Vector3 hostRot = hostSpat.GetRotationDegrees();
-    
-    // Get vertical Rotation based on head when possible.
-    hostRot.x = hostSpat.RotationDegrees.x;
+    Vector3 hostRot = body.LookingDegrees();
     
     Vector3 lookingRot = lookingAt.basis.GetEuler();
     lookingRot = Util.ToDegrees(lookingRot);
     Vector3 turnRot = (lookingRot - hostRot);
+    turnRot.x = PickShorterDirection(turnRot.x);
+    turnRot.y = PickShorterDirection(turnRot.y);
+
 
     float xMag = Math.Min(Math.Abs(turnRot.x), MaxTurnRate) * TurnModifier;
     FPSInputHandler.Inputs xDir = turnRot.x < 0 ? FPSInputHandler.Inputs.LookDown : FPSInputHandler.Inputs.LookUp;
@@ -165,6 +164,22 @@ public class StateAi : IInputSource {
     float yMag = Math.Min(Math.Abs(turnRot.y), MaxTurnRate) * TurnModifier;
     FPSInputHandler.Inputs yDir = turnRot.y < 0 ? FPSInputHandler.Inputs.LookLeft : FPSInputHandler.Inputs.LookRight;
     Hold(yDir, yMag);
+
+    GD.Print("[" + xMag + ", " + yMag + "] " + lookingRot + " - " + hostRot + " = " + turnRot);
+  }
+
+  // Don't turn 181 degrees when you can turn -179
+  public float PickShorterDirection(float val){
+    if(val > -180 && val < 180){
+      return val;
+    }
+
+    float direction = val < 0 ? 1f : -1f;
+    val = Math.Abs(val);
+    val -= 180;
+    val = 180 - val;
+
+    return val * direction;
   }
 
   public bool IsAimedAt(Vector3 point, float aimMargin){
