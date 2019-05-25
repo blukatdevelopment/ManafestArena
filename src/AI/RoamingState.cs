@@ -27,7 +27,7 @@ public class RoamingState : IBehaviorState {
       GD.Print("Enemies sighted");
       hostAi.ChangeState(StateAi.States.Pursuing);
     }
-    //Wander();
+    Wander();
   }
 
   public bool EnemyCheck(float delta){

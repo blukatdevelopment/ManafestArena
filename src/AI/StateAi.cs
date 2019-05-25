@@ -164,11 +164,9 @@ public class StateAi : IInputSource {
     float yMag = Math.Min(Math.Abs(turnRot.y), MaxTurnRate) * TurnModifier;
     FPSInputHandler.Inputs yDir = turnRot.y < 0 ? FPSInputHandler.Inputs.LookLeft : FPSInputHandler.Inputs.LookRight;
     Hold(yDir, yMag);
-
-    GD.Print("[" + xMag + ", " + yMag + "] " + lookingRot + " - " + hostRot + " = " + turnRot);
   }
 
-  // Don't turn 181 degrees when you can turn -179
+  // Why turn 181 degrees when you can turn -179 ?
   public float PickShorterDirection(float val){
     if(val > -180 && val < 180){
       return val;

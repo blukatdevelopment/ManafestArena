@@ -262,6 +262,9 @@ public class PillBody : KinematicBody , IBody, IReceiveDamage {
   }
 
   public Vector3 LookingDegrees(){
-    return GetRotationDegrees();
+    Vector3 torsoRot = GetRotationDegrees();
+    Vector3 eyesRot = eyes.GetRotationDegrees();
+    torsoRot.x = eyesRot.x;
+    return torsoRot;
   }
 }

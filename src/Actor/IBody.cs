@@ -21,5 +21,5 @@ public interface IBody {
   void Die();
   bool IsDead();
   List<Actor> ActorsInSight();
-  Vector3 LookingDegrees();
+  Vector3 LookingDegrees(); // In case this is not as simple as spatial.GetRotationDegrees()
 }
