@@ -40,6 +40,8 @@ public class PillBody : KinematicBody , IBody, IReceiveDamage {
 
     eyes = new Spatial();
     AddChild(eyes);
+    eyes.TranslateObjectLocal(new Vector3(0, 2f, 0));
+    eyes.SetRotationDegrees(new Vector3());
 
     hand = new Spatial();
     eyes.AddChild(hand);
@@ -100,10 +102,10 @@ public class PillBody : KinematicBody , IBody, IReceiveDamage {
     Camera cam = new Camera();
     cam.Far = 1000f;
     eyes = (Spatial)cam;
+    AddChild(eyes);
     eyes.TranslateObjectLocal(new Vector3(0, 2f, 0));
     eyes.SetRotationDegrees(new Vector3());
-
-    AddChild(eyes);
+    
     eyes.AddChild(hand);
   }
 
@@ -151,6 +153,7 @@ public class PillBody : KinematicBody , IBody, IReceiveDamage {
     }
 
     eyes.SetRotationDegrees(headRot);
+    SetRotationDegrees(bodyRot);
   }
 
   public void Update(float delta){
@@ -218,6 +221,10 @@ public class PillBody : KinematicBody , IBody, IReceiveDamage {
     return meshInstance;
   }
 
+  public bool IsDead(){
+    return dead;
+  }
+
   public void Die(){
     Transform trans = Transform;
     Vector3 pos = trans.origin;
@@ -228,24 +235,25 @@ public class PillBody : KinematicBody , IBody, IReceiveDamage {
   }
 
   public List<Actor> ActorsInSight(){
-    Vector3 start = eyes.Transform.origin;
+    Vector3 start = eyes.GlobalTransform.origin;
     Vector3 end = Get3DCursor();
     World world = GetWorld();
 
     List<object> objects = Util.GridCast(start, end, world, 3, 5f);
     List<Actor> ret = new List<Actor>();
     foreach(object obj in objects){
-      Actor sightedActor = Actor.GetActorFromNode(obj as Node);
+      Node node = obj as Node;
+      Actor sightedActor = Actor.GetActorFromNode(node);
       if(sightedActor != null){
         ret.Add(sightedActor);
       }
     }
-
     return ret;
   }
 
+  // The end of a ray pointed forward in global space
   public Vector3 Get3DCursor(float distance = 100f){
-    Vector3 start = eyes.Transform.origin;
+    Vector3 start = eyes.GlobalTransform.origin;
     Transform headTrans = eyes.Transform;
     Vector3 end = Util.TForward(headTrans);
     end *= distance;

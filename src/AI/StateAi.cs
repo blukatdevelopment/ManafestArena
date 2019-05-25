@@ -19,6 +19,8 @@ public class StateAi : IInputSource {
   };
 
   public const States DefaultState = States.Roaming;
+  public const float MaxTurnRate = 50f;
+  public const float TurnModifier = 5f; // 1 degree != 1f movement value
   public IBehaviorState activeState;
   public Actor host;
   public List<MappedInputEvent> inputEvents;
@@ -82,12 +84,12 @@ public class StateAi : IInputSource {
   //#     State convenience methods                                            #
   //############################################################################
   
-  public void Press(FPSInputHandler.Inputs input){
-    inputEvents.Add(MappedInputEvent.Press(1f, (int)input));
+  public void Press(FPSInputHandler.Inputs input, float val = 1f){
+    inputEvents.Add(MappedInputEvent.Press(val, (int)input));
   }
 
-  public void Hold(FPSInputHandler.Inputs input){
-    inputEvents.Add(MappedInputEvent.Hold(1f, (int)input));
+  public void Hold(FPSInputHandler.Inputs input, float val = 1f){
+    inputEvents.Add(MappedInputEvent.Hold(val, (int)input));
   }
 
   public List<Actor> ActorsInSight(){
@@ -156,18 +158,13 @@ public class StateAi : IInputSource {
     lookingRot = Util.ToDegrees(lookingRot);
     Vector3 turnRot = (lookingRot - hostRot);
 
-    if(turnRot.y > 0){
-      Hold(FPSInputHandler.Inputs.LookRight);
-    }
-    else if(turnRot.y < 0){
-      Hold(FPSInputHandler.Inputs.LookLeft);
-    }
-    if(turnRot.x > 0){
-      Hold(FPSInputHandler.Inputs.LookUp);
-    }
-    else if(turnRot.x < 0){
-      Hold(FPSInputHandler.Inputs.LookDown);
-    }
+    float xMag = Math.Min(Math.Abs(turnRot.x), MaxTurnRate) * TurnModifier;
+    FPSInputHandler.Inputs xDir = turnRot.x < 0 ? FPSInputHandler.Inputs.LookDown : FPSInputHandler.Inputs.LookUp;
+    Hold(xDir, xMag);
+
+    float yMag = Math.Min(Math.Abs(turnRot.y), MaxTurnRate) * TurnModifier;
+    FPSInputHandler.Inputs yDir = turnRot.y < 0 ? FPSInputHandler.Inputs.LookLeft : FPSInputHandler.Inputs.LookRight;
+    Hold(yDir, yMag);
   }
 
   public bool IsAimedAt(Vector3 point, float aimMargin){

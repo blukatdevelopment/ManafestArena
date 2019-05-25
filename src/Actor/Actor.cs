@@ -35,6 +35,10 @@ public class Actor : IHasInputHandler, IHasStats, IHasBody, IHasInventory {
   }
 
   public void Update(float delta){
+    if(body != null && body.IsDead()){
+      return;
+    }
+
     if(inputHandler != null){
       inputHandler.Update(delta);
     }

@@ -50,6 +50,7 @@ public class ActorFactory {
   public static void InitInputHandler(InputSources inputSource, Actor actor){
     FPSInputHandler fps;
     MappedInputSource mapped;
+    StateAi ai;
     switch(inputSource){
       case InputSources.Player1:
         mapped = new MappedInputSource(Session.GetDevice(0), FPSInputHandler.GetMappings());
@@ -61,7 +62,10 @@ public class ActorFactory {
         // Set up net source
       break;
       case InputSources.AI:
-        // Set up AI
+        ai = new StateAi(actor);
+        fps = new FPSInputHandler(actor);
+        fps.RegisterInputSource(ai as IInputSource);
+        actor.inputHandler = fps as IInputHandler;
       break;
     }
   }
@@ -143,7 +147,7 @@ public class ActorFactory {
   }
 
   public static Actor DebugEnemyCharacter(){
-    Actor actor = FromComponentTypes(InputSources.None, StatsHandlers.Icepaws, Bodies.PillBody, InventoryHandlers.None);
+    Actor actor = FromComponentTypes(InputSources.AI, StatsHandlers.Icepaws, Bodies.PillBody, InventoryHandlers.None);
     actor.stats.SetStat("intelligence", 5);
     actor.stats.SetStat("charisma", 5);
     actor.stats.SetStat("endurance", 5);

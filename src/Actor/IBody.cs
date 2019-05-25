@@ -19,5 +19,6 @@ public interface IBody {
   MeshInstance GetMesh();
   void Update(float delta);
   void Die();
+  bool IsDead();
   List<Actor> ActorsInSight();
 }

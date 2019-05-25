@@ -42,6 +42,7 @@ public class PursuingState : IBehaviorState {
   }
 
   public bool EnemyInRangeCheck(float delta){
+    return false; //FIXME
     rangeCheckTimer += delta;
     if(rangeCheckTimer < RangeCheckInterval){
       return false;
@@ -55,6 +56,7 @@ public class PursuingState : IBehaviorState {
   }
 
   public void Pursue(float delta){
+    GD.Print("pursuing the enemy");
     Spatial enemySpat = enemy.GetNode() as Spatial;
     if(enemySpat == null){
       GD.Print("Enemy has no spatial");
@@ -63,7 +65,7 @@ public class PursuingState : IBehaviorState {
     Vector3 targetPos = enemySpat.Translation;
 
     hostAi.AimAt(targetPos);
-    hostAi.Hold(FPSInputHandler.Inputs.MoveForward);
+    //hostAi.Hold(FPSInputHandler.Inputs.MoveForward);
   }
 
 }

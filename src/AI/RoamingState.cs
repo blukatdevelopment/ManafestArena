@@ -24,9 +24,10 @@ public class RoamingState : IBehaviorState {
 
   public void Update(float delta){
     if(EnemyCheck(delta)){
+      GD.Print("Enemies sighted");
       hostAi.ChangeState(StateAi.States.Pursuing);
     }
-    Wander();
+    //Wander();
   }
 
   public bool EnemyCheck(float delta){
@@ -49,7 +50,10 @@ public class RoamingState : IBehaviorState {
 
   // TODO: Make this less dumb
   public void Wander(){
-    hostAi.Hold(FPSInputHandler.Inputs.LookRight);
+    
+    for(int i = 0; i < 15; i++){
+      hostAi.Hold(FPSInputHandler.Inputs.LookRight);
+    }
     hostAi.Hold(FPSInputHandler.Inputs.MoveForward);
   }
 }
