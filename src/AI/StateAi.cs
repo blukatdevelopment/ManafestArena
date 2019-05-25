@@ -84,6 +84,17 @@ public class StateAi : IInputSource {
   //#     State convenience methods                                            #
   //############################################################################
   
+  /* Equip an item currently in the hotbar */
+  public void SelectHotBarItem(IItem item){
+    int slot = host.hotbar.GetSlotByItem(item);
+    int activeSlot = host.hotbar.GetEquippedSlot();
+    int requiredPresses = host.hotbar.SlotDistance(activeSlot, slot);
+    GD.Print("Going from " + activeSlot + " to " + slot + " with " + requiredPresses + " presses");
+    for(int i = 0; i < requiredPresses; i++){
+      Press(FPSInputHandler.Inputs.NextItem);
+    }
+  }
+
   public void Press(FPSInputHandler.Inputs input, float val = 1f){
     inputEvents.Add(MappedInputEvent.Press(val, (int)input));
   }

@@ -56,6 +56,7 @@ public class RangedCombatState : IBehaviorState {
   public void Update(float delta){
     if(enemy == null){
       hostAi.ChangeState(StateAi.States.Roaming);
+      return;
     }
 
     Spatial hostSpat = hostActor.GetNode() as Spatial;
@@ -121,37 +122,10 @@ public class RangedCombatState : IBehaviorState {
         aimDelayActive = false;
         attackTimer = 0f;
         aimDelayTimer = 0f;
-        hostAi.Hold(FPSInputHandler.Inputs.PrimaryUse);
+        hostAi.Press(FPSInputHandler.Inputs.PrimaryUse);
       }
 
     }
   }
-
-  // public void Attack(float delta){
-  //   attackTimer += delta;
-    
-  //   ProjectileWeapon pw = hostActor.PrimaryItem() as ProjectileWeapon;
-
-  //   if(pw == null || pw.GetAmmoCount() == 0){
-  //     hostAi.ChangeState(StateAi.States.Fighting);
-  //   }
-
-
-  //   if(!aimDelayActive && attackTimer >= AttackInterval && aimed){
-  //     aimDelayTimer = 0f;
-  //     aimDelayActive = true;
-  //   }
-
-  //   if(aimDelayActive){
-  //     aimDelayTimer += delta;
-  //     if(aimDelayTimer >= AimDelay){
-  //       aimDelayActive = false;
-  //       attackTimer = 0f;
-  //       aimDelayTimer = 0f;
-  //       hostActor.Use(Item.Uses.A);
-  //     }
-
-  //   }
-  // }
 
 }

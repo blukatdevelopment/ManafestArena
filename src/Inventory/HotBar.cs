@@ -73,7 +73,7 @@ public class HotBar : IHasInfo {
       return finish - start;
     }
     if(start > finish){
-      int ret = itemSlots.Length -1;
+      int ret = itemSlots.Length;
       ret -= start;
       ret += finish;
       return ret;

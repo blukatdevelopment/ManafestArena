@@ -109,7 +109,9 @@ public class FPSInputHandler : IInputHandler {
         break;
       case Inputs.NextItem:
         if(inputEvent.inputType == MappedInputEvent.Inputs.Press){
+          int start = actor.hotbar.GetEquippedSlot();
           actor.hotbar.EquipNext();
+          GD.Print("Changed from " + start + " to " + actor.hotbar.GetEquippedSlot());
         }
         break;
       case Inputs.PreviousItem: 

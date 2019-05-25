@@ -85,7 +85,7 @@ public class MeleeCombatState : IBehaviorState {
     attackTimer += delta;
     
     if(attackTimer >= AttackInterval && aimed && inRange){
-      hostAi.Hold(FPSInputHandler.Inputs.PrimaryUse);
+      hostAi.Press(FPSInputHandler.Inputs.PrimaryUse);
       attackTimer = 0f;
     }
   }
