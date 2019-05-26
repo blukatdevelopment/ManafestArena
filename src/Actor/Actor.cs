@@ -70,6 +70,16 @@ public class Actor : IHasInputHandler, IHasStats, IHasBody, IHasInventory {
     if(actorBody != null){
       return actorBody.GetActor();
     }
+
+    IItem item = node as IItem;
+    if(item != null){
+      actorBody = item.GetWielder() as IBody;
+      if(actorBody != null){
+        GD.Print("Found actor by its item");
+        return actorBody.GetActor();
+      }
+    }
+
     return null;
   }
 }

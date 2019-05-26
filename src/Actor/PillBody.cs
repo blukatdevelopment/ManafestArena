@@ -241,6 +241,7 @@ public class PillBody : KinematicBody , IBody, IReceiveDamage {
 
     List<object> objects = Util.GridCast(start, end, world, 3, 5f);
     List<Actor> ret = new List<Actor>();
+    GD.Print("Found " + objects.Count + " objects via gridcast");
     foreach(object obj in objects){
       Node node = obj as Node;
       Actor sightedActor = Actor.GetActorFromNode(node);
