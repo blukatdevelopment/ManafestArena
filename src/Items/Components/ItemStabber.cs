@@ -10,7 +10,7 @@ using System.Collections.Generic;
 public class ItemStabber {
     IItem item;
     public Vector3 wieldedPosition, forwardPosition;
-    public bool stabbing = false;
+    public bool stabbing;
     public float stabSpeed, stabTimer;
     public Damage damage;
     public Speaker speaker;
@@ -19,6 +19,7 @@ public class ItemStabber {
     public ItemStabber(IItem item){
         this.item = item;
         this.stabSound = Sound.Effects.FistSwing;
+        this.stabbing = false;
     }
 
     public void Config(
@@ -42,26 +43,36 @@ public class ItemStabber {
         if(stabbing){
             stabTimer -= delta;
             if(stabTimer <= 0f){
-                stabbing = false;
                 EndStab();
             }
         }
     }
 
     public void OnUpdateWielder(){
-        EndStab();
 
+        EndStab();
+        UpdateSender();
+        UpdatePositions();
+        
+    }
+
+    private void UpdateSender(){
         object wielder = item.GetWielder();
-        if(wielder == null){
+        Node wielderNode = wielder as Node;
+
+        if(wielder == null || wielderNode == null || !wielderNode.IsInsideTree()){
             damage.sender = "";
             return;
         }
-        Node wielderNode = wielder as Node;
+        
         if(wielderNode != null){
             damage.sender = wielderNode.GetPath();
         }
-        
+    }
+
+    private void UpdatePositions(){
         Spatial itemSpatial = item.GetNode() as Spatial;
+        
         if(itemSpatial == null){
             return;
         }
@@ -78,7 +89,9 @@ public class ItemStabber {
         if(stabbing){
             return;
         }
-
+        if(damage.sender == ""){
+            UpdateSender();
+        }
         stabbing = true;
         stabTimer = stabSpeed;
 

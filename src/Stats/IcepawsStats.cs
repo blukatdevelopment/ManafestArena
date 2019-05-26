@@ -4,7 +4,7 @@ using System.Collections.Generic;
 /*
   Base class for stats handlers that use ICEPAWS stats.
 */
-public class IcepawsStats : IStats {
+public class IcepawsStats : IStats, IReceiveDamage {
   System.Collections.Generic.Dictionary<string, int> stats;
   System.Collections.Generic.Dictionary<string, string> facts;
   private float updateTimer;
@@ -27,23 +27,26 @@ public class IcepawsStats : IStats {
   public virtual List<string> GetStatList(){
     List<string> statList = new List<string>();
     statList.AddRange(IcepawsStatList());
+    statList.AddRange(SkillsStatList());
+    statList.AddRange(MiscStatList());
     return statList;
   }
 
   protected List<string> IcepawsStatList(){
     return new List<string>{
-      "health", "healthmax", "healthregen",
-      "stamina", "staminamax", "staminaregen",
-      "mana", "manamax", "manaregen",
+      "health", "healthmax", "healthregen", "healthregenstored",
+      "stamina", "staminamax", "staminaregen", "staminaregenstored",
+      "mana", "manamax", "manaregen", "manaregenstored",
       "intelligence", "intelligencebonus",
       "charisma", "charismabonus",
       "endurance", "endurancebonus",
       "perception", "perceptionbonus",
       "agility", "agilitybonus",
       "willpower", "willpowerbonus",
-      "strength", "strength",
+      "strength", "strengthmax",
       "jumpcost", 
-      "sprintcost"
+      "sprintcost", "sprintbonus",
+      "speed"
     };
   }
 
@@ -60,6 +63,12 @@ public class IcepawsStats : IStats {
     };
   }
 
+  protected List<string> MiscStatList(){
+    return new List<string>{
+      "id"
+    };
+  }
+
   public virtual int GetStat(string stat){
     stat = stat.ToString();
     if(IcepawsStatList().IndexOf(stat) != -1){
@@ -70,6 +79,7 @@ public class IcepawsStats : IStats {
 
   protected virtual int GetIcepawsStat(string stat){
     stat = stat.ToLower();
+    int agility, strength, endurance;
     switch(stat){
       case "healthmax":
         return 50 + (GetStat("endurance") * 10);
@@ -81,13 +91,31 @@ public class IcepawsStats : IStats {
         return (GetStat("intelligence") + (GetStat("willpower") * 10));
         break;
       case "jumpcost":
-        int agility = GetStat("agility");
+        agility = GetStat("agility");
         if(agility == 0){
-          return 100;
+          return 1000;
         }
-        return 100 / agility;
+        return 1000 / agility;
         break;
       case "sprintcost":
+        break;
+      case "sprintbonus": // out of 100
+        strength = GetStat("strength");
+        agility = GetStat("agility");
+        return (agility * 5) + (strength * 5); 
+        break;
+      case "speed": // Out of 100
+        agility = GetStat("agility");
+        return agility * 10;
+        break;
+      case "healthregen": // In .1/second increments
+        return GetStat("endurance") / 5;
+        break;
+      case "staminaregen":
+        return (GetStat("endurance") * 5) + (GetStat("willpower") * 2);
+        break;
+      case "manaregen":
+        return (GetStat("willpower") * 10) + (GetStat("endurance") * 2);
         break;
     }
     if(stats.ContainsKey(stat)){
@@ -100,6 +128,10 @@ public class IcepawsStats : IStats {
     stat = stat.ToLower();
     if(stats.ContainsKey(stat)){
       stats[stat] = val;
+      return;
+    }
+    if(GetStatList().IndexOf(stat) != -1){
+      stats.Add(stat, val);
     }
   }
 
@@ -126,6 +158,11 @@ public class IcepawsStats : IStats {
 
   public bool ConsumeStat(string stat, int amount){
     stat = stat.ToLower();
+
+    if(stat == "stamina"){
+      return ConsumeStamina(amount);
+    }
+
     int statVal = GetStat(stat);
     int newVal = statVal - amount;
     if(newVal < 0){
@@ -136,6 +173,34 @@ public class IcepawsStats : IStats {
 
     return true;
   }
+
+  // Convert to consume 0.1 increments
+  public bool ConsumeStamina(int amount){
+    int fullPointsConsumed = amount/10;
+    int partialPointsConsumed = amount%10;
+    bool breakFullPoint = false;
+
+    if(partialPointsConsumed > stats["staminaregenstored"]){
+      breakFullPoint = true;
+      fullPointsConsumed += 1;
+    }
+
+    if(fullPointsConsumed == 0){
+      stats["staminaregenstored"] -= partialPointsConsumed;
+      return true;
+    }
+    else if(fullPointsConsumed < stats["stamina"]){
+      stats["stamina"] -= fullPointsConsumed;
+
+      if(breakFullPoint){
+        stats["staminaregenstored"] = 10 - partialPointsConsumed;
+      }
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
   
   public void ReceiveDamage(Damage damage){
     stats["health"] = GetStat("health") - damage.health;
@@ -143,6 +208,10 @@ public class IcepawsStats : IStats {
     stats["mana"] = GetStat("mana") - damage.mana;
 
     EnforceMaxValues();
+  }
+
+  public int GetHealth(){
+    return GetStat("health");
   }
   
   public void Update(float delta){
@@ -153,23 +222,43 @@ public class IcepawsStats : IStats {
     }
   }
 
+  // Converts regen into 0.1 increments
   protected void UpdateStats(){
-    stats["health"] = stats["health"] + stats["healthregen"];
-    stats["stamina"] = stats["stamina"] + stats["staminaregen"];
-    stats["mana"] = stats["mana"] + stats["manaregen"];
+
+    int healthStored = stats["healthregenstored"] + GetStat("healthregen");
+    int healthGained = healthStored/10;
+    stats["healthregenstored"] = healthStored % 10;
+    stats["health"] += healthGained;
+
+    int staminaStored = stats["staminaregenstored"] + GetStat("staminaregen");
+    int staminaGained = staminaStored/10;
+    stats["staminaregenstored"] = staminaStored % 10;
+    stats["stamina"] += staminaGained;
+
+    int manaStored = stats["manaregenstored"] + GetStat("manaregen");
+    int manaGained = manaStored/10;
+    stats["manaregenstored"] = manaStored % 10;
+    stats["mana"] += manaGained;
+
 
     EnforceMaxValues();
   }
 
   protected virtual void EnforceMaxValues(){
-    if(stats["health"] > stats["healthmax"]){
-      stats["health"] = stats["healthmax"];
+    if(stats["health"] > GetStat("healthmax")){
+      stats["health"] = GetStat("healthmax");
     }
-    if(stats["stamina"] > stats["staminamax"]){
-      stats["stamina"] = stats["staminamax"];
+    if(stats["stamina"] > GetStat("staminamax")){
+      stats["stamina"] = GetStat("staminamax");
     }
-    if(stats["mana"] > stats["manamax"]){
-      stats["mana"] = stats["manamax"];
+    if(stats["mana"] > GetStat("manamax")){
+      stats["mana"] = GetStat("manamax");
     }
+  }
+
+  public void RestoreCondition(){
+    SetStat("health", GetStat("healthmax"));
+    SetStat("stamina", GetStat("staminamax"));
+    SetStat("mana", GetStat("manamax"));
   }
 }

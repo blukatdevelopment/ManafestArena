@@ -1,3 +1,7 @@
+using Godot;
+using System;
+using System.Collections.Generic;
+
 public class ActorFactory {
   public enum InputSources {
     None,
@@ -24,7 +28,9 @@ public class ActorFactory {
 
   public enum Characters {
     None,
-    Debug
+    DebugPlayer,
+    Target,
+    DebugEnemy
   };
 
   public static Actor FromComponentTypes(
@@ -42,15 +48,24 @@ public class ActorFactory {
   }
 
   public static void InitInputHandler(InputSources inputSource, Actor actor){
+    FPSInputHandler fps;
+    MappedInputSource mapped;
+    StateAi ai;
     switch(inputSource){
       case InputSources.Player1:
-        // Set up devicestate[0]
+        mapped = new MappedInputSource(Session.GetDevice(0), FPSInputHandler.GetMappings());
+        fps = new FPSInputHandler(actor);
+        fps.RegisterInputSource(mapped as IInputSource);
+        actor.inputHandler = fps as IInputHandler;
       break;
       case InputSources.Remote:
         // Set up net source
       break;
       case InputSources.AI:
-        // Set up AI
+        ai = new StateAi(actor);
+        fps = new FPSInputHandler(actor);
+        fps.RegisterInputSource(ai as IInputSource);
+        actor.inputHandler = fps as IInputHandler;
       break;
     }
   }
@@ -58,7 +73,7 @@ public class ActorFactory {
   public static void InitStats(StatsHandlers statsHandler, Actor actor){
     switch(statsHandler){
       case StatsHandlers.Icepaws:
-        // Set up an ICEPAWS based IStats
+        actor.stats = new IcepawsStats();
       break;
     }
   }
@@ -79,18 +94,71 @@ public class ActorFactory {
     }
   }
 
-  public static Actor FromCharacter(Characters character){
-    switch(character){
-      case Characters.Debug:
-        return DebugCharacter();
-      break;
-    }
-    return null;
+  public static Actor FromName(string name){
+      GD.Print("Making character: " + name);
+      return FromCharacter(Characters.DebugPlayer);
   }
 
-  public static Actor DebugCharacter(){
-    Actor actor = FromComponentTypes(InputSources.Player1, StatsHandlers.None, Bodies.PillBody, InventoryHandlers.None);
-    actor.hotbar = new HotBar(10);
+  public static Actor FromCharacter(Characters character){
+    Actor ret = null;
+    switch(character){
+      case Characters.DebugPlayer: // Test player1
+        ret = DebugPlayerCharacter();
+      break;
+      case Characters.Target: // For target practice
+        ret = TargetCharacter();
+        break;
+      case Characters.DebugEnemy: // For live fire practice
+        ret = DebugEnemyCharacter();
+        break;
+    }
+    return ret;
+  }
+
+  public static Actor DebugPlayerCharacter(){
+    Actor actor = FromComponentTypes(InputSources.Player1, StatsHandlers.Icepaws, Bodies.PillBody, InventoryHandlers.None);
+    actor.stats.SetStat("intelligence", 5);
+    actor.stats.SetStat("charisma", 5);
+    actor.stats.SetStat("endurance", 5);
+    actor.stats.SetStat("perception", 5);
+    actor.stats.SetStat("agility", 5);
+    actor.stats.SetStat("willpower", 5);
+    actor.stats.SetStat("strength", 5);
+    actor.stats.RestoreCondition();
+    actor.hotbar.AddItem(0, ItemFactory.Factory(ItemFactory.Items.Knife));
+    actor.hotbar.AddItem(1, ItemFactory.Factory(ItemFactory.Items.Crossbow));
+    actor.body.InitCam(0);
+    return actor;
+  }
+
+  public static Actor TargetCharacter(){
+    Actor actor = FromComponentTypes(InputSources.None, StatsHandlers.Icepaws, Bodies.PillBody, InventoryHandlers.None);
+    actor.stats.SetStat("intelligence", 5);
+    actor.stats.SetStat("charisma", 5);
+    actor.stats.SetStat("endurance", 5);
+    actor.stats.SetStat("perception", 5);
+    actor.stats.SetStat("agility", 5);
+    actor.stats.SetStat("willpower", 5);
+    actor.stats.SetStat("strength", 5);
+    actor.stats.RestoreCondition();
+    actor.hotbar = new HotBar(10, actor);
+    actor.hotbar.AddItem(0, ItemFactory.Factory(ItemFactory.Items.Knife));
+    return actor;
+  }
+
+  public static Actor DebugEnemyCharacter(){
+    Actor actor = FromComponentTypes(InputSources.AI, StatsHandlers.Icepaws, Bodies.PillBody, InventoryHandlers.None);
+    actor.stats.SetStat("intelligence", 5);
+    actor.stats.SetStat("charisma", 5);
+    actor.stats.SetStat("endurance", 5);
+    actor.stats.SetStat("perception", 5);
+    actor.stats.SetStat("agility", 5);
+    actor.stats.SetStat("willpower", 5);
+    actor.stats.SetStat("strength", 5);
+    actor.stats.RestoreCondition();
+    actor.hotbar = new HotBar(10, actor);
+    actor.hotbar.AddItem(0, ItemFactory.Factory(ItemFactory.Items.Knife));
+    actor.hotbar.AddItem(1, ItemFactory.Factory(ItemFactory.Items.Crossbow));
     return actor;
   }
 }

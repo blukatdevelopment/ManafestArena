@@ -22,7 +22,9 @@ public class ItemFactory {
         Claws,
         // ProjectileItem
         MusketBall,
-        CrossbowBolt
+        CrossbowBolt,
+        // ProjectileLauncher
+        Crossbow
     };
 
     public static IItem Factory(Items item){
@@ -40,9 +42,9 @@ public class ItemFactory {
         return null;
     }
 
-    public static IItem Factory(Items item, string json){
+    public static IItem Factory(Items item, string json = ""){
         IItem ret = Factory(item);
-        if(ret != null){
+        if(ret != null && json != ""){
             ret.LoadJson(json);
         }
         return ret;
@@ -53,6 +55,8 @@ public class ItemFactory {
         List<IItem> ret = new List<IItem>();
         ret.Add(new Item() as IItem);
         ret.Add(new MeleeStabItem() as IItem);
+        ret.Add(new RangedProjectileItem() as IItem);
+        ret.Add(new ProjectileItem() as IItem);
         return ret;
     }
 

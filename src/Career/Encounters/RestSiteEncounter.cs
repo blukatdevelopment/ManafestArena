@@ -3,18 +3,26 @@ using System;
 using System.Collections.Generic;
 
 public class RestSiteEncounter : IEncounter {
+
+  public RestSiteEncounter(){}
+
   public string GetDisplayName(){
-    return "";
+    return "Rest Site";
   }
 
 
   public void StartEncounter(){
-    Session.ChangeMenu("RestSiteMenu");
+    //Session.ChangeMenu("RestSiteMenu");
     // TODO: Populate menu with rest site upgrades.
+    Career career = Career.GetActiveCareer();
+    if(career != null){
+      career.CompleteEncounter();
+      return;
+    }
   }
   
   public IEncounter GetRandomEncounter(){
-    return null;
+    return new RestSiteEncounter();
   }
 
   private List<string> RestSiteUpgrades(){

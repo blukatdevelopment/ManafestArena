@@ -11,6 +11,10 @@ public class Util{
   
   private static Random random;
 
+  public static void Dump(string message, object obj){
+    GD.Print(message + ToJson(obj));
+  }
+
   // newtonsoft Wrapper
   public static string ToJson(object obj){
     return JsonConvert.SerializeObject(obj, Formatting.Indented);
@@ -374,6 +378,11 @@ public class Util{
     }
 
     return ret;
+  }
+
+  // Damage per second
+  public static float DPS(float damage, float delay){
+    return damage * (1f/delay);
   }
 
 }

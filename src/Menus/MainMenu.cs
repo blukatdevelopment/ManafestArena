@@ -63,9 +63,7 @@ public class MainMenu : Container, IMenu {
 
   public void ContinueGame(){
     GD.Print("ContinueGame");
-    Session.session.career = CareerDb.LoadCareer();
-    Session.ChangeMenu("CareerMenu");
-   
+    Career.ContinueCareer();
   }
 
   public void Settings(){
@@ -75,7 +73,6 @@ public class MainMenu : Container, IMenu {
   
   public void Quit(){
     Session.session.Quit();
-  }
-    
+  } 
     
 }

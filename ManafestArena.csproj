@@ -70,6 +70,8 @@
     <Compile Include="src/Menus/TexturedButton.cs" />
     <Compile Include="src/Menus/MainMenu.cs" />
     <Compile Include="src/Menus/Menu.cs" />
+    <Compile Include="src/Menus/MenuInputHandler.cs" />
+    <Compile Include="src/Menus/IInputHandledMenu.cs" />
     <Compile Include="src/Menus/IMenu.cs" />
     <Compile Include="src/Menus/HUDMenu.cs" />
     <Compile Include="src/Menus/PauseMenu.cs" />
@@ -90,6 +92,7 @@
     <Compile Include="src/Items/Archetypes/Item.cs" />
     <Compile Include="src/Items/Archetypes/ItemFactory.cs" />
     <Compile Include="src/Items/Archetypes/MeleeStabItem.cs" />
+    <Compile Include="src/Items/Archetypes/RangedProjectileItem.cs" />
     <Compile Include="src/Items/Archetypes/ProjectileItem.cs" />
     <Compile Include="src/Items/Interfaces/IHasItem.cs" />
     <Compile Include="src/Items/Interfaces/IHasInfo.cs" />
@@ -102,12 +105,13 @@
     <Compile Include="src/Items/Components/ProjectileLauncher.cs" />
     <Compile Include="src/Items/Components/SelfDamager.cs" />
     <Compile Include="src/Items/Components/StatConsumer.cs" />
-    
     <Compile Include="src/Actor/IHasBody.cs" />
     <Compile Include="src/Actor/IHasInventory.cs" />
     <Compile Include="src/Actor/IHasInputHandler.cs" />
     <Compile Include="src/Items/Interfaces/ICollide.cs" />
     <Compile Include="src/Items/Interfaces/IConsume.cs" />
+    <Compile Include="src/Items/Interfaces/IWeapon.cs" />
+    <Compile Include="src/Items/Interfaces/IRangedWeapon.cs" />
     <Compile Include="src/Items/ItemData.cs" />
     <Compile Include="src/Arena/Arena.cs" />
     <Compile Include="src/Arena/ArenaSettings.cs" />
@@ -127,6 +131,7 @@
     <Compile Include="src/Inventory/IInventory.cs" />
     <Compile Include="src/Career/Career.cs" />
     <Compile Include="src/Career/CareerNode.cs" />
+    <Compile Include="src/Career/CareerTreeFactory.cs" />
     <Compile Include="src/Career/IEncounter.cs" />
     <Compile Include="src/Career/Encounters/ArenaMatchEncounter.cs" />
     <Compile Include="src/Career/Encounters/PressEventEncounter.cs" />
@@ -139,6 +144,13 @@
     <Compile Include="src/Stats/IStats.cs" />
     <Compile Include="src/Stats/IcepawsStats.cs" />
     <Compile Include="src/Stats/IHasStats.cs" />
+    <Compile Include="src/AI/StateAi.cs" />
+    <Compile Include="src/AI/IBehaviorState.cs" />
+    <Compile Include="src/AI/RoamingState.cs" />
+    <Compile Include="src/AI/RangedCombatState.cs" />
+    <Compile Include="src/AI/PursuingState.cs" />
+    <Compile Include="src/AI/MeleeCombatState.cs" />
+    <Compile Include="src/AI/FightingState.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
 </Project>

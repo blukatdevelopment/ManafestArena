@@ -1,16 +1,40 @@
 using Godot;
 using System;
 
-public class PauseMenu : Container, IMenu {
+public class PauseMenu : Container, IMenu, IInputHandledMenu {
   
   public Godot.Button quitButton;
   public Godot.Button mainMenuButton;
   public Godot.Button resumeButton;
+  public IInputHandler inputHandler;
+  private float inputDelay;
+  private const float InputDelayStart = 0.1f;
 
   public void Init(){
+    inputDelay = InputDelayStart;
+    InitInput();
     InitControls();
     ScaleControls();
     GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
+  }
+
+  public override void _Process(float delta){
+    if(inputDelay > 0){
+      inputDelay -= delta;
+      return;
+    }
+    inputHandler.Update(delta);
+  }
+
+  private void InitInput(){
+    DeviceState device = Session.GetDevice(0);
+    if(device == null){
+      GD.Print("Pause menu needs Device(0) to exist");
+      return;
+    }
+    inputHandler = new MenuInputHandler(this as IInputHandledMenu);
+    MappedInputSource source = new MappedInputSource(Session.GetDevice(0), FPSInputHandler.GetMappings());
+    inputHandler.RegisterInputSource(source as IInputSource);
   }
   
   void InitControls(){
@@ -29,6 +53,21 @@ public class PauseMenu : Container, IMenu {
       Menu.ScaleControl(resumeButton, 4 * wu, 2 * hu, 3 * wu, 0);
       Menu.ScaleControl(mainMenuButton, 4 * wu, 2 * hu, 3 * wu, 2 * hu);
       Menu.ScaleControl(quitButton, 4 * wu, 2 * hu, 3 * wu,  4 * hu);
+  }
+
+  public void Select(){
+  }
+
+  public void Pause(){
+    Resume();
+  }
+
+  public void Back(){
+
+  }
+
+  public void Move(Vector2 direction){
+
   }
   
   public void SetQuitButton(Godot.Button button){

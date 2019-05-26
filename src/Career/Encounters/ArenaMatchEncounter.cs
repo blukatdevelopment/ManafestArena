@@ -3,28 +3,42 @@ using System;
 using System.Collections.Generic;
 
 public class ArenaMatchEncounter : IEncounter {
-  string info;
+  string mapName;
+
+  public ArenaMatchEncounter(){}
+
+  public ArenaMatchEncounter(string mapName){
+    this.mapName = mapName;
+  }
 
   public string GetDisplayName(){
-    return "";
+    return "Arena Match";
   }  
 
   public void StartEncounter(){
-    ArenaSettings settings = new ArenaSettings();
-    settings.useKits = false;
-    settings.usePowerups = false;
-    //settings.enemies = EnemiesForMap(info);
-    //settings.player = playerData;
-    Arena.arenaSettings = settings;
+    Career career = Career.GetActiveCareer();
+    if(career == null){
+      return;
+    }
 
-    Arena.LocalArena(info);
+    Arena arena = new Arena();
+    arena.killQuota = 5;
+    arena.player = career.GetPlayer();
+    for(int i = 0; i < 1; i++){
+      arena.enemies.Add(ActorFactory.FromCharacter(ActorFactory.Characters.DebugEnemy));
+    }
+
+    Session.AddGamemode(arena as Node);
+    arena.Init(new string[]{ mapName });
+    Session.ChangeMenu("HUDMenu");
   }
   
   public IEncounter GetRandomEncounter(){
-    return null;
+    return new ArenaMatchEncounter(RandomArenaMap()) as IEncounter;
   }
 
   private string RandomArenaMap(){
+    return "res://Assets/Scenes/Maps/Open.tscn"; // TODO: Remove
     List<string> arenaMaps = new List<string>{
       "res://Assets/Scenes/Maps/Levels.tscn",
       "res://Assets/Scenes/Maps/Maze.tscn",

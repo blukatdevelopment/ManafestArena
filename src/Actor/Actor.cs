@@ -14,6 +14,10 @@ public class Actor : IHasInputHandler, IHasStats, IHasBody, IHasInventory {
   public HotBar hotbar;
   public PaperDoll paperdoll;
 
+  public Actor(){
+    hotbar = new HotBar(10, this);
+  }
+
   public IInputHandler GetInputHandler(){
     return inputHandler;
   }
@@ -31,11 +35,51 @@ public class Actor : IHasInputHandler, IHasStats, IHasBody, IHasInventory {
   }
 
   public void Update(float delta){
+    if(body != null && body.IsDead()){
+      return;
+    }
+
     if(inputHandler != null){
       inputHandler.Update(delta);
     }
     if(stats != null){
       stats.Update(delta);
     }
+    if(body != null){
+      body.Update(delta);
+    }
+
+    if(hotbar.GetActiveSlot() != null){
+      hotbar.GetActiveSlot().Update(delta);
+    }
+  }
+
+  public Node GetNode(){
+    if(body != null){
+      return body.GetNode();
+    }
+    return null;
+  }
+
+  public static Actor GetActorFromNode(Node node){
+    if(node == null){
+      return null;
+    }
+    
+    IBody actorBody = node as IBody;
+    if(actorBody != null){
+      return actorBody.GetActor();
+    }
+
+    IItem item = node as IItem;
+    if(item != null){
+      actorBody = item.GetWielder() as IBody;
+      if(actorBody != null){
+        GD.Print("Found actor by its item");
+        return actorBody.GetActor();
+      }
+    }
+
+    return null;
   }
 }

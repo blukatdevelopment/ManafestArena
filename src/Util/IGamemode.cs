@@ -5,4 +5,5 @@ public interface IGamemode {
     void Init(string[] argv);
     bool GameOver();
     bool Victory();
+    void Update(float delta);
 }

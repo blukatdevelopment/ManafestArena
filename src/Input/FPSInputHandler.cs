@@ -8,20 +8,50 @@ using System.Collections.Generic;
 public class FPSInputHandler : IInputHandler {
   public Actor actor;
   private IInputSource source;
+  private float walkSpeed, sprintSpeed;
+  private bool activelySprinting, sprintWasPressed;
+
+  public const float SpeedBase = 3f;
+  public const float DefaultMouseSensitivity = 4f;
 
   public FPSInputHandler(){}
 
   public FPSInputHandler(Actor actor){
     this.actor = actor;
+    UpdateSpeed();
   }
 
   public void RegisterInputSource(IInputSource source){
     this.source = source;
   }
   public void Update(float delta){
+    if(actor.stats != null){
+      UpdateSpeed();
+    }
+    if(actor.body == null){
+      GD.Print("No body, therefore no input handling ¯\\_(ツ)_/¯");
+      return;
+    }
     List<MappedInputEvent> inputEvents = source.GetInputs(delta);
+    sprintWasPressed = false;
     foreach(MappedInputEvent inputEvent in inputEvents){
       HandleSingleInput(inputEvent, delta);
+    }
+    if(activelySprinting && !sprintWasPressed){
+      activelySprinting = false;
+    }
+  }
+
+  public void UpdateSpeed(){
+    if(actor != null && actor.stats != null){
+      walkSpeed = (float)actor.stats.GetStat("speed") / 100f;
+      walkSpeed += SpeedBase;
+      
+      sprintSpeed = walkSpeed + ((float)actor.stats.GetStat("sprintbonus"))/ 100f;
+    }
+    else{
+      walkSpeed = SpeedBase;
+      sprintSpeed = SpeedBase * 2;
     }
   }
 
@@ -30,48 +60,112 @@ public class FPSInputHandler : IInputHandler {
     float val = inputEvent.inputValue;
     switch(input){
       case Inputs.MoveForward:
-        //actor.Move(new Vector3(0, 0, -val), delta);
+        HandleMovement(inputEvent, delta, new Vector3(0, 0, -1f));
         break;
       case Inputs.MoveBackward:
-        //actor.Move(new Vector3(0, 0, val), delta);
+        HandleMovement(inputEvent, delta, new Vector3(0, 0, 1f));
         break;
       case Inputs.MoveLeft:
-        //actor.Move(new Vector3(-val, 0, 0), delta); 
+        HandleMovement(inputEvent, delta, new Vector3(-1f, 0, 0));
         break;
       case Inputs.MoveRight:
-        //actor.Move(new Vector3(val, 0, 0), delta);
+        HandleMovement(inputEvent, delta, new Vector3(1f, 0, 0f));
         break;
       case Inputs.PrimaryUse:
+        inputEvent.mappedEventId = (int)Item.ItemInputs.A;
+        actor.hotbar.UseEquippedItem(inputEvent);
         break;
-      case Inputs.SecondaryUse: 
+      case Inputs.SecondaryUse:
+        inputEvent.mappedEventId = (int)Item.ItemInputs.B;
+        actor.hotbar.UseEquippedItem(inputEvent);
         break;
       case Inputs.Reload: 
+        inputEvent.mappedEventId = (int)Item.ItemInputs.C;
+        actor.hotbar.UseEquippedItem(inputEvent);
         break;
       case Inputs.Interact: 
         break;
       case Inputs.Sprint: 
+        if(inputEvent.inputType == MappedInputEvent.Inputs.Release){
+          activelySprinting = false;
+        }
+        else if(inputEvent.inputType == MappedInputEvent.Inputs.Press){
+          activelySprinting = true;
+          sprintWasPressed = true;
+        }
+        else if(inputEvent.inputType == MappedInputEvent.Inputs.Hold){
+          activelySprinting = true; // Protect against missed release events
+          sprintWasPressed = true;
+        }
         break;
       case Inputs.Crouch: 
         break;
-      case Inputs.Jump: 
+      case Inputs.Jump:
+        if(inputEvent.inputType == MappedInputEvent.Inputs.Press){
+          actor.body.Jump();
+        }
         break;
       case Inputs.Inventory: 
         break;
-      case Inputs.NextItem: 
+      case Inputs.NextItem:
+        if(inputEvent.inputType == MappedInputEvent.Inputs.Press){
+          int start = actor.hotbar.GetEquippedSlot();
+          actor.hotbar.EquipNext();
+          GD.Print("Changed from " + start + " to " + actor.hotbar.GetEquippedSlot());
+        }
         break;
       case Inputs.PreviousItem: 
+        if(inputEvent.inputType == MappedInputEvent.Inputs.Press){
+          actor.hotbar.EquipPrevious();
+        }
         break;
-      case Inputs.Pause: 
+      case Inputs.Pause:
+        if(inputEvent.inputType == MappedInputEvent.Inputs.Press){
+          Session.Event(SessionEvent.PauseEvent());
+        }
         break;
-      case Inputs.LookUp: 
+      case Inputs.LookUp:
+        HandleLook(new Vector3(0f, inputEvent.inputValue, 0f), delta);
         break;
       case Inputs.LookDown: 
+        HandleLook(new Vector3(0f, -inputEvent.inputValue, 0f), delta);
         break;
       case Inputs.LookLeft: 
+        HandleLook(new Vector3(-inputEvent.inputValue, 0f, 0f), delta);
         break;
-      case Inputs.LookRight: 
+      case Inputs.LookRight:
+        HandleLook(new Vector3(inputEvent.inputValue, 0f, 0f), delta);
         break;
     }
+  }
+
+  private void HandleLook(Vector3 direction, float delta){
+    if(actor.body != null){
+      actor.body.Turn(direction, delta);
+    } 
+  }
+
+  private void HandleMovement(MappedInputEvent input, float delta, Vector3 direction){
+    if(input.inputType != MappedInputEvent.Inputs.Press && input.inputType != MappedInputEvent.Inputs.Hold){
+      return;
+    }
+    float currentSpeed = walkSpeed;
+
+    int sprintCost = 1;
+    if(actor.stats != null){
+      sprintCost = actor.stats.GetStat("sprintcost");
+    }
+
+    if(activelySprinting && actor.stats == null){
+      currentSpeed = sprintSpeed;
+    }
+    else if(activelySprinting && actor.stats.ConsumeStat("stamina", sprintCost)){
+      currentSpeed = sprintSpeed;
+    }
+
+    direction *= (currentSpeed * SpeedBase);
+    direction *= input.inputValue;
+    actor.body.Move(direction, delta);
   }
 
   public enum Inputs{
@@ -139,7 +233,7 @@ public class FPSInputHandler : IInputHandler {
     mappings.Add(new InputMapping(
       InputMapping.Inputs.KeyboardKey,
       65,
-      (int)Inputs.MoveBackward,
+      (int)Inputs.MoveLeft,
       0f,
       1f
     ));
@@ -147,7 +241,7 @@ public class FPSInputHandler : IInputHandler {
     mappings.Add(new InputMapping(
       InputMapping.Inputs.KeyboardKey,
       83,
-      (int)Inputs.MoveLeft,
+      (int)Inputs.MoveBackward,
       0f,
       1f
     ));
@@ -253,7 +347,7 @@ public class FPSInputHandler : IInputHandler {
       1,
       (int)Inputs.LookUp,
       0f,
-      1f
+      -DefaultMouseSensitivity
     ));
 
     mappings.Add(new InputMapping(
@@ -261,7 +355,7 @@ public class FPSInputHandler : IInputHandler {
       1,
       (int)Inputs.LookDown,
       0f,
-      -1f
+      DefaultMouseSensitivity
     ));
 
     mappings.Add(new InputMapping(
@@ -269,7 +363,7 @@ public class FPSInputHandler : IInputHandler {
       0,
       (int)Inputs.LookLeft,
       0f,
-      -1f
+      DefaultMouseSensitivity
     ));
 
     mappings.Add(new InputMapping(
@@ -277,7 +371,7 @@ public class FPSInputHandler : IInputHandler {
       0,
       (int)Inputs.LookRight,
       0f,
-      1f
+      -DefaultMouseSensitivity
     ));
 
     

@@ -3,18 +3,25 @@ using System;
 using System.Collections.Generic;
 
 public class ShopEncounter : IEncounter {
+
+  public ShopEncounter(){}
+
   public string GetDisplayName(){
     return "shop";
   }
 
 
   public void StartEncounter(){
-    Session.ChangeMenu("ShopMenu");
+    //Session.ChangeMenu("ShopMenu");
     // TODO Add items to shop menu here
+    Career career = Career.GetActiveCareer();
+    if(career != null){
+      career.CompleteEncounter();
+    }
   }
   
   public IEncounter GetRandomEncounter(){
-    return null;
+    return new ShopEncounter();
   }
 
   private List<ItemData> ShopItems(){

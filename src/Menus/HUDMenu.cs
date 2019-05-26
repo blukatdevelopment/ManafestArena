@@ -19,14 +19,10 @@ public class HUDMenu : Container, IMenu{
   }
 
   public void Init(){
+    Input.SetMouseMode(Input.MouseMode.Captured);
     InitControls();
     ScaleControls();
     GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
-  }
-
-  public void Clear(){
-    GD.Print("HUDMenu.clear()");
-    this.QueueFree();
   }
 
   public void Update(){
@@ -37,26 +33,29 @@ public class HUDMenu : Container, IMenu{
       return;
     }
     
-    
-    healthBox.Text = "";//player.GetStatusText();
+    healthBox.Text = StatusText(player);
 
-    string itemText = "";//player.ItemInfo();
+    string itemText = player.hotbar.GetInfo();
+
     itemBox.Text = itemText;
     
     string objectiveText = Session.GetObjectiveText();
     objectiveBox.Text = objectiveText;
+  }
 
-    //IInteract interactor = player.VisibleObject() as IInteract;
-    
-    // if(interactor == null){
-    //   interactionBox.Hide();
-    // }
-    // else{
-    //   Item.Uses interaction = player.GetActiveInteraction();
-    //   string interactionText = interactor.GetInteractionText(interaction);
-    //   interactionBox.Show();
-    //   interactionBox.SetText(interactionText);
-    // }
+  private string StatusText(Actor player){
+    if(player.stats == null){
+      return "";
+    }
+    IStats stats = player.stats;
+
+    string ret = "";
+
+    ret += "Health: " + stats.GetStat("health") + "/" + stats.GetStat("healthmax");
+    ret += "\nStamina: " + stats.GetStat("stamina") + "/" + stats.GetStat("staminamax");
+    ret += "\nMana: " + stats.GetStat("mana") + "/" + stats.GetStat("manamax");
+    return ret;
+
   }
 
   void InitControls(){

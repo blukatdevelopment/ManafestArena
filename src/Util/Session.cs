@@ -13,7 +13,6 @@ using System.Text;
 public class Session : Node {
   public static Session session;
   
-  public Career career;
   public NetworkSession netSes;
   public Random random;
   public AudioStreamPlayer jukeBox;
@@ -53,6 +52,12 @@ public class Session : Node {
   }
 
   public override void _Process(float delta){
+    foreach(Node modeNode in activeGamemodes){
+      IGamemode gamemode = modeNode as IGamemode;
+      if(gamemode != null){
+        gamemode.Update(delta);
+      }
+    }
   }
 
   public override void _Input(Godot.InputEvent evt){
@@ -89,6 +94,7 @@ public class Session : Node {
 
   public static void AddDevice(int joypad){
     if(GetDevice(0) != null){
+      GD.Print("Multiple devices are not currently supported");
       return;
     }
     DeviceState ds = new DeviceState(joypad);
@@ -201,7 +207,6 @@ public class Session : Node {
     Input.SetMouseMode(Input.MouseMode.Visible);
   }
   
-  // Returns the first if there are more than one gamemode, or else the session
   public static Node GameNode(){
     Session ses = Session.session;
     foreach(Node node in ses.activeGamemodes){
@@ -209,6 +214,18 @@ public class Session : Node {
     }
     
     return ses;
+  }
+
+  public static Spatial GameSpatial(){
+    Session ses = Session.session;
+    foreach(Node node in ses.activeGamemodes){
+      Spatial spat = node as Spatial;
+      if(spat != null){
+        return spat;
+      }
+    }
+    
+    return null;
   }
   
   public static void QuitToMainMenu(){
@@ -222,6 +239,7 @@ public class Session : Node {
       ses.activeMenu.QueueFree();
     }
 
+    Input.SetMouseMode(Input.MouseMode.Visible);
     Node menuNode = Menu.MenuFactory(menuName);
     IMenu menu = menuNode as IMenu;
     if(menu == null){

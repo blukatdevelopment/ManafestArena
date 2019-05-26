@@ -3,12 +3,14 @@ using System;
 using System.Collections.Generic;
 
 public class PressEventMenu : Container, IMenu {
+  public Career career;
   public TextEdit promptText;
   public Button option1Button, option2Button, option3Button, option4Button;
   public PressEvent pressEvent;
   public TextEdit background;
 
   public void Init(){
+    career = Career.GetActiveCareer();
     pressEvent = null;//Session.session.career.pressEvent;
     InitControls();
     ScaleControls();
@@ -60,7 +62,7 @@ public class PressEventMenu : Container, IMenu {
       return;
     }
 
-    Session.session.career.CompleteEncounter();
+    career.CompleteEncounter();
   }
 
 
