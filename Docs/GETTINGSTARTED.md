@@ -49,3 +49,12 @@
     a. Add these to ItemFactory.Items enum
     b. Return these from your IItem.GetSupportedItems()
     c. Update your IItem.Factory() to construct each variant
+
+### How to add a new menu
+1. Create a class that inherits from Control and implements IMenu
+2. If your class is called YourMenu, you can now navigate to it with Session.ChangeMenu("YourMenu");
+
+### How to add a new kind of stats system
+1. Create your new stats system implementing IStats
+2. Add an enum value for it in StatsHandlers in src/Actor/ActorFactory.cs
+3. Add a case clause to ActorFactory.InitStats()
