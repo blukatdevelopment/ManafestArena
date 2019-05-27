@@ -373,7 +373,7 @@ public class Util{
     return ret;
   }
 
-  public static List<System.Object> ArrayToList(Godot.Array array){
+  public static List<System.Object> ArrayToList(Godot.Collections.Array array){
     List<System.Object> ret = new List<System.Object>();
     while(array.Count > 0){
       ret.Add(array[0]);
@@ -406,8 +406,8 @@ public class Util{
   }
 
   // Create an array using a single value
-  public static Godot.Array ArrayWrap(object obj){
-    Godot.Array arr = new Godot.Array();
+  public static Godot.Collections.Array ArrayWrap(object obj){
+    Godot.Collections.Array arr = new Godot.Collections.Array();
     arr.Add(obj);
     return arr;
   }

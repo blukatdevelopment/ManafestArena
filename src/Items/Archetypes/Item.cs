@@ -81,7 +81,7 @@ public class Item: RigidBody, IItem, IHasInfo {
     }
 
     public virtual void SetCollision(bool val){
-        Godot.Array owners = GetShapeOwners();
+        Godot.Collections.Array owners = GetShapeOwners();
         collisionDisabled = !val;
 
         if(area == null){
@@ -128,7 +128,7 @@ public class Item: RigidBody, IItem, IHasInfo {
         CollisionShape areaShape = new CollisionShape();
         areaShape.Name = "AreaShape";
         area.AddChild(areaShape);
-        Godot.Array areaShapeOwners = area.GetShapeOwners();
+        Godot.Collections.Array areaShapeOwners = area.GetShapeOwners();
         for(int i = 0; i < areaShapeOwners.Count; i++){
           int ownerInt = (int)areaShapeOwners[i];
           for(int j = 0; j < shapes.Count; j++){
@@ -141,7 +141,7 @@ public class Item: RigidBody, IItem, IHasInfo {
 
     public List<CollisionShape> GetCollisionShapes(){
         List<CollisionShape> shapes = new List<CollisionShape>();
-        Godot.Array owners = GetShapeOwners();
+        Godot.Collections.Array owners = GetShapeOwners();
         foreach(object owner in owners){
           int ownerInt = (int)owner;
           CollisionShape cs = (CollisionShape)ShapeOwnerGetOwner(ownerInt);
