@@ -176,6 +176,34 @@ public class Util{
     return ret;
   }
 
+  // Checks for siblings in this box.
+  // Uses transform local to parent
+  public static List<object> SiblingBoxCast(Spatial origin, Vector3 min, Vector3 max){
+    List<object> ret = new List<object>();
+    Node parent = origin.GetParent();
+    if(parent == null){
+      return ret;
+    }
+
+    List<object> siblingObjects = ArrayToList(parent.GetChildren());
+
+    foreach(object siblingObject in siblingObjects){
+      Spatial siblingSpat = siblingObject as Spatial;
+      if(siblingSpat == null || siblingSpat == origin){
+        continue;
+      }
+      Vector3 pos = siblingSpat.Transform.origin;
+      if(
+        pos.x >= min.x && pos.x <= max.x &&
+        pos.y >= min.y && pos.y <= max.y &&
+        pos.z >= min.z && pos.z <= max.z
+      ){
+        ret.Add(siblingObject);
+      }
+    }
+    return ret;
+  }
+
   // Returns true if index is positive and within max bounds.
   public static bool ValidCellIndex(int index, int gridSize){
     if(index < 0){
@@ -352,6 +380,19 @@ public class Util{
       array.RemoveAt(0);
     }
     return ret;
+  }
+
+  public static List<Node> ObjectsToNodes(List<System.Object> objects){
+    List<Node> nodes = new List<Node>();
+
+    foreach(System.Object obj in objects){
+      Node node = obj as Node;
+      if(node != null){
+        nodes.Add(node);
+      }
+    }
+
+    return nodes;
   }
 
   public static Node GetChildByName(Node parent, string name){

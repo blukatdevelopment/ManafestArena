@@ -15,6 +15,7 @@ public class PillBody : KinematicBody , IBody, IReceiveDamage {
   string meshPath;
   MeshInstance meshInstance;
   CollisionShape collisionShape;
+
   public bool dead;
   
   bool grounded;
@@ -24,6 +25,7 @@ public class PillBody : KinematicBody , IBody, IReceiveDamage {
 
   const float GravityAcceleration = -9.81f;
   const float TerminalVelocity = -53;
+  const float SightSize = 100f;
 
   public PillBody(Actor actor, string meshPath = "res://Assets/Models/Actor.obj"){
     this.actor = actor;
@@ -237,15 +239,18 @@ public class PillBody : KinematicBody , IBody, IReceiveDamage {
   public List<Actor> ActorsInSight(){
     Vector3 start = eyes.GlobalTransform.origin;
     Vector3 end = Get3DCursor();
-    World world = GetWorld();
 
-    List<object> objects = Util.GridCast(start, end, world, 3, 5f);
+    Spatial spat = this as Spatial;
+    Vector3 offset = new Vector3(SightSize, SightSize, SightSize);
+    Vector3 min = spat.Transform.origin - offset;
+    Vector3 max = spat.Transform.origin + offset;
+    List<object> objects = Util.SiblingBoxCast(spat, min, max);
     List<Actor> ret = new List<Actor>();
     GD.Print("Found " + objects.Count + " objects via gridcast");
     foreach(object obj in objects){
       Node node = obj as Node;
       Actor sightedActor = Actor.GetActorFromNode(node);
-      if(sightedActor != null){
+      if(sightedActor != null && sightedActor != actor){
         ret.Add(sightedActor);
       }
     }
