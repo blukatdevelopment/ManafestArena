@@ -83,7 +83,7 @@ public class Menu{
     TextEdit textBox = new TextEdit();
     textBox.SetText(val);
     textBox.Readonly = readOnly;
-    textBox.WrapLines = wordWrap;
+    //textBox.WrapLines = wordWrap; No longer exists in 3.1
 
     textBox.AddStyleboxOverride("normal", ColorStyleBox("editable"));
     textBox.AddStyleboxOverride("focus", ColorStyleBox("focus"));

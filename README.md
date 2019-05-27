@@ -1,6 +1,6 @@
 # Manafest Arena 1.0
 ![Manafest: Arena](/Textures/logo.jpg)
-This game is a FOSS video game developed with Godot 3.0.6.
+This game is a FOSS video game developed with Godot 3.1.1.
 
 ## Premise
 
