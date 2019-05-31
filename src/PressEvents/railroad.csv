@@ -1,3 +1,0 @@
-0,You come across a fork in a railroad with a train coming.[N]A bus full of orphans is stuck at on the selected tracks.[N]The mayor of Lixus is inspecting the opposite tracks.[N]You have enough time to switch the direction of the train.,Leave the train on its current course.,Direct the train to the mayor.,,,1,2,-1,-1,n,n,n,n,n
-1,The train comes to a screeching halt an inch short of the bus.[N]You slip away unnoticed.,Continue,,,,-2,-1,-1,-1,n,n,n,n,n
-2,"The train runs clear through the mayor.[N]The paper reads ""Hero saves bus of orphans. Mayor dies in tragic train accident.""",Continue,,,,-2,-1,-1,-1,orphan_savior,n,n,n,n

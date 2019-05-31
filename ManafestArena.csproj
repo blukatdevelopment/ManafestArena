@@ -58,6 +58,7 @@
     <Compile Include="src/Actor/ActorFactory.cs" />
     <Compile Include="src/Actor/IBody.cs" />
     <Compile Include="src/Actor/PillBody.cs" />
+    <Compile Include="src/Actor/HumanoidBody.cs" />
     <Compile Include="src/Input/DeviceState.cs" />
     <Compile Include="src/Input/InputMapping.cs" />
     <Compile Include="src/Input/MappedInputEvent.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="src/Util/PlayerData.cs" />
     <Compile Include="src/Util/Test.cs" />
     <Compile Include="src/Util/Util.cs" />
+    <Compile Include="src/Util/IncrementTimer.cs" />
     <Compile Include="src/Util/GFX.cs" />
     <Compile Include="src/Util/Speaker.cs" />
     <Compile Include="src/Util/SessionEvent.cs" />
