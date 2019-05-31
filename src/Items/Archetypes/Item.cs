@@ -18,7 +18,7 @@ public class Item: RigidBody, IItem, IHasInfo {
     public int id;
     public Speaker speaker;
     public string name, description;
-    public string meshPath; // Set this before InitNodeStructure
+    public string meshPath, texturePath; // Set this before InitNodeStructure
     public ItemFactory.Items itemEnum = ItemFactory.Items.None; // Set this in factory
     public MeshInstance meshInstance;
     public CollisionShape collisionShape;
@@ -50,6 +50,12 @@ public class Item: RigidBody, IItem, IHasInfo {
           collisionShape = new CollisionShape();
           AddChild(collisionShape);
           collisionShape.MakeConvexFromBrothers();
+        }
+
+        if(texturePath != ""){
+          SpatialMaterial mat = new SpatialMaterial();
+          mat.AlbedoTexture = ResourceLoader.Load(texturePath) as Texture;
+          meshInstance.SetSurfaceMaterial(0, mat);
         }
     }
 
