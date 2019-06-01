@@ -14,7 +14,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
   MeshInstance meshInstance;
   CollisionShape collisionShape;
 
-  const float SkeletonUpdateDelay = 0.83f;
+  const float SkeletonUpdateDelay = 0.03f;
   IncrementTimer skeletonTimer;
   Skeleton skeleton;
   int[] bones;
@@ -36,8 +36,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     Shin_l,
     Foot_r,
     Foot_l
-  };
-  
+  };  
 
   public bool dead;
   
@@ -60,6 +59,10 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
   
   public Actor GetActor(){
     return actor;
+  }
+
+  public void AnimationTrigger(string triggerName){
+    // Nothing like that here.
   }
 
   private void InitChildren(){
@@ -127,12 +130,20 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
       //GD.Print("Bone " + i + " " + hitBoxes[i].Transform.origin);
     }
 
-    Transform headTrans = skeleton.GetBoneGlobalPose(bones[6]);
-    headTrans.origin += new Vector3(0, 0.3f, 0);
+    Transform headTrans = skeleton.GetBoneGlobalPose(bones[(int)BodyParts.Head]);
+    headTrans.origin += new Vector3(0, 0.07f, 0);
     Transform eyesTrans = eyes.GlobalTransform;
     eyesTrans.origin = skeleton.ToGlobal(headTrans.origin);
+    eyesTrans.basis = headTrans.basis;
     eyes.GlobalTransform = eyesTrans;
+    Vector3 eyesRot = eyes.GetRotationDegrees();
+    eyesRot.x += 90f;
+    eyesRot.y = 180;
+    GD.Print(" EyesRot " + eyesRot.y);
+    //eyesRot.y = GetRotationDegrees().y;
+    //GD.Print(" BodyRot " + eyesRot.y);
 
+    eyes.SetRotationDegrees(eyesRot);
   }
 
   public void ReceiveDamage(Damage damage){
@@ -231,7 +242,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
       headRot.x = maxY;
     }
 
-    eyes.SetRotationDegrees(headRot);
+    //eyes.SetRotationDegrees(headRot);
     SetRotationDegrees(bodyRot);
   }
 

@@ -33,6 +33,10 @@ public class PillBody : KinematicBody , IBody, IReceiveDamage {
     this.dead = false;
     InitChildren();
   }
+
+  public void AnimationTrigger(string triggerName){
+    GD.Print("Animation trigger " + triggerName);
+  }
   
   public Actor GetActor(){
     return actor;
