@@ -19,6 +19,25 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
   Skeleton skeleton;
   int[] bones;
   CollisionShape[] hitBoxes;
+  public enum BodyParts{
+    Head,
+    Chest,
+    Shoulder_r,
+    Shoulder_l,
+    Forearm_r,
+    Forearm_l,
+    Hand_r,
+    Hand_l,
+    Spine,
+    Hips,
+    Thigh_r,
+    Thigh_l,
+    Shin_r,
+    Shin_l,
+    Foot_r,
+    Foot_l
+  };
+  
 
   public bool dead;
   
@@ -67,25 +86,25 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     AnimationPlayer animationPlayer = rootNode.FindNode("AnimationPlayer") as AnimationPlayer;
     //animationPlayer.Play("Crouching_Walk");
 
-    bones = new int[15];
-    hitBoxes = new CollisionShape[15];
+    bones = new int[16];
+    hitBoxes = new CollisionShape[16];
 
-    Vector3 footVector = new Vector3(0.1f, 0.1f, 0.1f);
-    CreateBone(0, "foot.L", footVector);
-    CreateBone(1, "foot.R", footVector);
-    CreateBone(2, "forearm.L", footVector);
-    CreateBone(3, "forearm.R", footVector);
-    CreateBone(4, "shoulder.L", footVector);
-    CreateBone(5, "shoulder.R", footVector);
-    CreateBone(6, "head", footVector);
-    CreateBone(7, "chest", footVector);
-    CreateBone(8, "hips", footVector);
-    CreateBone(9, "shin.L", footVector);
-    CreateBone(10, "shin.R", footVector);
-    CreateBone(11, "thigh.L", footVector);
-    CreateBone(12, "thigh.R", footVector);
-    CreateBone(13, "hand.L", footVector);
-    CreateBone(14, "hand.R", footVector);
+    CreateBone((int)BodyParts.Head,        "head",         new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone((int)BodyParts.Chest,       "chest",        new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone((int)BodyParts.Shoulder_r,  "shoulder.R",   new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone((int)BodyParts.Shoulder_l,  "shoulder.L",   new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone((int)BodyParts.Forearm_r,   "forearm.R",    new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone((int)BodyParts.Forearm_l,   "forearm.L",    new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone((int)BodyParts.Hand_r,      "hand.R",       new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone((int)BodyParts.Hand_l,      "hand.L",       new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone((int)BodyParts.Spine,       "spine",        new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone((int)BodyParts.Hips,        "hips",         new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone((int)BodyParts.Thigh_r,     "thigh.R",      new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone((int)BodyParts.Thigh_l,     "thigh.L",      new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone((int)BodyParts.Shin_r,      "shin.R",       new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone((int)BodyParts.Shin_l,      "shin.L",       new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone((int)BodyParts.Foot_r,      "foot.R",       new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone((int)BodyParts.Foot_l,      "foot.L",       new Vector3(0.1f, 0.1f, 0.1f));
     grounded = true;
   }
 
@@ -187,8 +206,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
         return;
       }
 
-      // TODO: Don't hardcode the feet like this.
-      if(collision.Position.y < hitBoxes[0].GlobalTransform.origin.y || collision.Position.y < hitBoxes[1].GlobalTransform.origin.y){
+      if(collision.Position.y < hitBoxes[(int)BodyParts.Foot_r].GlobalTransform.origin.y || collision.Position.y < hitBoxes[(int)BodyParts.Foot_l].GlobalTransform.origin.y){
         if(gravityVelocity < 0){
           grounded = true;
           gravityVelocity = 0f;
