@@ -64,32 +64,55 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     meshInstance = rootNode.FindNode("Cube") as MeshInstance;
     skeleton = rootNode.FindNode("Skeleton") as Skeleton;
 
-    // collisionShape = new CollisionShape();
-    // collisionShape.SetShape(meshInstance.Mesh.CreateConvexShape());
-    // AddChild(collisionShape);
-    bones = new int[2];
-    hitBoxes = new CollisionShape[2];
+    AnimationPlayer animationPlayer = rootNode.FindNode("AnimationPlayer") as AnimationPlayer;
+    //animationPlayer.Play("Crouching_Walk");
 
-    Vector3 footVector = new Vector3(0.25f, 0.25f, 0.25f);
+    bones = new int[15];
+    hitBoxes = new CollisionShape[15];
 
+    Vector3 footVector = new Vector3(0.1f, 0.1f, 0.1f);
     CreateBone(0, "foot.L", footVector);
     CreateBone(1, "foot.R", footVector);
+    CreateBone(2, "forearm.L", footVector);
+    CreateBone(3, "forearm.R", footVector);
+    CreateBone(4, "shoulder.L", footVector);
+    CreateBone(5, "shoulder.R", footVector);
+    CreateBone(6, "head", footVector);
+    CreateBone(7, "chest", footVector);
+    CreateBone(8, "hips", footVector);
+    CreateBone(9, "shin.L", footVector);
+    CreateBone(10, "shin.R", footVector);
+    CreateBone(11, "thigh.L", footVector);
+    CreateBone(12, "thigh.R", footVector);
+    CreateBone(13, "hand.L", footVector);
+    CreateBone(14, "hand.R", footVector);
     grounded = true;
   }
 
   private void CreateBone(int index, string name, Vector3 extents){
-    bones[index] = skeleton.FindBone("foot.L");
+    bones[index] = skeleton.FindBone(name);
     hitBoxes[index] = new CollisionShape();
     BoxShape boxShape = new BoxShape();
     boxShape.Extents = extents;
     hitBoxes[index].SetShape(boxShape);
+    hitBoxes[index].Name = name;
     AddChild(hitBoxes[index]);
   }
 
   public void UpdateSkeleton(){
     for(int i = 0; i < bones.Length; i++){
-      hitBoxes[i].Transform = skeleton.GetBonePose(bones[i]);
+      Transform hbTrans = hitBoxes[i].GlobalTransform;
+      Transform skelTrans = skeleton.GetBoneGlobalPose(bones[i]);
+      hbTrans.origin = skeleton.ToGlobal(skelTrans.origin);
+      hitBoxes[i].GlobalTransform = hbTrans;
+      //GD.Print("Bone " + i + " " + hitBoxes[i].Transform.origin);
     }
+
+    Transform headTrans = skeleton.GetBoneGlobalPose(bones[6]);
+    headTrans.origin += new Vector3(0, 0.3f, 0);
+    Transform eyesTrans = eyes.GlobalTransform;
+    eyesTrans.origin = skeleton.ToGlobal(headTrans.origin);
+    eyes.GlobalTransform = eyesTrans;
 
   }
 
@@ -160,7 +183,12 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
         }
       }
 
-      if(!grounded && collision != null && collision.Position.y < GetTranslation().y){
+      if(grounded || collision == null){
+        return;
+      }
+
+      // TODO: Don't hardcode the feet like this.
+      if(collision.Position.y < hitBoxes[0].GlobalTransform.origin.y || collision.Position.y < hitBoxes[1].GlobalTransform.origin.y){
         if(gravityVelocity < 0){
           grounded = true;
           gravityVelocity = 0f;
@@ -231,8 +259,10 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
   }
 
   public void Jump(){
-    if(!grounded){ return; }
-    float jumpForce = 10;
+    if(!grounded){ 
+      return; 
+    }
+    float jumpForce = 11;
     
     if(actor.stats == null){
       gravityVelocity = jumpForce;

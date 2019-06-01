@@ -1460,6 +1460,7 @@ tracks/67/keys = PoolRealArray( 0, 1, -2.57572e-14, -2.21189e-08, 1.22935e-07, 1
 
 [sub_resource type="Animation" id=5]
 resource_name = "Crouching_Walk"
+loop = true
 tracks/0/type = "transform"
 tracks/0/path = NodePath("Person")
 tracks/0/interp = 1

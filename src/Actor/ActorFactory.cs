@@ -136,7 +136,7 @@ public class ActorFactory {
   }
 
   public static Actor TargetCharacter(){
-    Actor actor = FromComponentTypes(InputSources.None, StatsHandlers.Icepaws, Bodies.PillBody, InventoryHandlers.None);
+    Actor actor = FromComponentTypes(InputSources.None, StatsHandlers.Icepaws, Bodies.HumanoidBody, InventoryHandlers.None);
     actor.stats.SetStat("intelligence", 5);
     actor.stats.SetStat("charisma", 5);
     actor.stats.SetStat("endurance", 5);
