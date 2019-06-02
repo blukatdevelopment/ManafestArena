@@ -44,7 +44,8 @@ public class CareerDb {
   }
 
   public static PressEvent LoadPressEvent(string name){
-    return new PressEvent(CSV.ReadRows(name));
+    return null;
+    //return new PressEvent(CSV.ReadRows(name));
   }
 
   public static List<string> PressEventFiles(){
