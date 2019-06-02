@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 public class SettingsDb{
     const string SavesDirectory = "Saves/";
-    const string SettingsPath = "Saves/settings.csv";
+    const string SettingsPath = "Saves/settings.json";
     System.Collections.Generic.Dictionary<string, string> settings;
 
     public SettingsDb(){
@@ -18,13 +18,8 @@ public class SettingsDb{
         FetchSettings();
     }
 
-    public void StoreSettings(){
-        
-        string settingsText = "";
-
-        foreach(string key in settings.Keys){
-            settingsText += key + "," + settings[key] + "\n";
-        }
+    public void StoreSettings(){    
+        string settingsText = Util.ToJson(settings);
 
         System.IO.File.WriteAllText(SettingsPath, settingsText);
     }
@@ -39,26 +34,7 @@ public class SettingsDb{
         }
 
         string rawText = System.IO.File.ReadAllText(SettingsPath);
-        settings = ParseSettingsText(rawText);
-    }
-
-    public System.Collections.Generic.Dictionary<string, string> ParseSettingsText(string rawText){
-        string[] lines = rawText.Split(new Char [] {'\n'});
-
-        System.Collections.Generic.Dictionary<string, string> ret;
-        ret = new System.Collections.Generic.Dictionary<string, string>();
-
-        for(int i = 0; i < lines.Length; i++){
-            string[] columns = lines[i].Split(new Char [] { ',' });
-            
-            if(columns.Length == 2){
-                ret.Add(columns[0], columns[1]);
-            }
-            else if(columns.Length != 1){
-                GD.Print("Line " + i + " had incorrect number of columns:" + columns.Length);
-            }
-        }
-        return ret;
+        settings = Util.FromJson<System.Collections.Generic.Dictionary<string, string>>(rawText);
     }
 
     public void InitSettings(){
