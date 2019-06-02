@@ -42,8 +42,9 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
   
   bool grounded;
   float gravityVelocity = 0f;
-  const int maxY = 90;
-  const int minY = -40;
+  const int minY = 90;
+  const int maxY = -40;
+  float spinePivot = 0f;
 
   const float GravityAcceleration = -9.81f;
   const float TerminalVelocity = -53;
@@ -62,7 +63,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
   }
 
   public void AnimationTrigger(string triggerName){
-    // Nothing like that here.
+    
   }
 
   private void InitChildren(){
@@ -87,7 +88,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     skeleton = rootNode.FindNode("Skeleton") as Skeleton;
 
     AnimationPlayer animationPlayer = rootNode.FindNode("AnimationPlayer") as AnimationPlayer;
-    //animationPlayer.Play("Crouching_Walk");
+    animationPlayer.Play("Both_Rest");
 
     bones = new int[16];
     hitBoxes = new CollisionShape[16];
@@ -127,7 +128,6 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
       Transform skelTrans = skeleton.GetBoneGlobalPose(bones[i]);
       hbTrans.origin = skeleton.ToGlobal(skelTrans.origin);
       hitBoxes[i].GlobalTransform = hbTrans;
-      //GD.Print("Bone " + i + " " + hitBoxes[i].Transform.origin);
     }
 
     Transform headTrans = skeleton.GetBoneGlobalPose(bones[(int)BodyParts.Head]);
@@ -139,9 +139,6 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     Vector3 eyesRot = eyes.GetRotationDegrees();
     eyesRot.x += 90f;
     eyesRot.y = 180;
-    GD.Print(" EyesRot " + eyesRot.y);
-    //eyesRot.y = GetRotationDegrees().y;
-    //GD.Print(" BodyRot " + eyesRot.y);
 
     eyes.SetRotationDegrees(eyesRot);
   }
@@ -230,19 +227,24 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     Vector3 bodyRot = this.GetRotationDegrees();
     bodyRot.y += movement.x;
     this.SetRotationDegrees(bodyRot);
-    
-    Vector3 headRot = eyes.GetRotationDegrees();
+
+    Spatial spineSpat = hitBoxes[(int)BodyParts.Spine];
+    Vector3 headRot = spineSpat.GetRotationDegrees();
+
     headRot.x += movement.y;
 
-    if(headRot.x < minY){
-      headRot.x = minY;
-    }
+    // if(headRot.x < minY){
+    //   headRot.x = minY;
+    // }
 
-    if(headRot.x > maxY){
-      headRot.x = maxY;
-    }
-
-    //eyes.SetRotationDegrees(headRot);
+    // if(headRot.x > maxY){
+    //   headRot.x = maxY;
+    // }
+    
+    GD.Print("Spine rot " + headRot);
+    spineSpat.SetRotationDegrees(headRot);
+    skeleton.SetBoneGlobalPose((int)BodyParts.Spine, spineSpat.Transform);
+    
     SetRotationDegrees(bodyRot);
   }
 
