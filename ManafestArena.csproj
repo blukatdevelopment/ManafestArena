@@ -141,7 +141,6 @@
     <Compile Include="src/Career/Encounters/ShopEncounter.cs" />
     <Compile Include="src/Career/PressEvent.cs" />
     <Compile Include="src/Career/PressEventNode.cs" />
-    <Compile Include="src/Db/CSV.cs" />
     <Compile Include="src/Db/CareerDb.cs" />
     <Compile Include="src/Stats/IStats.cs" />
     <Compile Include="src/Stats/IcepawsStats.cs" />
