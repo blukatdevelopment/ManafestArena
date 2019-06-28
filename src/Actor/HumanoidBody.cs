@@ -131,16 +131,17 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     }
 
     Transform headTrans = skeleton.GetBoneGlobalPose(bones[(int)BodyParts.Head]);
-    headTrans.origin += new Vector3(0, 0.07f, 0);
+    headTrans.origin += new Vector3(0, 0, -5);
     Transform eyesTrans = eyes.GlobalTransform;
     eyesTrans.origin = skeleton.ToGlobal(headTrans.origin);
-    eyesTrans.basis = headTrans.basis;
+    //eyesTrans.basis = headTrans.basis;
     eyes.GlobalTransform = eyesTrans;
-    Vector3 eyesRot = eyes.GetRotationDegrees();
-    eyesRot.x += 90f;
-    eyesRot.y = 180;
 
-    eyes.SetRotationDegrees(eyesRot);
+    // Vector3 eyesRot = eyes.GetRotationDegrees();
+    // eyesRot.x += 90f;
+    // eyesRot.y = 180;
+
+    // eyes.SetRotationDegrees(eyesRot);
   }
 
   public void ReceiveDamage(Damage damage){
@@ -228,22 +229,17 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     bodyRot.y += movement.x;
     this.SetRotationDegrees(bodyRot);
 
-    Spatial spineSpat = hitBoxes[(int)BodyParts.Spine];
+    Spatial spineSpat = new Spatial();
+    spineSpat.GlobalTransform = skeleton.GetBoneGlobalPose(bones[(int)BodyParts.Spine]);
+    //hitBoxes[(int)BodyParts.Spine];
     Vector3 headRot = spineSpat.GetRotationDegrees();
 
     headRot.x += movement.y;
-
-    // if(headRot.x < minY){
-    //   headRot.x = minY;
-    // }
-
-    // if(headRot.x > maxY){
-    //   headRot.x = maxY;
-    // }
+    GD.Print("headRot after" + headRot);
     
-    GD.Print("Spine rot " + headRot);
+
     spineSpat.SetRotationDegrees(headRot);
-    skeleton.SetBoneGlobalPose((int)BodyParts.Spine, spineSpat.Transform);
+    skeleton.SetBoneGlobalPose(bones[(int)BodyParts.Spine], spineSpat.Transform);
     
     SetRotationDegrees(bodyRot);
   }
