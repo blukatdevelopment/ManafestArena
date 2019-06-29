@@ -36,7 +36,9 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     Shin_l,
     Foot_r,
     Foot_l
-  };  
+  };
+  System.Collections.Generic.Dictionary<BodyParts, BoneAttachment> boneAttachments;
+  System.Collections.Generic.Dictionary<BodyParts, CollisionShape> collisionShapes;
 
   public bool dead;
   
@@ -92,56 +94,74 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
 
     bones = new int[16];
     hitBoxes = new CollisionShape[16];
+    boneAttachments = new System.Collections.Generic.Dictionary<BodyParts, BoneAttachment>();
+    collisionShapes = new System.Collections.Generic.Dictionary<BodyParts, CollisionShape>();
 
-    CreateBone((int)BodyParts.Head,        "head",         new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone((int)BodyParts.Chest,       "chest",        new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone((int)BodyParts.Shoulder_r,  "shoulder.R",   new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone((int)BodyParts.Shoulder_l,  "shoulder.L",   new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone((int)BodyParts.Forearm_r,   "forearm.R",    new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone((int)BodyParts.Forearm_l,   "forearm.L",    new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone((int)BodyParts.Hand_r,      "hand.R",       new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone((int)BodyParts.Hand_l,      "hand.L",       new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone((int)BodyParts.Spine,       "spine",        new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone((int)BodyParts.Hips,        "hips",         new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone((int)BodyParts.Thigh_r,     "thigh.R",      new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone((int)BodyParts.Thigh_l,     "thigh.L",      new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone((int)BodyParts.Shin_r,      "shin.R",       new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone((int)BodyParts.Shin_l,      "shin.L",       new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone((int)BodyParts.Foot_r,      "foot.R",       new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone((int)BodyParts.Foot_l,      "foot.L",       new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone(BodyParts.Head,        "head",         new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone(BodyParts.Chest,       "chest",        new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone(BodyParts.Shoulder_r,  "shoulder.R",   new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone(BodyParts.Shoulder_l,  "shoulder.L",   new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone(BodyParts.Forearm_r,   "forearm.R",    new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone(BodyParts.Forearm_l,   "forearm.L",    new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone(BodyParts.Hand_r,      "hand.R",       new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone(BodyParts.Hand_l,      "hand.L",       new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone(BodyParts.Spine,       "spine",        new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone(BodyParts.Hips,        "hips",         new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone(BodyParts.Thigh_r,     "thigh.R",      new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone(BodyParts.Thigh_l,     "thigh.L",      new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone(BodyParts.Shin_r,      "shin.R",       new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone(BodyParts.Shin_l,      "shin.L",       new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone(BodyParts.Foot_r,      "foot.R",       new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone(BodyParts.Foot_l,      "foot.L",       new Vector3(0.1f, 0.1f, 0.1f));
     grounded = true;
   }
 
-  private void CreateBone(int index, string name, Vector3 extents){
-    bones[index] = skeleton.FindBone(name);
-    hitBoxes[index] = new CollisionShape();
+  private void CreateBone(BodyParts part, string name, Vector3 extents){
+    bones[(int)part] = skeleton.FindBone(name);
+    
+    CollisionShape hitbox = new CollisionShape();
     BoxShape boxShape = new BoxShape();
     boxShape.Extents = extents;
-    hitBoxes[index].SetShape(boxShape);
-    hitBoxes[index].Name = name;
-    AddChild(hitBoxes[index]);
+    hitbox.SetShape(boxShape);
+    hitbox.Name = name;
+    AddChild(hitbox);
+    collisionShapes.Add(part, hitbox);
+
+    BoneAttachment attachment = new BoneAttachment();
+    attachment.BoneName = name;
+    attachment.Name = name;
+
+    skeleton.AddChild(attachment);
+
+    boneAttachments.Add(part, attachment);
   }
 
   public void UpdateSkeleton(){
-    for(int i = 0; i < bones.Length; i++){
-      Transform hbTrans = hitBoxes[i].GlobalTransform;
-      Transform skelTrans = skeleton.GetBoneGlobalPose(bones[i]);
-      hbTrans.origin = skeleton.ToGlobal(skelTrans.origin);
-      hitBoxes[i].GlobalTransform = hbTrans;
+    foreach(BodyParts part in boneAttachments.Keys){
+      collisionShapes[part].GlobalTransform = boneAttachments[part].GlobalTransform;
     }
+    // for(int i = 0; i < bones.Length; i++){
+    //   Transform hbTrans = hitBoxes[i].GlobalTransform;
+    //   Transform skelTrans = skeleton.GetBoneGlobalPose(bones[i]);
+    //   hbTrans.origin = skeleton.ToGlobal(skelTrans.origin);
+    //   hitBoxes[i].GlobalTransform = hbTrans;
+    // }
 
-    Transform headTrans = skeleton.GetBoneGlobalPose(bones[(int)BodyParts.Head]);
-    headTrans.origin += new Vector3(0, 0, -5);
-    Transform eyesTrans = eyes.GlobalTransform;
-    eyesTrans.origin = skeleton.ToGlobal(headTrans.origin);
-    //eyesTrans.basis = headTrans.basis;
-    eyes.GlobalTransform = eyesTrans;
+    // Transform headTrans = skeleton.GetBoneGlobalPose(bones[(int)BodyParts.Head]);
+    // //headTrans.origin += new Vector3(0, 0, -5);
+    // Transform eyesTrans = eyes.GlobalTransform;
+    // eyesTrans.origin = skeleton.ToGlobal(headTrans.origin);
+    // //eyesTrans.basis = headTrans.basis;
+    // eyes.GlobalTransform = eyesTrans;
 
     // Vector3 eyesRot = eyes.GetRotationDegrees();
     // eyesRot.x += 90f;
     // eyesRot.y = 180;
 
     // eyes.SetRotationDegrees(eyesRot);
+    eyes.GlobalTransform = boneAttachments[BodyParts.Head].GlobalTransform;
+    //eyes.Translate(new Vector3(0, 0, 3f));
+    //eyes.Rotate(new Vector3(0, 0, 0), 90f);
   }
 
   public void ReceiveDamage(Damage damage){
