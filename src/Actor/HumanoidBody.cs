@@ -17,7 +17,6 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
   const float SkeletonUpdateDelay = 0.03f;
   IncrementTimer skeletonTimer;
   Skeleton skeleton;
-  int[] bones;
   public enum BodyParts{
     Head,
     Chest,
@@ -38,6 +37,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
   };
   System.Collections.Generic.Dictionary<BodyParts, BoneAttachment> boneAttachments;
   System.Collections.Generic.Dictionary<BodyParts, CollisionShape> collisionShapes;
+  System.Collections.Generic.Dictionary<BodyParts, int> boneIds;
   Vector3 spineRotation;
 
   public bool dead;
@@ -88,10 +88,10 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     AnimationPlayer animationPlayer = rootNode.FindNode("AnimationPlayer") as AnimationPlayer;
     animationPlayer.Play("Both_Rest");
 
-    bones = new int[16];
     boneAttachments = new System.Collections.Generic.Dictionary<BodyParts, BoneAttachment>();
     collisionShapes = new System.Collections.Generic.Dictionary<BodyParts, CollisionShape>();
-
+    boneIds = new System.Collections.Generic.Dictionary<BodyParts, int>();
+    
     CreateBone(BodyParts.Head,        "head",         new Vector3(0.1f, 0.1f, 0.1f));
     CreateBone(BodyParts.Chest,       "chest",        new Vector3(0.1f, 0.1f, 0.1f));
     CreateBone(BodyParts.Shoulder_r,  "shoulder.R",   new Vector3(0.1f, 0.1f, 0.1f));
@@ -113,7 +113,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
   }
 
   private void CreateBone(BodyParts part, string name, Vector3 extents){
-    bones[(int)part] = skeleton.FindBone(name);
+    boneIds.Add(part, skeleton.FindBone(name));
     
     CollisionShape hitbox = new CollisionShape();
     BoxShape boxShape = new BoxShape();
@@ -135,13 +135,6 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     foreach(BodyParts part in boneAttachments.Keys){
       collisionShapes[part].GlobalTransform = boneAttachments[part].GlobalTransform;
     }
-
-    // Transform eyesTrans = boneAttachments[BodyParts.Head].GlobalTransform;
-    // Vector3 lookAtPoint = eyesTrans.origin + ( 5f *  Util.TForward(GlobalTransform));
-
-    // eyes.GlobalTransform = eyesTrans;
-    // eyes.SetRotationDegrees(new Vector3());
-    // eyes.LookAt(lookAtPoint, eyesTrans.basis.y);
   }
 
   public void ReceiveDamage(Damage damage){
@@ -247,7 +240,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
 
     boneAttachments[BodyParts.Spine].SetRotationDegrees(spineRotation);
 
-    skeleton.SetBoneGlobalPose(bones[(int)BodyParts.Spine], boneAttachments[BodyParts.Spine].Transform);
+    skeleton.SetBoneGlobalPose(boneIds[BodyParts.Spine], boneAttachments[BodyParts.Spine].Transform);
 
   }
 
