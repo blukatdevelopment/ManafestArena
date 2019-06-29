@@ -130,7 +130,6 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     BoneAttachment attachment = new BoneAttachment();
     attachment.BoneName = name;
     attachment.Name = name;
-
     skeleton.AddChild(attachment);
 
     boneAttachments.Add(part, attachment);
@@ -140,28 +139,8 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     foreach(BodyParts part in boneAttachments.Keys){
       collisionShapes[part].GlobalTransform = boneAttachments[part].GlobalTransform;
     }
-    // for(int i = 0; i < bones.Length; i++){
-    //   Transform hbTrans = hitBoxes[i].GlobalTransform;
-    //   Transform skelTrans = skeleton.GetBoneGlobalPose(bones[i]);
-    //   hbTrans.origin = skeleton.ToGlobal(skelTrans.origin);
-    //   hitBoxes[i].GlobalTransform = hbTrans;
-    // }
 
-    // Transform headTrans = skeleton.GetBoneGlobalPose(bones[(int)BodyParts.Head]);
-    // //headTrans.origin += new Vector3(0, 0, -5);
-    // Transform eyesTrans = eyes.GlobalTransform;
-    // eyesTrans.origin = skeleton.ToGlobal(headTrans.origin);
-    // //eyesTrans.basis = headTrans.basis;
-    // eyes.GlobalTransform = eyesTrans;
-
-    // Vector3 eyesRot = eyes.GetRotationDegrees();
-    // eyesRot.x += 90f;
-    // eyesRot.y = 180;
-
-    // eyes.SetRotationDegrees(eyesRot);
     eyes.GlobalTransform = boneAttachments[BodyParts.Head].GlobalTransform;
-    //eyes.Translate(new Vector3(0, 0, 3f));
-    //eyes.Rotate(new Vector3(0, 0, 0), 90f);
   }
 
   public void ReceiveDamage(Damage damage){
@@ -223,7 +202,11 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
       Vector3 delta = destination.origin - current.origin;
       KinematicCollision collision = MoveAndCollide(delta);
       
-      if(collision != null && collision.Collider != null){
+      if(collision == null){
+        return;
+      }
+
+      if(collision.Collider != null){
         ICollide collider = collision.Collider as ICollide;
         
         if(collider != null){
@@ -231,11 +214,11 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
         }
       }
 
-      if(grounded || collision == null){
+      if(grounded){
         return;
       }
 
-      if(collision.Position.y < hitBoxes[(int)BodyParts.Foot_r].GlobalTransform.origin.y || collision.Position.y < hitBoxes[(int)BodyParts.Foot_l].GlobalTransform.origin.y){
+      if(collision.Position.y < boneAttachments[BodyParts.Foot_r].GlobalTransform.origin.y || collision.Position.y < boneAttachments[BodyParts.Foot_l].GlobalTransform.origin.y){
         if(gravityVelocity < 0){
           grounded = true;
           gravityVelocity = 0f;
