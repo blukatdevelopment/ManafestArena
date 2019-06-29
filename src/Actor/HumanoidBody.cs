@@ -38,14 +38,12 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
   };
   System.Collections.Generic.Dictionary<BodyParts, BoneAttachment> boneAttachments;
   System.Collections.Generic.Dictionary<BodyParts, CollisionShape> collisionShapes;
-  Vector3 eyesRotation;
+  Vector3 spineRotation;
 
   public bool dead;
   
   bool grounded;
   float gravityVelocity = 0f;
-  const int minY = 90;
-  const int maxY = -40;
   float spinePivot = 0f;
 
   const float GravityAcceleration = -9.81f;
@@ -72,7 +70,6 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
 
     eyes = new Spatial();
     AddChild(eyes);
-    eyesRotation = new Vector3();
 
     hand = new Spatial();
     eyes.AddChild(hand);
@@ -112,6 +109,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     CreateBone(BodyParts.Foot_r,      "foot.R",       new Vector3(0.1f, 0.1f, 0.1f));
     CreateBone(BodyParts.Foot_l,      "foot.L",       new Vector3(0.1f, 0.1f, 0.1f));
     grounded = true;
+    spineRotation = boneAttachments[BodyParts.Spine].GetRotationDegrees();
   }
 
   private void CreateBone(BodyParts part, string name, Vector3 extents){
@@ -191,7 +189,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     boneAttachments[BodyParts.Head].AddChild(eyes);
     eyes.Rotate(new Vector3(1, 0, 0), Util.ToRadians(90f));
     eyes.Rotate(new Vector3(0, 1, 0), Util.ToRadians(180f));
-    eyes.Translate(new Vector3(0, 0, 3f));
+    eyes.Translate(new Vector3(0, 0.5f, 0));
     
     eyes.AddChild(hand);
   }
@@ -234,19 +232,23 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     movement *= moveDelta;
     Vector3 bodyRot = this.GetRotationDegrees();
     bodyRot.y += movement.x;
-    this.SetRotationDegrees(bodyRot);
-
-    Spatial spineSpat = new Spatial();
-    spineSpat.GlobalTransform = skeleton.GetBoneGlobalPose(bones[(int)BodyParts.Spine]);
-    Vector3 headRot = spineSpat.GetRotationDegrees();
-
-    headRot.x -= movement.y;
-    
-
-    spineSpat.SetRotationDegrees(headRot);
-    skeleton.SetBoneGlobalPose(bones[(int)BodyParts.Spine], spineSpat.Transform);
-    
     SetRotationDegrees(bodyRot);
+
+    spineRotation.x -= movement.y;
+    float maxX = 160f;
+    float minX = 10f;
+
+    if(spineRotation.x > maxX){
+      spineRotation.x = maxX;
+    }
+    if(spineRotation.x < minX){
+      spineRotation.x = minX;
+    }
+
+    boneAttachments[BodyParts.Spine].SetRotationDegrees(spineRotation);
+
+    skeleton.SetBoneGlobalPose(bones[(int)BodyParts.Spine], boneAttachments[BodyParts.Spine].Transform);
+
   }
 
   public void Update(float delta){
