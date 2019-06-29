@@ -85,8 +85,11 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     meshInstance = rootNode.FindNode("Cube") as MeshInstance;
     skeleton = rootNode.FindNode("Skeleton") as Skeleton;
 
-    AnimationPlayer animationPlayer = rootNode.FindNode("AnimationPlayer") as AnimationPlayer;
-    animationPlayer.Play("Both_Rest");
+    AnimationPlayer armsAnimationPlayer = rootNode.FindNode("ArmsAnimationPlayer") as AnimationPlayer;
+    armsAnimationPlayer.Play("Right_Punch");
+
+    AnimationPlayer legsAnimationPlayer = rootNode.FindNode("LegsAnimationPlayer") as AnimationPlayer;
+    legsAnimationPlayer.Play("Crouching_Walk");
 
     boneAttachments = new System.Collections.Generic.Dictionary<BodyParts, BoneAttachment>();
     collisionShapes = new System.Collections.Generic.Dictionary<BodyParts, CollisionShape>();
@@ -182,7 +185,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     boneAttachments[BodyParts.Head].AddChild(eyes);
     eyes.Rotate(new Vector3(1, 0, 0), Util.ToRadians(90f));
     eyes.Rotate(new Vector3(0, 1, 0), Util.ToRadians(180f));
-    eyes.Translate(new Vector3(0, 0.5f, 0));
+    eyes.Translate(new Vector3(0, 0.2f, 3));
     
     eyes.AddChild(hand);
   }
