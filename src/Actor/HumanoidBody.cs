@@ -14,6 +14,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
   MeshInstance meshInstance;
   CollisionShape collisionShape;
 
+  HumanoidAnimationHandler animHandler;
   const float SkeletonUpdateDelay = 0.03f;
   IncrementTimer skeletonTimer;
   Skeleton skeleton;
@@ -42,7 +43,8 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
 
   public bool dead;
   
-  bool grounded;
+
+  bool grounded, crouched;
   float gravityVelocity = 0f;
   float spinePivot = 0f;
 
@@ -86,10 +88,8 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     skeleton = rootNode.FindNode("Skeleton") as Skeleton;
 
     AnimationPlayer armsAnimationPlayer = rootNode.FindNode("ArmsAnimationPlayer") as AnimationPlayer;
-    armsAnimationPlayer.Play("Right_Punch");
-
     AnimationPlayer legsAnimationPlayer = rootNode.FindNode("LegsAnimationPlayer") as AnimationPlayer;
-    legsAnimationPlayer.Play("Crouching_Walk");
+    animHandler = new HumanoidAnimationHandler(armsAnimationPlayer, legsAnimationPlayer);
 
     boneAttachments = new System.Collections.Generic.Dictionary<BodyParts, BoneAttachment>();
     collisionShapes = new System.Collections.Generic.Dictionary<BodyParts, CollisionShape>();
@@ -185,12 +185,16 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     boneAttachments[BodyParts.Head].AddChild(eyes);
     eyes.Rotate(new Vector3(1, 0, 0), Util.ToRadians(90f));
     eyes.Rotate(new Vector3(0, 1, 0), Util.ToRadians(180f));
-    eyes.Translate(new Vector3(0, 0.2f, 3));
+    eyes.Translate(new Vector3(0, 0.2f, 3f));
     
     eyes.AddChild(hand);
   }
 
-  public void Move(Vector3 movement, float moveDelta = 1f){
+  public void Move(Vector3 movement, float moveDelta = 1f, bool ignoreAnimator = true, bool sprint = false){
+      if(!ignoreAnimator && movement != new Vector3()){
+        animHandler.HandleMovement();
+      }
+
       movement *= moveDelta;
       
       Transform current = GetTransform();
@@ -224,6 +228,11 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
       }
   }
 
+  public void ToggleCrouch(){
+    crouched = !crouched;
+    animHandler.HandleCrouch(crouched);
+  }
+
   public void Turn(Vector3 movement, float moveDelta = 1f){
     movement *= moveDelta;
     Vector3 bodyRot = this.GetRotationDegrees();
@@ -253,6 +262,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
       if(skeletonTimer.CheckTimer(delta)){
         UpdateSkeleton();
       }
+      animHandler.Update(delta);
     }
   }
 
@@ -278,7 +288,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     }
     
     Vector3 grav = new Vector3(0, gravityVelocity, 0);
-    Move(grav, delta);
+    Move(grav, delta, true);
 
     // Kill actor when it falls out of map
     if(actor.stats != null && actor.stats.HasStat("health") && GetTranslation().y < -100){

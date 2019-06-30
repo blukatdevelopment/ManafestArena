@@ -109,6 +109,7 @@
     <Compile Include="src/Actor/IHasBody.cs" />
     <Compile Include="src/Actor/IHasInventory.cs" />
     <Compile Include="src/Actor/IHasInputHandler.cs" />
+    <Compile Include="src/Actor/HumanoidAnimationHandler.cs" />    
     <Compile Include="src/Items/Interfaces/ICollide.cs" />
     <Compile Include="src/Items/Interfaces/IConsume.cs" />
     <Compile Include="src/Items/Interfaces/IWeapon.cs" />

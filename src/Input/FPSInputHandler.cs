@@ -99,6 +99,9 @@ public class FPSInputHandler : IInputHandler {
         }
         break;
       case Inputs.Crouch: 
+        if(inputEvent.inputType == MappedInputEvent.Inputs.Press){
+          actor.body.ToggleCrouch();
+        }
         break;
       case Inputs.Jump:
         if(inputEvent.inputType == MappedInputEvent.Inputs.Press){
@@ -165,7 +168,7 @@ public class FPSInputHandler : IInputHandler {
 
     direction *= (currentSpeed * SpeedBase);
     direction *= input.inputValue;
-    actor.body.Move(direction, delta);
+    actor.body.Move(direction, delta, false, false);
   }
 
   public enum Inputs{
