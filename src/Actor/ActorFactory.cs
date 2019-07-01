@@ -162,7 +162,7 @@ public class ActorFactory {
     actor.stats.RestoreCondition();
     actor.hotbar = new HotBar(10, actor);
     actor.hotbar.AddItem(0, ItemFactory.Factory(ItemFactory.Items.Knife));
-    actor.hotbar.AddItem(1, ItemFactory.Factory(ItemFactory.Items.Crossbow));
+    //actor.hotbar.AddItem(1, ItemFactory.Factory(ItemFactory.Items.Crossbow));
     return actor;
   }
 }

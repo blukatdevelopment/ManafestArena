@@ -93,20 +93,20 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     boneIds = new System.Collections.Generic.Dictionary<BodyParts, int>();
     
     CreateBone(BodyParts.Head,        "head",         new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone(BodyParts.Chest,       "chest",        new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone(BodyParts.Shoulder_r,  "shoulder.R",   new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone(BodyParts.Shoulder_l,  "shoulder.L",   new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone(BodyParts.Forearm_r,   "forearm.R",    new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone(BodyParts.Forearm_l,   "forearm.L",    new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone(BodyParts.Hand_r,      "hand.R",       new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone(BodyParts.Palm_r,      "palm.01.R",    new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone(BodyParts.Hand_l,      "hand.L",       new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone(BodyParts.Spine,       "spine",        new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone(BodyParts.Hips,        "hips",         new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone(BodyParts.Thigh_r,     "thigh.R",      new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone(BodyParts.Thigh_l,     "thigh.L",      new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone(BodyParts.Shin_r,      "shin.R",       new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone(BodyParts.Shin_l,      "shin.L",       new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone(BodyParts.Chest,       "chest",        new Vector3(0.3f, 0.5f, 0.3f));
+    // CreateBone(BodyParts.Shoulder_r,  "shoulder.R",   new Vector3(0.1f, 0.1f, 0.1f));
+    // CreateBone(BodyParts.Shoulder_l,  "shoulder.L",   new Vector3(0.1f, 0.1f, 0.1f));
+    // CreateBone(BodyParts.Forearm_r,   "forearm.R",    new Vector3(0.1f, 0.1f, 0.1f));
+    // CreateBone(BodyParts.Forearm_l,   "forearm.L",    new Vector3(0.1f, 0.1f, 0.1f));
+    // CreateBone(BodyParts.Hand_r,      "hand.R",       new Vector3(0.1f, 0.1f, 0.1f), true);
+    CreateBone(BodyParts.Palm_r,      "palm.01.R",    new Vector3(0.1f, 0.1f, 0.1f), true);
+    // CreateBone(BodyParts.Hand_l,      "hand.L",       new Vector3(0.1f, 0.1f, 0.1f), true);
+    CreateBone(BodyParts.Spine,       "spine",        new Vector3(0.1f, 0.1f, 0.1f), true);
+    // CreateBone(BodyParts.Hips,        "hips",         new Vector3(0.1f, 0.1f, 0.1f), true);
+    // CreateBone(BodyParts.Thigh_r,     "thigh.R",      new Vector3(0.1f, 0.1f, 0.1f), true);
+    // CreateBone(BodyParts.Thigh_l,     "thigh.L",      new Vector3(0.1f, 0.1f, 0.1f), true);
+    // CreateBone(BodyParts.Shin_r,      "shin.R",       new Vector3(0.1f, 0.1f, 0.1f));
+    // CreateBone(BodyParts.Shin_l,      "shin.L",       new Vector3(0.1f, 0.1f, 0.1f));
     CreateBone(BodyParts.Foot_r,      "foot.R",       new Vector3(0.1f, 0.1f, 0.1f));
     CreateBone(BodyParts.Foot_l,      "foot.L",       new Vector3(0.1f, 0.1f, 0.1f));
     grounded = true;
@@ -119,17 +119,17 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     hand.Translate(new Vector3(-0.05f, 0, 0.04f));
   }
 
-  private void CreateBone(BodyParts part, string name, Vector3 extents){
+  private void CreateBone(BodyParts part, string name, Vector3 extents, bool skipHitbox = false){
     boneIds.Add(part, skeleton.FindBone(name));
-    
-    CollisionShape hitbox = new CollisionShape();
-    BoxShape boxShape = new BoxShape();
-    boxShape.Extents = extents;
-    hitbox.SetShape(boxShape);
-    hitbox.Name = name;
-    AddChild(hitbox);
-    collisionShapes.Add(part, hitbox);
-
+    if(!skipHitbox){
+      CollisionShape hitbox = new CollisionShape();
+      BoxShape boxShape = new BoxShape();
+      boxShape.Extents = extents;
+      hitbox.SetShape(boxShape);
+      hitbox.Name = name;
+      AddChild(hitbox);
+      collisionShapes.Add(part, hitbox);
+    }
     BoneAttachment attachment = new BoneAttachment();
     attachment.BoneName = name;
     attachment.Name = name;
@@ -140,7 +140,9 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
 
   public void UpdateSkeleton(){
     foreach(BodyParts part in boneAttachments.Keys){
-      collisionShapes[part].GlobalTransform = boneAttachments[part].GlobalTransform;
+      if(collisionShapes.ContainsKey(part)){
+        collisionShapes[part].GlobalTransform = boneAttachments[part].GlobalTransform;
+      }
     }
   }
 
@@ -154,6 +156,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
       return;
     }
 
+    GD.Print("Receided Damage " + Util.ToJson(damage));
     receiver.ReceiveDamage(damage);
 
     if(GetHealth() < 1){

@@ -110,7 +110,7 @@ public class ItemStabber {
         if(!stabbing){
             return;
         }
-
+        GD.Print("Stab ended");
         stabbing = false;
         stabTimer = 0f;
         item.SetCollision(false);
@@ -118,15 +118,18 @@ public class ItemStabber {
 
     public void OnCollide(object body){
         if(!stabbing){
+            GD.Print("Not stabbing");
             return;
         }
         if(damage == null){
+            GD.Print("Damage null");
             EndStab();
             return;
         }
 
         IReceiveDamage receiver = body as IReceiveDamage;
         if(body == item.GetWielder()){
+            GD.Print("Not stabbing self");
             return;
         }
         if(receiver != null){
@@ -135,6 +138,7 @@ public class ItemStabber {
             if(speaker != null){
                 speaker.PlayEffect(impactSound);
             }
+            EndStab();
         }
 
     }

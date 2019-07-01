@@ -106,12 +106,12 @@ public class MeleeStabItem : Item, IHasDamage, IWeapon {
 
         switch(item){
             case ItemFactory.Items.Knife:
-                dmg.health = 35;
+                dmg.health = 100;
                 return new MeleeStabItem(
                         "Knife",
                         "Don't bring a gun to a knifefight.",
                         "res://Assets/Models/knife.obj",
-                        0.5f,
+                        1f,
                         dmg,
                         0,
                         15,

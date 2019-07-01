@@ -24,7 +24,7 @@ public class ArenaMatchEncounter : IEncounter {
     Arena arena = new Arena();
     arena.killQuota = 5;
     arena.player = career.GetPlayer();
-    for(int i = 0; i < 0; i++){
+    for(int i = 0; i < 5; i++){
       arena.enemies.Add(ActorFactory.FromCharacter(ActorFactory.Characters.DebugEnemy));
     }
 
