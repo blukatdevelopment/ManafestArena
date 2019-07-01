@@ -8,19 +8,21 @@ using System.Collections.Generic;
 public class HumanoidAnimationHandler {
   const float StopWalkingDelay = 0.05f;
   IncrementTimer stopWalkingTimer;
-  bool walking, crouching;
+  bool walking, crouching, holding;
 
   AnimationPlayer arms, legs;
   
   // Arms animations
-  const string AtRest = "Both_Rest";
-  const string Hold = "Single_Hold";
-  const string Punch = "Single_Punch";
+  const string AtRest   = "Both_Rest";
+  const string Hold     = "Single_Hold";
+  const string Punch    = "Single_Punch";
+  const string Stab     = "Single_Stab";
+  const string Slash    = "Single_Slash";
 
   // Legs animations
-  const string Stand = "Standing";
-  const string Crouch = "Crouching";
-  const string Walk = "Standing_Walk";
+  const string Stand      = "Standing";
+  const string Crouch     = "Crouching";
+  const string Walk       = "Standing_Walk";
   const string WalkCrouch = "Crouching_Walk";
 
   public HumanoidAnimationHandler(AnimationPlayer arms, AnimationPlayer legs){
@@ -31,22 +33,21 @@ public class HumanoidAnimationHandler {
     crouching = false;
     arms.Play(AtRest);
     legs.Play(Stand);
+    arms.PlaybackDefaultBlendTime = 0.25f;
+    legs.PlaybackDefaultBlendTime = 0.25f;
   }
 
   public void HandleMovement(){
     stopWalkingTimer.currentTime = 0f;
-    GD.Print("HandleMovement");
     if(walking){
       return;
     }
     walking = true;
     if(crouching){
       legs.Play(WalkCrouch);
-      GD.Print("Play walk crouch");
     }
     else{
       legs.Play(Walk);
-      GD.Print("Play walk");
     }
   }
 
@@ -72,6 +73,38 @@ public class HumanoidAnimationHandler {
       }
     }
 
+  }
+
+  public void HandleHold(bool val){
+    holding = val;
+    if(holding){
+      arms.Play(Hold);
+    }
+    else{
+      arms.Play(AtRest);
+    }
+  }
+
+  public void AnimationTrigger(string triggerName){
+    string animation = "";
+    if(holding){
+      switch(triggerName.ToLower()){
+        case "punch":
+          animation = Punch;
+        break;
+        case "stab":
+          animation = Stab;
+        break;
+        case "slash":
+          animation = Slash;
+        break;
+      }
+      if(animation != ""){
+        arms.Play(animation);
+        arms.Queue(Hold);
+        return;
+      }
+    }
   }
 
   public void Update(float delta){

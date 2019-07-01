@@ -26,6 +26,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     Forearm_r,
     Forearm_l,
     Hand_r,
+    Palm_r,
     Hand_l,
     Spine,
     Hips,
@@ -65,17 +66,13 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
   }
 
   public void AnimationTrigger(string triggerName){
-    
+    animHandler.AnimationTrigger(triggerName);
   }
 
   private void InitChildren(){
 
     eyes = new Spatial();
     AddChild(eyes);
-
-    hand = new Spatial();
-    eyes.AddChild(hand);
-    hand.Translation = new Vector3(0, 0f, -1f);
     
     speaker = new Speaker();
     AddChild(speaker);
@@ -102,6 +99,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     CreateBone(BodyParts.Forearm_r,   "forearm.R",    new Vector3(0.1f, 0.1f, 0.1f));
     CreateBone(BodyParts.Forearm_l,   "forearm.L",    new Vector3(0.1f, 0.1f, 0.1f));
     CreateBone(BodyParts.Hand_r,      "hand.R",       new Vector3(0.1f, 0.1f, 0.1f));
+    CreateBone(BodyParts.Palm_r,      "palm.01.R",    new Vector3(0.1f, 0.1f, 0.1f));
     CreateBone(BodyParts.Hand_l,      "hand.L",       new Vector3(0.1f, 0.1f, 0.1f));
     CreateBone(BodyParts.Spine,       "spine",        new Vector3(0.1f, 0.1f, 0.1f));
     CreateBone(BodyParts.Hips,        "hips",         new Vector3(0.1f, 0.1f, 0.1f));
@@ -113,6 +111,12 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     CreateBone(BodyParts.Foot_l,      "foot.L",       new Vector3(0.1f, 0.1f, 0.1f));
     grounded = true;
     spineRotation = boneAttachments[BodyParts.Spine].GetRotationDegrees();
+    
+    hand = new Spatial();
+    boneAttachments[BodyParts.Palm_r].AddChild(hand);
+    hand.Rotate(new Vector3(1, 0, 0), Util.ToRadians(-90f));
+    hand.Rotate(new Vector3(0, 1, 0), Util.ToRadians(-90f));
+    hand.Translate(new Vector3(-0.05f, 0, 0.04f));
   }
 
   private void CreateBone(BodyParts part, string name, Vector3 extents){
@@ -175,7 +179,6 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     if(index != 0){
       return; // Splitscreen cameras not implemented
     }
-    eyes.RemoveChild(hand);
 
     RemoveChild(eyes);
     
@@ -185,9 +188,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     boneAttachments[BodyParts.Head].AddChild(eyes);
     eyes.Rotate(new Vector3(1, 0, 0), Util.ToRadians(90f));
     eyes.Rotate(new Vector3(0, 1, 0), Util.ToRadians(180f));
-    eyes.Translate(new Vector3(0, 0.2f, 3f));
-    
-    eyes.AddChild(hand);
+    eyes.Translate(new Vector3(0, 0.2f, 0f));
   }
 
   public void Move(Vector3 movement, float moveDelta = 1f, bool ignoreAnimator = true, bool sprint = false){
@@ -270,13 +271,12 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     Node node = item.GetNode();
     this.hand.AddChild(node);
     Spatial spat = node as Spatial;
-    if(spat != null){
-      spat.Translation = new Vector3(0, 0, -1);
-    }
+    animHandler.HandleHold(true);
   }
 
   public void ReleaseItem(int hand, IItem item){
     this.hand.RemoveChild(item.GetNode());
+    animHandler.HandleHold(false);
   }
 
   private void Gravity(float delta){
