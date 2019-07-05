@@ -111,7 +111,7 @@ public class MeleeStabItem : Item, IHasDamage, IWeapon {
                         "Knife",
                         "Don't bring a gun to a knifefight.",
                         "res://Assets/Models/knife.obj",
-                        1f,
+                        1.5f,
                         dmg,
                         0,
                         15,

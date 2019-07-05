@@ -110,7 +110,6 @@ public class ItemStabber {
         if(!stabbing){
             return;
         }
-        GD.Print("Stab ended");
         stabbing = false;
         stabTimer = 0f;
         item.SetCollision(false);
@@ -126,9 +125,13 @@ public class ItemStabber {
             EndStab();
             return;
         }
-
+        
+        Node node = body as Node;
+        if(node != null){
+            GD.Print("Collided with " + node.Name);
+        }
         IReceiveDamage receiver = body as IReceiveDamage;
-        if(body == item.GetWielder()){
+        if(body == item.GetWielder() || body == item){
             GD.Print("Not stabbing self");
             return;
         }

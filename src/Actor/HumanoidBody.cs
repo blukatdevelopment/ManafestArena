@@ -92,8 +92,9 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     collisionShapes = new System.Collections.Generic.Dictionary<BodyParts, CollisionShape>();
     boneIds = new System.Collections.Generic.Dictionary<BodyParts, int>();
     
-    CreateBone(BodyParts.Head,        "head",         new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone(BodyParts.Chest,       "chest",        new Vector3(0.3f, 0.5f, 0.3f));
+    // These commented out bones are turned off for performance reasons.
+    CreateBone(BodyParts.Head,        "head",         new Vector3(0.1f, 0.1f, 0.1f), true);
+    CreateBone(BodyParts.Chest,       "chest",        new Vector3(0.25f, 0.25f, 0.4f));
     // CreateBone(BodyParts.Shoulder_r,  "shoulder.R",   new Vector3(0.1f, 0.1f, 0.1f));
     // CreateBone(BodyParts.Shoulder_l,  "shoulder.L",   new Vector3(0.1f, 0.1f, 0.1f));
     // CreateBone(BodyParts.Forearm_r,   "forearm.R",    new Vector3(0.1f, 0.1f, 0.1f));
@@ -341,6 +342,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     trans.origin = pos;
     Transform = trans;
     dead = true;
+    animHandler.AnimationTrigger("dead");
   }
 
   public List<Actor> ActorsInSight(){

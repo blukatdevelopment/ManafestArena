@@ -86,6 +86,12 @@ public class HumanoidAnimationHandler {
   }
 
   public void AnimationTrigger(string triggerName){
+    if(triggerName.ToLower() == "dead"){
+      arms.Play(AtRest);
+      legs.Play(Stand);
+      return;
+    }
+
     string animation = "";
     if(holding){
       switch(triggerName.ToLower()){

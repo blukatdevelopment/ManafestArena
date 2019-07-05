@@ -101,14 +101,6 @@ public class Item: RigidBody, IItem, IHasInfo {
             cs.Disabled = !val;
           }
         }
-
-        foreach(object owner in owners){
-          int ownerInt = (int)owner;
-          CollisionShape cs = (CollisionShape)ShapeOwnerGetOwner(ownerInt);
-          if(cs != null){
-            cs.Disabled = !val;
-          }
-        }
         
         ContactMonitor = val;
         
@@ -121,7 +113,15 @@ public class Item: RigidBody, IItem, IHasInfo {
     }
 
     public virtual void SetPhysics(bool val){
+        Godot.Collections.Array owners = GetShapeOwners();
         Mode = val ? RigidBody.ModeEnum.Rigid : RigidBody.ModeEnum.Static;
+        foreach(object owner in owners){
+          int ownerInt = (int)owner;
+          CollisionShape cs = (CollisionShape)ShapeOwnerGetOwner(ownerInt);
+          if(cs != null){
+            cs.Disabled = !val;
+          }
+        }
     }
 
     public  void InitArea(){
