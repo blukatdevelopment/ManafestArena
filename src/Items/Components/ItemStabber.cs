@@ -1,7 +1,6 @@
 /*
-    Item snaps forward to damage an enemy,
-    then snaps back when either a target
-    is hit or the stab time runs out.
+    Triggers stab animation and administers damage to first
+    collision that isn't the wielder.
 */
 using Godot;
 using System;
@@ -99,10 +98,11 @@ public class ItemStabber {
             speaker.PlayEffect(stabSound);
         }
 
-        Spatial itemSpatial = item.GetNode() as Spatial;
-        if(itemSpatial != null){
-            itemSpatial.Translation = forwardPosition;
+        IBody body = item.GetWielder() as IBody;
+        if(body != null){
+            body.AnimationTrigger("stab");
         }
+
         item.SetCollision(true);
     }
 
@@ -110,33 +110,38 @@ public class ItemStabber {
         if(!stabbing){
             return;
         }
-
         stabbing = false;
         stabTimer = 0f;
-        
-        Spatial itemSpatial = item.GetNode() as Spatial;
-        if(itemSpatial != null){
-            itemSpatial.Translation = wieldedPosition;
-        }
         item.SetCollision(false);
     }
 
     public void OnCollide(object body){
         if(!stabbing){
+            GD.Print("Not stabbing");
             return;
         }
         if(damage == null){
+            GD.Print("Damage null");
             EndStab();
             return;
         }
-
+        
+        Node node = body as Node;
+        if(node != null){
+            GD.Print("Collided with " + node.Name);
+        }
         IReceiveDamage receiver = body as IReceiveDamage;
+        if(body == item.GetWielder() || body == item){
+            GD.Print("Not stabbing self");
+            return;
+        }
         if(receiver != null){
             receiver.ReceiveDamage(damage);
 
             if(speaker != null){
                 speaker.PlayEffect(impactSound);
             }
+            EndStab();
         }
 
     }

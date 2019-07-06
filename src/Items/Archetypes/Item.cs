@@ -42,7 +42,7 @@ public class Item: RigidBody, IItem, IHasInfo {
         speaker = new Speaker();
         AddChild(speaker);
 
-        if(meshPath != ""){
+        if(meshPath != null && !meshPath.Equals("") && !meshPath.Equals("res://")){
           meshInstance = new MeshInstance();
           meshInstance.Mesh = ResourceLoader.Load(meshPath) as Mesh;
           AddChild(meshInstance);
@@ -52,7 +52,7 @@ public class Item: RigidBody, IItem, IHasInfo {
           collisionShape.MakeConvexFromBrothers();
         }
 
-        if(texturePath != ""){
+        if(texturePath != null && !texturePath.Equals("") && !texturePath.Equals("res://")){
           SpatialMaterial mat = new SpatialMaterial();
           mat.AlbedoTexture = ResourceLoader.Load(texturePath) as Texture;
           meshInstance.SetSurfaceMaterial(0, mat);
@@ -101,14 +101,6 @@ public class Item: RigidBody, IItem, IHasInfo {
             cs.Disabled = !val;
           }
         }
-
-        foreach(object owner in owners){
-          int ownerInt = (int)owner;
-          CollisionShape cs = (CollisionShape)ShapeOwnerGetOwner(ownerInt);
-          if(cs != null){
-            cs.Disabled = !val;
-          }
-        }
         
         ContactMonitor = val;
         
@@ -121,7 +113,15 @@ public class Item: RigidBody, IItem, IHasInfo {
     }
 
     public virtual void SetPhysics(bool val){
+        Godot.Collections.Array owners = GetShapeOwners();
         Mode = val ? RigidBody.ModeEnum.Rigid : RigidBody.ModeEnum.Static;
+        foreach(object owner in owners){
+          int ownerInt = (int)owner;
+          CollisionShape cs = (CollisionShape)ShapeOwnerGetOwner(ownerInt);
+          if(cs != null){
+            cs.Disabled = !val;
+          }
+        }
     }
 
     public  void InitArea(){

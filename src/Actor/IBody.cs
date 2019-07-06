@@ -12,7 +12,7 @@ public interface IBody {
   void ReleaseItem(int hand, IItem item);
   Node GetNode();
   void InitCam(int index);
-  void Move(Vector3 movement, float moveDelta);
+  void Move(Vector3 movement, float moveDelta, bool ignoreAnimation = true, bool sprint = false);
   void Turn(Vector3 direction, float delta);
   void Jump();
   Speaker GetSpeaker();
@@ -22,4 +22,6 @@ public interface IBody {
   bool IsDead();
   List<Actor> ActorsInSight();
   Vector3 LookingDegrees(); // In case this is not as simple as spatial.GetRotationDegrees()
+  void AnimationTrigger(string triggerName); // Reload, swing, crouch, etc, etc
+  void ToggleCrouch();
 }

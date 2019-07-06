@@ -33,6 +33,10 @@ public class PillBody : KinematicBody , IBody, IReceiveDamage {
     this.dead = false;
     InitChildren();
   }
+
+  public void AnimationTrigger(string triggerName){
+    GD.Print("Animation trigger " + triggerName);
+  }
   
   public Actor GetActor(){
     return actor;
@@ -111,7 +115,7 @@ public class PillBody : KinematicBody , IBody, IReceiveDamage {
     eyes.AddChild(hand);
   }
 
-  public void Move(Vector3 movement, float moveDelta = 1f){
+  public void Move(Vector3 movement, float moveDelta = 1f, bool ignoreAnimation = true, bool sprint = false){
       movement *= moveDelta;
       
       Transform current = GetTransform();
@@ -272,5 +276,9 @@ public class PillBody : KinematicBody , IBody, IReceiveDamage {
     Vector3 eyesRot = eyes.GetRotationDegrees();
     torsoRot.x = eyesRot.x;
     return torsoRot;
+  }
+
+  public void ToggleCrouch(){
+    // Nothing to see here, folks.
   }
 }

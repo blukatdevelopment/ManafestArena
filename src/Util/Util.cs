@@ -77,6 +77,19 @@ public class Util{
         recipient.basis = doner.basis;
   }
 
+  public static Vector3 GetRotationDegrees(Transform trans){
+    Spatial spat = new Spatial();
+    spat.Transform = trans;
+    return spat.GetRotationDegrees();
+  }
+
+  public static Transform ApplyRotationDegrees(Transform trans, Vector3 degrees){
+    Spatial spat = new Spatial();
+    spat.Transform = trans;
+    spat.SetRotationDegrees(degrees);
+    return spat.Transform;
+  }
+
   //############################################################################
   //#       String parsing                                                     #
   //############################################################################
