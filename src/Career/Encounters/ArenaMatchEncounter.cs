@@ -50,7 +50,7 @@ public class ArenaMatchEncounter : IEncounter {
       "res://Assets/Scenes/Maps/Rural.tscn",
       "res://Assets/Scenes/Maps/Town.tscn"
     };
-    int choice = Util.RandInt(0, arenaMaps.Count-1);
+    int choice = Util.RandInt(0, arenaMaps.Count);
     return arenaMaps[choice];
   }
 

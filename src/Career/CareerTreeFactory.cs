@@ -76,7 +76,7 @@ public class CareerTreeFactory {
 
   public List<CareerNode> GenerateLayerNodes(int layerId){
     List<CareerNode> ret = new List<CareerNode>();
-    for(int i = 0; i < Util.RandInt(1, Career.MaxCareerNodesPerLevel); i++){
+    for(int i = 0; i < Util.RandInt(1, Career.MaxCareerNodesPerLevel,true); i++){
       CareerNode node = NewNode();
       node.level = layerId;
       ret.Add(node);

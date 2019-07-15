@@ -88,8 +88,8 @@ public class RangedCombatState : IBehaviorState {
       }
       return;
     }
-    strafeDirection = Util.RandInt(-1, 1);
-    strafeTimer = (float)Util.RandInt(0, 6) * 0.5f;
+    strafeDirection = Util.RandInt(-1, 1,true);
+    strafeTimer = (float)Util.RandInt(0, 6,true) * 0.5f;
   }
 
   public void MaintainDistance(float delta, Spatial enemySpat){

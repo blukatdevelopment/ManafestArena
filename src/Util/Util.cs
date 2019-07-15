@@ -25,11 +25,13 @@ public class Util{
     return JsonConvert.DeserializeObject<T>(json);
   }
 
-  public static int RandInt(int min, int max){
+  public static int RandInt(int min, int max, bool inclusive = false){
     if(random == null){
       random = new Random();
     }
-
+    if(inclusive){
+      max++;
+    }
     return random.Next(min, max);
   }
 
