@@ -227,7 +227,7 @@ public class FPSInputHandler : IInputHandler {
     
     mappings.Add(new InputMapping(
       InputMapping.Inputs.KeyboardKey,
-      87,
+      (int)KeyList.W,
       (int)Inputs.MoveForward,
       0f,
       1f
@@ -235,7 +235,7 @@ public class FPSInputHandler : IInputHandler {
 
     mappings.Add(new InputMapping(
       InputMapping.Inputs.KeyboardKey,
-      65,
+      (int)KeyList.A,
       (int)Inputs.MoveLeft,
       0f,
       1f
@@ -243,7 +243,7 @@ public class FPSInputHandler : IInputHandler {
 
     mappings.Add(new InputMapping(
       InputMapping.Inputs.KeyboardKey,
-      83,
+      (int)KeyList.S,
       (int)Inputs.MoveBackward,
       0f,
       1f
@@ -251,7 +251,7 @@ public class FPSInputHandler : IInputHandler {
 
     mappings.Add(new InputMapping(
       InputMapping.Inputs.KeyboardKey,
-      68,
+      (int)KeyList.D,
       (int)Inputs.MoveRight,
       0f,
       1f
@@ -259,7 +259,7 @@ public class FPSInputHandler : IInputHandler {
 
     mappings.Add(new InputMapping(
       InputMapping.Inputs.MouseButton,
-      1,
+      (int)ButtonList.Left,
       (int)Inputs.PrimaryUse,
       0f,
       1f
@@ -267,7 +267,7 @@ public class FPSInputHandler : IInputHandler {
 
     mappings.Add(new InputMapping(
       InputMapping.Inputs.MouseButton,
-      2,
+      (int)ButtonList.Right,
       (int)Inputs.SecondaryUse,
       0f,
       1f
@@ -275,7 +275,7 @@ public class FPSInputHandler : IInputHandler {
 
     mappings.Add(new InputMapping(
       InputMapping.Inputs.KeyboardKey,
-      82,
+      (int)KeyList.R,
       (int)Inputs.Reload,
       0f,
       1f
@@ -283,7 +283,7 @@ public class FPSInputHandler : IInputHandler {
 
     mappings.Add(new InputMapping(
       InputMapping.Inputs.KeyboardKey,
-      69,
+      (int)KeyList.E,
       (int)Inputs.Interact,
       0f,
       1f
@@ -291,7 +291,7 @@ public class FPSInputHandler : IInputHandler {
 
     mappings.Add(new InputMapping(
       InputMapping.Inputs.KeyboardKey,
-      16777237,
+      (int)KeyList.Shift,
       (int)Inputs.Sprint,
       0f,
       1f
@@ -299,7 +299,7 @@ public class FPSInputHandler : IInputHandler {
 
     mappings.Add(new InputMapping(
       InputMapping.Inputs.KeyboardKey,
-      16777238,
+      (int)KeyList.Control,
       (int)Inputs.Crouch,
       0f,
       1f
@@ -307,7 +307,7 @@ public class FPSInputHandler : IInputHandler {
 
     mappings.Add(new InputMapping(
       InputMapping.Inputs.KeyboardKey,
-      32,
+      (int)KeyList.Space,
       (int)Inputs.Jump,
       0f,
       1f
@@ -315,7 +315,7 @@ public class FPSInputHandler : IInputHandler {
 
     mappings.Add(new InputMapping(
       InputMapping.Inputs.KeyboardKey,
-      73,
+      (int)KeyList.I,
       (int)Inputs.Inventory,
       0f,
       1f
@@ -323,7 +323,7 @@ public class FPSInputHandler : IInputHandler {
 
     mappings.Add(new InputMapping(
       InputMapping.Inputs.KeyboardKey,
-      81,
+      (int)KeyList.Q,
       (int)Inputs.NextItem,
       0f,
       1f
@@ -331,7 +331,7 @@ public class FPSInputHandler : IInputHandler {
 
     mappings.Add(new InputMapping(
       InputMapping.Inputs.KeyboardKey,
-      80,
+      (int)KeyList.P,
       (int)Inputs.PreviousItem,
       0f,
       1f
@@ -339,7 +339,7 @@ public class FPSInputHandler : IInputHandler {
 
     mappings.Add(new InputMapping(
       InputMapping.Inputs.KeyboardKey,
-      16777217,
+      (int)KeyList.Escape,
       (int)Inputs.Pause,
       0f,
       1f
@@ -347,7 +347,7 @@ public class FPSInputHandler : IInputHandler {
 
     mappings.Add(new InputMapping(
       InputMapping.Inputs.MouseAxis,
-      1,
+      (int)MouseAxis.Y,
       (int)Inputs.LookUp,
       0f,
       -DefaultMouseSensitivity
@@ -355,7 +355,7 @@ public class FPSInputHandler : IInputHandler {
 
     mappings.Add(new InputMapping(
       InputMapping.Inputs.MouseAxis,
-      1,
+      (int)MouseAxis.Y,
       (int)Inputs.LookDown,
       0f,
       DefaultMouseSensitivity
@@ -363,7 +363,7 @@ public class FPSInputHandler : IInputHandler {
 
     mappings.Add(new InputMapping(
       InputMapping.Inputs.MouseAxis,
-      0,
+      (int)MouseAxis.X,
       (int)Inputs.LookLeft,
       0f,
       DefaultMouseSensitivity
@@ -371,7 +371,7 @@ public class FPSInputHandler : IInputHandler {
 
     mappings.Add(new InputMapping(
       InputMapping.Inputs.MouseAxis,
-      0,
+      (int)MouseAxis.X,
       (int)Inputs.LookRight,
       0f,
       -DefaultMouseSensitivity
@@ -379,5 +379,10 @@ public class FPSInputHandler : IInputHandler {
 
     
     return mappings; 
+  }
+
+  public enum MouseAxis{
+    X,
+    Y
   }
 }

@@ -81,7 +81,7 @@ public class DeviceState : Node {
 
   // You don't need to add  mouseAxes. They are listened to automagically.
   public float GetMouseAxis(int axis){
-    if(axis == 0){
+    if(axis == (int)FPSInputHandler.MouseAxis.X){
       return mouseMovement.x;
     }
     return mouseMovement.y;
