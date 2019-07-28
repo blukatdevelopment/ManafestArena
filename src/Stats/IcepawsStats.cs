@@ -79,49 +79,55 @@ public class IcepawsStats : IStats, IReceiveDamage {
 
   protected virtual int GetIcepawsStat(string stat){
     stat = stat.ToLower();
-    int agility, strength, endurance;
+    int agility, strength;//, endurance;
+    int ret = 0;
     switch(stat){
       case "healthmax":
-        return 50 + (GetStat("endurance") * 10);
+        ret = 50 + (GetStat("endurance") * 10);
         break;
       case "staminamax":
-        return (GetStat("endurance") * 10) + (GetStat("agility") * 10); 
+        ret = (GetStat("endurance") * 10) + (GetStat("agility") * 10); 
         break;
       case "manamax":
-        return (GetStat("intelligence") + (GetStat("willpower") * 10));
+        ret = (GetStat("intelligence") + (GetStat("willpower") * 10));
         break;
       case "jumpcost":
         agility = GetStat("agility");
         if(agility == 0){
-          return 1000;
+          ret = 1000;
         }
-        return 1000 / agility;
+        else{
+        ret = 1000 / agility;
+        }
         break;
       case "sprintcost":
+        ret = 0;
         break;
       case "sprintbonus": // out of 100
         strength = GetStat("strength");
         agility = GetStat("agility");
-        return (agility * 5) + (strength * 5); 
+        ret = (agility * 5) + (strength * 5); 
         break;
       case "speed": // Out of 100
         agility = GetStat("agility");
-        return agility * 10;
+        ret = agility * 10;
         break;
       case "healthregen": // In .1/second increments
-        return GetStat("endurance") / 5;
+        ret = GetStat("endurance") / 5;
         break;
       case "staminaregen":
-        return (GetStat("endurance") * 5) + (GetStat("willpower") * 2);
+        ret = (GetStat("endurance") * 5) + (GetStat("willpower") * 2);
         break;
       case "manaregen":
-        return (GetStat("willpower") * 10) + (GetStat("endurance") * 2);
+        ret = (GetStat("willpower") * 10) + (GetStat("endurance") * 2);
+        break;
+      default:
+        if(stats.ContainsKey(stat)){
+          ret = stats[stat];
+        }
         break;
     }
-    if(stats.ContainsKey(stat)){
-      return stats[stat];
-    }
-    return 0;
+    return ret;
   }
   
   public void SetStat(string stat, int val){

@@ -41,7 +41,7 @@ public class PressEvent {
       return false;
     }
 
-    public string ToString(){
+    new public string ToString(){
       string ret = "";
       
       foreach(PressEventNode node in pressEventNodes){

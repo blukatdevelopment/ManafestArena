@@ -136,9 +136,10 @@ public class Sound {
   }
 
   public static List<Songs> GetPlaylist(Playlists playlist){
+    List<Songs> ret = new List<Songs>();
     switch(playlist){
       case Playlists.Menu:
-        return new List<Songs>{
+        ret = new List<Songs>{
           Songs.Menu1,
           Songs.Menu2,
           Songs.Menu3,
@@ -146,7 +147,7 @@ public class Sound {
         };
         break;
       case Playlists.Arena:
-        return new List<Songs>{
+        ret = new List<Songs>{
           Songs.Arena1,
           Songs.Arena2,
           Songs.Arena3,
@@ -159,9 +160,10 @@ public class Sound {
           Songs.Arena10,
           Songs.Arena11
         };
+        break;
     }
 
-    return new List<Songs>();
+    return ret;
   }
 
   public static void PlayRandomSong(List<Songs> playlist){

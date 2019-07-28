@@ -54,18 +54,19 @@ public class NewGameMenu : Container, IMenu {
   }
 
   string CharacterDescription(string characterName){
+    string ret = "NULL";
     switch(characterName.ToLower()){
       case "beast":
-        return "A beast man of the great plains, wields\na spear and deadly claws.\n";
+        ret = "A beast man of the great plains, wields\na spear and deadly claws.\n";
         break;
       case "mage":
-        return "A royal Persian mage with a staff\nwith many spells.";
+        ret = "A royal Persian mage with a staff\nwith many spells.";
         break;
       case "soldier":
-        return "A mercenary and former Han royal guard.\npacks a crossbow, flintlock pistol, and knife.";
+        ret = "A mercenary and former Han royal guard.\npacks a crossbow, flintlock pistol, and knife.";
         break;
     }
-    return "NULL";
+    return ret;
   }
 
   void StartGame(){

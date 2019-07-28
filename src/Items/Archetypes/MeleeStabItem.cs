@@ -103,11 +103,11 @@ public class MeleeStabItem : Item, IHasDamage, IWeapon {
 
     public override IItem Factory(ItemFactory.Items item){
         Damage dmg = new Damage();
-
+        IItem ret = null;
         switch(item){
             case ItemFactory.Items.Knife:
                 dmg.health = 100;
-                return new MeleeStabItem(
+                ret = new MeleeStabItem(
                         "Knife",
                         "Don't bring a gun to a knifefight.",
                         "res://Assets/Models/knife.obj",
@@ -122,7 +122,7 @@ public class MeleeStabItem : Item, IHasDamage, IWeapon {
             break;
             case ItemFactory.Items.Claws:
                 dmg.health = 50;
-                return new MeleeStabItem(
+                ret = new MeleeStabItem(
                         "Claws",
                         "Knives conveniently placed on your hands.",
                         "res://Assets/Models/claw.obj",
@@ -136,6 +136,6 @@ public class MeleeStabItem : Item, IHasDamage, IWeapon {
                     ) as IItem;
             break;
         }
-        return null;
+        return ret;
     }
 }

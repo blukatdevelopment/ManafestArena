@@ -25,7 +25,7 @@ public class PressEventNode {
       sideEffects = new string[4];
     }
 
-    public string ToString(){
+    new public string ToString(){
       string ret = "";
 
       ret += "Node[" + nodeId + "]: " + prompt + "\n";

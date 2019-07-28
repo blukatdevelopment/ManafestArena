@@ -29,11 +29,11 @@ public class RestSiteEncounter : IEncounter {
     string archetype = "";//GetPlayerStats().GetFact(StatsManager.Facts.Archetype);
     GD.Print("Archetype " + archetype);
     List<string> ret = new List<string>();
-    switch(archetype){
-      // case "beast": ret = GetBeastUpgrades(); break;
-      // case "mage": ret = GetMageUpgrades(); break;
-      // case "soldier": ret = GetSoldierUpgrades(); break;
-    }
+    // switch(archetype){
+    //   case "beast": ret = GetBeastUpgrades(); break;
+    //   case "mage": ret = GetMageUpgrades(); break;
+    //   case "soldier": ret = GetSoldierUpgrades(); break;
+    // }
 
     // Fill in the remaining three.
     int needed = 3 - ret.Count;

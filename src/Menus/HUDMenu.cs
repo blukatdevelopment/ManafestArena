@@ -17,7 +17,7 @@ public class HUDMenu : Container, IMenu{
 
     if(delay > 0.033f){
       delay -= 0.033f;
-      Update();
+      UpdateHud();
     }
   }
 
@@ -28,7 +28,7 @@ public class HUDMenu : Container, IMenu{
     GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
   }
 
-  public void Update(){
+  public void UpdateHud(){
     Actor player = Session.GetPlayer();
     
     if(player == null){
@@ -38,9 +38,9 @@ public class HUDMenu : Container, IMenu{
     IStats stats = player.GetStats();
     statBox.Text = StatusText(player);
 
-    staminaBar.updateProgress(stats.GetStat("stamina"),stats.GetStat("staminamax"));
-    healthBar.updateProgress(stats.GetStat("health"),stats.GetStat("healthmax"));
-    manaBar.updateProgress(stats.GetStat("mana"),stats.GetStat("manamax"));
+    staminaBar.UpdateProgress(stats.GetStat("stamina"),stats.GetStat("staminamax"));
+    healthBar.UpdateProgress(stats.GetStat("health"),stats.GetStat("healthmax"));
+    manaBar.UpdateProgress(stats.GetStat("mana"),stats.GetStat("manamax"));
 
     string itemText = player.hotbar.GetInfo();
 

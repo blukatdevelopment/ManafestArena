@@ -12,7 +12,7 @@ public class ColorProgressBar : Control
 
     public ColorProgressBar(Color color,int progress =100,int maxProgress = 100){
         this.color = color;
-        updateProgress(progress,maxProgress);
+        UpdateProgress(progress,maxProgress);
     }
 
     public override void _Ready()
@@ -25,7 +25,7 @@ public class ColorProgressBar : Control
         AddChild(progressRect);
     }
 
-    public void updateProgress(int progress, int maxProgress){//smoothen this maybe
+    public void UpdateProgress(int progress, int maxProgress){//smoothen this maybe
         this.maxProgress = maxProgress;
         this.progress = progress;
         ScaleControls();

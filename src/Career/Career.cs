@@ -17,7 +17,7 @@ public class Career : Node , IGamemode{
     careerNodes = new List<CareerNode>();
   }
 
-  public string ToString(){
+  new public string ToString(){
     string text = "Career:\n";
 
     return text;

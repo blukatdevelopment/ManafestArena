@@ -34,7 +34,7 @@ public class EndGameMenu : Container, IMenu {
   }
 
   public string EndCopy(){
-    int victory = 0;
+    //int victory = 0;
 
     // if(Session.session.career != null){
     //   victory = 1;Session.session.career.stats.GetStat(StatsManager.Stats.Victory);

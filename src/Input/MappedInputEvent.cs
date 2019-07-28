@@ -22,7 +22,7 @@ public class MappedInputEvent {
     this.inputType = inputType;
   }
 
-  public string ToString(){
+  new public string ToString(){
     string output = "[ID: " + mappedEventId + ", ";
     output += "type: " + inputType + ", ";
     output += "value: " + inputValue + "]";

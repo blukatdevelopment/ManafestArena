@@ -55,11 +55,11 @@ public class ProjectileItem : Item {
 
     public override IItem Factory(ItemFactory.Items item){
         Damage dmg = new Damage();
-
+        IItem ret = null;
         switch(item){
             case ItemFactory.Items.MusketBall:
                 dmg.health = 100;
-                return new ProjectileItem(
+                ret = new ProjectileItem(
                         "Musket Ball",
                         "Spherical and deadly when moving at high speeds.",
                         "res://Assets/Models/Bullet.obj",
@@ -69,7 +69,7 @@ public class ProjectileItem : Item {
             break;
             case ItemFactory.Items.CrossbowBolt:
                 dmg.health = 100;
-                return new ProjectileItem(
+                ret = new ProjectileItem(
                         "Crossbow Bolt",
                         "Pointy, aerodnamic, and deadly.",
                         "res://Assets/Models/Bullet.obj",
@@ -78,6 +78,6 @@ public class ProjectileItem : Item {
                     ) as IItem;
             break;
         }
-        return null;
+        return ret;
     }
 }
