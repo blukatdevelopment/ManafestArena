@@ -2,23 +2,6 @@
 
 This document is intended to provide context and a detailed description of goals for the development of the sequel to Manafest: Arena.
 
-## Recap of Manafest: Arena
-
-After a few months of development on the FPS_Framework repo, I decided it was time to make a video game using what I had done already as a starting point.
-With a three month timeline, Manafest: Arena was developed.
-
-### Initial build
-
-The goal was relatively simple: I wanted to produce an FPS rogue-like with elements similar to Slay The Spire https://store.steampowered.com/app/646570/Slay_the_Spire/ .
-The player choose one of three unique starting characters to begin their adventure. They are then presented a map consisting of a tree of encounters, and are given the choice of which encounter to start with on one of the leaves of this tree. Encounters included random Arena matches as well as rest sites where the player can choose between an upgrade for their character, or healing.
-
-A couple features were scrapped due to lack of time. One feature was a shop encounter that would allow the player to acquire new items for combat. Another feature was a press event encounter in which the player would respond to a multiple choice prompt and reward or punish the player based on their choice and random chance. Lastly, there was a sponsorship feature which would grant abilities or bonuses to the player when earned. Before work was started, all netcode was pulled from the code base.
-
-### Refactors
-
-After the release, I returned to clean up the code base. said features included a new file structure as well as new menu, input, Actor, and Item systems. JSON was
-added and used for saved files and dumping object data when debugging.
-
 ## Manafest: Arena 2
 
 The sequel shares the premise of the previous game. The player selects a character with unique abilities. Given a tree of encounters, they choose their own path up the tree and advance to the end of the game by completing encounters.
@@ -231,6 +214,9 @@ may be unique to them.
 Each item or ability should have at least one possible upgrade that changes how it functions. These can come in the form of simply damage increases, or can introduce 
 entirely new functionality. (ie a crossbow that does less damage, but knocks the enemy back very far).
 
+Each distinct item will need icons, sound effects, models, and animations. A JSON file containing item info might be useful, and allow for tweaking balancing on client 
+machines without recompiling.
+
 #### Menus
 
 There are many menus outlined above in this document. We will need to build out and polish these menus where applicable, in order to deliver an intuitive and visually 
@@ -268,10 +254,6 @@ One common point of contention is balancing the rewards for different play style
 Any dialogue, copy, or decisions regarding lore/story will need to be made as cohesively and consistently as possible. The game should have a consistent set of themes that 
 it adheres to.
 
-#### 2D Art
-
-Many UI elements will require us to make images.
-
 #### Marketing/PR
 
 We will need to create promotional materials for the game and likely give periodic press releases or dev log entries for the progress of the game.
@@ -288,7 +270,6 @@ We can periodically stop to reconsider the timeline if we either decide we need 
 The schedule for epics is tentative, and will very likely change as we begin work and realize the need for more or less stories. The epics are listed in the order that shey should be started. Many of the sprints are blank, as they will be used to continue work on epics from previous sprints.
 
 #### Sprint 1 preparation August 15, 2019
-- Marketing/PR
 
 #### Sprint 1 August 19, 2019
 - Menus
@@ -309,7 +290,6 @@ The schedule for epics is tentative, and will very likely change as we begin wor
 #### Sprint 7 November 11, 2019
 - User experience/balancing
 - Writing
-- 2D Art
 - Sound effects
 
 #### Sprint 8 November 25, 2019
@@ -318,6 +298,7 @@ The schedule for epics is tentative, and will very likely change as we begin wor
 - Music
 
 #### Sprint 10 December 23, 2019
+- Marketing/PR
 
 #### Sprint 11 January 6, 2020
 
