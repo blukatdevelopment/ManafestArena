@@ -52,7 +52,8 @@ public class EndGameMenu : Container, IMenu {
     string ret = "";
     ret += "              Credits\n";
     ret += "\n";
-    ret += " Programming - Blukat\n";
+    ret += " Programming - Blukat, Aswaith\n";
+    ret += " 3D Assets - Blukat, Aswaith\n"
     ret += "\n\n\n\n\n\n\n Thanks for playing!\n";
     ret += " Music - Halley Labs\n";
     ret += " lapfoxtrax.com/music\n";

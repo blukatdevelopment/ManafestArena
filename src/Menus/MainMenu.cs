@@ -6,6 +6,7 @@ public class MainMenu : Container, IMenu {
   public Godot.Button newGameButton;
   public Godot.Button continueGameButton;
   public Godot.Button settingsButton;
+  public Godot.Button creditsButton;
   public Godot.Button quitButton;
   public TextEdit background;
   public TexturedButton logo;
@@ -34,6 +35,9 @@ public class MainMenu : Container, IMenu {
     quitButton = Menu.Button(text : "Quit", onClick : Quit);
     AddChild(quitButton);
     
+    settingsButton = (Godot.Button)Menu.Button(text : "Credits", onClick : Credits);
+    AddChild(creditsButton);
+
     settingsButton = (Godot.Button)Menu.Button(text : "Settings", onClick : Settings);
     AddChild(settingsButton);
     
@@ -70,9 +74,14 @@ public class MainMenu : Container, IMenu {
     GD.Print("Settings menu");
     Session.ChangeMenu("SettingsMenu");
   }
+
+  public void Credits(){
+    GD.Print("Credits menu");
+    Session.ChangeMenu("CreditsMenu");
+  }
   
   public void Quit(){
     Session.session.Quit();
-  } 
+  }
     
 }
