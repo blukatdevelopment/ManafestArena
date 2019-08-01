@@ -35,7 +35,7 @@ public class MainMenu : Container, IMenu {
     quitButton = Menu.Button(text : "Quit", onClick : Quit);
     AddChild(quitButton);
     
-    settingsButton = (Godot.Button)Menu.Button(text : "Credits", onClick : Credits);
+    creditsButton = (Godot.Button)Menu.Button(text : "Credits", onClick : Credits);
     AddChild(creditsButton);
 
     settingsButton = (Godot.Button)Menu.Button(text : "Settings", onClick : Settings);
@@ -58,6 +58,7 @@ public class MainMenu : Container, IMenu {
       Menu.ScaleControl(continueGameButton, 2 * wu, 2 * hu, 0, 0);
     }
     Menu.ScaleControl(settingsButton, 2 * wu, 2 * hu, 0, 4 * hu);
+    Menu.ScaleControl(creditsButton, 2 * wu, 2 * hu, 0, 6 * hu);
     Menu.ScaleControl(quitButton, 2 * wu, 2 * hu, 0, 8 * hu);
   }
   
