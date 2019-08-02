@@ -71,10 +71,10 @@ public class HUDMenu : Container, IMenu{
 
     IStats stats = Session.GetPlayer().GetStats();
 
-    staminaBar = new ColorProgressBar(new Color(1,1,0),stats.GetStat("stamina"),stats.GetStat("staminamax"));
+    staminaBar = new ColorProgressBar(new Color(0,0.8f,0),stats.GetStat("stamina"),stats.GetStat("staminamax"));
     AddChild(staminaBar);
 
-    healthBar = new ColorProgressBar(new Color(0,1,0),stats.GetStat("health"),stats.GetStat("healthmax"));
+    healthBar = new ColorProgressBar(new Color(1,0,0),stats.GetStat("health"),stats.GetStat("healthmax"));
     AddChild(healthBar);
 
     manaBar = new ColorProgressBar(new Color(0,0,1),stats.GetStat("mana"),stats.GetStat("manamax"));
