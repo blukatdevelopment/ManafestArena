@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class EndGameMenu : Container, IMenu {
+public class CreditsMenu : Container, IMenu {
   public Button mainMenuButton;
   public Godot.TextEdit titleLabel;
   public Godot.TextEdit creditsLabel;
@@ -34,16 +34,6 @@ public class EndGameMenu : Container, IMenu {
   }
 
   public string EndCopy(){
-    int victory = 0;
-
-    // if(Session.session.career != null){
-    //   victory = 1;Session.session.career.stats.GetStat(StatsManager.Stats.Victory);
-    // }
-    
-    // if(victory == 1){
-    //   return "Congratulations!";
-    // }
-    // return "Better luck next time!";
     return "Thanks for playing!";
   }
 
@@ -52,7 +42,8 @@ public class EndGameMenu : Container, IMenu {
     string ret = "";
     ret += "              Credits\n";
     ret += "\n";
-    ret += " Programming - Blukat\n";
+    ret += " Programming - Blukat, Adwaith\n";
+    ret += " 3D Assets - Blukat, Adwaith\n";
     ret += "\n\n\n\n\n\n\n Thanks for playing!\n";
     ret += " Music - Halley Labs\n";
     ret += " lapfoxtrax.com/music\n";

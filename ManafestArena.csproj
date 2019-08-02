@@ -82,7 +82,7 @@
     <Compile Include="src/Menus/CareerMenu.cs" />
     <Compile Include="src/Menus/NewGameMenu.cs" />
     <Compile Include="src/Menus/PressEventMenu.cs" />
-    <Compile Include="src/Menus/EndGameMenu.cs" />
+    <Compile Include="src/Menus/CreditsMenu.cs" />
     <Compile Include="src/Menus/ShopMenu.cs" />
     <Compile Include="src/Menus/RestSiteMenu.cs" />
     <Compile Include="Properties/AssemblyInfo.cs" />
