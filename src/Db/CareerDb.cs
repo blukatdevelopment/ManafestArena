@@ -11,6 +11,7 @@ public class CareerDb {
   public const string DefaultCareerSave = "Saves/Career.json";
   public const string StatsFile = "Saves/stats.csv";
   public const string CareerFile = "Saves/career_tree.csv";
+  public const string CardsFile = "Configs/cards.json";
 
 
   public static bool CareerExists(){
@@ -53,6 +54,15 @@ public class CareerDb {
 
     string json = System.IO.File.ReadAllText(filePath);
     return Util.FromJson<CareerData>(json);
+  }
+
+  public static List<System.Collections.Generic.Dictionary<string, string>> LoadCardsConfig(){
+    if(!System.IO.File.Exists(CardsFile)){
+      return null;
+    }
+
+    string json = System.IO.File.ReadAllText(CardsFile);
+    return Util.FromJson<List<System.Collections.Generic.Dictionary<string, string>>>(json);
   }
 
 }
