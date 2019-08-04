@@ -12,6 +12,7 @@ public class CareerDb {
   public const string StatsFile = "Saves/stats.csv";
   public const string CareerFile = "Saves/career_tree.csv";
   public const string CardsFile = "Configs/cards.json";
+  public const string RelicsFile = "Configs/relics.json";
 
 
   public static bool CareerExists(){
@@ -57,12 +58,30 @@ public class CareerDb {
   }
 
   public static List<System.Collections.Generic.Dictionary<string, string>> LoadCardsConfig(){
-    if(!System.IO.File.Exists(CardsFile)){
+    return ReadHashesListFromFile(CardsFile);
+  }
+
+  public static List<System.Collections.Generic.Dictionary<string, string>> LoadRelicsConfig(){
+    return ReadHashesListFromFile(RelicsFile);
+  }
+
+  private static List<System.Collections.Generic.Dictionary<string, string>> ReadHashesListFromFile(string filePath){
+    if(!System.IO.File.Exists(filePath)){
       return null;
     }
 
-    string json = System.IO.File.ReadAllText(CardsFile);
-    return Util.FromJson<List<System.Collections.Generic.Dictionary<string, string>>>(json);
+    string json = System.IO.File.ReadAllText(filePath);
+    return Util.FromJson<List<System.Collections.Generic.Dictionary<string, string>>>(json); 
+  }
+
+  public static void TestConfigs(){
+    List<System.Collections.Generic.Dictionary<string, string>> configs;
+    GD.Print("Cards config");
+    configs = LoadCardsConfig();
+    GD.Print(Util.ToJson(configs));
+    GD.Print("Relics config");
+    configs = LoadRelicsConfig();
+    GD.Print(Util.ToJson(configs));
   }
 
 }
