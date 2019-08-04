@@ -1,0 +1,7 @@
+[
+ {
+   "name": "potion of invisibility",
+   "effect": "invisibility",
+   "icon": "Assets/Textures/UI/Icons/invisibility_potion.png"
+ }
+]

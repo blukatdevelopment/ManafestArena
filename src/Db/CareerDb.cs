@@ -13,6 +13,7 @@ public class CareerDb {
   public const string CareerFile = "Saves/career_tree.csv";
   public const string CardsFile = "Configs/cards.json";
   public const string RelicsFile = "Configs/relics.json";
+  public const string PotionsFile = "Configs/potions.json";
 
 
   public static bool CareerExists(){
@@ -65,6 +66,10 @@ public class CareerDb {
     return ReadHashesListFromFile(RelicsFile);
   }
 
+  public static List<System.Collections.Generic.Dictionary<string, string>> LoadPotionsConfig(){
+    return ReadHashesListFromFile(PotionsFile);
+  }
+
   private static List<System.Collections.Generic.Dictionary<string, string>> ReadHashesListFromFile(string filePath){
     if(!System.IO.File.Exists(filePath)){
       return null;
@@ -81,6 +86,8 @@ public class CareerDb {
     GD.Print(Util.ToJson(configs));
     GD.Print("Relics config");
     configs = LoadRelicsConfig();
+    GD.Print(Util.ToJson(configs));
+    configs = LoadPotionsConfig();
     GD.Print(Util.ToJson(configs));
   }
 
