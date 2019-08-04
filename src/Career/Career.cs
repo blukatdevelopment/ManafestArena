@@ -12,6 +12,7 @@ public class Career : Node , IGamemode{
   public const int CareerLevels = 15;
   public const int MaxCareerNodesPerLevel = 3;
   public Actor player;
+  public CareerData careerData;
 
   public Career(){
     careerNodes = new List<CareerNode>();
@@ -121,13 +122,16 @@ public class Career : Node , IGamemode{
 
   public static void StartNewCareer(string championName = ""){
       Career career = CareerTreeFactory.Factory(championName);
+      career.careerData = new CareerData();
+
       Session.AddGamemode(career as Node);
       Session.ChangeMenu("CareerMenu");
-      CareerDb.SaveCareer(career);
+      CareerDb.SaveCareerData(career.careerData);
   }
 
   public static void ContinueCareer(){
-    Career career = CareerDb.LoadCareer();
+    Career career = new Career();
+    career.careerData = CareerDb.LoadCareerData();
     Session.AddGamemode(career as Node);
     Session.ChangeMenu("CareerMenu");
   }
@@ -135,7 +139,7 @@ public class Career : Node , IGamemode{
   public static void Save(){
     Career career = Career.GetActiveCareer();
     if(career != null){
-      CareerDb.SaveCareer(career);
+      CareerDb.SaveCareerData(career.careerData);
     }
     else{
       GD.Print("Cannot save null career");
