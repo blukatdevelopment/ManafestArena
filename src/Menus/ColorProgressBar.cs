@@ -24,7 +24,9 @@ public class ColorProgressBar : Control
         underRect.Color = new Color(0.5f,0.5f,0.5f,0.5f);
         progressRect.Color = color;
         label = new Label();
+        label.SetAlign(Label.AlignEnum.Right);
         label.SetValign(Label.VAlign.Center);
+        label.SetAnchor(Margin.Right,1,true);
         animationPlayer = new AnimationPlayer();
         AddChild(underRect);
         AddChild(progressRect);
@@ -70,7 +72,8 @@ public class ColorProgressBar : Control
         Menu.ScaleControl(underRect,rect.Size.x,rect.Size.y,0,0);
         Menu.ScaleControl(progressRect,rect.Size.x*progress/maxProgress,rect.Size.y,0,0);
         Menu.ScaleControl(label,rect.Size.x,rect.Size.y,0,0);
-        label.SetMargin(Margin.Left,5);
+        //label.SetMargin(Margin.Left,5);
+        label.SetMargin(Margin.Right,-10);
     }
 
     public void InitAnimations(){

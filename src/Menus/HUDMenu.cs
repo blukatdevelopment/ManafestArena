@@ -97,12 +97,12 @@ public class HUDMenu : Container, IMenu{
     float wu = width/10; // relative height and width units
     float hu = height/10;
 
-    Menu.ScaleControl(statBox, 2 * wu, hu, 0, height - hu);
-    Menu.ScaleControl(staminaBar,4 * wu,20,3*wu,height - 90);
+    Menu.ScaleControl(statBox, 2 * wu, hu, 0, 0.5f* hu);
+    Menu.ScaleControl(staminaBar,3 * wu,0.3f*hu,0.3f*wu,height - 1.5f*hu);
     staminaBar.ScaleControls();
-    Menu.ScaleControl(healthBar,4 * wu,20,3*wu,height - 60);
+    Menu.ScaleControl(healthBar,3 * wu,0.3f*hu,0.3f*wu,height - 1.1f*hu);
     healthBar.ScaleControls();
-    Menu.ScaleControl(manaBar,4 * wu,20,3*wu,height - 30);
+    Menu.ScaleControl(manaBar,3 * wu,0.3f*hu,0.3f*wu,height - 0.7f*hu);
     manaBar.ScaleControls();
     Menu.ScaleControl(itemBox, 2 * wu, hu, 8 * wu, 9 * hu);
     Menu.ScaleControl(objectiveBox, 4 * wu, hu, 3 * wu, 0);
