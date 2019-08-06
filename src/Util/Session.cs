@@ -70,6 +70,7 @@ public class Session : Node {
 
   public void PerformTests(){
     Test.Init();
+    CareerDb.TestConfigs();
   }
 
   public static void AddGamemode(Node node){
