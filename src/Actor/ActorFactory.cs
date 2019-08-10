@@ -120,7 +120,7 @@ public class ActorFactory {
   }
 
   public static Actor DebugPlayerCharacter(){
-    Actor actor = FromComponentTypes(InputSources.Player1, StatsHandlers.Icepaws, Bodies.HumanoidBody, InventoryHandlers.None);
+    Actor actor = FromComponentTypes(InputSources.Player1, StatsHandlers.Icepaws, Bodies.PillBody, InventoryHandlers.None);
     actor.stats.SetStat("intelligence", 5);
     actor.stats.SetStat("charisma", 5);
     actor.stats.SetStat("endurance", 5);
@@ -151,7 +151,7 @@ public class ActorFactory {
   }
 
   public static Actor DebugEnemyCharacter(){
-    Actor actor = FromComponentTypes(InputSources.AI, StatsHandlers.Icepaws, Bodies.HumanoidBody, InventoryHandlers.None);
+    Actor actor = FromComponentTypes(InputSources.AI, StatsHandlers.Icepaws, Bodies.PillBody, InventoryHandlers.None);
     actor.stats.SetStat("intelligence", 5);
     actor.stats.SetStat("charisma", 5);
     actor.stats.SetStat("endurance", 5);
