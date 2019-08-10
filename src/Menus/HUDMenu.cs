@@ -28,7 +28,7 @@ public class HUDMenu : Container, IMenu{
     ScaleControls();
     GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
 
-    UpdateHandOfCards(new List<string>{"strike", "strike", "strike", "defend", "defend"});
+    //UpdateHandOfCards(new List<string>{"strike", "strike", "strike", "defend", "defend"});
   }
 
   public void Update(){
@@ -58,8 +58,7 @@ public class HUDMenu : Container, IMenu{
     string ret = "";
     ret += "Block: " + stats.GetStat("block");
     ret += "\nHealth: " + stats.GetStat("health") + "/" + stats.GetStat("healthmax");
-    ret += "\nStamina: " + stats.GetStat("stamina") + "/" + stats.GetStat("staminamax");
-    ret += "\nMana: " + stats.GetStat("mana") + "/" + stats.GetStat("manamax");
+    ret += "\nEnergy: " + stats.GetStat("stamina") + "/" + stats.GetStat("staminamax");
     return ret;
 
   }
@@ -67,30 +66,20 @@ public class HUDMenu : Container, IMenu{
   public void UpdateHandOfCards(List<string> cards){
     ClearHandOfCards();
 
-    System.Collections.Generic.Dictionary<string, int> cardStacks;
-    cardStacks = new System.Collections.Generic.Dictionary<string, int>();
-    foreach(string card in cards){
-      if(cardStacks.ContainsKey(card)){
-        cardStacks[card]++;
+    for(int i = 0; i < 5; i++){
+      if(cards.Count > i){
+        cardBoxes[i].Text = cards[i];
       }
-      else{
-        cardStacks.Add(card, 1);
-      }
-      List<string> uniqueCards = new List<string>(cardStacks.Keys);
-
-      for(int i = 0; i < 5; i++){
-        if(uniqueCards.Count > i){
-          string cardText = uniqueCards[i];
-          int stackCount = cardStacks[uniqueCards[i]];
-          if(stackCount > 1){
-            cardText += "(" + stackCount + ")";
-          }
-          cardBoxes[i].Text = cardText;
-        }
-      }
-
     }
 
+  }
+
+  public void UpdateDiscardPile(int count){
+    discardPileBox.Text = "Discard pile(" + count + ")";
+  }
+
+  public void UpdateDrawPile(int count){
+    drawPileBox.Text = "Draw pile(" + count + ")"; 
   }
 
   public void ClearHandOfCards(){
@@ -132,7 +121,7 @@ public class HUDMenu : Container, IMenu{
     float wu = width/10; // relative height and width units
     float hu = height/10;
 
-    Menu.ScaleControl(healthBox, 2 * wu, hu, 0, 0);
+    Menu.ScaleControl(healthBox, 2 * wu, hu,  wu, height - hu);
     Menu.ScaleControl(itemBox, 2 * wu, hu, 8 * wu, 0);
     Menu.ScaleControl(objectiveBox, 4 * wu, hu, 3 * wu, 0);
     Menu.ScaleControl(interactionBox, 4 * wu, hu, 3 * wu, 7 * hu);

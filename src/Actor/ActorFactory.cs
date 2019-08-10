@@ -129,8 +129,7 @@ public class ActorFactory {
     actor.stats.SetStat("willpower", 5);
     actor.stats.SetStat("strength", 5);
     actor.stats.RestoreCondition();
-    actor.hotbar.AddItem(0, ItemFactory.Factory(ItemFactory.Items.Knife));
-    actor.hotbar.AddItem(1, ItemFactory.Factory(ItemFactory.Items.Crossbow));
+    actor.hotbar.AddItem(0, new HandOfCards(new List<string>{"strike", "strike", "strike", "defend", "defend", "defend", "crossbow", "musket"}));
     actor.body.InitCam(0);
     return actor;
   }

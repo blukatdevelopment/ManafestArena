@@ -83,6 +83,14 @@ public class FPSInputHandler : IInputHandler {
         inputEvent.mappedEventId = (int)Item.ItemInputs.C;
         actor.hotbar.UseEquippedItem(inputEvent);
         break;
+      case Inputs.ScrollUp:
+        inputEvent.mappedEventId = (int)Item.ItemInputs.F;
+        actor.hotbar.UseEquippedItem(inputEvent);
+        break;
+      case Inputs.ScrollDown:
+        inputEvent.mappedEventId = (int)Item.ItemInputs.G;
+        actor.hotbar.UseEquippedItem(inputEvent);
+        break;
       case Inputs.Interact: 
         break;
       case Inputs.Sprint: 
@@ -190,7 +198,9 @@ public class FPSInputHandler : IInputHandler {
     LookUp,
     LookDown,
     LookLeft,
-    LookRight
+    LookRight,
+    ScrollUp,
+    ScrollDown
   };
 
   public static List<InputMapping> GetMappings(){
@@ -274,6 +284,22 @@ public class FPSInputHandler : IInputHandler {
     ));
 
     mappings.Add(new InputMapping(
+      InputMapping.Inputs.MouseButton,
+      (int)ButtonList.WheelUp,
+      (int)Inputs.ScrollUp,
+      0f,
+      1f
+    ));
+
+    mappings.Add(new InputMapping(
+      InputMapping.Inputs.MouseButton,
+      (int)ButtonList.WheelDown,
+      (int)Inputs.ScrollDown,
+      0f,
+      1f
+    ));
+
+    mappings.Add(new InputMapping(
       InputMapping.Inputs.KeyboardKey,
       82,
       (int)Inputs.Reload,
@@ -284,7 +310,7 @@ public class FPSInputHandler : IInputHandler {
     mappings.Add(new InputMapping(
       InputMapping.Inputs.KeyboardKey,
       69,
-      (int)Inputs.Interact,
+      (int)Inputs.ScrollUp,
       0f,
       1f
     ));
@@ -324,7 +350,7 @@ public class FPSInputHandler : IInputHandler {
     mappings.Add(new InputMapping(
       InputMapping.Inputs.KeyboardKey,
       81,
-      (int)Inputs.NextItem,
+      (int)Inputs.ScrollDown,
       0f,
       1f
     ));

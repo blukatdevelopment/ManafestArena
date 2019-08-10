@@ -91,6 +91,7 @@
     <Compile Include="src/Items/Interfaces/IHasAmmo.cs" />
     <Compile Include="src/Items/Interfaces/IReceiveDamage.cs" />
     <Compile Include="src/Items/Archetypes/Item.cs" />
+    <Compile Include="src/Items/Archetypes/HandOfCards.cs" />
     <Compile Include="src/Items/Archetypes/ItemFactory.cs" />
     <Compile Include="src/Items/Archetypes/MeleeStabItem.cs" />
     <Compile Include="src/Items/Archetypes/RangedProjectileItem.cs" />
