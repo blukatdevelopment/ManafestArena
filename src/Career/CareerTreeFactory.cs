@@ -28,60 +28,19 @@ public class CareerTreeFactory {
   }
 
   public void Generate(){
-    List<int> previousLayer = new List<int>();
-    int layerCount = Career.CareerLevels;
+    CareerNode node = NewNode();
+    node.encounter = Career.RandomEncounter();
+    node.level = 0;
+    for(int i = 1; i < 4; i++){
+      CareerNode child = NewNode();
+      child.level = i;
+      child.encounter = Career.RandomEncounter();
 
-    for(int i = 0; i < layerCount; i++){
-      previousLayer = GenerateLayer(previousLayer, i);
+      node.children.Add(child.id);
+      node = child;
     }
 
-    foreach(CareerNode node in careerNodes){
-      node.encounter = Career.RandomEncounter();
-    }
-  }
-
-  // Create a layer connected to the last one
-  public List<int> GenerateLayer(List<int> previous, int layerId){
-
-    List<CareerNode> layer = GenerateLayerNodes(layerId);
-    List<int> ret = new List<int>();
-
-    foreach(CareerNode node in layer){
-      ret.Add(node.id);
-    }
-
-    // When there is no previous layer, return early
-    if(layerId == 0){
-      return ret;
-    }
-
-    // Make sure every child has a parent
-    foreach(CareerNode child in layer){
-      int choice = Util.RandInt(0, previous.Count);
-      CareerNode parent = GetNodeById(previous[choice]);
-      parent.children.Add(child.id);
-    }
-
-    // Make sure every parent has a child
-    foreach(int parentId in previous){
-      CareerNode parentNode = GetNodeById(parentId);
-      if(parentNode.children.Count == 0){
-        int choice = Util.RandInt(0, ret.Count);
-        parentNode.children.Add(ret[choice]);
-      }
-    }
-
-    return ret;
-  }
-
-  public List<CareerNode> GenerateLayerNodes(int layerId){
-    List<CareerNode> ret = new List<CareerNode>();
-    for(int i = 0; i < Util.RandInt(1, Career.MaxCareerNodesPerLevel,true); i++){
-      CareerNode node = NewNode();
-      node.level = layerId;
-      ret.Add(node);
-    }
-    return ret;
+    return; 
   }
 
   public static Career Factory(string championName){
