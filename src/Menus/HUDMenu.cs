@@ -50,8 +50,8 @@ public class HUDMenu : Container, IMenu{
     IStats stats = player.stats;
 
     string ret = "";
-
-    ret += "Health: " + stats.GetStat("health") + "/" + stats.GetStat("healthmax");
+    ret += "Block: " + stats.GetStat("block");
+    ret += "\nHealth: " + stats.GetStat("health") + "/" + stats.GetStat("healthmax");
     ret += "\nStamina: " + stats.GetStat("stamina") + "/" + stats.GetStat("staminamax");
     ret += "\nMana: " + stats.GetStat("mana") + "/" + stats.GetStat("manamax");
     return ret;
