@@ -37,6 +37,7 @@ public class IcepawsStats : IStats, IReceiveDamage {
       "health", "healthmax", "healthregen", "healthregenstored",
       "stamina", "staminamax", "staminaregen", "staminaregenstored",
       "mana", "manamax", "manaregen", "manaregenstored",
+      "block",
       "intelligence", "intelligencebonus",
       "charisma", "charismabonus",
       "endurance", "endurancebonus",
@@ -55,7 +56,7 @@ public class IcepawsStats : IStats, IReceiveDamage {
     return new List<string>{
       "alchemy", "conjuration", "mysticism",      // intelligence
       "mercantile", "speechcraft", "illusion",    // charisma
-      "armorer", "block", "heavy armor",          // endurance
+      "armorer", "heavy armor",          // endurance
       "security", "sneak", "marksman",            // perception
       "athletics", "acrobatics", "light armor",   // agility
       "alteration", "destruction", "restoration", // willpower
@@ -203,6 +204,12 @@ public class IcepawsStats : IStats, IReceiveDamage {
   }
   
   public void ReceiveDamage(Damage damage){
+    damage.health -= GetStat("block");
+    if(damage.health < 0){
+      SetStat("block", -damage.health);
+      damage.health = 0;
+    }
+
     stats["health"] = GetStat("health") - damage.health;
     stats["stamina"] = GetStat("stamina") - damage.stamina;
     stats["mana"] = GetStat("mana") - damage.mana;
