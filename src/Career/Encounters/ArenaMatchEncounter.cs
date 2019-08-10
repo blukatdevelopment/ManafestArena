@@ -38,7 +38,7 @@ public class ArenaMatchEncounter : IEncounter {
   }
 
   private string RandomArenaMap(){
-    return "res://Assets/Scenes/Maps/Maze.tscn"; // TODO: Remove
+    return "res://Assets/Scenes/Maps/Small.tscn"; // TODO: Remove
     List<string> arenaMaps = new List<string>{
       "res://Assets/Scenes/Maps/Levels.tscn",
       "res://Assets/Scenes/Maps/Maze.tscn",
