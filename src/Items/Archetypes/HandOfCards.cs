@@ -16,7 +16,11 @@ public class HandOfCards : Item {
   IncrementTimer useDelayTimer, // Delay between using cards 
     scrollDelayTimer, //  Delay between switchin cards
     dealCardTimer,  // Delay between dealing each card
-    autoCrossbowTimer;
+    autoCrossbowTimer, // Delay between crossbow shots
+    furyTimer, // Duration of fury buff
+    rushTimer; // duration of rush buff
+
+  int fury, rush;
 
   List<string> dealQueue;
 
@@ -44,6 +48,8 @@ public class HandOfCards : Item {
     scrollDelayTimer = new IncrementTimer(0.3f);
     dealCardTimer = new IncrementTimer(1f);
     autoCrossbowTimer = new IncrementTimer(0.15f);
+    furyTimer = new IncrementTimer(30f);
+    rushTimer = new IncrementTimer(30f);
   }
 
   public override void Use(MappedInputEvent inputEvent){
@@ -153,6 +159,7 @@ public class HandOfCards : Item {
   }
 
   public void DiscardHand(){
+    selectedCard = 0;
     for(int i = 0; i < handCards.Count; i++){
       for(int j = 0; j < handStacks[i]; j++){
         discardPile.Add(handCards[i]);
@@ -186,6 +193,16 @@ public class HandOfCards : Item {
     if(crossbowShotsQueued > 0 && autoCrossbowTimer.CheckTimer(delta)){
       crossbowShotsQueued--;
       CardEffect("crossbow");
+    }
+    if(rush > 0 && rushTimer.CheckTimer(delta)){
+      int currentAgility = stats.GetStat("agility");
+      stats.SetStat("agility", currentAgility - rush);
+      rush = 0;
+    }
+    if(fury > 0 && furyTimer.CheckTimer(delta)){
+      int currentEndurance = stats.GetStat("endurance");
+      stats.SetStat("endurance", currentEndurance - fury);
+      fury = 0;
     }
   }
 
@@ -274,6 +291,12 @@ public class HandOfCards : Item {
       case "musket":
         return 250;
       break;
+      case "rush":
+        return 250;
+      break;
+      case "fury":
+        return 250;
+      break;
     }
     return 0;
   }
@@ -311,6 +334,18 @@ public class HandOfCards : Item {
           speaker
         );
         launcher.Fire();
+      break;
+      case "fury":
+        int currentEndurance = stats.GetStat("endurance");
+        stats.SetStat("endurance", currentEndurance + 3);
+        fury += 3;
+        GD.Print("Fury");
+      break;
+      case "rush":
+        int currentAgility = stats.GetStat("agility");
+        stats.SetStat("agility", currentAgility + 10);
+        rush += 10;
+        GD.Print("Rush");
       break;
     }
   }
