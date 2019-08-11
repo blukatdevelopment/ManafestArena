@@ -92,11 +92,6 @@ public class IcepawsStats : IStats, IReceiveDamage {
         return (GetStat("intelligence") + (GetStat("willpower") * 10));
         break;
       case "jumpcost":
-        agility = GetStat("agility");
-        if(agility == 0){
-          return 1000;
-        }
-        return 1000 / agility;
         break;
       case "sprintcost":
         break;

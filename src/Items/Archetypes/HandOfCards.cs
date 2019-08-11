@@ -1,3 +1,6 @@
+/*
+  An entire cards system crammed into one class.
+*/
 using Godot;
 using System;
 using System.Collections.Generic;
