@@ -204,6 +204,9 @@ public class IcepawsStats : IStats, IReceiveDamage {
       SetStat("block", -damage.health);
       damage.health = 0;
     }
+    else{
+      SetStat("block", 0);
+    }
 
     stats["health"] = GetStat("health") - damage.health;
     stats["stamina"] = GetStat("stamina") - damage.stamina;

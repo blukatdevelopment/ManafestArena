@@ -10,19 +10,29 @@ public class HandOfCards : Item {
   List<string> deck, drawPile, discardPile;
   List<string> handCards;
   List<int> handStacks;
-  int selectedCard;
+  int selectedCard, crossbowShotsQueued;
 
   HUDMenu hud;
   IncrementTimer useDelayTimer, // Delay between using cards 
     scrollDelayTimer, //  Delay between switchin cards
-    dealCardTimer;  // Delay between dealing each card
+    dealCardTimer,  // Delay between dealing each card
+    autoCrossbowTimer;
 
   List<string> dealQueue;
 
   IStats stats;
+  Speaker speaker;
+  ProjectileLauncher launcher;
+  RaycastDamager raycastWeapon;
 
 
   public HandOfCards(List<string> deck){
+    launcher = new ProjectileLauncher(this);
+    raycastWeapon = new RaycastDamager(this);
+
+    speaker = new Speaker();
+    AddChild(speaker);
+
     this.deck = deck;
     drawPile = new List<string>();
     discardPile = new List<string>();
@@ -33,6 +43,7 @@ public class HandOfCards : Item {
     useDelayTimer = new IncrementTimer(0.5f);
     scrollDelayTimer = new IncrementTimer(0.3f);
     dealCardTimer = new IncrementTimer(1f);
+    autoCrossbowTimer = new IncrementTimer(0.15f);
   }
 
   public override void Use(MappedInputEvent inputEvent){
@@ -97,7 +108,7 @@ public class HandOfCards : Item {
       }
     }
 
-    GD.Print("Played " + card);
+    CardEffect(card);
 
     discardPile.Add(card);
 
@@ -172,6 +183,10 @@ public class HandOfCards : Item {
     useDelayTimer.UpdateTimerReady(delta);
     scrollDelayTimer.UpdateTimerReady(delta);
     DealCards(delta);
+    if(crossbowShotsQueued > 0 && autoCrossbowTimer.CheckTimer(delta)){
+      crossbowShotsQueued--;
+      CardEffect("crossbow");
+    }
   }
 
   public override string GetInfo(){
@@ -253,10 +268,50 @@ public class HandOfCards : Item {
       case "crossbow":
         return 250;
       break;
+      case "autocrossbow":
+        return 250;
+      break;
       case "musket":
         return 250;
       break;
     }
     return 0;
+  }
+
+  public void CardEffect(string card){
+    Damage dmg = new Damage();
+    switch(card){
+      case "strike":
+        dmg.health = 100;
+        raycastWeapon.Config(30f, dmg, speaker);
+        raycastWeapon.Fire();
+      break;
+      case "defend":
+        stats.ConsumeStat("block", -10);
+      break;
+      case "crossbow":
+        dmg.health = 100;
+        launcher.Config(
+          ItemFactory.Items.CrossbowBolt,
+          dmg,
+          50f,
+          speaker
+        );
+        launcher.Fire();
+      break;
+      case "autocrossbow":
+        crossbowShotsQueued = 5;
+      break;
+      case "musket":
+        dmg.health = 150;
+        launcher.Config(
+          ItemFactory.Items.CrossbowBolt,
+          dmg,
+          100f,
+          speaker
+        );
+        launcher.Fire();
+      break;
+    }
   }
 }

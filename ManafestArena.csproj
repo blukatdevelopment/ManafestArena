@@ -105,6 +105,7 @@
     <Compile Include="src/Items/Components/ItemStabber.cs" />
     <Compile Include="src/Items/Components/ItemThrower.cs" />
     <Compile Include="src/Items/Components/ProjectileLauncher.cs" />
+    <Compile Include="src/Items/Components/RaycastDamager.cs" />
     <Compile Include="src/Items/Components/SelfDamager.cs" />
     <Compile Include="src/Items/Components/StatConsumer.cs" />
     <Compile Include="src/Actor/IHasBody.cs" />
