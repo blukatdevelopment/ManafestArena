@@ -38,7 +38,7 @@ public class ItemStabber {
     }
 
     public void Update(float delta){
-        this.item = item;
+        //this.item = item;
         if(stabbing){
             stabTimer -= delta;
             if(stabTimer <= 0f){

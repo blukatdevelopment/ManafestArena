@@ -21,6 +21,9 @@ public class HotBar : IHasInfo {
     this.actor = actor;
   }
 
+public IItem[] GetItemSlots(){
+  return itemSlots;
+}
   public List<int> GetEmptySlots(){
     List<int> ret = new List<int>();
 
@@ -169,13 +172,13 @@ public class HotBar : IHasInfo {
 
   public void EquipNext(){
     UnequipActive();
-    equippedSlot = NextSlot(equippedSlot);
+    equippedSlot = NextNonEmptySlot(equippedSlot);
     EquipActive();
   }
 
   public void EquipPrevious(){
     UnequipActive();
-    equippedSlot = PrevSlot(equippedSlot);
+    equippedSlot = PrevNonEmptySlot(equippedSlot);
     EquipActive();
   }
 
@@ -191,6 +194,21 @@ public class HotBar : IHasInfo {
     return ret;
   }
 
+  private int NextNonEmptySlot(int i = -1){
+
+    if(i == -1){
+      i = equippedSlot;
+    }
+    int ret = NextSlot(i);
+    while(itemSlots[ret]==null){
+      ret = NextSlot(ret);
+      if(ret==i){
+        return i;
+      }
+    }
+    return ret;
+  }
+
   private int PrevSlot(int i = -1){
     if(i == -1){
       i = equippedSlot;
@@ -198,6 +216,21 @@ public class HotBar : IHasInfo {
     int ret = i -1;
     if(!ValidSlot(ret)){
       ret = itemSlots.Length -1;
+    }
+    return ret;
+  }
+
+  private int PrevNonEmptySlot(int i = -1){
+
+    if(i == -1){
+      i = equippedSlot;
+    }
+    int ret = PrevSlot(i);
+    while(itemSlots[ret]==null){
+      ret = PrevSlot(ret);
+      if(ret==i){
+        return i;
+      }
     }
     return ret;
   }

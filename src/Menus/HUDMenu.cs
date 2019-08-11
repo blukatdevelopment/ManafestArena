@@ -4,7 +4,10 @@ using System;
 public class HUDMenu : Container, IMenu{
 
   public float delay = 0.0f;
-  public Godot.Label healthBox;
+  public Godot.Label statBox;
+  public ColorProgressBar staminaBar;
+  public ColorProgressBar healthBar;
+  public ColorProgressBar manaBar;
   public Godot.Label itemBox;
   public Godot.Label objectiveBox;
   public Godot.Label interactionBox;
@@ -14,7 +17,7 @@ public class HUDMenu : Container, IMenu{
 
     if(delay > 0.033f){
       delay -= 0.033f;
-      Update();
+      UpdateHud();
     }
   }
 
@@ -25,15 +28,19 @@ public class HUDMenu : Container, IMenu{
     GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
   }
 
-  public void Update(){
+  public void UpdateHud(){
     Actor player = Session.GetPlayer();
     
     if(player == null){
       GD.Print("Player 1 doesn't exist.");
       return;
     }
-    
-    healthBox.Text = StatusText(player);
+    IStats stats = player.GetStats();
+    statBox.Text = StatusText(player);
+
+    staminaBar.UpdateProgress(stats.GetStat("stamina"),stats.GetStat("staminamax"));
+    healthBar.UpdateProgress(stats.GetStat("health"),stats.GetStat("healthmax"));
+    manaBar.UpdateProgress(stats.GetStat("mana"),stats.GetStat("manamax"));
 
     string itemText = player.hotbar.GetInfo();
 
@@ -59,8 +66,19 @@ public class HUDMenu : Container, IMenu{
   }
 
   void InitControls(){
-    healthBox = Menu.Label("health");
-    AddChild(healthBox);
+    statBox = Menu.Label("stats");
+    AddChild(statBox);
+
+    IStats stats = Session.GetPlayer().GetStats();
+
+    staminaBar = new ColorProgressBar(new Color(0,0.8f,0),stats.GetStat("stamina"),stats.GetStat("staminamax"));
+    AddChild(staminaBar);
+
+    healthBar = new ColorProgressBar(new Color(1,0,0),stats.GetStat("health"),stats.GetStat("healthmax"));
+    AddChild(healthBar);
+
+    manaBar = new ColorProgressBar(new Color(0,0,1),stats.GetStat("mana"),stats.GetStat("manamax"));
+    AddChild(manaBar);
 
     itemBox = Menu.Label("item");
     AddChild(itemBox);
@@ -79,7 +97,13 @@ public class HUDMenu : Container, IMenu{
     float wu = width/10; // relative height and width units
     float hu = height/10;
 
-    Menu.ScaleControl(healthBox, 2 * wu, hu, 0, height - hu);
+    Menu.ScaleControl(statBox, 2 * wu, hu, 0, 0.5f* hu);
+    Menu.ScaleControl(staminaBar,3 * wu,0.3f*hu,0.3f*wu,height - 1.5f*hu);
+    staminaBar.ScaleControls();
+    Menu.ScaleControl(healthBar,3 * wu,0.3f*hu,0.3f*wu,height - 1.1f*hu);
+    healthBar.ScaleControls();
+    Menu.ScaleControl(manaBar,3 * wu,0.3f*hu,0.3f*wu,height - 0.7f*hu);
+    manaBar.ScaleControls();
     Menu.ScaleControl(itemBox, 2 * wu, hu, 8 * wu, 9 * hu);
     Menu.ScaleControl(objectiveBox, 4 * wu, hu, 3 * wu, 0);
     Menu.ScaleControl(interactionBox, 4 * wu, hu, 3 * wu, 7 * hu);

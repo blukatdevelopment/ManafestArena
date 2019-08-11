@@ -8,7 +8,7 @@ using System.Collections.Generic;
 public class RangedProjectileItem : Item, IWeapon, IRangedWeapon {
   ProjectileLauncher launcher;
   AmmoStore ammoStorage;
-  Speaker speaker;
+  // Speaker speaker;//inherits a speaker
   bool reloadActive, fireActive;
   float reloadTimer, reloadDelay, fireTimer, fireDelay;
 
