@@ -48,8 +48,8 @@ public class HandOfCards : Item {
     scrollDelayTimer = new IncrementTimer(0.3f);
     dealCardTimer = new IncrementTimer(1f);
     autoCrossbowTimer = new IncrementTimer(0.15f);
-    furyTimer = new IncrementTimer(30f);
-    rushTimer = new IncrementTimer(30f);
+    furyTimer = new IncrementTimer(15f);
+    rushTimer = new IncrementTimer(15f);
   }
 
   public override void Use(MappedInputEvent inputEvent){
@@ -337,15 +337,13 @@ public class HandOfCards : Item {
       break;
       case "fury":
         int currentEndurance = stats.GetStat("endurance");
-        stats.SetStat("endurance", currentEndurance + 3);
-        fury += 3;
-        GD.Print("Fury");
+        stats.SetStat("endurance", currentEndurance + 15);
+        fury += 15;
       break;
       case "rush":
         int currentAgility = stats.GetStat("agility");
         stats.SetStat("agility", currentAgility + 10);
         rush += 10;
-        GD.Print("Rush");
       break;
     }
   }
