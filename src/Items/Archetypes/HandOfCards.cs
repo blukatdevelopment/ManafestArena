@@ -10,14 +10,15 @@ public class HandOfCards {
   bool init = false;
   List<string> deck, drawPile, discardPile;
   List<string> handCards;
-  List<int> handStacks;
-  int selectedCard, crossbowShotsQueued;
+
+  bool handFull = true;
+  int selectedCard;
+  float drawTimer = 20;
 
   HUDMenu hud;
   IncrementTimer useDelayTimer, // Delay between using cards 
     scrollDelayTimer, //  Delay between switchin cards
     dealCardTimer,  // Delay between dealing each card
-    autoCrossbowTimer, // Delay between crossbow shots
     furyTimer, // Duration of fury buff
     rushTimer; // duration of rush buff
 
@@ -39,12 +40,10 @@ public class HandOfCards {
     discardPile = new List<string>();
     
     handCards = new List<string>();
-    handStacks = new List<int>();
 
     useDelayTimer = new IncrementTimer(0.5f);
     scrollDelayTimer = new IncrementTimer(0.3f);
     dealCardTimer = new IncrementTimer(1f);
-    autoCrossbowTimer = new IncrementTimer(0.15f);
     furyTimer = new IncrementTimer(15f);
     rushTimer = new IncrementTimer(15f);
   }
@@ -74,11 +73,6 @@ public class HandOfCards {
           GD.Print("Could not consume " + staminaCost + " stamina");
         }
       break;
-      case Item.ItemInputs.C:
-        if(dealQueue == null){
-          DrawHand();
-        }
-      break;
       case Item.ItemInputs.F:
         if(scrollDelayTimer.CheckTimerReady()){
           NextCard();
@@ -99,24 +93,17 @@ public class HandOfCards {
     }
 
     string card = handCards[selectedCard];
-    if(handStacks[selectedCard] > 1){
-      handStacks[selectedCard]--;
-    }
-    else{
-      handCards.RemoveAt(selectedCard);
-      handStacks.RemoveAt(selectedCard);
-      if(selectedCard >= handCards.Count){
-        PreviousCard();
-      }
+    
+    handFull = false;
+    handCards.RemoveAt(selectedCard);
+    if(selectedCard >= handCards.Count){
+      PreviousCard();
     }
 
     CardEffect(card);
 
     discardPile.Add(card);
 
-    if(handCards.Count == 0){
-      DrawHand();
-    }
     UpdateDisplayedCards();
   }
 
@@ -139,30 +126,27 @@ public class HandOfCards {
     UpdateDisplayedCards();
   }
 
-  public void DrawHand(){
-    DiscardHand();
-    GD.Print("Drawhand");
+  public void DrawHand(int num){
+    GD.Print("3");
+    //DiscardHand();
+    GD.Print("4");
+    GD.Print("Drawhand"+handFull);
     List<string> queue = new List<string>();
-    for(int i = 0; i < 3; i++){
+    for(int i = 0; (i < num)&&!handFull; i++){
       string card = RequestCardFromDrawPile();
       if(card != ""){
-        queue.Add(card);
+        DealSingleCard(card);
+        GD.Print("5");
       }
-    }
-    if(queue.Count > 0){
-      dealQueue = queue;
     }
   }
 
   public void DiscardHand(){
     selectedCard = 0;
     for(int i = 0; i < handCards.Count; i++){
-      for(int j = 0; j < handStacks[i]; j++){
-        discardPile.Add(handCards[i]);
-      }
+      discardPile.Add(handCards[i]);
     }
     handCards = new List<string>();
-    handStacks = new List<int>();
   }
 
   public string RequestCardFromDrawPile(){
@@ -183,13 +167,20 @@ public class HandOfCards {
   }
 
   public void Update(float delta){
+    
+    if(hud!=null){
+      hud.UpdateDrawPile((int)drawTimer);
+    }
+    if(drawTimer>0){
+      drawTimer-=delta;
+    }
+    else if(!handFull){
+      DrawHand(1);
+      UpdateDisplayedCards();
+      drawTimer = 20;
+    }
     useDelayTimer.UpdateTimerReady(delta);
     scrollDelayTimer.UpdateTimerReady(delta);
-    DealCards(delta);
-    if(crossbowShotsQueued > 0 && autoCrossbowTimer.CheckTimer(delta)){
-      crossbowShotsQueued--;
-      CardEffect("crossbow");
-    }
     if(rush > 0 && rushTimer.CheckTimer(delta)){
       int currentAgility = stats.GetStat("agility");
       stats.SetStat("agility", currentAgility - rush);
@@ -212,47 +203,26 @@ public class HandOfCards {
       hud = Session.session.activeMenu as HUDMenu;
       drawPile = new List<string>(deck);
       drawPile = Shuffle(drawPile);
-      UpdateDisplayedCards();
-      DrawHand();
+      GD.Print("2");
+      handFull = false;
+      DrawHand(3);
       ToggleActive(false);
+      UpdateDisplayedCards();
     }
     return "Hand of cards";
   }
 
-  public void DealCards(float delta){
-    if(dealQueue == null || !dealCardTimer.CheckTimer(delta)){
-      return;
-    }
-
-    string card = dealQueue[0];
-    dealQueue.RemoveAt(0);
-
-    DealSingleCard(card);
-    UpdateDisplayedCards();
-    if(dealQueue.Count == 0){
-      dealQueue = null;
-    }
-  }
-
   public void DealSingleCard(string card){
-    for(int i = 0; i < handCards.Count; i++){
-      if(handCards[i].Equals(card)){
-        handStacks[i]++;
-        return;
-      }
-    }
-
     handCards.Add(card);
-    handStacks.Add(1);
+    if(handCards.Count>=5){
+      handFull = true;
+    }
   }
 
   public void UpdateDisplayedCards(){
     List<string> stackedCards = new List<string>();
     for(int i = 0; i < handCards.Count; i++){
       string card = handCards[i];
-      if(handStacks[i] > 1){
-        card += "(" + handStacks[i] + ")";
-      }
       card += "\nCost: " + (CardStamina(handCards[i])/10); 
       if(i == selectedCard){
         card += "\n^^^^^^";
@@ -261,7 +231,7 @@ public class HandOfCards {
     }
     hud.UpdateHandOfCards(stackedCards);
     hud.UpdateDiscardPile(discardPile.Count);
-    hud.UpdateDrawPile(drawPile.Count);
+    hud.UpdateDrawPile((int)drawTimer);
   }
 
 

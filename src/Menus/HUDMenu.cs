@@ -106,7 +106,7 @@ public class HUDMenu : Container, IMenu{
   }
 
   public void UpdateDrawPile(int count){
-    drawPileBox.Text = "Draw pile(" + count + ")"; 
+    drawPileBox.Text = "Next Card in (" + count + ")"; 
   }
 
   public void ClearHandOfCards(){
