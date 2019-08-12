@@ -57,7 +57,7 @@ public class HotBar : IHasInfo {
     }
 
     if(handOfCards!=null){
-      ret+= handOfCards.GetInfo();
+      ret+= "\n"+ handOfCards.GetInfo();
     }
     return ret;
   }

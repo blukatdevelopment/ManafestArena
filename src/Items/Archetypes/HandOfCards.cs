@@ -8,7 +8,7 @@ using System.Collections.Generic;
 public class HandOfCards {
   Actor actor;
   bool init = false;
-  List<string> deck, drawPile, discardPile;
+  List<string> deck;
   List<string> handCards;
 
   bool handFull = true;
@@ -36,8 +36,6 @@ public class HandOfCards {
 
     this.actor  =actor;
     this.deck = deck;
-    drawPile = new List<string>();
-    discardPile = new List<string>();
     
     handCards = new List<string>();
 
@@ -73,6 +71,9 @@ public class HandOfCards {
           GD.Print("Could not consume " + staminaCost + " stamina");
         }
       break;
+      case Item.ItemInputs.C:
+        DiscardSelectedCard();
+      break;
       case Item.ItemInputs.F:
         if(scrollDelayTimer.CheckTimerReady()){
           NextCard();
@@ -102,8 +103,6 @@ public class HandOfCards {
 
     CardEffect(card);
 
-    discardPile.Add(card);
-
     UpdateDisplayedCards();
   }
 
@@ -127,49 +126,35 @@ public class HandOfCards {
   }
 
   public void DrawHand(int num){
-    GD.Print("3");
     //DiscardHand();
-    GD.Print("4");
-    GD.Print("Drawhand"+handFull);
     List<string> queue = new List<string>();
     for(int i = 0; (i < num)&&!handFull; i++){
-      string card = RequestCardFromDrawPile();
-      if(card != ""){
-        DealSingleCard(card);
-        GD.Print("5");
+      string card = GetRandomCardFromDeck();
+      handCards.Add(card);
+      if(handCards.Count>=5){
+          handFull = true;
       }
     }
   }
 
-  public void DiscardHand(){
-    selectedCard = 0;
-    for(int i = 0; i < handCards.Count; i++){
-      discardPile.Add(handCards[i]);
+  public void DiscardSelectedCard(){
+    if((selectedCard < handCards.Count)&&(selectedCard>=0)){
+      handCards.RemoveAt(selectedCard);
     }
-    handCards = new List<string>();
+    if(selectedCard>=handCards.Count){
+      selectedCard = 0;
+    }
+    UpdateDisplayedCards();
   }
 
-  public string RequestCardFromDrawPile(){
-    string ret = "";
-    if(drawPile.Count > 0){
-      ret = drawPile[0];
-      drawPile.RemoveAt(0);
-    }
-    else if(discardPile.Count > 0){
-      drawPile = new List<string>(discardPile);
-      drawPile = Shuffle(drawPile);
-      discardPile = new List<string>();
-      ret = drawPile[0];
-      drawPile.RemoveAt(0);
-    }
-
-    return ret;
+  public string GetRandomCardFromDeck(){
+    return deck[Util.RandInt(0,deck.Count)];
   }
 
   public void Update(float delta){
     
     if(hud!=null){
-      hud.UpdateDrawPile((int)drawTimer);
+      hud.UpdateDrawTime((int)drawTimer);
     }
     if(drawTimer>0){
       drawTimer-=delta;
@@ -201,22 +186,12 @@ public class HandOfCards {
     if(!init){ // Do init here because this is when HUDMenu definitely exists
       init = true;
       hud = Session.session.activeMenu as HUDMenu;
-      drawPile = new List<string>(deck);
-      drawPile = Shuffle(drawPile);
-      GD.Print("2");
       handFull = false;
       DrawHand(3);
       ToggleActive(false);
       UpdateDisplayedCards();
     }
     return "Hand of cards";
-  }
-
-  public void DealSingleCard(string card){
-    handCards.Add(card);
-    if(handCards.Count>=5){
-      handFull = true;
-    }
   }
 
   public void UpdateDisplayedCards(){
@@ -230,20 +205,9 @@ public class HandOfCards {
       stackedCards.Add(card);
     }
     hud.UpdateHandOfCards(stackedCards);
-    hud.UpdateDiscardPile(discardPile.Count);
-    hud.UpdateDrawPile((int)drawTimer);
+    hud.UpdateDrawTime((int)drawTimer);
   }
 
-
-  public List<string> Shuffle(List<string> cards){
-    List<string> ret = new List<string>();
-    while(cards.Count > 0){
-      int choice = Util.RandInt(0, cards.Count);
-      ret.Add(cards[choice]);
-      cards.RemoveAt(choice);
-    }
-    return ret;
-  }
 
   public int CardStamina(string card){
     switch(card){

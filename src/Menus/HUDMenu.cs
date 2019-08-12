@@ -9,7 +9,7 @@ public class HUDMenu : Container, IMenu{
   public Godot.Label itemBox;
   public Godot.Label objectiveBox;
   public Godot.Label interactionBox;
-  public Godot.Label drawPileBox, discardPileBox;
+  public Godot.Label drawTimeBox;
   public Godot.Label[] cardBoxes;
   
   public override void _Process(float delta){
@@ -101,12 +101,9 @@ public class HUDMenu : Container, IMenu{
 
   }
 
-  public void UpdateDiscardPile(int count){
-    discardPileBox.Text = "Discard pile(" + count + ")";
-  }
 
-  public void UpdateDrawPile(int count){
-    drawPileBox.Text = "Next Card in (" + count + ")"; 
+  public void UpdateDrawTime(int count){
+    drawTimeBox.Text = "Next Card in (" + count + ")"; 
   }
 
   public void ClearHandOfCards(){
@@ -122,11 +119,8 @@ public class HUDMenu : Container, IMenu{
       AddChild(cardBoxes[i]);
     }
 
-    drawPileBox = Menu.Label("DrawPile(0)");
-    AddChild(drawPileBox);
-
-    discardPileBox = Menu.Label("DiscardPile(0)");
-    AddChild(discardPileBox);  
+    drawTimeBox = Menu.Label("DrawPile(0)");
+    AddChild(drawTimeBox); 
 
     healthBox = Menu.Label("health");
     AddChild(healthBox);
@@ -149,11 +143,10 @@ public class HUDMenu : Container, IMenu{
     float hu = height/10;
 
     Menu.ScaleControl(healthBox, 2 * wu, hu,  wu, height - hu);
-    Menu.ScaleControl(itemBox, 2 * wu, hu, 8 * wu, 0);
     Menu.ScaleControl(objectiveBox, 4 * wu, hu, 3 * wu, 0);
     Menu.ScaleControl(interactionBox, 4 * wu, hu, 3 * wu, 7 * hu);
-    Menu.ScaleControl(drawPileBox, 2 * wu, hu, 0, height - hu);
-    Menu.ScaleControl(discardPileBox, 2 * wu, hu, 8 * wu, height - hu);
+    Menu.ScaleControl(drawTimeBox, 2 * wu, hu, 0, height - hu);
+    Menu.ScaleControl(itemBox, 2 * wu, hu, 8 * wu, height - hu);
     Menu.ScaleControl(cardBoxes[0], wu, 2* hu, 3 * wu, height - hu);
     Menu.ScaleControl(cardBoxes[1], wu, 2* hu, 4 * wu, height - hu);
     Menu.ScaleControl(cardBoxes[2], wu, 2* hu, 5 * wu, height - hu);
