@@ -91,6 +91,10 @@ public class FPSInputHandler : IInputHandler {
         inputEvent.mappedEventId = (int)Item.ItemInputs.G;
         actor.hotbar.UseEquippedItem(inputEvent);
         break;
+      case Inputs.HandOfCards:
+        inputEvent.mappedEventId = (int)Item.ItemInputs.E;
+        actor.hotbar.UseEquippedItem(inputEvent);
+        break;
       case Inputs.Interact: 
         break;
       case Inputs.Sprint: 
@@ -195,6 +199,7 @@ public class FPSInputHandler : IInputHandler {
     NextItem,
     PreviousItem,
     Pause,
+    HandOfCards,
     LookUp,
     LookDown,
     LookLeft,
@@ -367,6 +372,14 @@ public class FPSInputHandler : IInputHandler {
       InputMapping.Inputs.KeyboardKey,
       16777217,
       (int)Inputs.Pause,
+      0f,
+      1f
+    ));
+
+    mappings.Add(new InputMapping(
+      InputMapping.Inputs.KeyboardKey,
+      (int)KeyList.Tab,
+      (int)Inputs.HandOfCards,
       0f,
       1f
     ));
