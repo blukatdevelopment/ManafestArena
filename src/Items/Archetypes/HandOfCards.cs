@@ -202,6 +202,10 @@ public class HandOfCards {
     }
   }
 
+  public void ToggleActive(bool active){
+    hud.ToggleHandOfCards(active);
+  }
+
   public string GetInfo(){
     if(!init){ // Do init here because this is when HUDMenu definitely exists
       init = true;
@@ -210,6 +214,7 @@ public class HandOfCards {
       drawPile = Shuffle(drawPile);
       UpdateDisplayedCards();
       DrawHand();
+      ToggleActive(false);
     }
     return "Hand of cards";
   }
@@ -302,18 +307,26 @@ public class HandOfCards {
     switch(card){
       case "knife":
         actor.hotbar.SwitchItem(ItemFactory.Factory(ItemFactory.Items.Knife));
+        actor.hotbar.handOfCardsActive =false;
+        ToggleActive(false);
       break;
       case "defend":
         stats.ConsumeStat("block", -10);
       break;
       case "crossbow2":
         actor.hotbar.SwitchItem(ItemFactory.Factory(ItemFactory.Items.Crossbow2));
+        actor.hotbar.handOfCardsActive =false;
+        ToggleActive(false);
       break;
       case "crossbow5":
         actor.hotbar.SwitchItem(ItemFactory.Factory(ItemFactory.Items.Crossbow5));
+        actor.hotbar.handOfCardsActive =false;
+        ToggleActive(false);
       break;
       case "blade":
         actor.hotbar.SwitchItem(ItemFactory.Factory(ItemFactory.Items.Blade));
+        actor.hotbar.handOfCardsActive =false;
+        ToggleActive(false);
 
       break;
       case "fury":

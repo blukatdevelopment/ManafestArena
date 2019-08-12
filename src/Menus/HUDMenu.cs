@@ -63,6 +63,33 @@ public class HUDMenu : Container, IMenu{
 
   }
 
+  public void ToggleHandOfCards(bool active){
+    // for(int i = 0; i < 5; i++){
+    //   cardBoxes[i].Visible = active;
+    // }
+
+    Rect2 screen = this.GetViewportRect();
+      float width = screen.Size.x;
+      float height = screen.Size.y;
+      float wu = width/10; // relative height and width units
+      float hu = height/10;
+
+    if(active){
+      Menu.ScaleControl(cardBoxes[0], wu, 2* hu, 3 * wu, height - hu);
+      Menu.ScaleControl(cardBoxes[1], wu, 2* hu, 4 * wu, height - hu);
+      Menu.ScaleControl(cardBoxes[2], wu, 2* hu, 5 * wu, height - hu);
+      Menu.ScaleControl(cardBoxes[3], wu, 2* hu, 6 * wu, height - hu);
+      Menu.ScaleControl(cardBoxes[4], wu, 2* hu, 7 * wu, height - hu);
+    }
+    else{
+      Menu.ScaleControl(cardBoxes[0], wu, 2* hu, 3 * wu, height - 0.3f*hu);
+      Menu.ScaleControl(cardBoxes[1], wu, 2* hu, 4 * wu, height - 0.3f*hu);
+      Menu.ScaleControl(cardBoxes[2], wu, 2* hu, 5 * wu, height - 0.3f*hu);
+      Menu.ScaleControl(cardBoxes[3], wu, 2* hu, 6 * wu, height - 0.3f*hu);
+      Menu.ScaleControl(cardBoxes[4], wu, 2* hu, 7 * wu, height - 0.3f*hu);
+    }
+  }
+
   public void UpdateHandOfCards(List<string> cards){
     ClearHandOfCards();
 

@@ -227,6 +227,7 @@ public class HotBar : IHasInfo {
     Item.ItemInputs input = (Item.ItemInputs)inputEvent.mappedEventId;
     if(input==Item.ItemInputs.E&&inputEvent.inputType==MappedInputEvent.Inputs.Press&&handOfCards != null){
       handOfCardsActive = !handOfCardsActive;
+      handOfCards.ToggleActive(handOfCardsActive);
     }
     if(!handOfCardsActive){
       if(itemSlots[equippedSlot] == null){
