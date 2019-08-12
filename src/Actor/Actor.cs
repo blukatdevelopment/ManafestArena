@@ -15,7 +15,7 @@ public class Actor : IHasInputHandler, IHasStats, IHasBody, IHasInventory {
   public PaperDoll paperdoll;
 
   public Actor(){
-    hotbar = new HotBar(10, this);
+    hotbar = new HotBar(1, this);
   }
 
   public IInputHandler GetInputHandler(){
@@ -51,6 +51,7 @@ public class Actor : IHasInputHandler, IHasStats, IHasBody, IHasInventory {
 
     if(hotbar.GetActiveSlot() != null){
       hotbar.GetActiveSlot().Update(delta);
+      hotbar.Update(delta);
     }
   }
 

@@ -19,12 +19,15 @@ public class ItemFactory {
         None,
         // MeleeStabItem
         Knife,
+        Blade,
         Claws,
         // ProjectileItem
         MusketBall,
         CrossbowBolt,
         // ProjectileLauncher
-        Crossbow
+        Crossbow,
+        Crossbow2,
+        Crossbow5
     };
 
     public static IItem Factory(Items item){

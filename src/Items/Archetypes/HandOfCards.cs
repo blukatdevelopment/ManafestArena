@@ -5,7 +5,8 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class HandOfCards : Item {
+public class HandOfCards {
+  Actor actor;
   bool init = false;
   List<string> deck, drawPile, discardPile;
   List<string> handCards;
@@ -26,17 +27,13 @@ public class HandOfCards : Item {
 
   IStats stats;
   Speaker speaker;
-  ProjectileLauncher launcher;
-  RaycastDamager raycastWeapon;
+  //ProjectileLauncher launcher;
+  //RaycastDamager raycastWeapon;
 
 
-  public HandOfCards(List<string> deck){
-    launcher = new ProjectileLauncher(this);
-    raycastWeapon = new RaycastDamager(this);
+  public HandOfCards(Actor actor, List<string> deck){
 
-    speaker = new Speaker();
-    AddChild(speaker);
-
+    this.actor  =actor;
     this.deck = deck;
     drawPile = new List<string>();
     discardPile = new List<string>();
@@ -52,9 +49,8 @@ public class HandOfCards : Item {
     rushTimer = new IncrementTimer(15f);
   }
 
-  public override void Use(MappedInputEvent inputEvent){
+  public void Use(MappedInputEvent inputEvent){
     if(stats == null){
-      Actor actor = Actor.GetActorFromNode(wielder as Node);
       if(actor != null){
         stats = actor.stats;
       }
@@ -186,7 +182,7 @@ public class HandOfCards : Item {
     return ret;
   }
 
-  public override void Update(float delta){
+  public void Update(float delta){
     useDelayTimer.UpdateTimerReady(delta);
     scrollDelayTimer.UpdateTimerReady(delta);
     DealCards(delta);
@@ -206,7 +202,7 @@ public class HandOfCards : Item {
     }
   }
 
-  public override string GetInfo(){
+  public string GetInfo(){
     if(!init){ // Do init here because this is when HUDMenu definitely exists
       init = true;
       hud = Session.session.activeMenu as HUDMenu;
@@ -276,19 +272,19 @@ public class HandOfCards : Item {
 
   public int CardStamina(string card){
     switch(card){
-      case "strike":
+      case "knife":
         return 250;
       break;
       case "defend":
         return 250;
       break;
-      case "crossbow":
+      case "crossbow2":
         return 250;
       break;
-      case "autocrossbow":
+      case "crossbow5":
         return 250;
       break;
-      case "musket":
+      case "blade":
         return 250;
       break;
       case "rush":
@@ -304,36 +300,21 @@ public class HandOfCards : Item {
   public void CardEffect(string card){
     Damage dmg = new Damage();
     switch(card){
-      case "strike":
-        dmg.health = 100;
-        raycastWeapon.Config(30f, dmg, speaker);
-        raycastWeapon.Fire();
+      case "knife":
+        actor.hotbar.SwitchItem(ItemFactory.Factory(ItemFactory.Items.Knife));
       break;
       case "defend":
         stats.ConsumeStat("block", -10);
       break;
-      case "crossbow":
-        dmg.health = 100;
-        launcher.Config(
-          ItemFactory.Items.CrossbowBolt,
-          dmg,
-          50f,
-          speaker
-        );
-        launcher.Fire();
+      case "crossbow2":
+        actor.hotbar.SwitchItem(ItemFactory.Factory(ItemFactory.Items.Crossbow2));
       break;
-      case "autocrossbow":
-        crossbowShotsQueued = 5;
+      case "crossbow5":
+        actor.hotbar.SwitchItem(ItemFactory.Factory(ItemFactory.Items.Crossbow5));
       break;
-      case "musket":
-        dmg.health = 150;
-        launcher.Config(
-          ItemFactory.Items.CrossbowBolt,
-          dmg,
-          100f,
-          speaker
-        );
-        launcher.Fire();
+      case "blade":
+        actor.hotbar.SwitchItem(ItemFactory.Factory(ItemFactory.Items.Blade));
+
       break;
       case "fury":
         int currentEndurance = stats.GetStat("endurance");

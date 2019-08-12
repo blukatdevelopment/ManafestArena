@@ -117,7 +117,7 @@ public class RangedProjectileItem : Item, IWeapon, IRangedWeapon {
   }
 
   public override List<ItemFactory.Items> GetSupportedItems(){
-    return new List<ItemFactory.Items>(){ ItemFactory.Items.Crossbow };
+    return new List<ItemFactory.Items>(){ ItemFactory.Items.Crossbow, ItemFactory.Items.Crossbow2, ItemFactory.Items.Crossbow5 };
   }
 
   public Damage GetDamage(){
@@ -155,6 +155,38 @@ public class RangedProjectileItem : Item, IWeapon, IRangedWeapon {
         0.5f
       );
       ret.LoadAmmo(CreateAmmo(12, ItemFactory.Items.CrossbowBolt));
+      break;
+
+      case ItemFactory.Items.Crossbow2:
+      damage.health = 100;
+      ret = new RangedProjectileItem(
+        "Crossbow",
+        "Fires a metal bolt at high speeds.",
+        "res://Assets/Models/crossbow.obj",
+        ItemFactory.Items.CrossbowBolt,
+        damage,
+        50f,
+        1,
+        1f,
+        0.5f
+      );
+      ret.LoadAmmo(CreateAmmo(2, ItemFactory.Items.CrossbowBolt));
+      break;
+
+      case ItemFactory.Items.Crossbow5:
+      damage.health = 100;
+      ret = new RangedProjectileItem(
+        "Crossbow",
+        "Fires a metal bolt at high speeds.",
+        "res://Assets/Models/crossbow.obj",
+        ItemFactory.Items.CrossbowBolt,
+        damage,
+        50f,
+        1,
+        1f,
+        0.5f
+      );
+      ret.LoadAmmo(CreateAmmo(5, ItemFactory.Items.CrossbowBolt));
       break;
     }
     return ret as IItem;

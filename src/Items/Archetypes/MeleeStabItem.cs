@@ -97,6 +97,7 @@ public class MeleeStabItem : Item, IHasDamage, IWeapon {
     public override List<ItemFactory.Items> GetSupportedItems(){
         return new List<ItemFactory.Items>(){
             ItemFactory.Items.Knife,
+            ItemFactory.Items.Blade,
             ItemFactory.Items.Claws
         };
     }
@@ -120,6 +121,23 @@ public class MeleeStabItem : Item, IHasDamage, IWeapon {
                         Sound.Effects.FistImpact
                     ) as IItem;
             break;
+
+            case ItemFactory.Items.Blade:
+                dmg.health = 150;
+                return new MeleeStabItem(
+                        "Blade",
+                        "Don't bring a gun to a knifefight.",
+                        "res://Assets/Models/knife.obj",
+                        1.5f,
+                        dmg,
+                        0,
+                        15,
+                        0,
+                        Sound.Effects.FistSwing,
+                        Sound.Effects.FistImpact
+                    ) as IItem;
+            break;
+
             case ItemFactory.Items.Claws:
                 dmg.health = 50;
                 return new MeleeStabItem(

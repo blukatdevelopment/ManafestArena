@@ -14,11 +14,21 @@ public class HotBar : IHasInfo {
   public Actor actor;
   public IItem[] itemSlots;
   public int equippedSlot;
+  public HandOfCards handOfCards;
+
+  public bool handOfCardsActive = false;
+
 
   public HotBar(int slots, Actor actor){
     itemSlots = new IItem[slots];
     equippedSlot = 0;
     this.actor = actor;
+  }
+
+  public void Update(float delta){
+    if(handOfCards!=null){
+      handOfCards.Update(delta);
+    }
   }
 
   public List<int> GetEmptySlots(){
@@ -44,6 +54,10 @@ public class HotBar : IHasInfo {
     }
     else{
       ret = itemInfo.GetInfo();
+    }
+
+    if(handOfCards!=null){
+      ret+= handOfCards.GetInfo();
     }
     return ret;
   }
@@ -112,6 +126,12 @@ public class HotBar : IHasInfo {
       ret.Unequip();
     }
     return ret;
+  }
+
+  public void SwitchItem(IItem item){
+    UnequipActive();
+    AddItem(equippedSlot,item);
+
   }
 
   public void AddItem(int i, IItem item){
@@ -203,10 +223,20 @@ public class HotBar : IHasInfo {
   }
 
   public void UseEquippedItem(MappedInputEvent inputEvent){
-    if(itemSlots[equippedSlot] == null){
-      return;
+    
+    Item.ItemInputs input = (Item.ItemInputs)inputEvent.mappedEventId;
+    if(input==Item.ItemInputs.E&&inputEvent.inputType==MappedInputEvent.Inputs.Press&&handOfCards != null){
+      handOfCardsActive = !handOfCardsActive;
     }
-    itemSlots[equippedSlot].Use(inputEvent);
+    if(!handOfCardsActive){
+      if(itemSlots[equippedSlot] == null){
+        return;
+      }
+      itemSlots[equippedSlot].Use(inputEvent);
+    }
+    else if(handOfCards != null){
+      handOfCards.Use(inputEvent);
+    }
   }
 
 }
