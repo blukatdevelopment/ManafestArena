@@ -139,28 +139,23 @@ public class Menu{
     control.SetPosition(new Vector2(x, y)); 
   }
 
-  // Toggles between HUDMenu and PauseMenu
+  // Toggles PauseMenu
   public static void TogglePause(){
     Node menuNode = Session.session.activeMenu;
-    if(HudActive()){
-      Session.ChangeMenu("PauseMenu");
-      return;
+    HUDMenu hudMenu = menuNode as HUDMenu;
+    if(hudMenu != null){
+      hudMenu.TogglePause();
     }
-
-    PauseMenu pauseMenu = menuNode as PauseMenu;
-    if(pauseMenu != null){
-      Session.ChangeMenu("HUDMenu");
-      return;
+    else{
+      GD.Print("HUDMenu not active. Doing nothing.");
     }
-
-    GD.Print("Neither HUDMenu nor PauseMenu are active. Doing nothing.");
   }
 
   public static bool HudActive(){
     Node menuNode = Session.session.activeMenu;
     HUDMenu hudMenu = menuNode as HUDMenu;
     if(hudMenu != null){
-      return true;
+      return !hudMenu.Paused();
     }
     return false;
   }
