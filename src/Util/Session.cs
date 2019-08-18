@@ -41,6 +41,7 @@ public class Session : Node {
   }
 
   public override void _Ready() {
+    PauseMode = PauseModeEnum.Process;
     activeGamemodes = new List<Node>();
     EnforceSingleton();
     ChangeMenu("MainMenu");
@@ -277,6 +278,10 @@ public class Session : Node {
       if(gamemode != null){
         gamemode.HandleEvent(sessionEvent);
       }
+    }
+    if(sessionEvent.type==SessionEvent.Types.Pause){
+      GetTree().Paused = !GetTree().Paused;
+      //Menu.TogglePause();
     }
   }
   

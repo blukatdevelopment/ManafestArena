@@ -24,6 +24,7 @@ public class HUDMenu : Container, IMenu, IHasSubmenu{
   }
 
   public void Init(){
+    PauseMode = PauseModeEnum.Stop;
     Input.SetMouseMode(Input.MouseMode.Captured);
     InitControls();
     ScaleControls();

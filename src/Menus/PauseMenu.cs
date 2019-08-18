@@ -11,6 +11,7 @@ public class PauseMenu : Container, IMenu, IInputHandledMenu {
   private const float InputDelayStart = 0.1f;
 
   public void Init(){
+    PauseMode = PauseModeEnum.Process;
     inputDelay = InputDelayStart;
     InitInput();
     InitControls();
