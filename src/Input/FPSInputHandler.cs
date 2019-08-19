@@ -190,7 +190,9 @@ public class FPSInputHandler : IInputHandler {
     LookUp,
     LookDown,
     LookLeft,
-    LookRight
+    LookRight,
+    ScrollUp,
+    ScrollDown
   };
 
   public static List<InputMapping> GetMappings(){
@@ -341,6 +343,22 @@ public class FPSInputHandler : IInputHandler {
       InputMapping.Inputs.KeyboardKey,
       (int)KeyList.Escape,
       (int)Inputs.Pause,
+      0f,
+      1f
+    ));
+
+    mappings.Add(new InputMapping(
+      InputMapping.Inputs.MouseButton,
+      (int)ButtonList.WheelUp,
+      (int)Inputs.ScrollUp,
+      0f,
+      1f
+    ));
+
+    mappings.Add(new InputMapping(
+      InputMapping.Inputs.MouseButton,
+      (int)ButtonList.WheelDown,
+      (int)Inputs.ScrollDown,
       0f,
       1f
     ));

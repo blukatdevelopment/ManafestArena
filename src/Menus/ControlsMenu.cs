@@ -115,7 +115,7 @@ public class ControlsMenu : Container, IMenu {
         case InputMapping.Inputs.MouseButton:
           ret+="Mouse ";
           if(mapping.inputId==(int)ButtonList.WheelUp){
-            ret+=ButtonList.WheelUp;//typeCast doesnt work for WheelUp coz ButtonList has another enum name with same value
+            ret+="WheelUp";//typeCast doesnt work for WheelUp coz ButtonList has another enum name with same value
           }
           else{
             ret += (ButtonList)mapping.inputId;

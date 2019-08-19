@@ -97,6 +97,7 @@ public class PauseMenu : Container, IMenu, IInputHandledMenu {
   }
   
   public void QuitToMainMenu(){
+    GetTree().Paused =false;
     Session.QuitToMainMenu();
   }
 
