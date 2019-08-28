@@ -231,6 +231,7 @@ public class Session : Node {
   }
   
   public static void QuitToMainMenu(){
+    session.GetTree().Paused =false;
     Session.ChangeMenu("MainMenu");
     Session.ClearGame();
   }

@@ -1,8 +1,9 @@
 using Godot;
 using System;
 
-public class SettingsMenu : Container, IMenu {
-    public Godot.Button mainMenuButton;
+public class SettingsMenu : Container, IMenu, ISubmenu {
+    public IHasSubmenu parentMenu;
+    public Godot.Button backButton;
     public Godot.Button revertButton;
     public Godot.Button saveButton;
     public Godot.HSlider masterVolumeSlider;
@@ -20,17 +21,23 @@ public class SettingsMenu : Container, IMenu {
     public TextEdit background;
 
     public void Init(){
+      parentMenu = GetParent() as IHasSubmenu;
+      PauseMode = PauseModeEnum.Process;
       InitControls();
       ScaleControls();
       GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
     }
 
+  public IHasSubmenu GetParentMenu(){
+    return parentMenu;
+  }
+  
     public void InitControls(){
       background = Menu.BackgroundBox();
       AddChild(background);
 
-      mainMenuButton = Menu.Button("Main Menu", MainMenu);
-      AddChild(mainMenuButton);
+      backButton = Menu.Button("Back", Back);
+      AddChild(backButton);
 
       revertButton = Menu.Button("Revert", RevertSettings);
       AddChild(revertButton);
@@ -88,7 +95,7 @@ public class SettingsMenu : Container, IMenu {
       float hu = height/10;
       
       Menu.ScaleControl(background, width, height, 0, 0);
-      Menu.ScaleControl(mainMenuButton, 2 * wu, hu, 0, height - hu);
+      Menu.ScaleControl(backButton, 2 * wu, hu, 0, height - hu);
       Menu.ScaleControl(revertButton, 2 * wu, hu, 4 * wu, height - hu);
       Menu.ScaleControl(saveButton, 2 * wu, hu, 8 * wu, height - hu);
       Menu.ScaleControl(controlsButton, 2 * wu, hu, 8 * wu, 0);
@@ -106,10 +113,18 @@ public class SettingsMenu : Container, IMenu {
     }
 
     public void ToControlsMenu(){
+      if(parentMenu!=null){
+        parentMenu.ChangeSubmenu("ControlsMenu");
+        return;
+      }
       Session.ChangeMenu("ControlsMenu");
     }
 
-    public void MainMenu(){
+    public void Back(){
+      if(parentMenu!=null){
+        parentMenu.ChangeSubmenu("PauseMenu");
+        return;
+      }
       Session.ChangeMenu("MainMenu");
     }
 

@@ -2,7 +2,8 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class ControlsMenu : Container, IMenu {
+public class ControlsMenu : Container, IMenu, ISubmenu {
+    public IHasSubmenu parentMenu;
     public Godot.Button backButton;
     public Godot.Button saveButton;
     public Godot.Button revertButton;
@@ -18,9 +19,15 @@ public class ControlsMenu : Container, IMenu {
 
     
     public void Init(){
+      parentMenu = GetParent() as IHasSubmenu;
+      PauseMode = PauseModeEnum.Process;
       InitControls();
       ScaleControls();
       GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
+    }
+
+    public IHasSubmenu GetParentMenu(){
+      return parentMenu;
     }
 
     public void InitControls(){
@@ -180,6 +187,10 @@ public class ControlsMenu : Container, IMenu {
     }
 
     public void Back(){
+      if(parentMenu!=null){
+        parentMenu.ChangeSubmenu("SettingsMenu");
+        return;
+      }
       Session.ChangeMenu("SettingsMenu");
     }
 
