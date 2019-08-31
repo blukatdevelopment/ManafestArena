@@ -1,21 +1,29 @@
 using Godot;
 using System;
 
-public class PauseMenu : Container, IMenu, IInputHandledMenu {
+public class PauseMenu : Container, IMenu, ISubmenu, IInputHandledMenu {
   
+  public IHasSubmenu parentMenu;
   public Godot.Button quitButton;
   public Godot.Button mainMenuButton;
+  public Godot.Button settingsButton;
   public Godot.Button resumeButton;
   public IInputHandler inputHandler;
   private float inputDelay;
   private const float InputDelayStart = 0.1f;
 
   public void Init(){
+    parentMenu = GetParent() as IHasSubmenu;
+    PauseMode = PauseModeEnum.Process;
     inputDelay = InputDelayStart;
     InitInput();
     InitControls();
     ScaleControls();
     GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
+  }
+
+  public IHasSubmenu GetParentMenu(){
+    return parentMenu;
   }
 
   public override void _Process(float delta){
@@ -40,6 +48,7 @@ public class PauseMenu : Container, IMenu, IInputHandledMenu {
   void InitControls(){
     SetQuitButton((Godot.Button)Menu.Button(text : "Quit", onClick : Quit));
     SetMainMenuButton((Godot.Button)Menu.Button(text : "Main Menu", onClick : QuitToMainMenu));
+    SetSettingsButton((Godot.Button)Menu.Button(text : "Settings", onClick : Settings));
     SetResumeButton((Godot.Button)Menu.Button(text : "Resume", onClick : Resume));
   }
   
@@ -52,7 +61,8 @@ public class PauseMenu : Container, IMenu, IInputHandledMenu {
       
       Menu.ScaleControl(resumeButton, 4 * wu, 2 * hu, 3 * wu, 0);
       Menu.ScaleControl(mainMenuButton, 4 * wu, 2 * hu, 3 * wu, 2 * hu);
-      Menu.ScaleControl(quitButton, 4 * wu, 2 * hu, 3 * wu,  4 * hu);
+      Menu.ScaleControl(settingsButton, 4 * wu, 2 * hu, 3 * wu,  4 * hu);
+      Menu.ScaleControl(quitButton, 4 * wu, 2 * hu, 3 * wu,  6 * hu);
   }
 
   public void Select(){
@@ -78,9 +88,16 @@ public class PauseMenu : Container, IMenu, IInputHandledMenu {
   }
   
   public void SetMainMenuButton(Godot.Button button){
-    if(mainMenuButton != null){ quitButton.QueueFree(); }
+    if(mainMenuButton != null){ mainMenuButton.QueueFree(); }
     
     mainMenuButton = button;
+    AddChild(button);
+  }
+
+  public void SetSettingsButton(Godot.Button button){
+    if(settingsButton != null){ settingsButton.QueueFree(); }
+    
+    settingsButton = button;
     AddChild(button);
   }
 
@@ -97,6 +114,10 @@ public class PauseMenu : Container, IMenu, IInputHandledMenu {
   
   public void QuitToMainMenu(){
     Session.QuitToMainMenu();
+  }
+
+  public void Settings(){
+    GetParentMenu().ChangeSubmenu("SettingsMenu");
   }
 
   public void Resume(){

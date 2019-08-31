@@ -48,11 +48,13 @@ public class CareerMenu : Container, IMenu {
     Rect2 screen = this.GetViewportRect();
     float height = screen.Size.y;
     float hu = height/10;// relative height and width units
-    float scrollVelocity = 5f;
+    float scrollVelocity = 15f;
+    float maxDist = 1;
     float change = scrollVelocity * delta;
     
     float offset = careerParent.GetPosition().y/hu;
     targetOffset = Mathf.Clamp(targetOffset,minOffset,maxOffset);
+    targetOffset = (int)Mathf.Clamp(targetOffset,offset-maxDist,offset+maxDist);
     float dist = Mathf.Abs(targetOffset-offset);
     if(dist<=change){
       offset = targetOffset;

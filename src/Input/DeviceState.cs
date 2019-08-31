@@ -124,6 +124,17 @@ public class DeviceState : Node {
       mousePosition = mot.GlobalPosition;
       mouseMovement = mot.Relative;
     }
+    InputEventMouseButton btn = evt as InputEventMouseButton;
+    if(btn!=null){
+      int btnIndex = btn.ButtonIndex;
+      if(btnIndex == (int)ButtonList.WheelDown||btnIndex==(int)ButtonList.WheelUp)
+      if(mouseButtons.ContainsKey(btnIndex)){
+        mouseButtons[btnIndex] = 1;
+      }
+      else{
+        mouseButtons[btnIndex] = 0;
+      }
+    }
   }
 
 }

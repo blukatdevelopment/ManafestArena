@@ -27,6 +27,7 @@ public class Arena : Spatial, IGamemode {
   public System.Collections.Generic.Dictionary<int, Actor> actors;
   
   public Arena(){
+    PauseMode = PauseModeEnum.Stop;
     enemies = new List<Actor>();
     actors = new System.Collections.Generic.Dictionary<int, Actor>();
     scores = new System.Collections.Generic.Dictionary<int, int>();

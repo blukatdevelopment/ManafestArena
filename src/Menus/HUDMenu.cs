@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class HUDMenu : Container, IMenu{
+public class HUDMenu : Container, IMenu, IHasSubmenu{
 
   public float delay = 0.0f;
   public Godot.Label statBox;
@@ -11,6 +11,8 @@ public class HUDMenu : Container, IMenu{
   public Godot.Label itemBox;
   public Godot.Label objectiveBox;
   public Godot.Label interactionBox;
+  public Node submenu;
+  public bool paused = false;
   
   public override void _Process(float delta){
     delay += delta;
@@ -22,10 +24,48 @@ public class HUDMenu : Container, IMenu{
   }
 
   public void Init(){
+    PauseMode = PauseModeEnum.Stop;
     Input.SetMouseMode(Input.MouseMode.Captured);
     InitControls();
     ScaleControls();
     GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
+  }
+
+  public void ChangeSubmenu(string menuName = null){
+    if(submenu != null){
+      submenu.QueueFree();
+    }
+
+    if(menuName==null){
+      submenu = null;
+      Input.SetMouseMode(Input.MouseMode.Captured);
+      return;
+    }
+    Input.SetMouseMode(Input.MouseMode.Visible);
+    Node menuNode = Menu.MenuFactory(menuName);
+    IMenu menu = menuNode as IMenu;
+    if(menu == null){
+      GD.Print("Menu " + menuName + " was null.");
+    }
+    else{
+      submenu = menuNode;
+      AddChild(menuNode);
+      menu.Init();
+    }
+  }
+
+  public void TogglePause(){
+    paused=!paused;
+    if(paused){
+      ChangeSubmenu("PauseMenu");
+    }
+    else{
+      ChangeSubmenu();
+    }
+  }
+
+  public bool Paused(){
+    return paused;
   }
 
   public void UpdateHud(){

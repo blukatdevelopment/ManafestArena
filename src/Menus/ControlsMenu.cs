@@ -2,7 +2,8 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class ControlsMenu : Container, IMenu {
+public class ControlsMenu : Container, IMenu, ISubmenu {
+    public IHasSubmenu parentMenu;
     public Godot.Button backButton;
     public Godot.Button saveButton;
     public Godot.Button revertButton;
@@ -13,19 +14,20 @@ public class ControlsMenu : Container, IMenu {
     public bool keyboardInput = true; // Whether to display keyboard or joystick controls
     public bool waitingForInput = false;
     public int activeMapping = -1;
-    public DebugInputHandler inputHandler;
     public float inputDelayRemaining;
     public const float InputDelay = 0.25f;
 
     
     public void Init(){
+      parentMenu = GetParent() as IHasSubmenu;
+      PauseMode = PauseModeEnum.Process;
       InitControls();
       ScaleControls();
       GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
     }
 
-    public void Clear(){
-      this.QueueFree();
+    public IHasSubmenu GetParentMenu(){
+      return parentMenu;
     }
 
     public void InitControls(){
@@ -50,15 +52,47 @@ public class ControlsMenu : Container, IMenu {
     }
 
     public void PopulateMappings(List<InputMapping> inputMappings){
-      inputHandler = new DebugInputHandler();
-      List<InputMapping> detectionMappings = keyboardInput ? DebugInputHandler.GetKeyboardMappings() : DebugInputHandler.GetJoyMappings();
-      MappedInputSource source = new MappedInputSource(Session.GetDevice(0), detectionMappings);
-      inputHandler.RegisterInputSource(source);
       this.inputMappings = inputMappings;
       for(int i = 0; i < inputMappings.Count; i++){
         itemList.AddItem(GetMappingText(inputMappings[i]));
       }
 
+    }
+
+    public override void _Input(InputEvent evt){
+      if(waitingForInput&&inputDelayRemaining <= 0f){
+        GD.Print(evt);
+        InputEventKey inputEventKey = evt as InputEventKey;
+        InputEventMouseButton inputEventMouseButton = evt as InputEventMouseButton;
+        InputEventJoypadButton inputEventJoypadButton = evt as InputEventJoypadButton;
+
+        if(inputEventKey!=null){
+          KeyList key = (KeyList)inputEventKey.Scancode;
+          GD.Print("Keyboard key: " + key);
+          inputMappings[activeMapping].inputId = inputEventKey.Scancode;
+          inputMappings[activeMapping].inputType = InputMapping.Inputs.KeyboardKey;
+        }
+
+        else if(inputEventMouseButton!=null){
+          ButtonList button = (ButtonList)inputEventMouseButton.ButtonIndex;
+          GD.Print("Mouse button: " + button);
+          inputMappings[activeMapping].inputId = inputEventMouseButton.ButtonIndex;
+          inputMappings[activeMapping].inputType = InputMapping.Inputs.MouseButton;
+        }
+        else if(inputEventJoypadButton!=null){
+          JoystickList button = (JoystickList)inputEventJoypadButton.ButtonIndex;
+          GD.Print("Joy button: " + button);
+          inputMappings[activeMapping].inputId = inputEventJoypadButton.ButtonIndex;
+          inputMappings[activeMapping].inputType = InputMapping.Inputs.JoyButton;
+        }
+        else {
+          return;
+        }
+        itemList.SetItemText(activeMapping, GetMappingText(inputMappings[activeMapping]));
+        activeMapping = -1;
+        waitingForInput = false;
+        itemList.UnselectAll();
+      }
     }
 
     public override void _Process(float delta){
@@ -73,27 +107,6 @@ public class ControlsMenu : Container, IMenu {
         GD.Print("Delaying input");
         return;
       }
-
-      GD.Print("DetectInput");
-      MappedInputEvent input = inputHandler.GetNextInput();
-      if(input != null){
-        GD.Print("Found " + input.ToString());
-        if(keyboardInput && input.mappedEventId >= 0){
-          Godot.KeyList key = (Godot.KeyList)input.mappedEventId;
-          GD.Print("Keyboard key: " + key);
-          inputMappings[activeMapping].inputId = input.mappedEventId;
-          inputMappings[activeMapping].inputType = InputMapping.Inputs.KeyboardKey;
-        }
-        else if(keyboardInput){
-          int mouseButton = input.mappedEventId * -1;
-          inputMappings[activeMapping].inputId = mouseButton;
-          inputMappings[activeMapping].inputType = InputMapping.Inputs.KeyboardKey;
-        }
-        itemList.SetItemText(activeMapping, GetMappingText(inputMappings[activeMapping]));
-        activeMapping = -1;
-        waitingForInput = false;
-      }
-      
     }
 
     public string GetMappingText(InputMapping mapping){
@@ -107,13 +120,19 @@ public class ControlsMenu : Container, IMenu {
           ret += mapping.sensitivity < 0 ? "-)" : "+)";
           break;
         case InputMapping.Inputs.MouseButton:
-          ret += "Mouse button " + mapping.inputId;
+          ret+="Mouse ";
+          if(mapping.inputId==(int)ButtonList.WheelUp){
+            ret+="WheelUp";//typeCast doesnt work for WheelUp coz ButtonList has another enum name with same value
+          }
+          else{
+            ret += (ButtonList)mapping.inputId;
+          }
           break;
         case InputMapping.Inputs.MouseAxis: 
           ret += "Mouse axis";
           break;
         case InputMapping.Inputs.KeyboardKey:
-          ret += (Godot.KeyList)mapping.inputId + " key"; 
+          ret += (KeyList)mapping.inputId + " key"; 
           break;
       }
       return ret;
@@ -168,6 +187,10 @@ public class ControlsMenu : Container, IMenu {
     }
 
     public void Back(){
+      if(parentMenu!=null){
+        parentMenu.ChangeSubmenu("SettingsMenu");
+        return;
+      }
       Session.ChangeMenu("SettingsMenu");
     }
 
