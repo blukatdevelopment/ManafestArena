@@ -156,6 +156,7 @@
     <Compile Include="src/AI/FightingState.cs" />
     <Compile Include="src\Menus\ColorProgressBar.cs" />
     <Compile Include="src\Menus\IHasSubmenu.cs" />
+    <Compile Include="src\Menus\ISubmenu.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
 </Project>
