@@ -17,6 +17,8 @@ public class ItemFactory {
 
     public enum Items {
         None,
+        // MeleeBiteItem
+        Teeth,
         // MeleeStabItem
         Knife,
         Claws,
@@ -54,6 +56,7 @@ public class ItemFactory {
     public static List<IItem> GetDelegateFactories(){
         List<IItem> ret = new List<IItem>();
         ret.Add(new Item() as IItem);
+        ret.Add(new MeleeBiteItem() as IItem);
         ret.Add(new MeleeStabItem() as IItem);
         ret.Add(new RangedProjectileItem() as IItem);
         ret.Add(new ProjectileItem() as IItem);
