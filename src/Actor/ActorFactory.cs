@@ -23,7 +23,8 @@ public class ActorFactory {
   public enum Bodies {
     None,
     PillBody,
-    HumanoidBody
+    HumanoidBody,
+    WolfBody
   };
 
 
@@ -87,6 +88,9 @@ public class ActorFactory {
       case Bodies.HumanoidBody:
         actor.body = new HumanoidBody(actor);
       break;
+      case Bodies.WolfBody:
+        actor.body = new WolfBody(actor);
+      break;
     }
   }
 
@@ -129,8 +133,9 @@ public class ActorFactory {
     actor.stats.SetStat("willpower", 5);
     actor.stats.SetStat("strength", 5);
     actor.stats.RestoreCondition();
+    //actor.hotbar.AddItem(0,ItemFactory.Factory(ItemFactory.Items.Teeth));
     actor.hotbar.AddItem(0, ItemFactory.Factory(ItemFactory.Items.Knife));
-    actor.hotbar.AddItem(1, ItemFactory.Factory(ItemFactory.Items.Crossbow));
+    //actor.hotbar.AddItem(1, ItemFactory.Factory(ItemFactory.Items.Crossbow));
     actor.body.InitCam(0);
     return actor;
   }

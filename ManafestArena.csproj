@@ -59,6 +59,7 @@
     <Compile Include="src/Actor/IBody.cs" />
     <Compile Include="src/Actor/PillBody.cs" />
     <Compile Include="src/Actor/HumanoidBody.cs" />
+    <Compile Include="src/Actor/WolfBody.cs" />
     <Compile Include="src/Input/DeviceState.cs" />
     <Compile Include="src/Input/InputMapping.cs" />
     <Compile Include="src/Input/MappedInputEvent.cs" />

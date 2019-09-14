@@ -1,0 +1,105 @@
+[gd_resource type="AnimationNodeStateMachine" load_steps=25 format=2]
+
+[sub_resource type="AnimationNodeAnimation" id=1]
+animation = "bite"
+
+[sub_resource type="AnimationNodeAnimation" id=2]
+animation = "crouch_walk"
+
+[sub_resource type="AnimationNodeAnimation" id=3]
+animation = "crouch_idle"
+
+[sub_resource type="AnimationNodeAnimation" id=4]
+animation = "crouch_walk_back"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=5]
+blend_point_0/node = SubResource( 2 )
+blend_point_0/pos = 1.0
+blend_point_1/node = SubResource( 3 )
+blend_point_1/pos = 0.0
+blend_point_2/node = SubResource( 4 )
+blend_point_2/pos = -1.0
+
+[sub_resource type="AnimationNodeAnimation" id=6]
+animation = "jump"
+
+[sub_resource type="AnimationNodeAnimation" id=7]
+animation = "land"
+
+[sub_resource type="AnimationNodeAnimation" id=8]
+animation = "idle"
+
+[sub_resource type="AnimationNodeAnimation" id=9]
+animation = "walk"
+
+[sub_resource type="AnimationNodeAnimation" id=10]
+animation = "walk_back"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=11]
+blend_point_0/node = SubResource( 8 )
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource( 9 )
+blend_point_1/pos = 1.0
+blend_point_2/node = SubResource( 10 )
+blend_point_2/pos = -1.0
+
+[sub_resource type="AnimationNodeAnimation" id=12]
+animation = "idle"
+
+[sub_resource type="AnimationNodeAnimation" id=13]
+animation = "walk"
+
+[sub_resource type="AnimationNodeAnimation" id=14]
+animation = "walk_back"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=15]
+blend_point_0/node = SubResource( 12 )
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource( 13 )
+blend_point_1/pos = 1.0
+blend_point_2/node = SubResource( 14 )
+blend_point_2/pos = -1.0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=16]
+switch_mode = 1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=17]
+switch_mode = 1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=18]
+switch_mode = 1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=19]
+switch_mode = 1
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=20]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=21]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=22]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=23]
+switch_mode = 2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=24]
+switch_mode = 2
+auto_advance = true
+
+[resource]
+states/bite/node = SubResource( 1 )
+states/bite/position = Vector2( 271, 129 )
+states/crouch/node = SubResource( 5 )
+states/crouch/position = Vector2( 759, 241 )
+states/jump/node = SubResource( 6 )
+states/jump/position = Vector2( 539, -43 )
+states/land/node = SubResource( 7 )
+states/land/position = Vector2( 634, 36.6286 )
+states/run/node = SubResource( 11 )
+states/run/position = Vector2( 759, 129 )
+states/walk/node = SubResource( 15 )
+states/walk/position = Vector2( 539, 129 )
+transitions = [ "walk", "run", SubResource( 16 ), "run", "walk", SubResource( 17 ), "walk", "crouch", SubResource( 18 ), "crouch", "walk", SubResource( 19 ), "walk", "jump", SubResource( 20 ), "walk", "bite", SubResource( 21 ), "bite", "walk", SubResource( 22 ), "jump", "land", SubResource( 23 ), "land", "walk", SubResource( 24 ) ]
+start_node = "walk"
+graph_offset = Vector2( 49, -109.371 )
