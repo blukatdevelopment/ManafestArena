@@ -1,58 +1,53 @@
 /*
-    Triggers stab animation and administers damage to first
+    Triggers attack animation and administers damage to first
     collision that isn't the wielder.
 */
 using Godot;
 using System;
 using System.Collections.Generic;
 
-public class ItemStabber {
+public class ItemMeleeAttacker {
     IItem item;
-    public Vector3 wieldedPosition, forwardPosition;
-    public bool stabbing;
-    public float stabSpeed, stabTimer;
+    String animationName;
+    public bool attacking;
+    public float attackSpeed, attackTimer;
     public Damage damage;
     public Speaker speaker;
-    public Sound.Effects stabSound, impactSound;
+    public Sound.Effects attackSound, impactSound;
 
-    public ItemStabber(IItem item){
+    public ItemMeleeAttacker(IItem item, String animationName){
         this.item = item;
-        this.stabSound = Sound.Effects.FistSwing;
-        this.stabbing = false;
+        this.animationName = animationName;
+        this.attacking = false;
     }
 
     public void Config(
-        float stabSpeed, // How long a stab takes to complete
+        float attackSpeed, // How long a stab takes to complete
         Damage damage, // Damage object passed to stabbed target
         Speaker speaker, // Use this to make noise
-        Sound.Effects stabSound,
+        Sound.Effects attackSound,
         Sound.Effects impactSound
     ){
-        this.stabSpeed  = stabSpeed;
+        this.attackSpeed  = attackSpeed;
         this.damage     = damage;
         this.speaker    = speaker;
-        this.stabSound = stabSound;
+        this.attackSound = attackSound;
         this.impactSound = impactSound;
-        this.forwardPosition = new Vector3();
-        this.wieldedPosition = new Vector3();
     }
 
     public void Update(float delta){
-        //this.item = item;
-        if(stabbing){
-            stabTimer -= delta;
-            if(stabTimer <= 0f){
-                EndStab();
+        if(attacking){
+            attackTimer -= delta;
+            if(attackTimer <= 0f){
+                EndAttack();
             }
         }
     }
 
     public void OnUpdateWielder(){
 
-        EndStab();
-        UpdateSender();
-        UpdatePositions();
-        
+        EndAttack();
+        UpdateSender();        
     }
 
     private void UpdateSender(){
@@ -69,60 +64,49 @@ public class ItemStabber {
         }
     }
 
-    private void UpdatePositions(){
-        Spatial itemSpatial = item.GetNode() as Spatial;
-        
-        if(itemSpatial == null){
-            return;
-        }
-        
-        wieldedPosition = itemSpatial.GetTranslation();
-        forwardPosition = wieldedPosition + new Vector3(0, 0, -1);
+    public bool CanStartAttack(){
+        return !attacking;
     }
 
-    public bool CanStartStab(){
-        return !stabbing;
-    }
-
-    public void StartStab(){
-        if(stabbing){
+    public void StartAttack(){
+        if(attacking){
             return;
         }
         if(damage.sender == ""){
             UpdateSender();
         }
-        stabbing = true;
-        stabTimer = stabSpeed;
+        attacking = true;
+        attackTimer = attackSpeed;
 
         if(speaker != null){
-            speaker.PlayEffect(stabSound);
+            speaker.PlayEffect(attackSound);
         }
 
         IBody body = item.GetWielder() as IBody;
         if(body != null){
-            body.AnimationTrigger("stab");
+            body.AnimationTrigger(animationName);
         }
 
         item.SetCollision(true);
     }
 
-    public void EndStab(){
-        if(!stabbing){
+    public void EndAttack(){
+        if(!attacking){
             return;
         }
-        stabbing = false;
-        stabTimer = 0f;
+        attacking = false;
+        attackTimer = 0f;
         item.SetCollision(false);
     }
 
     public void OnCollide(object body){
-        if(!stabbing){
-            GD.Print("Not stabbing");
+        if(!attacking){
+            GD.Print("Not attaacking");
             return;
         }
         if(damage == null){
             GD.Print("Damage null");
-            EndStab();
+            EndAttack();
             return;
         }
         
@@ -132,7 +116,7 @@ public class ItemStabber {
         }
         IReceiveDamage receiver = body as IReceiveDamage;
         if(body == item.GetWielder() || body == item){
-            GD.Print("Not stabbing self");
+            GD.Print("Not attacking self");
             return;
         }
         if(receiver != null){
@@ -141,7 +125,7 @@ public class ItemStabber {
             if(speaker != null){
                 speaker.PlayEffect(impactSound);
             }
-            EndStab();
+            EndAttack();
         }
 
     }

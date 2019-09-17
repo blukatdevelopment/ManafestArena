@@ -2,22 +2,22 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class MeleeStabItem : Item, IHasDamage, IWeapon {
+public class MeleeBiteItem : Item, IHasDamage, IWeapon {
     public ItemMeleeAttacker attacker;
     public StatConsumer consumer;
 
-    public MeleeStabItem(){}
+    public MeleeBiteItem(){}
 
-    public MeleeStabItem(
+    public MeleeBiteItem(
         string name,
         string description,
         string meshPath,
-        float stabSpeed,
+        float biteSpeed,
         Damage damage,
         int healthCost,
         int manaCost,
         int staminaCost,
-        Sound.Effects stabSound,
+        Sound.Effects biteSound,
         Sound.Effects impactSound
     ){
         this.name = name;
@@ -26,13 +26,13 @@ public class MeleeStabItem : Item, IHasDamage, IWeapon {
         this.meshPath = meshPath;
         InitNodeStructure();
 
-        attacker = new ItemMeleeAttacker(this as IItem,"stab");
+        attacker = new ItemMeleeAttacker(this as IItem, "bite");
 
         attacker.Config(
-            stabSpeed,
+            biteSpeed,
             damage,
             speaker,
-            stabSound,
+            biteSound,
             impactSound
         );
 
@@ -72,11 +72,11 @@ public class MeleeStabItem : Item, IHasDamage, IWeapon {
     public override void Use(MappedInputEvent inputEvent){
         Item.ItemInputs input = (Item.ItemInputs)inputEvent.mappedEventId;
         if(input == Item.ItemInputs.A && inputEvent.inputType == MappedInputEvent.Inputs.Press){
-            Stab();
+            Bite();
         }
     }
 
-    public void Stab(){
+    public void Bite(){
         if(attacker.CanStartAttack() && consumer.ConsumeStats()){
             attacker.StartAttack();
         }
@@ -96,8 +96,7 @@ public class MeleeStabItem : Item, IHasDamage, IWeapon {
 
     public override List<ItemFactory.Items> GetSupportedItems(){
         return new List<ItemFactory.Items>(){
-            ItemFactory.Items.Knife,
-            ItemFactory.Items.Claws
+            ItemFactory.Items.Teeth
         };
     }
 
@@ -105,28 +104,13 @@ public class MeleeStabItem : Item, IHasDamage, IWeapon {
         Damage dmg = new Damage();
         IItem ret = null;
         switch(item){
-            case ItemFactory.Items.Knife:
-                dmg.health = 100;
-                ret = new MeleeStabItem(
-                        "Knife",
-                        "Don't bring a gun to a knifefight.",
-                        "res://Assets/Models/knife.obj",
-                        1.5f,
-                        dmg,
-                        0,
-                        15,
-                        0,
-                        Sound.Effects.FistSwing,
-                        Sound.Effects.FistImpact
-                    ) as IItem;
-            break;
-            case ItemFactory.Items.Claws:
+            case ItemFactory.Items.Teeth:
                 dmg.health = 50;
-                ret = new MeleeStabItem(
-                        "Claws",
-                        "Knives conveniently placed on your hands.",
-                        "res://Assets/Models/claw.obj",
-                        0.5f,
+                ret = new MeleeBiteItem(
+                        "Teeth",
+                        "Helps you chew through bones",
+                        "res://Assets/Models/teeth.obj",
+                        1f,
                         dmg,
                         0,
                         15,

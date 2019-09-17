@@ -59,6 +59,7 @@
     <Compile Include="src/Actor/IBody.cs" />
     <Compile Include="src/Actor/PillBody.cs" />
     <Compile Include="src/Actor/HumanoidBody.cs" />
+    <Compile Include="src/Actor/WolfBody.cs" />
     <Compile Include="src/Input/DeviceState.cs" />
     <Compile Include="src/Input/InputMapping.cs" />
     <Compile Include="src/Input/MappedInputEvent.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="src/Items/Interfaces/IReceiveDamage.cs" />
     <Compile Include="src/Items/Archetypes/Item.cs" />
     <Compile Include="src/Items/Archetypes/ItemFactory.cs" />
+    <Compile Include="src/Items/Archetypes/MeleeBiteItem.cs" />
     <Compile Include="src/Items/Archetypes/MeleeStabItem.cs" />
     <Compile Include="src/Items/Archetypes/RangedProjectileItem.cs" />
     <Compile Include="src/Items/Archetypes/ProjectileItem.cs" />
@@ -101,7 +103,7 @@
     <Compile Include="src/Items/Interfaces/IEquip.cs" />
     <Compile Include="src/Items/Components/AmmoStore.cs" />
     <Compile Include="src/Items/Components/CollisionDamager.cs" />
-    <Compile Include="src/Items/Components/ItemStabber.cs" />
+    <Compile Include="src/Items/Components/ItemMeleeAttacker.cs" />
     <Compile Include="src/Items/Components/ItemThrower.cs" />
     <Compile Include="src/Items/Components/ProjectileLauncher.cs" />
     <Compile Include="src/Items/Components/SelfDamager.cs" />

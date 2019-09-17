@@ -5,6 +5,10 @@ public class IncrementTimer {
     this.delay = delay;
   }
 
+  public void StartTimer(float currentTime=0){
+    this.currentTime = currentTime;
+  }
+
   public bool CheckTimer(float delta){
     currentTime += delta;
     if(currentTime >= delay){
