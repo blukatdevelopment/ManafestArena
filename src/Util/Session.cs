@@ -23,6 +23,8 @@ public class Session : Node {
   public Node activeMenu;
   public List<Node> activeGamemodes;
 
+  public const string DebugMenu = "RestSiteMenu";
+
   // Settings
   public float masterVolume, sfxVolume, musicVolume;
   public string userName;
@@ -50,6 +52,10 @@ public class Session : Node {
     PerformTests();
 
     AddDevice(0);
+
+    if(!DebugMenu.Equals("")){
+      ChangeMenu(DebugMenu);
+    }
   }
 
   public override void _Process(float delta){
