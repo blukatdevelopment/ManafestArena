@@ -32,26 +32,7 @@ public class HUDMenu : Container, IMenu, IHasSubmenu{
   }
 
   public void ChangeSubmenu(string menuName = null){
-    if(submenu != null){
-      submenu.QueueFree();
-    }
-
-    if(menuName==null){
-      submenu = null;
-      Input.SetMouseMode(Input.MouseMode.Captured);
-      return;
-    }
-    Input.SetMouseMode(Input.MouseMode.Visible);
-    Node menuNode = Menu.MenuFactory(menuName);
-    IMenu menu = menuNode as IMenu;
-    if(menu == null){
-      GD.Print("Menu " + menuName + " was null.");
-    }
-    else{
-      submenu = menuNode;
-      AddChild(menuNode);
-      menu.Init();
-    }
+    Menu.ChangeSubmenu(submenu, menuName);
   }
 
   public void TogglePause(){

@@ -15,3 +15,4 @@ dest_files=[ "res://.import/dagger.obj-0dac97c1614921567575f58a50defbda.mesh", "
 
 generate_tangents=true
 scale_mesh=Vector3( 1, 1, 1 )
+optimize_mesh=true

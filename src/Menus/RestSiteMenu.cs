@@ -11,83 +11,33 @@ public class RestSiteMenu : Container, IMenu {
   public TextEdit descriptionLabel;
   public Button confirmButton;
   public TextEdit background;
+  public Node submenu;
+
+  public List<string> upgrades;
 
   string selection = "";
 
   public void Init(){
+    if(Session.DebugMenu.Equals("RestSiteMenu")){
+      LoadDebugData();
+    }
+    else{
+      LoadData();
+    }
+
     career = Career.GetActiveCareer();
     InitControls();
     ScaleControls();
     GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
   }
 
-  void InitControls(){
-    // background = Menu.BackgroundBox();
-    // AddChild(background);
-
-    // restButton = Menu.Button("Rest", () => { 
-    //   HealPlayer1();
-    //   Session.session.career.CompleteEncounter();
-    // });
-    // AddChild(restButton);
-
-    // if(Career.RestSiteUpgrades().Count > 0){
-    //   upgradeButton = Menu.Button("Upgrade", DisplayUpgrades);
-    //   AddChild(upgradeButton);
-    // }
+  public void ChangeSubmenu(string menuName = null){
+    Menu.ChangeSubmenu(submenu, menuName);
   }
 
-  void DisplayUpgrades(){
-    // GD.Print("DisplayUpgrades");
-    // restButton.QueueFree();
-    // upgradeButton.QueueFree();
+  public void InitControls(){}
 
-    // upgradeButtons = new List<Button>();
-    // List<string> upgrades = Career.RestSiteUpgrades();
-
-    // foreach(string upgrade in upgrades){
-    //   Button button = Menu.Button(upgrade, () => {
-    //     SelectUpgrade(upgrade);
-    //   });
-    //   upgradeButtons.Add(button);
-    //   AddChild(button);
-    // }
-
-    // descriptionLabel = Menu.TextBox("Select an option");
-    // AddChild(descriptionLabel);
-    // ScaleControls();
-
-  }
-
-  void SelectUpgrade(string upgrade){
-    // GD.Print("Selected " + upgrade);
-    // selection = upgrade;
-    // descriptionLabel.Text = Career.UpgradeDescription(upgrade);
-
-    // if(confirmButton == null){
-    //   confirmButton = Menu.Button("Confirm", Confirm);
-    //   AddChild(confirmButton);
-    //   ScaleControls();
-    // }
-  }
-
-  void Confirm(){
-    GD.Print("Confirming selection of " + selection);
-    //Career.SelectRestSiteUpgrade(selection);
-    if(career != null){
-      career.CompleteEncounter();
-    }
-  }
-
-  void HealPlayer1(){
-    GD.Print("Healing player1");
-    // StatsManager stats = Career.GetPlayerStats();
-    // int healing = stats.GetStat(StatsManager.Stats.HealthMax) / 3;
-    // Career.HealPlayer(healing);
-  }
-
-
-  void ScaleControls(){
+  public void ScaleControls(){
     Rect2 screen = this.GetViewportRect();
     float width = screen.Size.x;
     float height = screen.Size.y;

@@ -15,3 +15,4 @@ dest_files=[ "res://.import/Rifle.obj-20bd0a3b8f7f7bae5301df3a96f68c7f.mesh", "r
 
 generate_tangents=true
 scale_mesh=Vector3( 1, 1, 1 )
+optimize_mesh=true

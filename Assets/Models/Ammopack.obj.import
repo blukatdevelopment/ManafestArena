@@ -15,3 +15,4 @@ dest_files=[ "res://.import/Ammopack.obj-902cad42b9867cdd33875eb82f2c21e7.mesh",
 
 generate_tangents=true
 scale_mesh=Vector3( 1, 1, 1 )
+optimize_mesh=true

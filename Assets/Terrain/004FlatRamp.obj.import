@@ -15,3 +15,4 @@ dest_files=[ "res://.import/004FlatRamp.obj-eeb9002b1a92365da9a2b67ce5ff679b.mes
 
 generate_tangents=true
 scale_mesh=Vector3( 1, 1, 1 )
+optimize_mesh=true
