@@ -17,6 +17,12 @@ public class ColorProgressBar : Control
         SetProgress(progress,maxProgress);
     }
 
+    public ColorProgressBar(Node parent, Color color,int progress ,int maxProgress){
+        this.color = color;
+        SetProgress(progress,maxProgress);
+        parent.AddChild(this);
+    }
+
     public override void _Ready()
     {
         underRect = new ColorRect();

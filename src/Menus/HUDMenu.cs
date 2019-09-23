@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public class HUDMenu : Container, IMenu, IHasSubmenu{
+public class HUDMenu : MenuBase{
 
   public float delay = 0.0f;
   public Godot.Label statBox;
@@ -13,6 +13,7 @@ public class HUDMenu : Container, IMenu, IHasSubmenu{
   public Godot.Label interactionBox;
   public Node submenu;
   public bool paused = false;
+  public Actor player;
   
   public override void _Process(float delta){
     delay += delta;
@@ -23,16 +24,16 @@ public class HUDMenu : Container, IMenu, IHasSubmenu{
     }
   }
 
-  public void Init(){
+  public override void InitData(){
     PauseMode = PauseModeEnum.Stop;
     Input.SetMouseMode(Input.MouseMode.Captured);
-    InitControls();
-    ScaleControls();
-    GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
-  }
 
-  public void ChangeSubmenu(string menuName = null){
-    Menu.ChangeSubmenu(this, submenu, menuName);
+    if(Session.DebugMenu == "HUDMenu"){
+      player = ActorFactory.DebugPlayerCharacter();
+    }
+    else{
+      player = Session.GetPlayer();
+    }
   }
 
   public void TogglePause(){
@@ -41,7 +42,7 @@ public class HUDMenu : Container, IMenu, IHasSubmenu{
       ChangeSubmenu("PauseMenu");
     }
     else{
-      ChangeSubmenu();
+      ChangeSubmenu("");
     }
   }
 
@@ -50,8 +51,6 @@ public class HUDMenu : Container, IMenu, IHasSubmenu{
   }
 
   public void UpdateHud(){
-    Actor player = Session.GetPlayer();
-    
     if(player == null){
       GD.Print("Player 1 doesn't exist.");
       return;
@@ -85,47 +84,36 @@ public class HUDMenu : Container, IMenu, IHasSubmenu{
     return ret;
   }
 
-  void InitControls(){
-    statBox = Menu.Label("stats");
-    AddChild(statBox);
+  public override void InitControls(){
+    statBox = Menu.Label(this, "stats");
 
-    IStats stats = Session.GetPlayer().GetStats();
-
-    staminaBar = new ColorProgressBar(new Color(0,0.8f,0),stats.GetStat("stamina"),stats.GetStat("staminamax"));
-    AddChild(staminaBar);
-
-    healthBar = new ColorProgressBar(new Color(1,0,0),stats.GetStat("health"),stats.GetStat("healthmax"));
-    AddChild(healthBar);
-
-    manaBar = new ColorProgressBar(new Color(0,0,1),stats.GetStat("mana"),stats.GetStat("manamax"));
-    AddChild(manaBar);
-
-    itemBox = Menu.Label("item");
-    AddChild(itemBox);
+    if(player == null){
+      GD.Print("Player 1 doesn't exist.");
+      return;
+    }
     
-    objectiveBox = Menu.Label("Objective Info");
-    AddChild(objectiveBox);
+    IStats stats = player.GetStats();
 
-    interactionBox = Menu.Label("");
-    AddChild(interactionBox);
+    staminaBar = new ColorProgressBar(this, new Color(0,0.8f,0),stats.GetStat("stamina"),stats.GetStat("staminamax"));
+    healthBar = new ColorProgressBar(this, new Color(1,0,0),stats.GetStat("health"),stats.GetStat("healthmax"));
+    manaBar = new ColorProgressBar(this, new Color(0,0,1),stats.GetStat("mana"),stats.GetStat("manamax"));
+
+    itemBox = Menu.Label(this, "item");
+    objectiveBox = Menu.Label(this, "Objective Info");
+    interactionBox = Menu.Label(this, "");
+
   }
 
-  public void ScaleControls(){
-    Rect2 screen = this.GetViewportRect();
-    float width = screen.Size.x;
-    float height = screen.Size.y;
-    float wu = width/10; // relative height and width units
-    float hu = height/10;
-
-    Menu.ScaleControl(statBox, 2 * wu, hu, 0, 0.5f* hu);
-    Menu.ScaleControl(staminaBar,3 * wu,0.3f*hu,0.3f*wu,height - 1.5f*hu);
+  public override void ScaleControls(){
+    ScaleControl(statBox, 2 * widthUnit, heightUnit, 0, 0.5f * heightUnit);
+    ScaleControl(staminaBar, 3 * widthUnit, 0.3f * heightUnit, 0.3f * widthUnit, screenHeight - 1.5f * heightUnit);
     staminaBar.ScaleControls();
-    Menu.ScaleControl(healthBar,3 * wu,0.3f*hu,0.3f*wu,height - 1.1f*hu);
+    ScaleControl(healthBar, 3 * widthUnit, 0.3f * heightUnit, 0.3f * widthUnit, screenHeight - 1.1f * heightUnit);
     healthBar.ScaleControls();
-    Menu.ScaleControl(manaBar,3 * wu,0.3f*hu,0.3f*wu,height - 0.7f*hu);
+    ScaleControl(manaBar, 3 * widthUnit, 0.3f * heightUnit, 0.3f * widthUnit, screenHeight - 0.7f * heightUnit);
     manaBar.ScaleControls();
-    Menu.ScaleControl(itemBox, 2 * wu, hu, 8 * wu, 9 * hu);
-    Menu.ScaleControl(objectiveBox, 4 * wu, hu, 3 * wu, 0);
-    Menu.ScaleControl(interactionBox, 4 * wu, hu, 3 * wu, 7 * hu);
+    ScaleControl(itemBox, 2 * widthUnit, heightUnit, 8 * widthUnit, 9 * heightUnit);
+    ScaleControl(objectiveBox, 4 * widthUnit, heightUnit, 3 * widthUnit, 0);
+    ScaleControl(interactionBox, 4 * widthUnit, heightUnit, 3 * widthUnit, 7 * heightUnit);
   }
 }

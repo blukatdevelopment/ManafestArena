@@ -203,26 +203,4 @@ public class Menu{
     return false;
   }
 
-  public static void ChangeSubmenu(Node parent, Node submenu, string menuName = null){
-    if(submenu != null){
-      submenu.QueueFree();
-    }
-
-    if(menuName==null){
-      submenu = null;
-      Input.SetMouseMode(Input.MouseMode.Captured);
-      return;
-    }
-    Input.SetMouseMode(Input.MouseMode.Visible);
-    Node menuNode = Menu.MenuFactory(menuName);
-    IMenu menu = menuNode as IMenu;
-    if(menu == null){
-      GD.Print("Menu " + menuName + " was null.");
-    }
-    else{
-      submenu = menuNode;
-      parent.AddChild(menuNode);
-      menu.Init();
-    }
-  }
 }
