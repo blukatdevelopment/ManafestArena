@@ -2,69 +2,33 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class RestSiteMenu : Container, IMenu {
-  public Career career;
+public class RestSiteMenu : MenuBase {
   public Button restButton;
   public Button upgradeButton;
-
-  public List<Button> upgradeButtons;
-  public TextEdit descriptionLabel;
-  public Button confirmButton;
   public TextEdit background;
-  public Node submenu;
 
-  public List<string> upgrades;
+  public override void InitControls(){
+    background = Menu.BackgroundBox(this);
+    restButton = Menu.Button(this, "Rest", Rest);
+    upgradeButton = Menu.Button(this, "Upgrade", Upgrade);
+  }
 
-  string selection = "";
+  public override void ScaleControls(){
+    ScaleControl(background, screenWidth, screenHeight, 0, 0);
+    ScaleControl(restButton, 2 * widthUnit, 2 * heightUnit, widthUnit, 2 * heightUnit);
+    ScaleControl(upgradeButton, 2 * widthUnit, 2 * heightUnit, 7 * widthUnit, 2 * heightUnit);
+  }
 
-  public void Init(){
+  public void Rest(){
     if(Session.DebugMenu.Equals("RestSiteMenu")){
-      LoadDebugData();
+      GD.Print("Selected rest option");
+      return;
     }
-    else{
-      LoadData();
-    }
-
-    career = Career.GetActiveCareer();
-    InitControls();
-    ScaleControls();
-    GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
+    Career career = Career.GetActiveCareer();
+    // IMPLEMENT ME
   }
 
-  public void ChangeSubmenu(string menuName = null){
-    Menu.ChangeSubmenu(submenu, menuName);
-  }
-
-  public void InitControls(){}
-
-  public void ScaleControls(){
-    Rect2 screen = this.GetViewportRect();
-    float width = screen.Size.x;
-    float height = screen.Size.y;
-    float wu = width/10; // relative height and width units
-    float hu = height/10;
-
-    Menu.ScaleControl(background, width, height, 0, 0);
-    if(restButton != null){
-      Menu.ScaleControl(restButton, 2 * wu, 2 * hu, wu, 2 * hu);
-      if(upgradeButton != null){
-        Menu.ScaleControl(upgradeButton, 2 * wu, 2 * hu, width - 3 * wu, 2 * hu);
-      }
-    }
-    if(upgradeButtons != null){
-      if(upgradeButtons.Count > 0){
-        Menu.ScaleControl(upgradeButtons[0], 2 * wu, 2 * hu, wu, 2 * hu);  
-      }
-      if(upgradeButtons.Count > 1){
-        Menu.ScaleControl(upgradeButtons[1], 2 * wu, 2 * hu, 4 * wu, 2 * hu);  
-      }
-      if(upgradeButtons.Count > 2){
-        Menu.ScaleControl(upgradeButtons[2], 2 * wu, 2 * hu, 7 * wu, 2 * hu);
-      }
-      Menu.ScaleControl(descriptionLabel, 4 * wu, 4 * hu, 3 * wu, 4 * hu);
-    }
-    if(confirmButton != null){
-      Menu.ScaleControl(confirmButton, 2 * wu, 2 * hu, 4 * wu, 8 * hu); 
-    }
+  public void Upgrade(){
+    ChangeSubmenu("UpgradeMenu");
   }
 }

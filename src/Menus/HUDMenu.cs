@@ -32,7 +32,7 @@ public class HUDMenu : Container, IMenu, IHasSubmenu{
   }
 
   public void ChangeSubmenu(string menuName = null){
-    Menu.ChangeSubmenu(submenu, menuName);
+    Menu.ChangeSubmenu(this, submenu, menuName);
   }
 
   public void TogglePause(){
@@ -83,7 +83,6 @@ public class HUDMenu : Container, IMenu, IHasSubmenu{
     ret += "\nStamina: " + stats.GetStat("stamina") + "/" + stats.GetStat("staminamax");
     ret += "\nMana: " + stats.GetStat("mana") + "/" + stats.GetStat("manamax");
     return ret;
-
   }
 
   void InitControls(){

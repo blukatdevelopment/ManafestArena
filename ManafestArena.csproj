@@ -68,16 +68,10 @@
     <Compile Include="src/Input/IInputHandler.cs" />
     <Compile Include="src/Input/DebugInputHandler.cs" />
     <Compile Include="src/Input/FPSInputHandler.cs" />
-    <Compile Include="src/Menus/Button.cs" />
-    <Compile Include="src/Menus/TexturedButton.cs" />
     <Compile Include="src/Menus/MainMenu.cs" />
-    <Compile Include="src/Menus/Menu.cs" />
     <Compile Include="src/Menus/MenuInputHandler.cs" />
-    <Compile Include="src/Menus/IInputHandledMenu.cs" />
-    <Compile Include="src/Menus/IMenu.cs" />
     <Compile Include="src/Menus/HUDMenu.cs" />
     <Compile Include="src/Menus/PauseMenu.cs" />
-    <Compile Include="src/Menus/TextBox.cs" />
     <Compile Include="src/Menus/SettingsMenu.cs" />
     <Compile Include="src/Menus/ControlsMenu.cs" />
     <Compile Include="src/Menus/CareerMenu.cs" />
@@ -86,6 +80,7 @@
     <Compile Include="src/Menus/CreditsMenu.cs" />
     <Compile Include="src/Menus/ShopMenu.cs" />
     <Compile Include="src/Menus/RestSiteMenu.cs" />
+    <Compile Include="src/Menus/UpgradeMenu.cs" />
     <Compile Include="Properties/AssemblyInfo.cs" />
     <Compile Include="src/Items/Damage.cs" />
     <Compile Include="src/Items/Interfaces/IItem.cs" />
@@ -156,9 +151,16 @@
     <Compile Include="src/AI/PursuingState.cs" />
     <Compile Include="src/AI/MeleeCombatState.cs" />
     <Compile Include="src/AI/FightingState.cs" />
-    <Compile Include="src\Menus\ColorProgressBar.cs" />
-    <Compile Include="src\Menus\IHasSubmenu.cs" />
-    <Compile Include="src\Menus\ISubmenu.cs" />
+    <Compile Include="src/Menus/Util/ColorProgressBar.cs" />
+    <Compile Include="src/Menus/Util/TextBox.cs" />
+    <Compile Include="src/Menus/Util/Menu.cs" />
+    <Compile Include="src/Menus/Util/Button.cs" />
+    <Compile Include="src/Menus/Util/TexturedButton.cs" />
+    <Compile Include="src/Menus/Util/MenuBase.cs" />
+    <Compile Include="src/Menus/Interfaces/IHasSubmenu.cs" />
+    <Compile Include="src/Menus/Interfaces/ISubmenu.cs" />
+    <Compile Include="src/Menus/Interfaces/IInputHandledMenu.cs" />
+    <Compile Include="src/Menus/Interfaces/IMenu.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
 </Project>

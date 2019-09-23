@@ -23,7 +23,7 @@ public class Session : Node {
   public Node activeMenu;
   public List<Node> activeGamemodes;
 
-  public const string DebugMenu = "RestSiteMenu";
+  public const string DebugMenu = "";
 
   // Settings
   public float masterVolume, sfxVolume, musicVolume;
@@ -46,6 +46,7 @@ public class Session : Node {
     PauseMode = PauseModeEnum.Process;
     activeGamemodes = new List<Node>();
     EnforceSingleton();
+    CareerDb.Init();
     ChangeMenu("MainMenu");
     InitJukeBox();
     InitSettings();
@@ -77,7 +78,6 @@ public class Session : Node {
 
   public void PerformTests(){
     Test.Init();
-    CareerDb.TestConfigs();
   }
 
   public static void AddGamemode(Node node){
