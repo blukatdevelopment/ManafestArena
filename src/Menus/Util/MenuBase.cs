@@ -7,7 +7,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class MenuBase : Container, IMenu {
+public class MenuBase : Container, IMenu, IHasSubmenu {
   public Node submenu;
   public float screenWidth, screenHeight, widthUnit, heightUnit;
   public float widthUnitDenominator, heightUnitDenominator;
@@ -48,7 +48,7 @@ public class MenuBase : Container, IMenu {
       submenu.QueueFree();
     }
 
-    if(menuName==null){
+    if(menuName==null||menuName==""){
       submenu = null;
       Input.SetMouseMode(Input.MouseMode.Captured);
       return;

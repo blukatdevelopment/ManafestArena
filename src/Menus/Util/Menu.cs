@@ -131,7 +131,7 @@ public class Menu{
     ret.AddStyleboxOverride("panel", box);
     ret.AddStyleboxOverride("read_only", box);
 
-    GD.Print("BackgroundBox" + Util.ToJson(ret));
+    //GD.Print("BackgroundBox" + Util.ToJson(ret));
     return ret;
   }
 

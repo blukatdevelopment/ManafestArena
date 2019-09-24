@@ -11,7 +11,6 @@ public class HUDMenu : MenuBase{
   public Godot.Label itemBox;
   public Godot.Label objectiveBox;
   public Godot.Label interactionBox;
-  public Node submenu;
   public bool paused = false;
   public Actor player;
   
