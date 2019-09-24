@@ -2,119 +2,33 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class RestSiteMenu : Container, IMenu {
-  public Career career;
+public class RestSiteMenu : MenuBase {
   public Button restButton;
   public Button upgradeButton;
-
-  public List<Button> upgradeButtons;
-  public TextEdit descriptionLabel;
-  public Button confirmButton;
   public TextEdit background;
 
-  string selection = "";
-
-  public void Init(){
-    career = Career.GetActiveCareer();
-    InitControls();
-    ScaleControls();
-    GetTree().GetRoot().Connect("size_changed", this, "ScaleControls");
+  public override void InitControls(){
+    background = Menu.BackgroundBox(this);
+    restButton = Menu.Button(this, "Rest", Rest);
+    upgradeButton = Menu.Button(this, "Upgrade", Upgrade);
   }
 
-  void InitControls(){
-    // background = Menu.BackgroundBox();
-    // AddChild(background);
-
-    // restButton = Menu.Button("Rest", () => { 
-    //   HealPlayer1();
-    //   Session.session.career.CompleteEncounter();
-    // });
-    // AddChild(restButton);
-
-    // if(Career.RestSiteUpgrades().Count > 0){
-    //   upgradeButton = Menu.Button("Upgrade", DisplayUpgrades);
-    //   AddChild(upgradeButton);
-    // }
+  public override void ScaleControls(){
+    ScaleControl(background, screenWidth, screenHeight, 0, 0);
+    ScaleControl(restButton, 2 * widthUnit, 2 * heightUnit, widthUnit, 2 * heightUnit);
+    ScaleControl(upgradeButton, 2 * widthUnit, 2 * heightUnit, 7 * widthUnit, 2 * heightUnit);
   }
 
-  void DisplayUpgrades(){
-    // GD.Print("DisplayUpgrades");
-    // restButton.QueueFree();
-    // upgradeButton.QueueFree();
-
-    // upgradeButtons = new List<Button>();
-    // List<string> upgrades = Career.RestSiteUpgrades();
-
-    // foreach(string upgrade in upgrades){
-    //   Button button = Menu.Button(upgrade, () => {
-    //     SelectUpgrade(upgrade);
-    //   });
-    //   upgradeButtons.Add(button);
-    //   AddChild(button);
-    // }
-
-    // descriptionLabel = Menu.TextBox("Select an option");
-    // AddChild(descriptionLabel);
-    // ScaleControls();
-
-  }
-
-  void SelectUpgrade(string upgrade){
-    // GD.Print("Selected " + upgrade);
-    // selection = upgrade;
-    // descriptionLabel.Text = Career.UpgradeDescription(upgrade);
-
-    // if(confirmButton == null){
-    //   confirmButton = Menu.Button("Confirm", Confirm);
-    //   AddChild(confirmButton);
-    //   ScaleControls();
-    // }
-  }
-
-  void Confirm(){
-    GD.Print("Confirming selection of " + selection);
-    //Career.SelectRestSiteUpgrade(selection);
-    if(career != null){
-      career.CompleteEncounter();
+  public void Rest(){
+    if(Session.DebugMenu.Equals("RestSiteMenu")){
+      GD.Print("Selected rest option");
+      return;
     }
+    Career career = Career.GetActiveCareer();
+    // IMPLEMENT ME
   }
 
-  void HealPlayer1(){
-    GD.Print("Healing player1");
-    // StatsManager stats = Career.GetPlayerStats();
-    // int healing = stats.GetStat(StatsManager.Stats.HealthMax) / 3;
-    // Career.HealPlayer(healing);
-  }
-
-
-  void ScaleControls(){
-    Rect2 screen = this.GetViewportRect();
-    float width = screen.Size.x;
-    float height = screen.Size.y;
-    float wu = width/10; // relative height and width units
-    float hu = height/10;
-
-    Menu.ScaleControl(background, width, height, 0, 0);
-    if(restButton != null){
-      Menu.ScaleControl(restButton, 2 * wu, 2 * hu, wu, 2 * hu);
-      if(upgradeButton != null){
-        Menu.ScaleControl(upgradeButton, 2 * wu, 2 * hu, width - 3 * wu, 2 * hu);
-      }
-    }
-    if(upgradeButtons != null){
-      if(upgradeButtons.Count > 0){
-        Menu.ScaleControl(upgradeButtons[0], 2 * wu, 2 * hu, wu, 2 * hu);  
-      }
-      if(upgradeButtons.Count > 1){
-        Menu.ScaleControl(upgradeButtons[1], 2 * wu, 2 * hu, 4 * wu, 2 * hu);  
-      }
-      if(upgradeButtons.Count > 2){
-        Menu.ScaleControl(upgradeButtons[2], 2 * wu, 2 * hu, 7 * wu, 2 * hu);
-      }
-      Menu.ScaleControl(descriptionLabel, 4 * wu, 4 * hu, 3 * wu, 4 * hu);
-    }
-    if(confirmButton != null){
-      Menu.ScaleControl(confirmButton, 2 * wu, 2 * hu, 4 * wu, 8 * hu); 
-    }
+  public void Upgrade(){
+    ChangeSubmenu("UpgradeMenu");
   }
 }

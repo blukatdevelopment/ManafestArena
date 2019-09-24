@@ -15,3 +15,4 @@ dest_files=[ "res://.import/musket_pistol.obj-02377e2ae7432f0ec5240ecbad981fb7.m
 
 generate_tangents=true
 scale_mesh=Vector3( 1, 1, 1 )
+optimize_mesh=true

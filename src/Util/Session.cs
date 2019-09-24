@@ -23,6 +23,8 @@ public class Session : Node {
   public Node activeMenu;
   public List<Node> activeGamemodes;
 
+  public const string DebugMenu = "";
+
   // Settings
   public float masterVolume, sfxVolume, musicVolume;
   public string userName;
@@ -44,12 +46,17 @@ public class Session : Node {
     PauseMode = PauseModeEnum.Process;
     activeGamemodes = new List<Node>();
     EnforceSingleton();
+    CareerDb.Init();
     ChangeMenu("MainMenu");
     InitJukeBox();
     InitSettings();
     PerformTests();
 
     AddDevice(0);
+
+    if(!DebugMenu.Equals("")){
+      ChangeMenu(DebugMenu);
+    }
   }
 
   public override void _Process(float delta){
@@ -71,7 +78,6 @@ public class Session : Node {
 
   public void PerformTests(){
     Test.Init();
-    CareerDb.TestConfigs();
   }
 
   public static void AddGamemode(Node node){

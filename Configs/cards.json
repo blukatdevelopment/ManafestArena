@@ -22,11 +22,11 @@
    "reload_delay": "0.5"
  },
  {
-   "name": "crossbow",
+   "name": "crossbow+",
    "class": "RangedProjectileItem",
    "icon": "Assets/Textures/UI/Icons/crossbow.png",
    "damage": "55",
    "uses": "5",
-   "reload_delay": "0.5"
+   "reload_delay": "0.25"
  }
 ]

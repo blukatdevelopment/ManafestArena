@@ -6,6 +6,12 @@ using System;
 
 public class Menu{
   
+  public static Button Button(Node parent, string text = "", Action onClick = null){
+    Button button = Button(text, onClick);
+    parent.AddChild(button);
+    return button;
+  }
+
   public static Button Button(string text = "", Action onClick = null){
     Button button = new Button();
     
@@ -24,6 +30,17 @@ public class Menu{
     button.AddColorOverride("font_color_disabled",  GFX.Color(new Vector3()));
 
     return button;
+  }
+
+  public static TexturedButton TexturedButton(
+    Node parent,
+    string normalTexturePath = "",
+    string selectTexturePath = "",
+    Action onClick = null
+  ){
+    TexturedButton button = TexturedButton(normalTexturePath, selectTexturePath, onClick);
+    parent.AddChild(button);
+    return button;    
   }
 
   public static TexturedButton TexturedButton(
@@ -79,6 +96,12 @@ public class Menu{
     return box;
   }
 
+  public static TextEdit TextBox(Node parent, string val = "", bool readOnly = true, bool wordWrap = false){
+    TextEdit textBox = TextBox(val, readOnly, wordWrap);
+    parent.AddChild(textBox);
+    return textBox;
+  }
+
   public static TextEdit TextBox(string val = "", bool readOnly = true, bool wordWrap = false){    
     TextEdit textBox = new TextEdit();
     textBox.SetText(val);
@@ -94,6 +117,12 @@ public class Menu{
     return textBox;
   }
 
+  public static TextEdit BackgroundBox(Node parent){
+    TextEdit textBox = BackgroundBox();
+    parent.AddChild(textBox);
+    return textBox;
+  }
+
   public static TextEdit BackgroundBox(){
     TextEdit ret = TextBox("");
     StyleBox box = ColorStyleBox(BoxColor("background")); 
@@ -101,7 +130,15 @@ public class Menu{
     ret.AddStyleboxOverride("focus", box);
     ret.AddStyleboxOverride("panel", box);
     ret.AddStyleboxOverride("read_only", box);
+
+    //GD.Print("BackgroundBox" + Util.ToJson(ret));
     return ret;
+  }
+
+  public static HSlider HSlider(Node parent, float min, float max, float val, float step){
+    HSlider slider = HSlider(min, max, val, step);
+    parent.AddChild(slider);
+    return slider;
   }
 
   public static HSlider HSlider(float min, float max, float val, float step){    
@@ -119,6 +156,12 @@ public class Menu{
     slider.AddStyleboxOverride("grabber_area", ColorStyleBox("grabber_area"));
 
     return slider;
+  }
+
+  public static Label Label(Node parent, string text = ""){
+    Label label = Label(text);
+    parent.AddChild(label);
+    return label;
   }
 
   public static Label Label(string text = ""){
@@ -159,4 +202,5 @@ public class Menu{
     }
     return false;
   }
+
 }

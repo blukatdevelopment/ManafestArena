@@ -15,3 +15,4 @@ dest_files=[ "res://.import/Healthpack.obj-38e6dda27fc16d7bd32e139734e78d03.mesh
 
 generate_tangents=true
 scale_mesh=Vector3( 1, 1, 1 )
+optimize_mesh=true

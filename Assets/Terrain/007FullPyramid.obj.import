@@ -15,3 +15,4 @@ dest_files=[ "res://.import/007FullPyramid.obj-8edb88a090132e1e08785dad44cb27bf.
 
 generate_tangents=true
 scale_mesh=Vector3( 1, 1, 1 )
+optimize_mesh=true

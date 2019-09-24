@@ -15,3 +15,4 @@ dest_files=[ "res://.import/005HalfRamp.obj-747dbf88acf9ec01ecf6ddd1ed4ba6e3.mes
 
 generate_tangents=true
 scale_mesh=Vector3( 1, 1, 1 )
+optimize_mesh=true
