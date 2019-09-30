@@ -24,6 +24,7 @@ public class Session : Node {
   public List<Node> activeGamemodes;
 
   public const string DebugMenu = "";
+  public const bool DebugTests = true;
 
   // Settings
   public float masterVolume, sfxVolume, musicVolume;
@@ -50,8 +51,11 @@ public class Session : Node {
     ChangeMenu("MainMenu");
     InitJukeBox();
     InitSettings();
-    PerformTests();
 
+    if(DebugTests){
+      PerformTests();  
+    }
+    
     AddDevice(0);
 
     if(!DebugMenu.Equals("")){
@@ -78,8 +82,9 @@ public class Session : Node {
 
   public void PerformTests(){
     Test.Init();
+    LootTable.TestLootTable();
+    Test.PrintFails();
   }
-
   public static void AddGamemode(Node node){
     Session.session.activeGamemodes.Add(node);
     Session.session.AddChild(node);
@@ -288,7 +293,6 @@ public class Session : Node {
     }
     if(sessionEvent.type==SessionEvent.Types.Pause){
       GetTree().Paused = !GetTree().Paused;
-      //Menu.TogglePause();
     }
   }
   
