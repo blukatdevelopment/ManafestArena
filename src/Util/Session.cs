@@ -24,7 +24,7 @@ public class Session : Node {
   public List<Node> activeGamemodes;
 
   public const string DebugMenu = "";
-  public const bool DebugTests = true;
+  public const bool DebugTests = false;
 
   // Settings
   public float masterVolume, sfxVolume, musicVolume;

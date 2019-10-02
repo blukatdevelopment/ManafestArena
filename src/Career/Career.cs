@@ -13,9 +13,11 @@ public class Career : Node , IGamemode{
   public const int MaxCareerNodesPerLevel = 3;
   public Actor player;
   public CareerData careerData;
+  public LootTable lootTable;
 
   public Career(){
     careerNodes = new List<CareerNode>();
+    lootTable = new LootTable();
   }
 
   new public string ToString(){
@@ -82,7 +84,6 @@ public class Career : Node , IGamemode{
   }
 
   public void HandleEvent(SessionEvent evt){
-
   }
 
   public void Init(string[] args){
