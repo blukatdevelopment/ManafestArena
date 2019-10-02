@@ -224,7 +224,6 @@ public class Arena : Spatial, IGamemode {
   }
 
   public void HandleEvent(SessionEvent sessionEvent){
-    GD.Print(Util.ToJson(sessionEvent));
     if(sessionEvent.type == SessionEvent.Types.ActorDied ){
       HandleActorDead(sessionEvent);
     }
@@ -247,42 +246,27 @@ public class Arena : Spatial, IGamemode {
     string[] actorPaths = sessionEvent.args;  
     
     if(actorPaths == null || actorPaths.Length == 0 || actorPaths[0] == ""){
-      GD.Print("actorsPaths were wrong");
+      GD.Print("actors paths were wrong");
       return;
     }
 
     Actor killed = ActorFromPath(actorPaths[0]);
-
-    if(killed != null && killed.stats.GetStat("id") > 0){
-      ClearActor(killed.stats.GetStat("id"));  
-    }
-    
-    
     Actor killer = ActorFromPath(actorPaths[1]);
-    if(killed != null && killer != null){
-      GD.Print(Util.ToJson(killed.stats) + " and killer " + Util.ToJson(killer.stats));
+
+    int killedId = killed != null ? killed.stats.GetStat("id") : -1;
+    int killerId = killer != null ? killer.stats.GetStat("id") : -1;
+
+    if(killedId != -1){
+      ClearActor(killedId);
+
+      Career career = Career.GetActiveCareer();
+      if(killedId == playerWorldId && career != null){
+        career.FailEncounter();
+      }
     }
 
-    if(killer == null || killer.stats.GetStat("id") < 1){
-
-      GD.Print("Inadequate info in a SessionEvent to award killer");
-      return;
-    }
-    
-    AwardForKill(killer.stats.GetStat("id"));
-    
-    Career career = Career.GetActiveCareer();
-
-    if(killed.stats.GetStat("id") == playerWorldId && career != null){
-      career.FailEncounter();
-    }
-    else if(killer.stats.GetStat("id") == playerWorldId && career != null){
-      career.lootTable.HandleAction("kill enemy");
-      GD.Print("Handled loot action");
-    }
-
-    if(PlayerWon() && career != null){
-      career.CompleteEncounter();
+    if(killerId != -1){
+      AwardForKill(killerId);
     }
   }
 
@@ -293,6 +277,16 @@ public class Arena : Spatial, IGamemode {
     else{
       GD.Print("Actor " + id + " doesn't exist.");
     }
+
+    Career career = Career.GetActiveCareer();
+    if(id == playerWorldId && career != null){
+      career.lootTable.HandleAction("kill enemy");
+
+      if(PlayerWon()){
+        career.CompleteEncounter();
+      }
+    }
+
   }
 
   public void ClearActor(int id){
