@@ -13,7 +13,9 @@ public class Sound {
     FistSwing,
     FistImpact,
     ActorDamage,
-    ActorDeath
+    ActorDeath,
+    Click,
+    Coins
   };
 
   public enum Songs{
@@ -117,6 +119,12 @@ public class Sound {
       case Effects.ActorDeath:
         ret = "res://Assets/Audio/Effects/actor_die.wav";
         break;
+      case Effects.Click:
+        ret = "res://Assets/Audio/Effects/click.wav";
+        break;
+      case Effects.Coins:
+        ret = "res://Assets/Audio/Effects/coins.wav";
+        break;
     }
     return ret;
   }
@@ -200,5 +208,36 @@ public class Sound {
       return;
     }
     Session.session.jukeBox.Playing = false;
+  }
+
+  public static void PlayEffect(Effects effect){
+    AudioStreamPlayer player = GetSfxPlayer();
+    string soundFile = EffectFile(effect);
+    player.VolumeDb = Sound.VolumeMath(Session.session.sfxVolume);
+    player.Stream = (AudioStreamSample)GD.Load(soundFile);
+    player.Play();
+  }
+
+  // Need more than one channel active in case there are multiple
+  // simultaneous sound effects
+  public static AudioStreamPlayer GetSfxPlayer(){
+    if(Session.session.sfxPlayers == null){
+      List<AudioStreamPlayer> sfxPlayers = new List<AudioStreamPlayer>();
+      sfxPlayers.Add(new AudioStreamPlayer());
+      Session.session.sfxPlayers = sfxPlayers;
+      Session.session.AddChild(sfxPlayers[0]);
+      return Session.session.sfxPlayers[0];
+    }
+
+    foreach(AudioStreamPlayer player in Session.session.sfxPlayers){
+      if(player != null && !player.Playing){
+        return player;
+      }
+    }
+
+    AudioStreamPlayer newPlayer = new AudioStreamPlayer();
+    Session.session.sfxPlayers.Add(newPlayer);
+    Session.session.AddChild(newPlayer);
+    return newPlayer;
   }
 }

@@ -65,6 +65,7 @@ public class CreditsMenu : Container, IMenu {
   }
 
   public void ReturnToMainMenu(){
+    Sound.PlayEffect(Sound.Effects.Click);
     Session.ChangeMenu("MainMenu");
   }
 }

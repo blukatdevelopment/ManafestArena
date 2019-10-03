@@ -167,6 +167,7 @@ public class ControlsMenu : Container, IMenu, ISubmenu {
     }
 
     public void Save(){
+      Sound.PlayEffect(Sound.Effects.Click);
       GD.Print("Save");
       SettingsDb db = new SettingsDb();
       foreach(InputMapping mapping in inputMappings){
@@ -176,6 +177,7 @@ public class ControlsMenu : Container, IMenu, ISubmenu {
     }
 
     public void Revert(){
+      Sound.PlayEffect(Sound.Effects.Click);
       GD.Print("Revert");
       itemList.QueueFree();
       itemList = new ItemList();
@@ -187,6 +189,7 @@ public class ControlsMenu : Container, IMenu, ISubmenu {
     }
 
     public void Back(){
+      Sound.PlayEffect(Sound.Effects.Click);
       if(parentMenu!=null){
         parentMenu.ChangeSubmenu("SettingsMenu");
         return;

@@ -16,6 +16,7 @@ public class Session : Node {
   public NetworkSession netSes;
   public Random random;
   public AudioStreamPlayer jukeBox;
+  public List<AudioStreamPlayer> sfxPlayers;
   public Vector2 mousePosition;
   public Vector2 mouseMovement;
   public Sound.Songs currentSong;

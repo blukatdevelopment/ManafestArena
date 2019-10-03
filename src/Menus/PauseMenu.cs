@@ -109,18 +109,22 @@ public class PauseMenu : Container, IMenu, ISubmenu, IInputHandledMenu {
   }
   
   public void Quit(){
+      Sound.PlayEffect(Sound.Effects.Click);
       Session.session.Quit();
   }
   
   public void QuitToMainMenu(){
+    Sound.PlayEffect(Sound.Effects.Click);
     Session.QuitToMainMenu();
   }
 
   public void Settings(){
+    Sound.PlayEffect(Sound.Effects.Click);
     GetParentMenu().ChangeSubmenu("SettingsMenu");
   }
 
   public void Resume(){
+    Sound.PlayEffect(Sound.Effects.Click);
     Session.Event(SessionEvent.PauseEvent());
   }
   
