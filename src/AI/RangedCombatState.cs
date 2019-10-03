@@ -54,7 +54,7 @@ public class RangedCombatState : IBehaviorState {
   }
 
   public void Update(float delta){
-    if(enemy == null){
+    if(enemy == null||enemy.GetNode()==null){
       hostAi.ChangeState(StateAi.States.Roaming);
       return;
     }

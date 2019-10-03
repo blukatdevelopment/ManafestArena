@@ -61,6 +61,14 @@ public class Actor : IHasInputHandler, IHasStats, IHasBody, IHasInventory {
     return null;
   }
 
+  public void QueueFree(){
+     Node actorNode = body as Node;
+      if(actorNode != null){
+        actorNode.QueueFree();
+      }
+      body=null;
+  }
+
   public static Actor GetActorFromNode(Node node){
     if(node == null){
       return null;

@@ -293,10 +293,7 @@ public class Arena : Spatial, IGamemode {
   public void ClearActor(int id){
     if(actors.ContainsKey(id)){
       Actor actor = actors[id];
-      Node actorNode = actor.body as Node;
-      if(actorNode != null){
-        actorNode.QueueFree();
-      }
+      actor.QueueFree();
       actors.Remove(id);
 
     }
