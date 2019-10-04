@@ -28,7 +28,7 @@ public class ArenaMatchEncounter : IEncounter {
       arena.enemies.Add(ActorFactory.FromCharacter(ActorFactory.Characters.DebugEnemy));
     }
 
-    Session.AddGamemode(arena as Node);
+    Session.AddGamemode("arena", arena as Node);
     arena.Init(new string[]{ mapName });
     Session.ChangeMenu("HUDMenu");
   }

@@ -22,7 +22,8 @@ public class Session : Node {
   public Sound.Songs currentSong;
 
   public Node activeMenu;
-  public List<Node> activeGamemodes;
+  //public List<Node> activeGamemodes;
+  public System.Collections.Generic.Dictionary<string, Node> activeGamemodes;
 
   public const string DebugMenu = "";
   public const bool DebugTests = false;
@@ -46,7 +47,7 @@ public class Session : Node {
 
   public override void _Ready() {
     PauseMode = PauseModeEnum.Process;
-    activeGamemodes = new List<Node>();
+    activeGamemodes = new System.Collections.Generic.Dictionary<string, Node>();
     EnforceSingleton();
     CareerDb.Init();
     ChangeMenu("MainMenu");
@@ -65,10 +66,12 @@ public class Session : Node {
   }
 
   public override void _Process(float delta){
-    foreach(Node modeNode in activeGamemodes){
-      IGamemode gamemode = modeNode as IGamemode;
-      if(gamemode != null){
-        gamemode.Update(delta);
+    foreach(string key in activeGamemodes.Keys){
+      if(activeGamemodes.ContainsKey(key)){
+        IGamemode gamemode = activeGamemodes[key] as IGamemode;
+        if(gamemode != null){
+          gamemode.Update(delta);
+        }
       }
     }
   }
@@ -86,9 +89,16 @@ public class Session : Node {
     LootTable.TestLootTable();
     Test.PrintFails();
   }
-  public static void AddGamemode(Node node){
-    Session.session.activeGamemodes.Add(node);
-    Session.session.AddChild(node);
+  public static void AddGamemode(string name, Node node){
+    Session ses = Session.session;
+    
+    if(ses.activeGamemodes.ContainsKey(name)){
+      GD.Print("Gamemode " + name + " already added. Not adding a duplicate.");
+      return;
+    }
+
+    ses.activeGamemodes.Add(name, node);
+    ses.AddChild(node);
   }
 
   public void InitSettings(){
@@ -142,8 +152,9 @@ public class Session : Node {
   }
   
   public static Actor GetPlayer(){
-    foreach(Node gamemodeNode in Session.session.activeGamemodes){
-      Actor actor = GetPlayer(gamemodeNode as IGamemode);
+    Session ses = Session.session;
+    foreach(string key in ses.activeGamemodes.Keys){
+      Actor actor = GetPlayer(ses.activeGamemodes[key] as IGamemode);
       if(actor != null){
         return actor;
       }
@@ -214,17 +225,18 @@ public class Session : Node {
   /* Remove game nodes/variables in order to return it to a menu. */
   public static void ClearGame(bool keepNet = false){
     Session ses = Session.session;
-    foreach(Node node in ses.activeGamemodes){
+    foreach(string key in ses.activeGamemodes.Keys){
+      Node node = ses.activeGamemodes[key];
       node.QueueFree();
+      ses.activeGamemodes.Remove(key);
     }
-    ses.activeGamemodes = new List<Node>();
     Input.SetMouseMode(Input.MouseMode.Visible);
   }
   
   public static Node GameNode(){
     Session ses = Session.session;
-    foreach(Node node in ses.activeGamemodes){
-      return node;
+    foreach(string key in ses.activeGamemodes.Keys){
+      return ses.activeGamemodes[key];
     }
     
     return ses;
@@ -232,8 +244,8 @@ public class Session : Node {
 
   public static Spatial GameSpatial(){
     Session ses = Session.session;
-    foreach(Node node in ses.activeGamemodes){
-      Spatial spat = node as Spatial;
+    foreach(string key in ses.activeGamemodes.Keys){
+      Spatial spat = (Spatial)ses.activeGamemodes[key];
       if(spat != null){
         return spat;
       }
@@ -274,9 +286,8 @@ public class Session : Node {
   
   public static string GetObjectiveText(){
     Session ses = Session.session;
-    
-    foreach(Node gamemodeNode in ses.activeGamemodes){
-      IGamemode gamemode = gamemodeNode as IGamemode;
+    foreach(string key in ses.activeGamemodes.Keys){
+      IGamemode gamemode = ses.activeGamemodes[key] as IGamemode;
       if(gamemode != null){
         return gamemode.GetObjectiveText();
       }
@@ -286,12 +297,14 @@ public class Session : Node {
   }
   
   public void HandleEvent(SessionEvent sessionEvent){
-    foreach(Node gamemodeNode in Session.session.activeGamemodes){
-      IGamemode gamemode = gamemodeNode as IGamemode;
+    Session ses = Session.session;
+    foreach(string key in ses.activeGamemodes.Keys){
+      IGamemode gamemode = ses.activeGamemodes[key] as IGamemode;
       if(gamemode != null){
         gamemode.HandleEvent(sessionEvent);
       }
     }
+
     if(sessionEvent.type==SessionEvent.Types.Pause){
       GetTree().Paused = !GetTree().Paused;
     }

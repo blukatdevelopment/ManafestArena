@@ -125,7 +125,7 @@ public class Career : Node , IGamemode{
       Career career = CareerTreeFactory.Factory(championName);
       career.careerData = new CareerData();
 
-      Session.AddGamemode(career as Node);
+      Session.AddGamemode("career", career as Node);
       Session.ChangeMenu("CareerMenu");
       CareerDb.SaveCareerData(career.careerData);
   }
@@ -133,7 +133,7 @@ public class Career : Node , IGamemode{
   public static void ContinueCareer(){
     Career career = new Career();
     career.careerData = CareerDb.LoadCareerData();
-    Session.AddGamemode(career as Node);
+    Session.AddGamemode("career", career as Node);
     Session.ChangeMenu("CareerMenu");
   }
 
@@ -148,11 +148,8 @@ public class Career : Node , IGamemode{
   }
 
   public static Career GetActiveCareer(){
-    foreach(Node gamemodeNode in Session.session.activeGamemodes){
-      Career career = gamemodeNode as Career;
-      if(career != null){
-        return career;
-      }
+    if(Session.session.activeGamemodes.ContainsKey("career")){
+      return Session.session.activeGamemodes["career"] as Career;
     }
     return null;
   }
