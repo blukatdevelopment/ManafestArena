@@ -44,6 +44,7 @@ public class MeleeCombatState : IBehaviorState {
   public void Update(float delta){
     if(enemy == null||enemy.GetNode()==null){
       hostAi.ChangeState(StateAi.States.Roaming);
+      return;
     }
     Spatial hostSpat = hostActor.GetNode() as Spatial;
     Spatial enemySpat = enemy.GetNode() as Spatial;

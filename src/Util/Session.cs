@@ -20,7 +20,7 @@ public class Session : Node {
   public Vector2 mousePosition;
   public Vector2 mouseMovement;
   public Sound.Songs currentSong;
-
+  bool clearGame = false;
   public Node activeMenu;
   //public List<Node> activeGamemodes;
   public System.Collections.Generic.Dictionary<string, Node> activeGamemodes;
@@ -66,7 +66,9 @@ public class Session : Node {
   }
 
   public override void _Process(float delta){
-    foreach(string key in activeGamemodes.Keys){
+    List<string> keys = new List<string>(activeGamemodes.Keys);
+    for(int i = 0; i < keys.Count; i++){
+      string key = keys[i];
       if(activeGamemodes.ContainsKey(key)){
         IGamemode gamemode = activeGamemodes[key] as IGamemode;
         if(gamemode != null){
@@ -225,10 +227,14 @@ public class Session : Node {
   /* Remove game nodes/variables in order to return it to a menu. */
   public static void ClearGame(bool keepNet = false){
     Session ses = Session.session;
-    foreach(string key in ses.activeGamemodes.Keys){
-      Node node = ses.activeGamemodes[key];
-      node.QueueFree();
-      ses.activeGamemodes.Remove(key);
+    List<string> keys = new List<string>(ses.activeGamemodes.Keys);
+    for(int i = 0; i < keys.Count; i++){
+      string key = keys[i];
+      if(ses.activeGamemodes.ContainsKey(key)){
+        Node node = ses.activeGamemodes[key];
+        node.QueueFree();
+        ses.activeGamemodes.Remove(key);
+      }
     }
     Input.SetMouseMode(Input.MouseMode.Visible);
   }
@@ -261,6 +267,7 @@ public class Session : Node {
   }
 
   public static void ChangeMenu(string menuName){
+    GD.Print("Changed menu to " + menuName);
     Session ses = Session.session;
     if(ses.activeMenu != null){
       ses.activeMenu.QueueFree();
@@ -298,10 +305,14 @@ public class Session : Node {
   
   public void HandleEvent(SessionEvent sessionEvent){
     Session ses = Session.session;
-    foreach(string key in ses.activeGamemodes.Keys){
-      IGamemode gamemode = ses.activeGamemodes[key] as IGamemode;
-      if(gamemode != null){
-        gamemode.HandleEvent(sessionEvent);
+    List<string> keys = new List<string>(ses.activeGamemodes.Keys);
+    for(int i = 0; i < keys.Count; i++){
+      string key = keys[i];
+      if(ses.activeGamemodes.ContainsKey(key)){
+        IGamemode gamemode = ses.activeGamemodes[key] as IGamemode;
+        if(gamemode != null){
+          gamemode.HandleEvent(sessionEvent);
+        }
       }
     }
 

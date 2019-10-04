@@ -100,14 +100,14 @@ public class Career : Node , IGamemode{
 
   public void CompleteGame(){
     GD.Print("CompleteGame");
+    Session.ChangeMenu("CreditsMenu");
     Session.ClearGame();
-    Session.ChangeMenu("EndGameMenu");
   }
 
   public void FailEncounter(){
-    Session.ClearGame();
     GD.Print("FailEncounter");
-    Session.ChangeMenu("EndGameMenu");
+    Session.ChangeMenu("CreditsMenu");
+    Session.ClearGame();
   }
 
   public static IEncounter RandomEncounter(){
