@@ -23,7 +23,7 @@ public class Session : Node {
   bool clearGame = false;
   public Node activeMenu;
   //public List<Node> activeGamemodes;
-  public System.Collections.Generic.Dictionary<string, Node> activeGamemodes;
+  private System.Collections.Generic.Dictionary<string, Node> activeGamemodes;
 
   public const string DebugMenu = "";
   public const bool DebugTests = false;
@@ -229,16 +229,30 @@ public class Session : Node {
     Session ses = Session.session;
     List<string> keys = new List<string>(ses.activeGamemodes.Keys);
     for(int i = 0; i < keys.Count; i++){
-      string key = keys[i];
-      if(ses.activeGamemodes.ContainsKey(key)){
-        Node node = ses.activeGamemodes[key];
-        node.QueueFree();
-        ses.activeGamemodes.Remove(key);
-      }
+      RemoveGamemode(keys[i]);
     }
     Input.SetMouseMode(Input.MouseMode.Visible);
   }
+
+  public static void RemoveGamemode(String key){
+    Session ses = Session.session;
+    if(ses.activeGamemodes.ContainsKey(key)){
+      Node node = ses.activeGamemodes[key];
+      IGamemode gamemode = node as IGamemode;
+      node.QueueFree();
+      ses.activeGamemodes.Remove(key);
+      }
+  }
   
+  public static Node GetGamemode(String key){
+    if(session.activeGamemodes.ContainsKey(key)){
+      return Session.session.activeGamemodes[key];
+    }
+    else{
+      return null;
+    }
+  }
+
   public static Node GameNode(){
     Session ses = Session.session;
     foreach(string key in ses.activeGamemodes.Keys){

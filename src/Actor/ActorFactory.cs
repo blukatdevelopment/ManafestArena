@@ -44,9 +44,18 @@ public class ActorFactory {
     Actor actor = new Actor();
     InitInputHandler(inputSource, actor);
     InitStats(statsHandler, actor);
-    InitBody(body, actor);
+    actor.SetBodyType(body);
+    //InitBody( actor);
     InitInventory(inventoryHandler, actor);
     return actor;
+  }
+
+  public static void InitActor(Actor actor){
+    InitBody(actor);
+    if(actor.camId==0){
+      actor.body.InitCam(0);// Splitscreen cameras not implemented
+    }
+    actor.hotbar.EquipActive();
   }
 
   public static void InitInputHandler(InputSources inputSource, Actor actor){
@@ -80,8 +89,8 @@ public class ActorFactory {
     }
   }
 
-  public static void InitBody(Bodies body, Actor actor){
-    switch(body){
+  public static void InitBody(Actor actor){
+    switch(actor.bodyType){
       case Bodies.PillBody:
         actor.body = new PillBody(actor);
       break;
@@ -136,7 +145,7 @@ public class ActorFactory {
     //actor.hotbar.AddItem(0,ItemFactory.Factory(ItemFactory.Items.Teeth));
     actor.hotbar.AddItem(0, ItemFactory.Factory(ItemFactory.Items.Knife));
     //actor.hotbar.AddItem(1, ItemFactory.Factory(ItemFactory.Items.Crossbow));
-    actor.body.InitCam(0);
+    actor.InitCam(0);
     return actor;
   }
 

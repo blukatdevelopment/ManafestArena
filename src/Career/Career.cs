@@ -44,6 +44,7 @@ public class Career : Node , IGamemode{
     GD.Print("CompleteEncounter");
     encounterInProgress = false;
     Session.ChangeMenu("CareerMenu");
+    Session.RemoveGamemode("arena");
 
     // if(Session.GetPlayer() != null){
     //   //playerData = Session.GetPlayer().GetData();
@@ -148,10 +149,7 @@ public class Career : Node , IGamemode{
   }
 
   public static Career GetActiveCareer(){
-    if(Session.session.activeGamemodes.ContainsKey("career")){
-      return Session.session.activeGamemodes["career"] as Career;
-    }
-    return null;
+    return Session.GetGamemode("career") as Career;
   }
 
 }

@@ -65,6 +65,14 @@ public class Arena : Spatial, IGamemode {
     }
   }
 
+  public override void _ExitTree(){
+    foreach (Actor actor in actors.Values)
+    {
+        actor.QueueFree();
+    }
+    actors = null;
+  }
+
   public void Timer(float delta){
     secondCounter += delta;
 
@@ -136,6 +144,7 @@ public class Arena : Spatial, IGamemode {
 
   public Actor InitActor(Actor actor, bool player = false){
     int id = NextId();
+    ActorFactory.InitActor(actor);
     if(actor.stats != null && actor.stats.HasStat("id")){
       actor.stats.SetStat("id", id);
       scores.Add(id, 0);

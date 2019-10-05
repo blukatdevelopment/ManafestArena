@@ -34,9 +34,6 @@ public class RangedProjectileItem : Item, IWeapon, IRangedWeapon {
     InitNodeStructure();
 
 
-    speaker = new Speaker();
-    AddChild(speaker);
-
     launcher = new ProjectileLauncher(this);
     launcher.Config(projectileType, damage, launchImpulse, speaker);
     
