@@ -1,0 +1,10 @@
+{
+  "RifleShot": "res://Assets/Audio/Effects/pew.wav",
+  "RifleReload": "res://Assets/Audio/Effects/chtcht.wav",
+  "FistSwing": "res://Assets/Audio/Effects/swing.wav",
+  "FistImpact": "res://Assets/Audio/Effects/impact.wav",
+  "ActorDamage": "res://Assets/Audio/Effects/actor_damage.wav",
+  "ActorDeath": "res://Assets/Audio/Effects/actor_die.wav",
+  "Click": "res://Assets/Audio/Effects/click.wav",
+  "Coins": "res://Assets/Audio/Effects/coins.wav"
+}
