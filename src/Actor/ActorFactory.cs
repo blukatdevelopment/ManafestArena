@@ -24,7 +24,8 @@ public class ActorFactory {
     None,
     PillBody,
     HumanoidBody,
-    WolfBody
+    WolfBody,
+    BatBody
   };
 
 
@@ -99,6 +100,9 @@ public class ActorFactory {
       break;
       case Bodies.WolfBody:
         actor.body = new WolfBody(actor);
+      break;
+      case Bodies.BatBody:
+        actor.body = new BatBody(actor);
       break;
     }
   }

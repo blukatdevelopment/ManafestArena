@@ -1,0 +1,63 @@
+[gd_resource type="AnimationNodeStateMachine" load_steps=14 format=2]
+
+[sub_resource type="AnimationNodeAnimation" id=1]
+animation = "circle_left"
+
+[sub_resource type="AnimationNodeAnimation" id=2]
+animation = "circle_right"
+
+[sub_resource type="AnimationNodeAnimation" id=3]
+animation = "dive"
+
+[sub_resource type="AnimationNodeAnimation" id=4]
+animation = "idle"
+
+[sub_resource type="AnimationNodeAnimation" id=5]
+animation = "rise"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=6]
+switch_mode = 1
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=7]
+switch_mode = 1
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=8]
+switch_mode = 1
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=9]
+switch_mode = 1
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=10]
+switch_mode = 1
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=11]
+switch_mode = 1
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=12]
+switch_mode = 1
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=13]
+switch_mode = 1
+xfade_time = 0.2
+
+[resource]
+states/circle_left/node = SubResource( 1 )
+states/circle_left/position = Vector2( 330, 84 )
+states/circle_right/node = SubResource( 2 )
+states/circle_right/position = Vector2( 700, 84 )
+states/dive/node = SubResource( 3 )
+states/dive/position = Vector2( 529, 166 )
+states/idle/node = SubResource( 4 )
+states/idle/position = Vector2( 529, 84 )
+states/rise/node = SubResource( 5 )
+states/rise/position = Vector2( 529, -6 )
+transitions = [ "idle", "rise", SubResource( 6 ), "rise", "idle", SubResource( 7 ), "circle_right", "idle", SubResource( 8 ), "idle", "circle_right", SubResource( 9 ), "idle", "dive", SubResource( 10 ), "dive", "idle", SubResource( 11 ), "idle", "circle_left", SubResource( 12 ), "circle_left", "idle", SubResource( 13 ) ]
+start_node = "idle"
+graph_offset = Vector2( -11, -38 )

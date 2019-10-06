@@ -157,7 +157,7 @@ public class StateAi : IInputSource {
     }
 
     Transform hostTrans = hostSpat.Transform;
-    Transform lookingAt = hostTrans.LookingAt(point, Util.TUp(hostTrans));
+    Transform lookingAt = hostTrans.LookingAt(point, Vector3.Up);
     
     Vector3 hostRot = body.LookingDegrees();
     
@@ -169,7 +169,7 @@ public class StateAi : IInputSource {
 
 
     float xMag = Math.Min(Math.Abs(turnRot.x), MaxTurnRate) * TurnModifier;
-    FPSInputHandler.Inputs xDir = turnRot.x < 0 ? FPSInputHandler.Inputs.LookDown : FPSInputHandler.Inputs.LookUp;
+    FPSInputHandler.Inputs xDir = turnRot.x > 0 ? FPSInputHandler.Inputs.LookDown : FPSInputHandler.Inputs.LookUp;
     Hold(xDir, xMag);
 
     float yMag = Math.Min(Math.Abs(turnRot.y), MaxTurnRate) * TurnModifier;
@@ -201,7 +201,7 @@ public class StateAi : IInputSource {
 
     Vector3 hostRot = hostSpat.GetRotationDegrees();
     Vector3 up = Util.TUp(hostSpat.Transform);
-    Transform aimedTrans = hostSpat.Transform.LookingAt(point, up);
+    Transform aimedTrans = hostSpat.Transform.LookingAt(point, Vector3.Up);
     
     Vector3 aimedRot = aimedTrans.basis.GetEuler();
     aimedRot = Util.ToDegrees(aimedRot);
