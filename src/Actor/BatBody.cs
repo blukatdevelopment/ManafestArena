@@ -61,13 +61,6 @@ public class BatBody : KinematicBody , IBody, IReceiveDamage
     collisionShape.TranslateObjectLocal(new Vector3(0,0,0.03f));
     AddChild(collisionShape);
 
-    // BoxShape shape2 = new BoxShape();
-    // shape2.SetExtents(new Vector3(0.15f,0.2f,0.25f));
-    // collisionShape =  new CollisionShape();
-    // collisionShape.SetShape(shape2);
-    // collisionShape.TranslateObjectLocal(new Vector3(0,1.4f,-1));
-    // AddChild(collisionShape);
-
     eyes = rootNode.FindNode("Eyes") as Spatial;
     //eyes = rootNode.FindNode("Test") as Spatial; //for testing
     meshInstance = rootNode.FindNode("Body") as MeshInstance;
@@ -165,7 +158,7 @@ public class BatBody : KinematicBody , IBody, IReceiveDamage
     Vector3 bodyRot = this.GetRotationDegrees();
     bodyRot.y += movement.x;
 
-    bodyRot.x += -movement.y;
+    bodyRot.x += movement.y;
 
     if(bodyRot.x < minY){
       bodyRot.x = minY;

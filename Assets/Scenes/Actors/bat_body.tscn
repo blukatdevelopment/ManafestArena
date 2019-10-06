@@ -616,7 +616,7 @@ bones/2/name = "Head.001"
 bones/2/parent = 1
 bones/2/rest = Transform( 1, -4.19801e-014, 8.75756e-008, 4.2633e-014, 1, -7.45035e-009, -8.75756e-008, 7.45036e-009, 1, 5.55112e-017, 0.023525, 0 )
 bones/2/enabled = true
-bones/2/bound_children = [  ]
+bones/2/bound_children = [ NodePath("Head") ]
 bones/3/name = "Wing.L"
 bones/3/parent = 0
 bones/3/rest = Transform( 0.0911272, 0.995839, -2.63192e-006, 0.991834, -0.0907605, 0.0896019, 0.0892288, -0.00816778, -0.995978, 0.0421683, 0.0997562, 0.0129973 )
@@ -688,14 +688,17 @@ mesh = SubResource( 1 )
 material/0 = null
 
 [node name="Head" type="BoneAttachment" parent="Skeleton"]
-transform = Transform( -1, 2.41585e-013, 5.55644e-012, -1.50983e-010, 7.45058e-009, 1.00003, 6.56786e-012, 0.999999, -2.79397e-006, -9.14193e-015, 0.00820371, 0.0549944 )
+transform = Transform( -1, -8.38441e-013, -5.8975e-013, -1.41419e-010, -9.53674e-007, 1.00003, 4.11969e-012, 0.999999, -1.28895e-006, -2.01351e-013, 0.00820355, 0.0549944 )
 bone_name = "Head.001"
 
-[node name="Eyes" type="Position3D" parent="Skeleton/Head"]
-transform = Transform( 1, 8.88178e-016, -1.42109e-014, 0, 0.0862536, -0.996274, 2.09042e-016, 0.996274, 0.0862536, 3.43903e-012, 0.0352226, 0.0260677 )
+[node name="Head" type="Spatial" parent="Skeleton/Head"]
+transform = Transform( -1, -5.89735e-013, -8.3844e-013, 4.12115e-012, 1.28892e-006, 1.00003, -1.41416e-010, 0.999972, 9.53675e-007, 0, 0, 0 )
 
-[node name="Mouth" type="Position3D" parent="Skeleton/Head"]
-transform = Transform( 1, -1.72417e-009, -8.89792e-008, -8.89792e-008, -0.0387411, -0.999249, -1.72417e-009, 0.999249, -0.0387411, 3.89455e-009, 0.0445489, -0.0118326 )
+[node name="Eyes" type="Position3D" parent="Skeleton/Head/Head"]
+transform = Transform( -1, -6.52367e-013, 7.95808e-013, -1.41419e-010, 0.997137, 0.0759913, 4.12115e-012, 0.0759848, -0.997081, -3.48388e-012, 0.0260684, 0.0352216 )
+
+[node name="Mouth" type="Position3D" parent="Skeleton/Head/Head"]
+transform = Transform( -1, 1.72361e-009, 8.89801e-008, -1.86555e-009, 0.999277, -0.0387412, -8.89726e-008, -0.0387413, -0.999221, -3.89458e-009, -0.011833, 0.0445477 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/circle_left = SubResource( 2 )
