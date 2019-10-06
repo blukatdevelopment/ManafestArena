@@ -63,25 +63,30 @@ public class MainMenu : Container, IMenu {
   }
   
   public void NewGame(){
+    Sound.PlayEffect(Sound.Effects.Click);
     Session.ChangeMenu("NewGameMenu");
   }
 
   public void ContinueGame(){
+    Sound.PlayEffect(Sound.Effects.Click);
     GD.Print("ContinueGame");
     Career.ContinueCareer();
   }
 
   public void Settings(){
+    Sound.PlayEffect(Sound.Effects.Click);
     GD.Print("Settings menu");
     Session.ChangeMenu("SettingsMenu");
   }
 
   public void Credits(){
+    Sound.PlayEffect(Sound.Effects.Click);
     GD.Print("Credits menu");
     Session.ChangeMenu("CreditsMenu");
   }
   
   public void Quit(){
+    Sound.PlayEffect(Sound.Effects.Click);
     Session.session.Quit();
   }
     

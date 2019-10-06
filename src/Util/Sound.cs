@@ -13,7 +13,9 @@ public class Sound {
     FistSwing,
     FistImpact,
     ActorDamage,
-    ActorDeath
+    ActorDeath,
+    Click,
+    Coins
   };
 
   public enum Songs{
@@ -43,82 +45,33 @@ public class Sound {
     Arena
   };
 
-  public static string SongFile(Songs song){
-    string ret = "";
-    switch(song){
-      case Songs.Menu1: 
-        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/adam_spc.ogg";
-        break;
-      case Songs.Menu2: 
-        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/ssss.ogg";
-        break;
-      case Songs.Menu3: 
-        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/t.ogg";
-        break;
-      case Songs.Menu4: 
-        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/you_will_know.ogg";
-        break;
-      case Songs.Arena1: 
-        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/bowser_nights.ogg";
-        break;
-      case Songs.Arena2: 
-        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/dr.ogg";
-        break;
-      case Songs.Arena3: 
-        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/FDBT.ogg";
-        break;
-      case Songs.Arena4: 
-        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/ffff.ogg";
-        break;
-      case Songs.Arena5: 
-        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/heated_swimmer.ogg";
-        break;
-      case Songs.Arena6: 
-        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/hot_shit.ogg";
-        break;
-      case Songs.Arena7: 
-        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/mbtb_away.ogg";
-        break;
-      case Songs.Arena8: 
-        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/md.ogg";
-        break;
-      case Songs.Arena9: 
-        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/MODR_something_big.ogg";
-        break;
-      case Songs.Arena10: 
-        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/true_fossil_soul_beta.ogg";
-        break;
-      case Songs.Arena11: 
-        ret = "res://Assets/Audio/Songs/HallyLabs2014-current-selected-research/you_bet.ogg";
-        break;
+  public static System.Collections.Generic.Dictionary<string, AudioStreamOGGVorbis> loadedMusic;
+  public static System.Collections.Generic.Dictionary<string, AudioStreamSample> loadedEffects;
 
+  public static void LoadSoundFiles(){
+    System.Collections.Generic.Dictionary<string, string> music = SoundDb.GetMusic();
+    loadedMusic = new System.Collections.Generic.Dictionary<string, AudioStreamOGGVorbis>();
+    foreach(string key in music.Keys){
+      loadedMusic.Add(key, (AudioStreamOGGVorbis)GD.Load(music[key]));
     }
-    return ret;
+
+    System.Collections.Generic.Dictionary<string, string> effects = SoundDb.GetEffects();
+    loadedEffects = new System.Collections.Generic.Dictionary<string, AudioStreamSample>();
+    foreach(string key in effects.Keys){
+      loadedEffects.Add(key, (AudioStreamSample)GD.Load(effects[key]));
+    }
   }
-  
-  public static string EffectFile(Effects effect){
-    string ret = "";
-    switch(effect){
-      case Effects.RifleShot:
-        ret = "res://Assets/Audio/Effects/pew.wav";
-        break;
-      case Effects.RifleReload:
-        ret = "res://Assets/Audio/Effects/chtcht.wav";
-        break;
-      case Effects.FistSwing:
-        ret = "res://Assets/Audio/Effects/swing.wav";
-        break;
-      case Effects.FistImpact:
-        ret = "res://Assets/Audio/Effects/impact.wav";
-        break;
-      case Effects.ActorDamage:
-        ret = "res://Assets/Audio/Effects/actor_damage.wav";
-        break;
-      case Effects.ActorDeath:
-        ret = "res://Assets/Audio/Effects/actor_die.wav";
-        break;
+
+  public static AudioStreamSample LoadEffect(Effects effect){
+    string effectName = "" + effect;
+    if(loadedEffects == null){
+      LoadSoundFiles();
     }
-    return ret;
+    if(!loadedEffects.ContainsKey(effectName)){
+      GD.Print("No such sound effect " + effectName);
+      return null;
+    }
+    return loadedEffects[effectName];
   }
 
   public static void RefreshVolume(){
@@ -176,18 +129,23 @@ public class Sound {
   }
   
   public static void PlaySong(Songs song){
-    if(song == Songs.None){
+    if(song == Songs.None || song == Session.session.currentSong){
+      GD.Print("Not playing song " + song);
+      return;
+    }
+    if(loadedMusic == null){
+      LoadSoundFiles();
+    }
+    string songName = "" + song;
+
+    if(!loadedMusic.ContainsKey(songName)){
+      GD.Print("Song: " + songName + " does not exist");
       return;
     }
     
-    if(song == Session.session.currentSong){
-      GD.Print("Don't restart the current song");
-      return;
-    }
     GD.Print("Changing " + Session.session.currentSong + " to " + song);
 
-    string fileName = SongFile(song);
-    AudioStreamOGGVorbis stream = (AudioStreamOGGVorbis)GD.Load(fileName);
+    AudioStreamOGGVorbis stream = loadedMusic[songName];
     
     Session.InitJukeBox();
     Session.session.jukeBox.Stream = stream;
@@ -201,4 +159,45 @@ public class Sound {
     }
     Session.session.jukeBox.Playing = false;
   }
+
+  public static void PlayEffect(Effects effect){
+    if(loadedEffects == null){
+      LoadSoundFiles();
+    }
+    string effectName = "" + effect;
+
+    if(!loadedEffects.ContainsKey(effectName)){
+      GD.Print("Effect " + effectName + " does not exist");
+      return;
+    }
+
+    AudioStreamPlayer player = GetSfxPlayer();
+    player.VolumeDb = Sound.VolumeMath(Session.session.sfxVolume);
+    player.Stream = loadedEffects[effectName];
+    player.Play();
+  }
+
+  // Need more than one channel active in case there are multiple
+  // simultaneous sound effects
+  public static AudioStreamPlayer GetSfxPlayer(){
+    if(Session.session.sfxPlayers == null){
+      List<AudioStreamPlayer> sfxPlayers = new List<AudioStreamPlayer>();
+      sfxPlayers.Add(new AudioStreamPlayer());
+      Session.session.sfxPlayers = sfxPlayers;
+      Session.session.AddChild(sfxPlayers[0]);
+      return Session.session.sfxPlayers[0];
+    }
+
+    foreach(AudioStreamPlayer player in Session.session.sfxPlayers){
+      if(player != null && !player.Playing){
+        return player;
+      }
+    }
+
+    AudioStreamPlayer newPlayer = new AudioStreamPlayer();
+    Session.session.sfxPlayers.Add(newPlayer);
+    Session.session.AddChild(newPlayer);
+    return newPlayer;
+  }
+
 }

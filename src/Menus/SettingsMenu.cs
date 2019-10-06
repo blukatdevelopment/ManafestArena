@@ -113,6 +113,7 @@ public class SettingsMenu : Container, IMenu, ISubmenu {
     }
 
     public void ToControlsMenu(){
+      Sound.PlayEffect(Sound.Effects.Click);
       if(parentMenu!=null){
         parentMenu.ChangeSubmenu("ControlsMenu");
         return;
@@ -121,6 +122,7 @@ public class SettingsMenu : Container, IMenu, ISubmenu {
     }
 
     public void Back(){
+      Sound.PlayEffect(Sound.Effects.Click);
       if(parentMenu!=null){
         parentMenu.ChangeSubmenu("PauseMenu");
         return;
@@ -155,6 +157,7 @@ public class SettingsMenu : Container, IMenu, ISubmenu {
 
 
     public void SaveSettings(){
+      Sound.PlayEffect(Sound.Effects.Click);
       Session.session.masterVolume = masterVolumeSlider.Value;
       Session.session.sfxVolume = sfxVolumeSlider.Value;
       Session.session.musicVolume = musicVolumeSlider.Value;
@@ -167,6 +170,7 @@ public class SettingsMenu : Container, IMenu, ISubmenu {
     }
 
     public void RevertSettings(){
+      Sound.PlayEffect(Sound.Effects.Click);
       masterVolumeSlider.Value = Session.session.masterVolume;
       sfxVolumeSlider.Value = Session.session.sfxVolume;
       musicVolumeSlider.Value = Session.session.musicVolume;

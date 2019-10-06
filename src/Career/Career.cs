@@ -13,9 +13,11 @@ public class Career : Node , IGamemode{
   public const int MaxCareerNodesPerLevel = 3;
   public Actor player;
   public CareerData careerData;
+  public LootTable lootTable;
 
   public Career(){
     careerNodes = new List<CareerNode>();
+    lootTable = new LootTable();
   }
 
   new public string ToString(){
@@ -42,6 +44,7 @@ public class Career : Node , IGamemode{
     GD.Print("CompleteEncounter");
     encounterInProgress = false;
     Session.ChangeMenu("CareerMenu");
+    Session.RemoveGamemode("arena");
 
     // if(Session.GetPlayer() != null){
     //   //playerData = Session.GetPlayer().GetData();
@@ -82,7 +85,6 @@ public class Career : Node , IGamemode{
   }
 
   public void HandleEvent(SessionEvent evt){
-
   }
 
   public void Init(string[] args){
@@ -99,14 +101,14 @@ public class Career : Node , IGamemode{
 
   public void CompleteGame(){
     GD.Print("CompleteGame");
+    Session.ChangeMenu("CreditsMenu");
     Session.ClearGame();
-    Session.ChangeMenu("EndGameMenu");
   }
 
   public void FailEncounter(){
-    Session.ClearGame();
     GD.Print("FailEncounter");
-    Session.ChangeMenu("EndGameMenu");
+    Session.ChangeMenu("CreditsMenu");
+    Session.ClearGame();
   }
 
   public static IEncounter RandomEncounter(){
@@ -124,7 +126,7 @@ public class Career : Node , IGamemode{
       Career career = CareerTreeFactory.Factory(championName);
       career.careerData = new CareerData();
 
-      Session.AddGamemode(career as Node);
+      Session.AddGamemode("career", career as Node);
       Session.ChangeMenu("CareerMenu");
       CareerDb.SaveCareerData(career.careerData);
   }
@@ -132,7 +134,7 @@ public class Career : Node , IGamemode{
   public static void ContinueCareer(){
     Career career = new Career();
     career.careerData = CareerDb.LoadCareerData();
-    Session.AddGamemode(career as Node);
+    Session.AddGamemode("career", career as Node);
     Session.ChangeMenu("CareerMenu");
   }
 
@@ -147,13 +149,7 @@ public class Career : Node , IGamemode{
   }
 
   public static Career GetActiveCareer(){
-    foreach(Node gamemodeNode in Session.session.activeGamemodes){
-      Career career = gamemodeNode as Career;
-      if(career != null){
-        return career;
-      }
-    }
-    return null;
+    return Session.GetGamemode("career") as Career;
   }
 
 }

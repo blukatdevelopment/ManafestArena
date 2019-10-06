@@ -65,6 +65,14 @@ public class Arena : Spatial, IGamemode {
     }
   }
 
+  public override void _ExitTree(){
+    foreach (Actor actor in actors.Values)
+    {
+        actor.QueueFree();
+    }
+    actors = null;
+  }
+
   public void Timer(float delta){
     secondCounter += delta;
 
@@ -76,7 +84,7 @@ public class Arena : Spatial, IGamemode {
   
   public bool PlayerWon(){
     GD.Print("Score " + scores[playerWorldId] + ", needed " + killQuota);
-    if(scores[playerWorldId] >= killQuota){
+    if(scores.ContainsKey(playerWorldId) && scores[playerWorldId] >= killQuota){
       return true;
     }
     
@@ -136,6 +144,7 @@ public class Arena : Spatial, IGamemode {
 
   public Actor InitActor(Actor actor, bool player = false){
     int id = NextId();
+    ActorFactory.InitActor(actor);
     if(actor.stats != null && actor.stats.HasStat("id")){
       actor.stats.SetStat("id", id);
       scores.Add(id, 0);
@@ -144,7 +153,9 @@ public class Arena : Spatial, IGamemode {
     else{
       GD.Print("Actor without proper stats was initialized");
     }
-
+    if(player){
+      playerWorldId = id;
+    }
     return SpawnActor(actor, player);
   }
 
@@ -244,33 +255,27 @@ public class Arena : Spatial, IGamemode {
     string[] actorPaths = sessionEvent.args;  
     
     if(actorPaths == null || actorPaths.Length == 0 || actorPaths[0] == ""){
+      GD.Print("actors paths were wrong");
       return;
     }
 
     Actor killed = ActorFromPath(actorPaths[0]);
-
-    if(killed == null || killed.stats == null || killed.stats.GetStat("id") < 1){
-      GD.Print("Inadequate info in a SessionEvent to handle killed actor death");
-      return;
-    }
-    ClearActor(killed.stats.GetStat("id"));
-    
     Actor killer = ActorFromPath(actorPaths[1]);
-    if(killer == null || killer.stats == null || killer.stats.GetStat("id") < 1){
-      GD.Print("Inadequate info in a SessionEvent to award killer");
-      return;
-    }
-    
-    AwardForKill(killer.stats.GetStat("id"));
-    
-    Career career = Career.GetActiveCareer();
-    
-    if(killed.stats.GetStat("id") == playerWorldId && career != null){
-      career.FailEncounter();
+
+    int killedId = killed != null ? killed.stats.GetStat("id") : -1;
+    int killerId = killer != null ? killer.stats.GetStat("id") : -1;
+
+    if(killedId != -1){
+      ClearActor(killedId);
+
+      Career career = Career.GetActiveCareer();
+      if(killedId == playerWorldId && career != null){
+        career.FailEncounter();
+      }
     }
 
-    if(PlayerWon() && career != null){
-      career.CompleteEncounter();
+    if(killerId != -1){
+      AwardForKill(killerId);
     }
   }
 
@@ -281,15 +286,23 @@ public class Arena : Spatial, IGamemode {
     else{
       GD.Print("Actor " + id + " doesn't exist.");
     }
+
+    Career career = Career.GetActiveCareer();
+    if(id == playerWorldId && career != null){
+      career.lootTable.HandleAction("kill enemy");
+      Sound.PlayEffect(Sound.Effects.Coins);
+
+      if(PlayerWon()){
+        career.CompleteEncounter();
+      }
+    }
+
   }
 
   public void ClearActor(int id){
     if(actors.ContainsKey(id)){
       Actor actor = actors[id];
-      Node actorNode = actor.body as Node;
-      if(actorNode != null){
-        actorNode.QueueFree();
-      }
+      actor.QueueFree();
       actors.Remove(id);
 
     }

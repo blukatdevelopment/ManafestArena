@@ -157,11 +157,17 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
       return;
     }
 
-    GD.Print("Receided Damage " + Util.ToJson(damage));
+    GD.Print("Received Damage " + Util.ToJson(damage));
     receiver.ReceiveDamage(damage);
 
     if(GetHealth() < 1){
       GD.Print("Died because health was" + GetHealth());
+      
+      string dead = this.GetPath();
+      string killer = damage.sender;
+      SessionEvent evt = SessionEvent.ActorDiedEvent(dead, killer);
+      Session.session.HandleEvent(evt);
+
       Die();
     }
   }

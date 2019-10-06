@@ -1,0 +1,16 @@
+{
+  "kill enemy": [
+    {
+      "lootName": "coins",
+      "chance": "100",
+      "minLoot": "0",
+      "maxLoot": "3"
+    },
+    {
+      "lootName": "meat",
+      "chance": "20",
+      "minLoot": "1",
+      "maxLoot": "2"
+    },
+  ]
+}

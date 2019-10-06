@@ -129,6 +129,8 @@
     <Compile Include="src/Inventory/HotBar.cs" />
     <Compile Include="src/Inventory/PaperDoll.cs" />
     <Compile Include="src/Inventory/IInventory.cs" />
+    <Compile Include="src/Inventory/Loot/LootTable.cs" />
+    <Compile Include="src/Inventory/Loot/LootDrop.cs" />    
     <Compile Include="src/Career/Career.cs" />
     <Compile Include="src/Career/CareerData.cs" />
     <Compile Include="src/Career/CareerNode.cs" />
@@ -141,6 +143,7 @@
     <Compile Include="src/Career/PressEvent.cs" />
     <Compile Include="src/Career/PressEventNode.cs" />
     <Compile Include="src/Db/CareerDb.cs" />
+    <Compile Include="src/Db/SoundDb.cs" />
     <Compile Include="src/Stats/IStats.cs" />
     <Compile Include="src/Stats/IcepawsStats.cs" />
     <Compile Include="src/Stats/IHasStats.cs" />
@@ -162,5 +165,5 @@
     <Compile Include="src/Menus/Interfaces/IInputHandledMenu.cs" />
     <Compile Include="src/Menus/Interfaces/IMenu.cs" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" /> 
 </Project>

@@ -7,15 +7,24 @@ using System;
 using System.Collections.Generic;
 
 public class Actor : IHasInputHandler, IHasStats, IHasBody, IHasInventory {
+  public ActorFactory.Bodies bodyType;
   public IInputHandler inputHandler; // 
   public IStats stats;
   public IBody body;
   public IInventory inventory;
   public HotBar hotbar;
   public PaperDoll paperdoll;
+  public int camId = -1;
 
   public Actor(){
     hotbar = new HotBar(10, this);
+  }
+
+  public Node GetNode(){
+    if(body != null){
+      return body.GetNode();
+    }
+    return null;
   }
 
   public IInputHandler GetInputHandler(){
@@ -32,6 +41,14 @@ public class Actor : IHasInputHandler, IHasStats, IHasBody, IHasInventory {
 
   public IInventory GetInventory(){
     return inventory;
+  }
+
+  public void SetBodyType(ActorFactory.Bodies bodyType){
+    this.bodyType = bodyType;
+  }
+
+  public void InitCam(int id){
+    camId = id;
   }
 
   public void Update(float delta){
@@ -54,11 +71,13 @@ public class Actor : IHasInputHandler, IHasStats, IHasBody, IHasInventory {
     }
   }
 
-  public Node GetNode(){
-    if(body != null){
-      return body.GetNode();
-    }
-    return null;
+  public void QueueFree(){
+     Node actorNode = body as Node;
+      if(actorNode != null){
+        hotbar.UnequipActive();
+        actorNode.QueueFree();
+      }
+      body=null;
   }
 
   public static Actor GetActorFromNode(Node node){

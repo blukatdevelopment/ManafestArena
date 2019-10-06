@@ -155,14 +155,14 @@ public IItem[] GetItemSlots(){
     }
   }
 
-  private void UnequipActive(){
+  public void UnequipActive(){
     if(itemSlots[equippedSlot] == null){
       return;
     }
     itemSlots[equippedSlot].Unequip();
   }
 
-  private void EquipActive(){
+  public void EquipActive(){
     if(itemSlots[equippedSlot] == null){
       GD.Print("Active slot is null. Not equipping.");
       return;

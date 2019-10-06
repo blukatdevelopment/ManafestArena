@@ -43,6 +43,7 @@ public class NewGameMenu : Container, IMenu {
   }
 
   void SelectChampion(string characterName){
+    Sound.PlayEffect(Sound.Effects.Click);
     if(startGameButton == null){
       startGameButton = Menu.Button("Start Game", StartGame);
       AddChild(startGameButton);
@@ -93,6 +94,7 @@ public class NewGameMenu : Container, IMenu {
   }
 
   public void ReturnToMainMenu(){
+    Sound.PlayEffect(Sound.Effects.Click);
     Session.ChangeMenu("MainMenu");
   }
 

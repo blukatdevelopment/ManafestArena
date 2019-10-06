@@ -74,6 +74,9 @@ public class IcepawsStats : IStats, IReceiveDamage {
     if(IcepawsStatList().IndexOf(stat) != -1){
       return GetIcepawsStat(stat);
     }
+    if(stats.ContainsKey(stat)){
+      return stats[stat];
+    }
     return 0;
   }
 
@@ -138,6 +141,9 @@ public class IcepawsStats : IStats, IReceiveDamage {
     }
     if(GetStatList().IndexOf(stat) != -1){
       stats.Add(stat, val);
+    }
+    else{
+      GD.Print("Could not find stat " + stat);
     }
   }
 

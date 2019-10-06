@@ -9,6 +9,7 @@ using Godot;
 public class Test{
   public static List<string> fails; // failed test info
   public static bool debugs;
+  public static string module;
 
   public static void Init(bool showDebugs = true){
     fails = new List<string>();
@@ -50,5 +51,13 @@ public class Test{
 
   public static string StackTrace(){
     return System.Environment.StackTrace;
+  }
+
+  public static void SetModule(string name){
+    module = name;
+  }
+
+  public static void Info(string message){
+    GD.Print(module + ".info: " + message);
   }
 }
