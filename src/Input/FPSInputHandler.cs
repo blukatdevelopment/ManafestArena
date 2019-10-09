@@ -9,6 +9,7 @@ public class FPSInputHandler : IInputHandler {
   public Actor actor;
   private IInputSource source;
   private float walkSpeed, sprintSpeed;
+  private Vector3 direction = new Vector3();
   private bool activelySprinting, sprintWasPressed;
 
   public const float SpeedBase = 3f;
@@ -37,9 +38,36 @@ public class FPSInputHandler : IInputHandler {
     foreach(MappedInputEvent inputEvent in inputEvents){
       HandleSingleInput(inputEvent, delta);
     }
+
+    Move(delta);
+
     if(activelySprinting && !sprintWasPressed){
       activelySprinting = false;
     }
+  }
+
+  private void Move(float delta){
+  
+  if(direction.LengthSquared()<1f){
+    direction = direction.Normalized();
+  }
+
+  float currentSpeed = walkSpeed;
+  int sprintCost = 1;
+  if(actor.stats != null){
+    sprintCost = actor.stats.GetStat("sprintcost");
+  }
+
+  if(activelySprinting && actor.stats == null){
+    currentSpeed = sprintSpeed;
+  }
+  else if(activelySprinting && actor.stats.ConsumeStat("stamina", sprintCost)){
+    currentSpeed = sprintSpeed;
+  }
+
+  direction *= (currentSpeed * SpeedBase);
+  actor.body.Move(direction, delta, false, false);
+  direction = new Vector3();
   }
 
   public void UpdateSpeed(){
@@ -60,16 +88,16 @@ public class FPSInputHandler : IInputHandler {
     float val = inputEvent.inputValue;
     switch(input){
       case Inputs.MoveForward:
-        HandleMovement(inputEvent, delta, new Vector3(0, 0, -1f));
+        HandleMovement(inputEvent, delta, Vector3.Forward);
         break;
       case Inputs.MoveBackward:
-        HandleMovement(inputEvent, delta, new Vector3(0, 0, 1f));
+        HandleMovement(inputEvent, delta, Vector3.Back);
         break;
       case Inputs.MoveLeft:
-        HandleMovement(inputEvent, delta, new Vector3(-1f, 0, 0));
+        HandleMovement(inputEvent, delta, Vector3.Left);
         break;
       case Inputs.MoveRight:
-        HandleMovement(inputEvent, delta, new Vector3(1f, 0, 0f));
+        HandleMovement(inputEvent, delta, Vector3.Right);
         break;
       case Inputs.PrimaryUse:
         inputEvent.mappedEventId = (int)Item.ItemInputs.A;
@@ -152,23 +180,7 @@ public class FPSInputHandler : IInputHandler {
     if(input.inputType != MappedInputEvent.Inputs.Press && input.inputType != MappedInputEvent.Inputs.Hold){
       return;
     }
-    float currentSpeed = walkSpeed;
-
-    int sprintCost = 1;
-    if(actor.stats != null){
-      sprintCost = actor.stats.GetStat("sprintcost");
-    }
-
-    if(activelySprinting && actor.stats == null){
-      currentSpeed = sprintSpeed;
-    }
-    else if(activelySprinting && actor.stats.ConsumeStat("stamina", sprintCost)){
-      currentSpeed = sprintSpeed;
-    }
-
-    direction *= (currentSpeed * SpeedBase);
-    direction *= input.inputValue;
-    actor.body.Move(direction, delta, false, false);
+    this.direction+=direction*input.inputValue;
   }
 
   public enum Inputs{

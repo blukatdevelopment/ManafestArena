@@ -2,7 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class WolfBody : KinematicBody , IBody, IReceiveDamage
+public class BatBody : KinematicBody , IBody, IReceiveDamage
 {
     
   Actor actor;
@@ -15,32 +15,29 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
   AnimationTree animationTree;
   AnimationNodeStateMachinePlayback stateMachine;
   public bool dead;
-  const float ChangeAnimDelay = 0.05f;
-  IncrementTimer ChangeAnimTimer;
-  
-  bool grounded, crouched;
-  Vector3 gravityVelocity = new Vector3();
+  bool grounded = false, diving = false, rising = false;
+  Vector3 velocity = new Vector3();
   const int maxY = 90;
   const int minY = -40;
 
+  float height = 4;  
   Vector3 GravityAcceleration = new Vector3(0,-9.81f,0) ;
   const float TerminalVelocity = -53;
   const float SightSize = 100f;
 
-  public WolfBody(Actor actor, string rootPath = "res://Assets/Scenes/Actors/wolf_body.tscn"){
+  public BatBody(Actor actor, string rootPath = "res://Assets/Scenes/Actors/bat_body.tscn"){
     this.actor = actor;
     this.rootPath = rootPath;
     this.dead = false;
-    ChangeAnimTimer = new IncrementTimer(ChangeAnimDelay);
     InitChildren();
   }
 
   public void AnimationTrigger(string triggerName){
     GD.Print("Animation trigger " + triggerName);
-    triggerName = triggerName.ToLower();
-    if(triggerName=="bite"){
-      stateMachine.Travel("bite");
-    }
+    // triggerName = triggerName.ToLower();
+    // if(triggerName=="bite"){
+    //   stateMachine.Travel("bite");
+    // }
   }
 
   public Actor GetActor(){
@@ -57,17 +54,11 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
     AddChild(speaker);
 
     CapsuleShape shape = new CapsuleShape();
-    shape.SetRadius(.4f);
+    shape.SetRadius(.06f);
+    shape.SetHeight(.09f);
     collisionShape =  new CollisionShape();
     collisionShape.SetShape(shape);
-    collisionShape.TranslateObjectLocal(new Vector3(0,0.5f,0));
-    AddChild(collisionShape);
-
-    BoxShape shape2 = new BoxShape();
-    shape2.SetExtents(new Vector3(0.15f,0.2f,0.25f));
-    collisionShape =  new CollisionShape();
-    collisionShape.SetShape(shape2);
-    collisionShape.TranslateObjectLocal(new Vector3(0,1.4f,-1));
+    collisionShape.TranslateObjectLocal(new Vector3(0,0,0.03f));
     AddChild(collisionShape);
 
     eyes = rootNode.FindNode("Eyes") as Spatial;
@@ -76,24 +67,15 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
     skeleton = rootNode.FindNode("Skeleton") as Skeleton;
     mouth = rootNode.FindNode("Mouth") as Spatial;
     animationTree = rootNode.FindNode("AnimationTree") as AnimationTree;
-    grounded = true;
     initAnimTree();
   }
 
   public void initAnimTree(){
     animationTree.SetActive(true);
     stateMachine = animationTree.Get("parameters/playback") as AnimationNodeStateMachinePlayback;
-    setBlendPosition(0);
   }
 
-  public void setBlendPosition(float blendPosition =0){
-    animationTree.Set("parameters/walk/blend_position",blendPosition);
-    animationTree.Set("parameters/run/blend_position",blendPosition);
-    animationTree.Set("parameters/crouch/blend_position",blendPosition*0.7f);//the 0.7 is temporary
-    if(blendPosition!=0){
-      ChangeAnimTimer.StartTimer();
-    }
-  }
+
 
   public void ReceiveDamage(Damage damage){
     if(dead){
@@ -144,19 +126,9 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
   }
   public void Move(Vector3 movement, float moveDelta = 1f, bool ignoreAnimator = true, bool sprint = false){
 
-      if(!ignoreAnimator&&grounded){
-        if(movement.z!=0){ 
-           if(movement.z<0){
-            setBlendPosition(1);
-          }
-          else{
-            setBlendPosition(-1);
-          }
-          ChangeAnimTimer.StartTimer();
-        }
+      if(!ignoreAnimator){
+        
       }
-
-      movement.x*=0.25f;//wolves dont strafe
       movement *= moveDelta;
       
       Transform current = GetTransform();
@@ -180,61 +152,117 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
 
   }
 
-  public void ToggleCrouch(){
-    crouched = !crouched;
-    if(crouched){
-      stateMachine.Travel("crouch");
-    }
-    else{
-      stateMachine.Travel("walk");
-    }
-  }
 
   public void Turn(Vector3 movement, float moveDelta = 1f){
     movement *= moveDelta;
     Vector3 bodyRot = this.GetRotationDegrees();
-    if(grounded){
-      bodyRot.y += movement.x;
+    bodyRot.y += movement.x;
+
+    bodyRot.x += movement.y;
+
+    if(bodyRot.x < minY){
+      bodyRot.x = minY;
     }
-    else
-    {
-      bodyRot.y +=movement.x*0.25f;
+
+    if(bodyRot.x > maxY){
+      bodyRot.x = maxY;
     }
+
     this.SetRotationDegrees(bodyRot);
     
-    Vector3 headRot = eyes.GetRotationDegrees();
-    headRot.x += movement.y;
+    // Vector3 headRot = eyes.GetRotationDegrees();
+    // headRot.x += movement.y;
 
-    if(headRot.x < minY){
-      headRot.x = minY;
-    }
+    // if(headRot.x < minY){
+    //   headRot.x = minY;
+    // }
 
-    if(headRot.x > maxY){
-      headRot.x = maxY;
-    }
+    // if(headRot.x > maxY){
+    //   headRot.x = maxY;
+    // }
 
-    eyes.SetRotationDegrees(headRot);
-
+    //eyes.SetRotationDegrees(headRot);
+    //eyes2.SetRotationDegrees(headRot);
   }
 
   public void Update(float delta){
-    if(!dead){
-      Gravity(delta);
-      if(ChangeAnimTimer.CheckTimer(delta))
-        setBlendPosition(0);
-      float margin = 0.05f;
+    CalcVelocity(delta);
+    if(dead&&!grounded){
+      float margin = 0.1f;
       if(TestMove(Transform,margin*Vector3.Down)){
-        if(gravityVelocity.y < 0){
-          if(!grounded){
-            grounded = true;
-            gravityVelocity = new Vector3();
-          }
-          if(grounded &&stateMachine.GetCurrentNode()=="jump"){
-            stateMachine.Travel("walk");
-          }
+        if(velocity.y < 0){
+          grounded = true;
+          velocity = new Vector3();
         }
       }
     }
+  }
+
+  public void Fly(float delta){
+    float margin = 0.2f;
+    float riseSpeed = 3;
+
+    if(GetTranslation().y-height>margin){
+      Move(Vector3.Down*riseSpeed, delta, true);
+    }
+    else if(GetTranslation().y-height<-margin){
+      Move(Vector3.Up*riseSpeed, delta, true);
+    }
+  }
+
+  private void CalcVelocity(float delta){
+
+    if(dead){
+      if(grounded){
+        return;
+      }
+      Gravity(delta);
+    }
+    else{
+      Fly(delta);
+      return;
+    }
+    Vector3 acceleration = GravityAcceleration;
+    Vector3 deltaVelocity = acceleration * delta;
+    velocity += deltaVelocity;
+
+    if(velocity.Length() < TerminalVelocity){
+      velocity = TerminalVelocity*velocity.Normalized();
+    }
+    
+    Move(velocity, delta, true);
+
+    // Kill actor when it falls out of map
+    if(actor.stats != null && actor.stats.HasStat("health") && GetTranslation().y < -100){
+      Damage damage = new Damage();
+      damage.health = actor.stats.GetStat("health");
+      actor.stats.ReceiveDamage(damage);
+    }
+  }
+
+  private void Gravity(float delta){
+    Vector3 gravityForce = GravityAcceleration * delta;
+    velocity += gravityForce;
+
+    if(velocity.Length() < TerminalVelocity){
+      velocity = TerminalVelocity*velocity.Normalized();
+    }
+    
+    Move(velocity, delta, true);
+
+    // Kill actor when it falls out of map
+    if(actor.stats != null && actor.stats.HasStat("health") && GetTranslation().y < -100){
+      Damage damage = new Damage();
+      damage.health = actor.stats.GetStat("health");
+      actor.stats.ReceiveDamage(damage);
+    }
+  }
+
+  public void ToggleCrouch(){
+
+  }
+  public void Jump(){
+      
   }
 
   public void HoldItem(int hand, IItem item){
@@ -248,47 +276,7 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
     }
   }
 
-  private void Gravity(float delta){
-    Vector3 gravityForce = GravityAcceleration * delta;
-    gravityVelocity += gravityForce;
 
-    if(gravityVelocity.Length() < TerminalVelocity){
-      gravityVelocity = TerminalVelocity*gravityVelocity.Normalized();
-    }
-    
-    Move(gravityVelocity, delta, true);
-
-    // Kill actor when it falls out of map
-    if(actor.stats != null && actor.stats.HasStat("health") && GetTranslation().y < -100){
-      Damage damage = new Damage();
-      damage.health = actor.stats.GetStat("health");
-      actor.stats.ReceiveDamage(damage);
-    }
-  }
-
-  public void Jump(){
-    if(!grounded){ 
-      return; 
-    }
-    crouched=false;
-    Vector3 jumpForce = new Vector3(0,11,-5);
-    
-    if(actor.stats == null){
-      gravityVelocity = jumpForce;
-      grounded = false;
-      stateMachine.Travel("jump");
-      return;  
-    }
-
-    if(actor.stats != null && actor.stats.HasStat("jumpcost")){
-      int jumpCost = actor.stats.GetStat("jumpcost");
-      if(actor.stats.ConsumeStat("stamina", jumpCost)){
-        gravityVelocity = jumpForce;
-        grounded = false;
-        stateMachine.Travel("jump");
-      }
-    }
-  }
 
   public Speaker GetSpeaker(){
     return speaker;
@@ -345,7 +333,8 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
   public Vector3 LookingDegrees(){
     Vector3 torsoRot = GetRotationDegrees();
     Vector3 eyesRot = eyes.GetRotationDegrees();
-    torsoRot.x = eyesRot.x;
+    //torsoRot.x = eyesRot.x;
     return torsoRot;
   }
+
 }

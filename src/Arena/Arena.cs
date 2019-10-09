@@ -25,12 +25,14 @@ public class Arena : Spatial, IGamemode {
   public int nextId = 1;
   public System.Collections.Generic.Dictionary<int, int> scores;
   public System.Collections.Generic.Dictionary<int, Actor> actors;
+  public System.Collections.Generic.Dictionary<int, float> clearQueue;
   
   public Arena(){
     PauseMode = PauseModeEnum.Stop;
     enemies = new List<Actor>();
     actors = new System.Collections.Generic.Dictionary<int, Actor>();
     scores = new System.Collections.Generic.Dictionary<int, int>();
+    clearQueue = new System.Collections.Generic.Dictionary<int,float>();
   }
 
   public void Init(string[] argv){
@@ -60,6 +62,7 @@ public class Arena : Spatial, IGamemode {
     if(roundTimerActive){
       Timer(delta);
     }
+    UpdateClearQueue(delta);
     foreach(int id in actors.Keys){
       actors[id].Update(delta);
     }
@@ -266,7 +269,7 @@ public class Arena : Spatial, IGamemode {
     int killerId = killer != null ? killer.stats.GetStat("id") : -1;
 
     if(killedId != -1){
-      ClearActor(killedId);
+      QueueClearActor(killedId,10);
 
       Career career = Career.GetActiveCareer();
       if(killedId == playerWorldId && career != null){
@@ -297,6 +300,22 @@ public class Arena : Spatial, IGamemode {
       }
     }
 
+  }
+
+  public void QueueClearActor(int id, float timer){
+    clearQueue.Add(id,timer);
+  }
+
+  public void UpdateClearQueue(float delta){
+    List<int> ids = new List<int>(clearQueue.Keys);
+    foreach (int id in ids)
+    {
+      clearQueue[id]-=delta;
+      if(clearQueue[id]<0){
+        ClearActor(id);
+        clearQueue.Remove(id);
+      }
+    }
   }
 
   public void ClearActor(int id){
@@ -401,5 +420,23 @@ public class Arena : Spatial, IGamemode {
   }
 
   public void PlayerReady(){}
+
+}
+
+class KillQueue{
+
+  List<Actor> queue = new List<Actor>();
+  List<float> timers = new List<float>();
+
+  public void Add(Actor actor, float timer){
+    if(actor!=null){
+      queue.Add(actor);
+      timers.Add(timer);
+    }
+  }
+
+  public void Update(float delta){
+
+  }
 
 }
