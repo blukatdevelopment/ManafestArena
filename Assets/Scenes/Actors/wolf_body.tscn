@@ -2244,7 +2244,7 @@ bones/11/name = "head"
 bones/11/parent = 10
 bones/11/rest = Transform( 1, 4.84698e-007, -7.05619e-007, -8.52825e-007, 0.635601, -0.772018, 7.42967e-008, 0.772018, 0.635601, 8.52651e-014, 0.106339, 5.96046e-008 )
 bones/11/enabled = true
-bones/11/bound_children = [  ]
+bones/11/bound_children = [ NodePath("Head") ]
 bones/12/name = "shoulder.L"
 bones/12/parent = 8
 bones/12/rest = Transform( 0.933632, -0.322465, -0.156035, -0.0957527, 0.195086, -0.976101, 0.345199, 0.92626, 0.151262, -0.0829086, 0.293701, -0.102831 )
@@ -2387,10 +2387,11 @@ anims/walk_back = SubResource( 10 )
 [node name="AnimationTree" type="AnimationTree" parent="."]
 tree_root = ExtResource( 1 )
 anim_player = NodePath("../AnimationPlayer")
+active = true
 parameters/playback = SubResource( 11 )
 parameters/crouch/blend_position = 0
 parameters/run/blend_position = 0
-parameters/walk/blend_position = 0
+parameters/walk/blend_position = 0.00180185
 
 [node name="Test" type="Position3D" parent="."]
 transform = Transform( 0.787649, -0.0207752, -0.615774, 0, 0.999431, -0.0337192, 0.616125, 0.0265588, 0.787201, -1.99031, 1.40806, 1.98575 )

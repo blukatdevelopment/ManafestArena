@@ -2,15 +2,17 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class WolfBody : KinematicBody , IBody, IReceiveDamage
+public class HumanoidBody2 : KinematicBody , IBody, IReceiveDamage
 {
     
   Actor actor;
-  Spatial eyes, mouth;
+  Spatial eyes, hand;
   Speaker speaker;
   string rootPath;
   MeshInstance meshInstance;
   CollisionShape collisionShape;
+  Godot.Collections.Array<CollisionShape> dummyCollisions;
+  Godot.Collections.Array<CollisionShape> collisions;
   Skeleton skeleton;
   AnimationTree animationTree;
   AnimationNodeStateMachinePlayback stateMachine;
@@ -27,7 +29,7 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
   const float TerminalVelocity = -53;
   const float SightSize = 100f;
 
-  public WolfBody(Actor actor, string rootPath = "res://Assets/Scenes/Actors/wolf_body.tscn"){
+  public HumanoidBody2(Actor actor, string rootPath = "res://Assets/Scenes/Actors/debug2.tscn"){
     this.actor = actor;
     this.rootPath = rootPath;
     this.dead = false;
@@ -38,8 +40,11 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
   public void AnimationTrigger(string triggerName){
     GD.Print("Animation trigger " + triggerName);
     triggerName = triggerName.ToLower();
-    if(triggerName=="bite"){
-      stateMachine.Travel("bite");
+    if(triggerName=="claw"){
+      stateMachine.Travel("claw");
+    }
+    if(triggerName=="stab"){
+      stateMachine.Travel("stab");
     }
   }
 
@@ -56,25 +61,12 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
     speaker = new Speaker();
     AddChild(speaker);
 
-    CapsuleShape shape = new CapsuleShape();
-    shape.SetRadius(.4f);
-    collisionShape =  new CollisionShape();
-    collisionShape.SetShape(shape);
-    collisionShape.TranslateObjectLocal(new Vector3(0,0.5f,0));
-    AddChild(collisionShape);
-
-    BoxShape shape2 = new BoxShape();
-    shape2.SetExtents(new Vector3(0.15f,0.2f,0.25f));
-    collisionShape =  new CollisionShape();
-    collisionShape.SetShape(shape2);
-    collisionShape.TranslateObjectLocal(new Vector3(0,1.4f,-1));
-    AddChild(collisionShape);
-
     eyes = rootNode.FindNode("Eyes") as Spatial;
     //eyes = rootNode.FindNode("Test") as Spatial; //for testing
     meshInstance = rootNode.FindNode("Body") as MeshInstance;
     skeleton = rootNode.FindNode("Skeleton") as Skeleton;
-    mouth = rootNode.FindNode("Mouth") as Spatial;
+    //mouth = rootNode.FindNode("Mouth") as Spatial;
+    hand = rootNode.FindNode("Hand") as Spatial;
     animationTree = rootNode.FindNode("AnimationTree") as AnimationTree;
     grounded = true;
     initAnimTree();
@@ -88,8 +80,8 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
 
   public void setBlendPosition(float blendPosition =0){
     animationTree.Set("parameters/walk/blend_position",blendPosition);
-    animationTree.Set("parameters/run/blend_position",blendPosition);
-    animationTree.Set("parameters/crouch/blend_position",blendPosition*0.7f);//the 0.7 is temporary
+    // animationTree.Set("parameters/run/blend_position",blendPosition);
+    // animationTree.Set("parameters/crouch/blend_position",blendPosition*0.7f);//the 0.7 is temporary
     if(blendPosition!=0){
       ChangeAnimTimer.StartTimer();
     }
@@ -217,12 +209,30 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
 
   }
 
+  public override void _Ready(){
+    dummyCollisions = new Godot.Collections.Array<CollisionShape>();
+    collisions = new Godot.Collections.Array<CollisionShape>();
+    foreach(System.Object obj in GetTree().GetNodesInGroup("Collisions")){
+      CollisionShape dummy = obj as CollisionShape;
+      if(dummy!=null&&IsAParentOf(dummy)){
+        dummyCollisions.Add(dummy);
+        CollisionShape collision = new CollisionShape();
+        collision.Shape = dummy.Shape;
+        AddChild(collision);
+        collision.SetGlobalTransform(dummy.GetGlobalTransform());
+        collision.Disabled=dummy.Disabled;
+        collisions.Add(collision);
+      }
+    }
+  }
+
   public void Update(float delta){
     if(!dead){
       Gravity(delta);
       if(ChangeAnimTimer.CheckTimer(delta))
         setBlendPosition(0);
       float margin = 0.05f;
+      float landMargin = 3f;
       if(TestMove(Transform,margin*Vector3.Down)){
         if(gravityVelocity.y < 0){
           if(!grounded){
@@ -234,18 +244,37 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
           }
         }
       }
+      else if(TestMove(Transform,landMargin*Vector3.Down)){
+        if(gravityVelocity.y < 0){
+          if(stateMachine.GetCurrentNode()=="jump"){
+            stateMachine.Travel("land");
+          }
+        }
+      }
+    }
+  }
+
+  public void UpdateCollision(float delta){
+    for (int i = 0; i < collisions.Count; i++)
+    {
+      CollisionShape collision = collisions[i];
+      CollisionShape dummy = dummyCollisions[i];
+      collision.SetGlobalTransform(dummy.GetGlobalTransform());
+      collision.Disabled=dummy.Disabled;
     }
   }
 
   public void HoldItem(int hand, IItem item){
     Node node = item.GetNode();
-    mouth.AddChild(node);
+    this.hand.AddChild(node);
+    AnimationTrigger("hold");
   }
 
   public void ReleaseItem(int hand, IItem item){
-    if(mouth.IsAParentOf(item.GetNode())){
-      mouth.RemoveChild(item.GetNode());
+    if(this.hand.IsAParentOf(item.GetNode())){
+      this.hand.RemoveChild(item.GetNode());
     }
+    AnimationTrigger("release");
   }
 
   private void Gravity(float delta){
@@ -271,7 +300,7 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
       return; 
     }
     crouched=false;
-    Vector3 jumpForce = new Vector3(0,11,-5);
+    Vector3 jumpForce = new Vector3(0,11,0);
     
     if(actor.stats == null){
       gravityVelocity = jumpForce;

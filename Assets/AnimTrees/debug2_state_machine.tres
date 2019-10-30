@@ -1,0 +1,82 @@
+[gd_resource type="AnimationNodeStateMachine" load_steps=19 format=2]
+
+[sub_resource type="AnimationNodeAnimation" id=44]
+animation = "claw"
+
+[sub_resource type="AnimationNodeAnimation" id=24]
+animation = "jump"
+
+[sub_resource type="AnimationNodeAnimation" id=25]
+animation = "land"
+
+[sub_resource type="AnimationNodeAnimation" id=26]
+animation = "run"
+
+[sub_resource type="AnimationNodeAnimation" id=41]
+animation = "stab"
+
+[sub_resource type="AnimationNodeAnimation" id=27]
+animation = "idle"
+
+[sub_resource type="AnimationNodeAnimation" id=28]
+animation = "walk"
+
+[sub_resource type="AnimationNodeAnimation" id=29]
+animation = "walk_back"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=30]
+blend_point_0/node = SubResource( 27 )
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource( 28 )
+blend_point_1/pos = 1.0
+blend_point_2/node = SubResource( 29 )
+blend_point_2/pos = -1.0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=31]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=32]
+switch_mode = 2
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=33]
+switch_mode = 2
+auto_advance = true
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=39]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=40]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=42]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=43]
+switch_mode = 2
+auto_advance = true
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=45]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=46]
+switch_mode = 2
+auto_advance = true
+
+[resource]
+states/claw/node = SubResource( 44 )
+states/claw/position = Vector2( 757, 270 )
+states/jump/node = SubResource( 24 )
+states/jump/position = Vector2( 556, 46 )
+states/land/node = SubResource( 25 )
+states/land/position = Vector2( 739, 90 )
+states/run/node = SubResource( 26 )
+states/run/position = Vector2( 357, 215 )
+states/stab/node = SubResource( 41 )
+states/stab/position = Vector2( 787, 167 )
+states/walk/node = SubResource( 30 )
+states/walk/position = Vector2( 563, 215 )
+transitions = [ "walk", "jump", SubResource( 31 ), "jump", "land", SubResource( 32 ), "land", "walk", SubResource( 33 ), "walk", "run", SubResource( 39 ), "run", "walk", SubResource( 40 ), "walk", "stab", SubResource( 42 ), "stab", "walk", SubResource( 43 ), "walk", "claw", SubResource( 45 ), "claw", "walk", SubResource( 46 ) ]
+start_node = "walk"
+graph_offset = Vector2( 69, 29 )

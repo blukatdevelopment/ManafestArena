@@ -96,7 +96,7 @@ public class ActorFactory {
         actor.body = new PillBody(actor);
       break;
       case Bodies.HumanoidBody:
-        actor.body = new HumanoidBody(actor);
+        actor.body = new HumanoidBody2(actor);
       break;
       case Bodies.WolfBody:
         actor.body = new WolfBody(actor);
