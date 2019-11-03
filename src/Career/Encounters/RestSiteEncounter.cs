@@ -116,8 +116,8 @@ public class RestSiteEncounter : IEncounter {
   }
 
   public static string UpgradeDescription(string upgradeName){
-    System.Collections.Generic.Dictionary<string, string> descriptionMap;
-    descriptionMap = new System.Collections.Generic.Dictionary<string, string>{
+    Dictionary<string, string> descriptionMap;
+    descriptionMap = new Dictionary<string, string>{
       {"Extra endurance","Improved health, take less damage."},
       {"+50 max health", "Take more damage"},
       {"Extra agility", "Run faster"},

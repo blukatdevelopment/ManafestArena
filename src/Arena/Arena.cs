@@ -23,16 +23,16 @@ public class Arena : Spatial, IGamemode {
   public List<Actor> enemies;
 
   public int nextId = 1;
-  public System.Collections.Generic.Dictionary<int, int> scores;
-  public System.Collections.Generic.Dictionary<int, Actor> actors;
-  public System.Collections.Generic.Dictionary<int, float> clearQueue;
+  public Dictionary<int, int> scores;
+  public Dictionary<int, Actor> actors;
+  public Dictionary<int, float> clearQueue;
   
   public Arena(){
     PauseMode = PauseModeEnum.Stop;
     enemies = new List<Actor>();
-    actors = new System.Collections.Generic.Dictionary<int, Actor>();
-    scores = new System.Collections.Generic.Dictionary<int, int>();
-    clearQueue = new System.Collections.Generic.Dictionary<int,float>();
+    actors = new Dictionary<int, Actor>();
+    scores = new Dictionary<int, int>();
+    clearQueue = new Dictionary<int,float>();
   }
 
   public void Init(string[] argv){

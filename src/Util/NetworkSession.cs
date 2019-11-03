@@ -14,7 +14,7 @@ public class NetworkSession : Node {
   private const int MaxPlayers = 10;
   public const string DefaultServerAddress = "127.0.0.1";
   public int selfPeerId;
-  public System.Collections.Generic.Dictionary<int, PlayerData> playerData;
+  public Dictionary<int, PlayerData> playerData;
   public int randomSeed;
   public System.Random random;
   public int playersReady;
@@ -24,7 +24,7 @@ public class NetworkSession : Node {
   public string initName;
   
   public override void _Ready(){
-    playerData = new System.Collections.Generic.Dictionary<int, PlayerData>();
+    playerData = new Dictionary<int, PlayerData>();
   }
 
   public bool Initialized(){

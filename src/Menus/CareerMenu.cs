@@ -7,7 +7,7 @@ public class CareerMenu : Container, IMenu {
   public Button mainMenuButton;
   public Control careerParent;
   public List<CareerNode> careerNodes;
-  public System.Collections.Generic.Dictionary<int, Button> careerButtons;
+  public Dictionary<int, Button> careerButtons;
   public TextEdit background;
   public int targetOffset;
   public int minOffset;
@@ -78,7 +78,7 @@ public class CareerMenu : Container, IMenu {
     maxOffset = 0;
     targetOffset = minOffset;
 
-    careerButtons = new System.Collections.Generic.Dictionary<int, Button>();
+    careerButtons = new Dictionary<int, Button>();
 
     foreach(CareerNode node in careerNodes){
       AddNodeButton(node);

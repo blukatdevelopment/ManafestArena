@@ -56,7 +56,7 @@ public class PressEvent {
       return ret;
     }
 
-    public PressEvent(System.Collections.Generic.Dictionary<int, string[]> rows){
+    public PressEvent(Dictionary<int, string[]> rows){
         pressEventNodes = new List<PressEventNode>();
         
         foreach(int key in rows.Keys){
