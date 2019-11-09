@@ -9,7 +9,11 @@ using Newtonsoft.Json;
 using System.IO;
 
 public class Util{
-  
+  public const int Greater = 1;
+  public const int Lesser = -1;
+  public const int Equal = 0;
+
+
   private static Random random;
 
   public static void Dump(string message, object obj){

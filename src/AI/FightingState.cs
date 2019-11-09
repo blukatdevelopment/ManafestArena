@@ -63,7 +63,7 @@ public class FightingState : IBehaviorState {
         continue;
       }
 
-      if(CompareRangedWeapons(retWeapon, weapon) == 1){
+      if(CompareRangedWeapons(retWeapon, weapon) == Util.Greater){
         ret = item;
         retWeapon = weapon;
       }
@@ -75,39 +75,39 @@ public class FightingState : IBehaviorState {
   public int CompareRangedWeapons(IRangedWeapon first, IRangedWeapon second){
     if(first == null && second != null){
       if(second.GetAmmo() == 0){
-        return 0;
+        return Util.Equal;
       }
-      return 1;
+      return Util.Greater;
     }
     else if(first != null && second == null){
       if(first.GetAmmo() == 0){
-        return 0;
+        return Util.Equal;
       }
-      return -1;
+      return Util.Lesser;
     }
     else if(first == null && second == null){
-      return 0;
+      return Util.Equal;
     }
 
     int firstAmmo = first.GetAmmo();
     int secondAmmo = second.GetAmmo();
     if(firstAmmo == 0 && secondAmmo != 0){
-      return 1;
+      return Util.Greater;
     }
     else if(firstAmmo != 0 && secondAmmo == 0){
-      return -1;
+      return Util.Lesser;
     }
     else if(firstAmmo == 0 && secondAmmo == 0){
-      return 0;
+      return Util.Equal;
     }
 
     if(firstAmmo > secondAmmo){
-      return -1;
+      return Util.Lesser;
     }
     else if(firstAmmo < secondAmmo){
-      return 1;
+      return Util.Greater;
     }
-    return 0;
+    return Util.Equal;
   }
 
   public IItem SelectMeleeWeapon(List<IItem> items){
@@ -125,7 +125,7 @@ public class FightingState : IBehaviorState {
         continue;
       }
 
-      if(CompareMeleeWeapons(retWeapon, weapon) == 1){
+      if(CompareMeleeWeapons(retWeapon, weapon) == Util.Greater){
         ret = item;
         retWeapon = weapon;
       }
@@ -134,57 +134,52 @@ public class FightingState : IBehaviorState {
     return ret;
   }
 
-  /*
-    -1 first
-    0  equal
-    1  second
-  */
   public int CompareMeleeWeapons(IWeapon first, IWeapon second){
     IRangedWeapon firstRanged = first as IRangedWeapon;
     IRangedWeapon secondRanged = second as IRangedWeapon;
 
     if(firstRanged != null && second != null){
-      return 1;
+      return Util.Greater;
     }
     if(first != null && secondRanged != null){
-      return -1;
+      return Util.Lesser;
     }
     if(firstRanged != null && secondRanged != null){
-      return 0;
+      return Util.Equal;
     }
 
     if(first == null && second != null){
-      return 1;
+      return Util.Greater;
     }
     else if(first != null && second == null){
-      return -1;
+      return Util.Lesser;
     }
     else if(first == null && second == null){
-      return 0;
+      return Util.Equal;
     }
 
     Damage firstDamage = first.GetDamage();
     Damage secondDamage = second.GetDamage();
 
     if(firstDamage == null && secondDamage != null){
-      return 1;
+      return Util.Greater;
     }
     else if(firstDamage != null && secondDamage == null){
-      return -1;
+      return Util.Lesser;
     }
     else if(firstDamage == null && secondDamage == null){
-      return 0;
+      return Util.Equal;
     }
 
     float firstDps = Util.DPS((float)firstDamage.health, first.AttackDelay());
     float secondDps = Util.DPS((float)secondDamage.health, second.AttackDelay());
     if(firstDps == secondDps){
-      return 0;
+      return Util.Equal;
     }
     else if(firstDps < secondDps){
-      return 1;
+      return Util.Greater;
     }
-    return -1;
+    return Util.Lesser;
   }
 
 
