@@ -23,7 +23,7 @@ public class Session : Node {
   bool clearGame = false;
   public Node activeMenu;
   //public List<Node> activeGamemodes;
-  private System.Collections.Generic.Dictionary<string, Node> activeGamemodes;
+  private Dictionary<string, Node> activeGamemodes;
 
   public const string DebugMenu = "";
   public const bool DebugTests = false;
@@ -47,7 +47,7 @@ public class Session : Node {
 
   public override void _Ready() {
     PauseMode = PauseModeEnum.Process;
-    activeGamemodes = new System.Collections.Generic.Dictionary<string, Node>();
+    activeGamemodes = new Dictionary<string, Node>();
     EnforceSingleton();
     CareerDb.Init();
     ChangeMenu("MainMenu");

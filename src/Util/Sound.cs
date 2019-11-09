@@ -45,18 +45,18 @@ public class Sound {
     Arena
   };
 
-  public static System.Collections.Generic.Dictionary<string, AudioStreamOGGVorbis> loadedMusic;
-  public static System.Collections.Generic.Dictionary<string, AudioStreamSample> loadedEffects;
+  public static Dictionary<string, AudioStreamOGGVorbis> loadedMusic;
+  public static Dictionary<string, AudioStreamSample> loadedEffects;
 
   public static void LoadSoundFiles(){
-    System.Collections.Generic.Dictionary<string, string> music = SoundDb.GetMusic();
-    loadedMusic = new System.Collections.Generic.Dictionary<string, AudioStreamOGGVorbis>();
+    Dictionary<string, string> music = SoundDb.GetMusic();
+    loadedMusic = new Dictionary<string, AudioStreamOGGVorbis>();
     foreach(string key in music.Keys){
       loadedMusic.Add(key, (AudioStreamOGGVorbis)GD.Load(music[key]));
     }
 
-    System.Collections.Generic.Dictionary<string, string> effects = SoundDb.GetEffects();
-    loadedEffects = new System.Collections.Generic.Dictionary<string, AudioStreamSample>();
+    Dictionary<string, string> effects = SoundDb.GetEffects();
+    loadedEffects = new Dictionary<string, AudioStreamSample>();
     foreach(string key in effects.Keys){
       loadedEffects.Add(key, (AudioStreamSample)GD.Load(effects[key]));
     }

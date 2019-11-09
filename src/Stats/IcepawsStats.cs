@@ -5,18 +5,18 @@ using System.Collections.Generic;
   Base class for stats handlers that use ICEPAWS stats.
 */
 public class IcepawsStats : IStats, IReceiveDamage {
-  System.Collections.Generic.Dictionary<string, int> stats;
-  System.Collections.Generic.Dictionary<string, string> facts;
+  Dictionary<string, int> stats;
+  Dictionary<string, string> facts;
   private float updateTimer;
   private const float UpdateTime = 1f;
 
   public IcepawsStats(){
-    stats = new System.Collections.Generic.Dictionary<string, int>();
+    stats = new Dictionary<string, int>();
     foreach(string stat in GetStatList()){
       stats.Add(stat, 0);
     }
 
-    facts = new System.Collections.Generic.Dictionary<string, string>();
+    facts = new Dictionary<string, string>();
 
   }
 

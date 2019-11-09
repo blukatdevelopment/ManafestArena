@@ -6,7 +6,7 @@ public class ShopMenu : Container, IMenu {
   public Career career;
   public Button finishedButton;
   public List<Button> itemButtons;
-  public System.Collections.Generic.Dictionary<string, ItemData> itemsDict;
+  public Dictionary<string, ItemData> itemsDict;
 
 
   public void Init(){
@@ -25,7 +25,7 @@ public class ShopMenu : Container, IMenu {
 
     // itemButtons = new List<Button>();
     // List<ItemData> items = Career.ShopItems();
-    // itemsDict = new System.Collections.Generic.Dictionary<string, ItemData>();
+    // itemsDict = new Dictionary<string, ItemData>();
 
     // foreach(ItemData item in items){
     //   string shopName = item.extra["shop_name"];
