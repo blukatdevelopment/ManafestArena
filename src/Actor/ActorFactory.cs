@@ -21,7 +21,6 @@ public class ActorFactory {
 
   public enum Bodies {
     None,
-    PillBody,
     HumanoidBody,
     WolfBody,
     BatBody
@@ -89,9 +88,6 @@ public class ActorFactory {
 
   public static void InitBody(Actor actor){
     switch(actor.bodyType){
-      case Bodies.PillBody:
-        actor.body = new PillBody(actor);
-      break;
       case Bodies.HumanoidBody:
         actor.body = new HumanoidBody(actor);
       break;
