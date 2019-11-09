@@ -115,12 +115,10 @@
     <Compile Include="src/Items/ItemData.cs" />
     <Compile Include="src/Arena/Arena.cs" />
     <Compile Include="src/Arena/ArenaSettings.cs" />
-    <Compile Include="src/Util/NetworkSession.cs" />
     <Compile Include="src/Util/Session.cs" />
     <Compile Include="src/Util/IGamemode.cs" />
     <Compile Include="src/Util/Sound.cs" />
     <Compile Include="src/Util/PlayerData.cs" />
-    <Compile Include="src/Util/Test.cs" />
     <Compile Include="src/Util/Util.cs" />
     <Compile Include="src/Util/IncrementTimer.cs" />
     <Compile Include="src/Util/GFX.cs" />

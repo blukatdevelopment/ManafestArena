@@ -78,30 +78,4 @@ public class LootTable {
     }
     return ret;
   }
-
-  public static void TestLootTable(){
-    Test.SetModule("LootTable");
-    LootTable table = new LootTable();
-
-    Test.Info("Loot table: " + Util.ToJson(table));
-
-    Dictionary<string, int> loot = table.HandleAction("kill enemy");
-
-    Test.Info("Loot: " + Util.ToJson(loot));
-
-    for(int i = 0; i < 100; i++){
-      table.HandleAction("kill enemy");
-    }
-
-    loot = table.AvailableLoot();
-
-    Test.Info("Loot: " + Util.ToJson(loot));
-
-    table.ClearLoot();
-    
-    loot = table.AvailableLoot();
-
-    Test.Info("Loot: " + Util.ToJson(loot));    
-  }
-
 }
