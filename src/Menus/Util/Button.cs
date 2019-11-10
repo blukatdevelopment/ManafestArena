@@ -12,6 +12,8 @@ public class Button : Godot.Button
     }
     
     public override void _Pressed(){
-      if(onClick != null){ onClick(); }
+      if(onClick != null){ 
+        onClick(); 
+      }
     }
 }

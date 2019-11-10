@@ -47,7 +47,7 @@ public class CareerMenu : Container, IMenu {
   public void HandleScrolling(float delta){
     Rect2 screen = this.GetViewportRect();
     float height = screen.Size.y;
-    float hu = height/10;// relative height and width units
+    float hu = height/10;
     float scrollVelocity = 15f;
     float maxDist = 1;
     float change = scrollVelocity * delta;

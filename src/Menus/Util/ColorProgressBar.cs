@@ -27,59 +27,61 @@ public class ColorProgressBar : Control
     {
         underRect = new ColorRect();
         progressRect = new ColorRect();
-        underRect.Color = new Color(0.5f,0.5f,0.5f,0.5f);
+
+        underRect.Color = new Color(0.5f, 0.5f, 0.5f, 0.5f);
         progressRect.Color = color;
         label = new Label();
         label.SetAlign(Label.AlignEnum.Right);
         label.SetValign(Label.VAlign.Center);
-        label.SetAnchor(Margin.Right,1,true);
+        label.SetAnchor(Margin.Right, 1, true);
         animationPlayer = new AnimationPlayer();
         AddChild(underRect);
         AddChild(progressRect);
         AddChild(label);
         AddChild(animationPlayer);
         InitAnimations();
-        SetProgress(progress,maxProgress);
+        SetProgress(progress, maxProgress);
     }
 
-    public void UpdateProgress(int progress, int maxProgress){//smoothen this maybe
+    public void UpdateProgress(int progress, int maxProgress){
 
-        if(maxProgress>this.maxProgress){
+        if(maxProgress > this.maxProgress){
             BlinkBright();
         
         }
-        else if(maxProgress<this.maxProgress){
+        else if(maxProgress < this.maxProgress){
             BlinkDark();
         }
         else{
-            if(progress>this.progress){
+            if(progress > this.progress){
                 BlinkBright();
             }
-            else if(progress<this.progress){
+            else if(progress < this.progress){
                 BlinkDark();
             }
             else{
                 return;
             }
         }
-        SetProgress(progress,maxProgress);
+        SetProgress(progress, maxProgress);
     }
 
-    void SetProgress(int progress,int maxProgress){
+    void SetProgress(int progress, int maxProgress){
         this.maxProgress = maxProgress;
         this.progress = progress;
-        label.SetText(progress+"|"+maxProgress);
+        label.SetText(progress + "|" + maxProgress);
         Rect2 rect = GetRect();
-        Menu.ScaleControl(progressRect,rect.Size.x*progress/maxProgress,rect.Size.y,0,0);
+        Menu.ScaleControl(progressRect, rect.Size.x * progress / maxProgress, rect.Size.y, 0, 0);
     }
 
     public void ScaleControls(){
         Rect2 rect = GetRect();
-        Menu.ScaleControl(underRect,rect.Size.x,rect.Size.y,0,0);
-        Menu.ScaleControl(progressRect,rect.Size.x*progress/maxProgress,rect.Size.y,0,0);
-        Menu.ScaleControl(label,rect.Size.x,rect.Size.y,0,0);
-        //label.SetMargin(Margin.Left,5);
-        label.SetMargin(Margin.Right,-10);
+        Menu.ScaleControl(underRect, rect.Size.x, rect.Size.y, 0, 0);
+        Menu.ScaleControl(progressRect, rect.Size.x * progress / maxProgress, rect.Size.y, 0, 0);
+        Menu.ScaleControl(label, rect.Size.x, rect.Size.y, 0, 0);
+
+        int marginMax = -10;
+        label.SetMargin(Margin.Right, marginMax);
     }
 
     public void InitAnimations(){
@@ -87,26 +89,25 @@ public class ColorProgressBar : Control
         Animation blinkBright  = new Animation();
         int trackIndex = blinkBright.AddTrack(Animation.TrackType.Value);
         blinkBright.TrackSetPath(trackIndex,GetPathTo(progressRect)+":color");
-        blinkBright.TrackInsertKey(trackIndex,0,color);
-        blinkBright.TrackInsertKey(trackIndex,0.5f,color.Lightened(0.5f));
-        blinkBright.TrackInsertKey(trackIndex,1,color);
-        animationPlayer.AddAnimation("blink_bright",blinkBright);
+        blinkBright.TrackInsertKey(trackIndex, 0, color);
+        blinkBright.TrackInsertKey(trackIndex, 0.5f, color.Lightened(0.5f));
+        blinkBright.TrackInsertKey(trackIndex, 1, color);
+        animationPlayer.AddAnimation("blink_bright", blinkBright);
 
         Animation blinkDark = new Animation();
         trackIndex = blinkDark.AddTrack(Animation.TrackType.Value);
-        blinkDark.TrackSetPath(trackIndex,GetPathTo(progressRect)+":color");
-        blinkDark.TrackInsertKey(trackIndex,0,color);
-        blinkDark.TrackInsertKey(trackIndex,0.5f,color.Darkened(0.5f));
-        blinkDark.TrackInsertKey(trackIndex,1,color);
-        animationPlayer.AddAnimation("blink_dark",blinkDark);
+        blinkDark.TrackSetPath(trackIndex,GetPathTo(progressRect) + ":color");
+        blinkDark.TrackInsertKey(trackIndex, 0, color);
+        blinkDark.TrackInsertKey(trackIndex, 0.5f, color.Darkened(0.5f));
+        blinkDark.TrackInsertKey(trackIndex, 1, color);
+        animationPlayer.AddAnimation("blink_dark", blinkDark);
     }
 
     public void BlinkDark(float customSpeed = 3){
-        animationPlayer.Play("blink_dark",-1,customSpeed);
+        animationPlayer.Play("blink_dark", -1, customSpeed);
     }
 
     public void BlinkBright(float customSpeed = 3){
-        animationPlayer.Play("blink_bright",-1,customSpeed);
+        animationPlayer.Play("blink_bright", -1, customSpeed);
     }
-
 }

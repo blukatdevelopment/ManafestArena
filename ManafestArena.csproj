@@ -146,7 +146,6 @@
     <Compile Include="src/AI/MeleeCombatState.cs" />
     <Compile Include="src/AI/FightingState.cs" />
     <Compile Include="src/Menus/Util/ColorProgressBar.cs" />
-    <Compile Include="src/Menus/Util/TextBox.cs" />
     <Compile Include="src/Menus/Util/Menu.cs" />
     <Compile Include="src/Menus/Util/Button.cs" />
     <Compile Include="src/Menus/Util/TexturedButton.cs" />
