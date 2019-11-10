@@ -79,14 +79,14 @@ public class Arena : Spatial, IGamemode {
   public void Timer(float delta){
     secondCounter += delta;
 
-    if(secondCounter >= 1.0f){
+    float second = 1.0f;
+    if(secondCounter >= second){
       roundTimeRemaining -= secondCounter;
       secondCounter = 0f;
     }
   }
   
   public bool PlayerWon(){
-    GD.Print("Score " + scores[playerWorldId] + ", needed " + killQuota);
     if(scores.ContainsKey(playerWorldId) && scores[playerWorldId] >= killQuota){
       return true;
     }
@@ -144,10 +144,10 @@ public class Arena : Spatial, IGamemode {
     return player;
   }
 
-
   public Actor InitActor(Actor actor, bool player = false){
     int id = NextId();
     ActorFactory.InitActor(actor);
+    
     if(actor.stats != null && actor.stats.HasStat("id")){
       actor.stats.SetStat("id", id);
       scores.Add(id, 0);
@@ -156,6 +156,7 @@ public class Arena : Spatial, IGamemode {
     else{
       GD.Print("Actor without proper stats was initialized");
     }
+    
     if(player){
       playerWorldId = id;
     }
@@ -329,20 +330,6 @@ public class Arena : Spatial, IGamemode {
       scores.Remove(id);
     }
   }
-
-  // public void ClearActor(Actor actor){
-  //   if(actor == null || actors == null){
-  //     GD.Print("ClearActor: actor or actors were null");
-  //     return;
-  //   }
-
-  //   Node body = actor.body as Node;
-  //   if(body != null){
-  //     body.QueueFree();
-  //   }
-  //   actors.Remove(actor);
-  // }
-
   
   public void InitSpawnPoints(){
     SceneTree st = GetTree();
@@ -353,7 +340,6 @@ public class Arena : Spatial, IGamemode {
 
     usedEnemySpawnPoints = new List<Vector3>();
   }
-  
 
   List<Vector3> GetSpawnPoints(string name){
     List<Vector3> ret = new List<Vector3>();
@@ -390,7 +376,6 @@ public class Arena : Spatial, IGamemode {
     return spawnList[randInt];
   }
 
-  // Don't place spawnpoints on top of each other.
   public Vector3 RandomSpawn(List<Vector3> spawnList, List<Vector3> usedList){
     if(spawnList.Count == usedList.Count){
       usedList = new List<Vector3>();
@@ -423,7 +408,7 @@ public class Arena : Spatial, IGamemode {
 
 }
 
-class KillQueue{
+class KillQueue {
 
   List<Actor> queue = new List<Actor>();
   List<float> timers = new List<float>();
