@@ -76,7 +76,6 @@
     <Compile Include="src/Menus/ControlsMenu.cs" />
     <Compile Include="src/Menus/CareerMenu.cs" />
     <Compile Include="src/Menus/NewGameMenu.cs" />
-    <Compile Include="src/Menus/PressEventMenu.cs" />
     <Compile Include="src/Menus/CreditsMenu.cs" />
     <Compile Include="src/Menus/ShopMenu.cs" />
     <Compile Include="src/Menus/RestSiteMenu.cs" />
@@ -135,11 +134,8 @@
     <Compile Include="src/Career/CareerTreeFactory.cs" />
     <Compile Include="src/Career/IEncounter.cs" />
     <Compile Include="src/Career/Encounters/ArenaMatchEncounter.cs" />
-    <Compile Include="src/Career/Encounters/PressEventEncounter.cs" />
     <Compile Include="src/Career/Encounters/RestSiteEncounter.cs" />
     <Compile Include="src/Career/Encounters/ShopEncounter.cs" />
-    <Compile Include="src/Career/PressEvent.cs" />
-    <Compile Include="src/Career/PressEventNode.cs" />
     <Compile Include="src/Db/CareerDb.cs" />
     <Compile Include="src/Db/SoundDb.cs" />
     <Compile Include="src/Stats/IStats.cs" />
