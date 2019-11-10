@@ -15,9 +15,12 @@ public class Menu{
   public static Button Button(string text = "", Action onClick = null){
     Button button = new Button();
     
-    if(text != ""){ button.SetText(text); }
-    if(onClick != null){ button.SetOnClick(onClick); }
-
+    if(text != ""){ 
+      button.SetText(text); 
+    }
+    if(onClick != null){ 
+      button.SetOnClick(onClick); 
+    }
 
     button.AddStyleboxOverride("normal", ColorStyleBox("normal"));
     button.AddStyleboxOverride("pressed", ColorStyleBox("pressed"));
@@ -49,13 +52,21 @@ public class Menu{
       Action onClick = null
   ){
     TexturedButton tb = new TexturedButton();
-    if(normalTexturePath != ""){ tb.TextureNormal = ResourceLoader.Load(normalTexturePath) as Texture; }
+    
+    if(normalTexturePath != ""){ 
+      tb.TextureNormal = ResourceLoader.Load(normalTexturePath) as Texture; 
+    }
+
     if(selectTexturePath != ""){ 
       Texture t = ResourceLoader.Load(selectTexturePath) as Texture;
       tb.TextureFocused = t;
       tb.TextureHover = t;
     }
-    if(onClick != null){ tb.SetOnClick(onClick); }
+
+    if(onClick != null){ 
+      tb.SetOnClick(onClick); 
+    }
+
     tb.Expand = true;
     return tb;
   }
@@ -73,8 +84,8 @@ public class Menu{
       case "read_only":     rgb = new Vector3(0.211f, 0.219f, 0.349f); break;
       case "slider":        rgb = new Vector3(0.211f, 0.219f, 0.349f); break;
       case "grabber_area":  rgb = new Vector3(0.211f, 0.219f, 0.349f); break;
-      case "editable":  rgb = new Vector3(0.466f, 0.470f, 0.513f); break;
-      case "background":  rgb = new Vector3(0.086f, 0.086f, 0.172f); break;
+      case "editable":      rgb = new Vector3(0.466f, 0.470f, 0.513f); break;
+      case "background":    rgb = new Vector3(0.086f, 0.086f, 0.172f); break;
     }
 
     return GFX.Color(rgb);
@@ -106,13 +117,10 @@ public class Menu{
     TextEdit textBox = new TextEdit();
     textBox.SetText(val);
     textBox.Readonly = readOnly;
-    //textBox.WrapLines = wordWrap; No longer exists in 3.1
-
     textBox.AddStyleboxOverride("normal", ColorStyleBox("editable"));
     textBox.AddStyleboxOverride("focus", ColorStyleBox("focus"));
     textBox.AddStyleboxOverride("panel", ColorStyleBox("panel"));
     textBox.AddStyleboxOverride("read_only", ColorStyleBox("read_only"));
-
 
     return textBox;
   }
@@ -120,6 +128,7 @@ public class Menu{
   public static TextEdit BackgroundBox(Node parent){
     TextEdit textBox = BackgroundBox();
     parent.AddChild(textBox);
+
     return textBox;
   }
 
@@ -131,7 +140,6 @@ public class Menu{
     ret.AddStyleboxOverride("panel", box);
     ret.AddStyleboxOverride("read_only", box);
 
-    //GD.Print("BackgroundBox" + Util.ToJson(ret));
     return ret;
   }
 
@@ -182,7 +190,6 @@ public class Menu{
     control.SetPosition(new Vector2(x, y)); 
   }
 
-  // Toggles PauseMenu
   public static void TogglePause(){
     Node menuNode = Session.session.activeMenu;
     HUDMenu hudMenu = menuNode as HUDMenu;

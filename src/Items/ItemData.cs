@@ -1,6 +1,3 @@
-/* 
-	A flat item.
-*/
 using System;
 using System.Collections.Generic;
 using Godot;

@@ -26,8 +26,6 @@ public class AmmoStore {
         LoadAmmo(ammo);
     }
 
-    // Trickle fill loadedAmmo and trickle to reserveAmmo
-    // Don't feed it stacked items, and never after midnight
     public void LoadAmmo(List<ItemData> ammo){
         loadedAmmo.AddRange(ammo);
 
@@ -67,7 +65,6 @@ public class AmmoStore {
         return loadedAmmo.Count > 0;
     }
 
-    // Attempts to expend loaded ammo, returns true if successful
     public bool ExpendAmmo(){
         if(loadedAmmo.Count < 1){
             return false;

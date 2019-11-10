@@ -26,7 +26,7 @@ public class MeleeStabItem : Item, IHasDamage, IWeapon {
         this.meshPath = meshPath;
         InitNodeStructure();
 
-        attacker = new ItemMeleeAttacker(this as IItem,"stab");
+        attacker = new ItemMeleeAttacker(this as IItem, "stab");
 
         attacker.Config(
             stabSpeed,

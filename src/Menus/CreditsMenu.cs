@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public class CreditsMenu : Container, IMenu {
   public Button mainMenuButton;
-  public Godot.TextEdit titleLabel;
-  public Godot.TextEdit creditsLabel;
+  public TextEdit titleLabel;
+  public TextEdit creditsLabel;
   public TextEdit background;
 
   public void Init(){

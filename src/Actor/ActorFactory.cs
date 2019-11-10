@@ -5,8 +5,7 @@ using System.Collections.Generic;
 public class ActorFactory {
   public enum InputSources {
     None,
-    Player1, // Keyboard input
-    Remote,
+    Keyboard,
     AI
   };
 
@@ -22,7 +21,6 @@ public class ActorFactory {
 
   public enum Bodies {
     None,
-    PillBody,
     HumanoidBody,
     WolfBody,
     BatBody
@@ -46,15 +44,16 @@ public class ActorFactory {
     InitInputHandler(inputSource, actor);
     InitStats(statsHandler, actor);
     actor.SetBodyType(body);
-    //InitBody( actor);
+
     InitInventory(inventoryHandler, actor);
     return actor;
   }
 
   public static void InitActor(Actor actor){
     InitBody(actor);
-    if(actor.camId==0){
-      actor.body.InitCam(0);// Splitscreen cameras not implemented
+    int playerOneCam = 0;
+    if(actor.camId == playerOneCam){
+      actor.body.InitCam(playerOneCam);
     }
     actor.hotbar.EquipActive();
   }
@@ -64,14 +63,11 @@ public class ActorFactory {
     MappedInputSource mapped;
     StateAi ai;
     switch(inputSource){
-      case InputSources.Player1:
+      case InputSources.Keyboard:
         mapped = new MappedInputSource(Session.GetDevice(0), FPSInputHandler.GetMappings());
         fps = new FPSInputHandler(actor);
         fps.RegisterInputSource(mapped as IInputSource);
         actor.inputHandler = fps as IInputHandler;
-      break;
-      case InputSources.Remote:
-        // Set up net source
       break;
       case InputSources.AI:
         ai = new StateAi(actor);
@@ -92,9 +88,6 @@ public class ActorFactory {
 
   public static void InitBody(Actor actor){
     switch(actor.bodyType){
-      case Bodies.PillBody:
-        actor.body = new PillBody(actor);
-      break;
       case Bodies.HumanoidBody:
         actor.body = new HumanoidBody(actor);
       break;
@@ -123,13 +116,13 @@ public class ActorFactory {
   public static Actor FromCharacter(Characters character){
     Actor ret = null;
     switch(character){
-      case Characters.DebugPlayer: // Test player1
+      case Characters.DebugPlayer:
         ret = DebugPlayerCharacter();
       break;
-      case Characters.Target: // For target practice
+      case Characters.Target:
         ret = TargetCharacter();
         break;
-      case Characters.DebugEnemy: // For live fire practice
+      case Characters.DebugEnemy:
         ret = DebugEnemyCharacter();
         break;
     }
@@ -137,7 +130,7 @@ public class ActorFactory {
   }
 
   public static Actor DebugPlayerCharacter(){
-    Actor actor = FromComponentTypes(InputSources.Player1, StatsHandlers.Icepaws, Bodies.HumanoidBody, InventoryHandlers.None);
+    Actor actor = FromComponentTypes(InputSources.Keyboard, StatsHandlers.Icepaws, Bodies.HumanoidBody, InventoryHandlers.None);
     actor.stats.SetStat("intelligence", 5);
     actor.stats.SetStat("charisma", 5);
     actor.stats.SetStat("endurance", 5);
@@ -146,9 +139,7 @@ public class ActorFactory {
     actor.stats.SetStat("willpower", 5);
     actor.stats.SetStat("strength", 5);
     actor.stats.RestoreCondition();
-    //actor.hotbar.AddItem(0,ItemFactory.Factory(ItemFactory.Items.Teeth));
     actor.hotbar.AddItem(0, ItemFactory.Factory(ItemFactory.Items.Knife));
-    //actor.hotbar.AddItem(1, ItemFactory.Factory(ItemFactory.Items.Crossbow));
     actor.InitCam(0);
     return actor;
   }
@@ -180,7 +171,6 @@ public class ActorFactory {
     actor.stats.RestoreCondition();
     actor.hotbar = new HotBar(10, actor);
     actor.hotbar.AddItem(0, ItemFactory.Factory(ItemFactory.Items.Knife));
-    //actor.hotbar.AddItem(1, ItemFactory.Factory(ItemFactory.Items.Crossbow));
     return actor;
   }
 }

@@ -8,12 +8,10 @@ using System.Collections.Generic;
 public class RangedProjectileItem : Item, IWeapon, IRangedWeapon {
   ProjectileLauncher launcher;
   AmmoStore ammoStorage;
-  // Speaker speaker;//inherits a speaker
   bool reloadActive, fireActive;
   float reloadTimer, reloadDelay, fireTimer, fireDelay;
 
-  public RangedProjectileItem(){
-  }
+  public RangedProjectileItem(){}
 
   public RangedProjectileItem(
     string name, 
@@ -32,7 +30,6 @@ public class RangedProjectileItem : Item, IWeapon, IRangedWeapon {
     this.meshPath = meshPath;
     this.reloadDelay = reloadDelay;
     InitNodeStructure();
-
 
     launcher = new ProjectileLauncher(this);
     launcher.Config(projectileType, damage, launchImpulse, speaker);
@@ -126,8 +123,9 @@ public class RangedProjectileItem : Item, IWeapon, IRangedWeapon {
   }
 
   public float GetEffectiveRange(){
-    // TODO: Calculate bullet drop from 2m height here
-    return 20f;
+    // FIXME: Calculate bullet drop from height here
+    float effectiveRange = 20f;
+    return effectiveRange;
   }
 
   public int GetAmmo(){

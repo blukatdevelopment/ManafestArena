@@ -33,8 +33,10 @@ public class FPSInputHandler : IInputHandler {
       GD.Print("No body, therefore no input handling ¯\\_(ツ)_/¯");
       return;
     }
+
     List<MappedInputEvent> inputEvents = source.GetInputs(delta);
     sprintWasPressed = false;
+    
     foreach(MappedInputEvent inputEvent in inputEvents){
       HandleSingleInput(inputEvent, delta);
     }
@@ -48,44 +50,47 @@ public class FPSInputHandler : IInputHandler {
 
   private void Move(float delta){
   
-  if(direction.LengthSquared()<1f){
-    direction = direction.Normalized();
-  }
+    if(direction.LengthSquared() < 1f){
+      direction = direction.Normalized();
+    }
 
-  float currentSpeed = walkSpeed;
-  int sprintCost = 1;
-  if(actor.stats != null){
-    sprintCost = actor.stats.GetStat("sprintcost");
-  }
+    float currentSpeed = walkSpeed;
+    int sprintCost = 1;
+    if(actor.stats != null){
+      sprintCost = actor.stats.GetStat("sprintcost");
+    }
 
-  if(activelySprinting && actor.stats == null){
-    currentSpeed = sprintSpeed;
-  }
-  else if(activelySprinting && actor.stats.ConsumeStat("stamina", sprintCost)){
-    currentSpeed = sprintSpeed;
-  }
+    if(activelySprinting && actor.stats == null){
+      currentSpeed = sprintSpeed;
+    }
+    else if(activelySprinting && actor.stats.ConsumeStat("stamina", sprintCost)){
+      currentSpeed = sprintSpeed;
+    }
 
-  direction *= (currentSpeed * SpeedBase);
-  actor.body.Move(direction, delta, false, false);
-  direction = new Vector3();
+    direction *= (currentSpeed * SpeedBase);
+    actor.body.Move(direction, delta, false, false);
+    direction = new Vector3();
   }
 
   public void UpdateSpeed(){
     if(actor != null && actor.stats != null){
-      walkSpeed = (float)actor.stats.GetStat("speed") / 100f;
+      float speedDivisor = 100f;
+      walkSpeed = (float)actor.stats.GetStat("speed") / speedDivisor;
       walkSpeed += SpeedBase;
       
-      sprintSpeed = walkSpeed + ((float)actor.stats.GetStat("sprintbonus"))/ 100f;
+      sprintSpeed = walkSpeed + ((float)actor.stats.GetStat("sprintbonus"))/ speedDivisor;
     }
     else{
+      float speedCoefficient = 2f;
       walkSpeed = SpeedBase;
-      sprintSpeed = SpeedBase * 2;
+      sprintSpeed = SpeedBase * speedCoefficient;
     }
   }
 
   public void HandleSingleInput(MappedInputEvent inputEvent, float delta){
     Inputs input = (Inputs)inputEvent.mappedEventId;
     float val = inputEvent.inputValue;
+    
     switch(input){
       case Inputs.MoveForward:
         HandleMovement(inputEvent, delta, Vector3.Forward);
@@ -142,7 +147,6 @@ public class FPSInputHandler : IInputHandler {
         if(inputEvent.inputType == MappedInputEvent.Inputs.Press){
           int start = actor.hotbar.GetEquippedSlot();
           actor.hotbar.EquipNext();
-          GD.Print("Changed from " + start + " to " + actor.hotbar.GetEquippedSlot());
         }
         break;
       case Inputs.PreviousItem: 
@@ -180,7 +184,7 @@ public class FPSInputHandler : IInputHandler {
     if(input.inputType != MappedInputEvent.Inputs.Press && input.inputType != MappedInputEvent.Inputs.Hold){
       return;
     }
-    this.direction+=direction*input.inputValue;
+    this.direction += direction * input.inputValue;
   }
 
   public enum Inputs{
@@ -407,7 +411,6 @@ public class FPSInputHandler : IInputHandler {
       -DefaultMouseSensitivity
     ));
 
-    
     return mappings; 
   }
 

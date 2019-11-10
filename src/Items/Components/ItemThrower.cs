@@ -1,6 +1,3 @@
-/*
-    Throws an item and uses an attached CollisionDamager to damage targets
-*/
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -39,10 +36,8 @@ public class ItemThrower {
         pastWielder = wielder;
 
         if (actor != null) {
-            // TODO: Fix this actor.DropItem(item);
             item.SetCollision(true);
             wielder = null;
-            //actor.EquipNextItem();
         }
 
         Spatial spat = item.GetNode() as Spatial;
@@ -68,61 +63,6 @@ public class ItemThrower {
         if(wielderNode != null){
             damage.sender = wielderNode.GetPath();
         }
-    }
-
-    public void OnCollide(object body){
-        HandlePickup(body);
-        object wielder = item.GetWielder();
-        if(!damageActive){
-          return;
-        }
-        if(thrown){
-            damageActive = false;
-            RigidBody spat = item.GetNode() as RigidBody;
-            if(spat != null){
-                spat.SetAxisVelocity(new Vector3());                
-            }
-        }
-        
-        IReceiveDamage receiver = body as IReceiveDamage;
-        IReceiveDamage wielderDamage = wielder as IReceiveDamage;
-        if(wielderDamage == null){
-            wielderDamage = pastWielder as IReceiveDamage;
-        }
-
-        if(receiver != null && receiver != wielderDamage){
-          //Strike(receiver);
-        }
-        else if(receiver == wielderDamage){
-            damageActive = true;
-        }
-    }
-
-    public void HandlePickup(object body){
-        if(!thrown || damageActive){
-            return;
-        }
-
-        Actor pastActor = pastWielder as Actor;
-        Actor currentActor = body as Actor;
-        
-        if(pastActor == null || currentActor == null){
-            return;
-        }
-
-        if(pastActor == currentActor){
-            GD.Print("Picking item back up");
-            thrown = false;
-            if(item.GetNode().GetParent() != null){
-                item.GetNode().GetParent().RemoveChild(item.GetNode());
-            }
-            
-            //currentActor.PickUpAndEquipItem(this);
-        }
-        else{
-            GD.Print("Only the original actor can pick it up at this point in time.");
-        }
-        
     }
 
     private Node GetParent(){

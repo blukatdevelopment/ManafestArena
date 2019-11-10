@@ -51,7 +51,8 @@ public class CareerTreeFactory {
     }
 
     // When there is no previous layer, return early
-    if(layerId == 0){
+    int rootLayer = 0;
+    if(layerId == rootLayer){
       return ret;
     }
 

@@ -12,7 +12,7 @@ public class RoamingState : IBehaviorState {
   public RayCast rightRay;
   public RayCast leftRay;
   public const float RayDist = 7;
-  public const float rayAngle = 0.5f;//maybe try different values
+  public const float rayAngle = 0.5f;
   public const float rayCastHeight = 2;
   public const float dirInterval = 3;
   public float dirTimer;
@@ -53,8 +53,8 @@ public class RoamingState : IBehaviorState {
   }
 
   public void Update(float delta){
-    if(dirTimer>0){
-      dirTimer-=delta;
+    if(dirTimer > 0){
+      dirTimer -= delta;
     }
     else{
       dirTimer = 0;
@@ -68,7 +68,6 @@ public class RoamingState : IBehaviorState {
   }
 
   public bool EnemyCheck(float delta){
-    //return false;
     enemyCheckTimer += delta;
     
     if(enemyCheckTimer < EnemyCheckInterval){
@@ -89,23 +88,23 @@ public class RoamingState : IBehaviorState {
   // TODO: Improve this, maybe use navmesh
   public void Wander(){
     if(rightRay.IsColliding() && leftRay.IsColliding()){
-      if(dirTimer==0){
+      if(dirTimer == 0){
         dirTimer = dirInterval;
-        curDir = Util.RandInt(0,1,true)==0 ?Dir.Right:Dir.Left;
+        curDir = Util.RandInt(0,1,true) == 0 ? Dir.Right : Dir.Left;
       }
-      hostAi.Hold(InputFromDir(curDir),90);
+      hostAi.Hold(InputFromDir(curDir), 90);
     }
     else if(rightRay.IsColliding()){
-      if(dirTimer==0){
+      if(dirTimer == 0){
         curDir = Dir.Right;
       }
-      hostAi.Hold(InputFromDir(curDir),90);
+      hostAi.Hold(InputFromDir(curDir), 90);
     }
     else if(leftRay.IsColliding()){
-      if(dirTimer==0){
+      if(dirTimer == 0){
         curDir = Dir.Left;
       }
-      hostAi.Hold(InputFromDir(curDir),90);
+      hostAi.Hold(InputFromDir(curDir), 90);
     }
     else{
       hostAi.Hold(FPSInputHandler.Inputs.MoveForward);
@@ -118,7 +117,7 @@ public class RoamingState : IBehaviorState {
   }
 
   public FPSInputHandler.Inputs InputFromDir(Dir dir){
-    if(dir==Dir.Right){
+    if(dir == Dir.Right){
       return FPSInputHandler.Inputs.LookRight;
     }
     else{
