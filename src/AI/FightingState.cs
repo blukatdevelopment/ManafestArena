@@ -35,7 +35,7 @@ public class FightingState : IBehaviorState {
     }
     IItem bestRanged = SelectRangedWeapon(hostActor.hotbar.Getitems());
     if(bestRanged != null){
-      hostAi.SelectHotBarItem(bestRanged);
+      hostAi.EquipHotBarItem(bestRanged);
       hostAi.ChangeState(StateAi.States.Ranged);
       return;
     }
@@ -45,7 +45,7 @@ public class FightingState : IBehaviorState {
       GD.Print("No weapons to use!");
       return;
     }
-    hostAi.SelectHotBarItem(best);
+    hostAi.EquipHotBarItem(best);
     hostAi.ChangeState(StateAi.States.Melee);
   }
 
