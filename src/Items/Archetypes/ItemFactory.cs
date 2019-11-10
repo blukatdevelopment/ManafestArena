@@ -17,15 +17,11 @@ public class ItemFactory {
 
     public enum Items {
         None,
-        // MeleeBiteItem
         Teeth,
-        // MeleeStabItem
         Knife,
         Claws,
-        // ProjectileItem
         MusketBall,
         CrossbowBolt,
-        // ProjectileLauncher
         Crossbow
     };
 

@@ -1,11 +1,9 @@
-/*
-  Supplies ammo when picked up.
-*/
 using Godot;
 using System.Collections.Generic;
 
 public class AmmoPowerUp : PowerUp {
-  public int ammo = 50;
+  public const int DefaultAmmo = 50;
+  public int ammo = DefaultAmmo;
   
   public override void ApplyPowerUp(object obj){
     IHasAmmo receiver = obj as IHasAmmo;

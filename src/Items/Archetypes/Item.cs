@@ -18,8 +18,8 @@ public class Item: RigidBody, IItem, IHasInfo {
     public int id;
     public Speaker speaker;
     public string name, description;
-    public string meshPath, texturePath; // Set this before InitNodeStructure
-    public ItemFactory.Items itemEnum = ItemFactory.Items.None; // Set this in factory
+    public string meshPath, texturePath;
+    public ItemFactory.Items itemEnum = ItemFactory.Items.None;
     public MeshInstance meshInstance;
     public CollisionShape collisionShape;
     public bool collisionDisabled;
@@ -35,7 +35,6 @@ public class Item: RigidBody, IItem, IHasInfo {
         G      // eg. previous       Mouse Wheel Backward
     };
 
-    // Should take place after Item has been configured.
     public virtual void InitNodeStructure(){
         this.Connect("body_entered", this, nameof(OnCollide));
 
@@ -83,8 +82,7 @@ public class Item: RigidBody, IItem, IHasInfo {
         return this;
     }
 
-    public virtual void Update(float delta){
-    }
+    public virtual void Update(float delta){}
 
     public virtual void SetCollision(bool val){
         Godot.Collections.Array owners = GetShapeOwners();
@@ -134,6 +132,7 @@ public class Item: RigidBody, IItem, IHasInfo {
         CollisionShape areaShape = new CollisionShape();
         areaShape.Name = "AreaShape";
         area.AddChild(areaShape);
+        
         Godot.Collections.Array areaShapeOwners = area.GetShapeOwners();
         for(int i = 0; i < areaShapeOwners.Count; i++){
           int ownerInt = (int)areaShapeOwners[i];

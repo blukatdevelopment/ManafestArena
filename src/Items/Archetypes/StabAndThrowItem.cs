@@ -10,7 +10,7 @@ public class StabAndThrowItem : MeleeStabItem{
         int healthCost,
         int manaCost,
         int staminaCost,
-        float throwStrength;
+        float throwStrength
     ){
         this.name = name;
         this.description = description;
@@ -28,15 +28,11 @@ public class StabAndThrowItem : MeleeStabItem{
         );
 
         consumer = new StatConsumer(healthCost, manaCost, staminaCost);
-
         thrower = new ItemThrower(this as IItem);
-        thrower.Config(
-            
-        );
-
+        thrower.Config();
     }
 
-        public override void Equip(object wielder){
+    public override void Equip(object wielder){
         this.wielder = wielder;
         SetCollision(false);
         stabber.OnUpdateWielder();
