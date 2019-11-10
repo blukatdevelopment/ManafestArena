@@ -20,8 +20,7 @@ public class LootTable {
     this.actions = actions;
   }
 
-  // Return loot earned from that action
-  public Dictionary<string, int> HandleAction(string action){
+  public Dictionary<string, int> HandleLootingAction(string action){
     if(!actions.ContainsKey(action) || actions[action].Count == 0){
       return new Dictionary<string, int>();
     }
@@ -33,14 +32,18 @@ public class LootTable {
     List<LootDrop> drops = actions[action];
 
     foreach(LootDrop drop in drops){
-      if(Util.RandInt(1, 100, true) <= drop.chance){
+      int minChance = 1;
+      int maxChance = 100;
+      if(Util.RandInt(minChance, maxChance, true) <= drop.chance){
         int quantity = Util.RandInt(drop.minLoot, drop.maxLoot, true);
+        
         if(earned.ContainsKey(drop.lootName)){
           earned[drop.lootName] += quantity;
         }
         else{
           earned.Add(drop.lootName, quantity);
         }
+        
         if(availableLoot.ContainsKey(drop.lootName)){
           availableLoot[drop.lootName] += quantity;
         }
@@ -66,8 +69,10 @@ public class LootTable {
 
   public string ToString(){
     string ret = "LootTable:\n";
+    
     foreach(string action in actions.Keys){
       ret += "\t" + action + "\n";
+      
       List<LootDrop> drops = actions[action];
       foreach(LootDrop drop in drops){
         ret += "\t lootName: " + drop.lootName;

@@ -103,7 +103,6 @@
     <Compile Include="src/Items/Components/SelfDamager.cs" />
     <Compile Include="src/Items/Components/StatConsumer.cs" />
     <Compile Include="src/Actor/IHasBody.cs" />
-    <Compile Include="src/Actor/IHasInventory.cs" />
     <Compile Include="src/Actor/IHasInputHandler.cs" />
     <Compile Include="src/Actor/HumanoidAnimationHandler.cs" />
     <Compile Include="src/Items/Interfaces/ICollide.cs" />
@@ -124,8 +123,6 @@
     <Compile Include="src/Util/SessionEvent.cs" />
     <Compile Include="src/Db/SettingsDb.cs" />
     <Compile Include="src/Inventory/HotBar.cs" />
-    <Compile Include="src/Inventory/PaperDoll.cs" />
-    <Compile Include="src/Inventory/IInventory.cs" />
     <Compile Include="src/Inventory/Loot/LootTable.cs" />
     <Compile Include="src/Inventory/Loot/LootDrop.cs" />    
     <Compile Include="src/Career/Career.cs" />

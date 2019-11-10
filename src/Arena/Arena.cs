@@ -293,7 +293,7 @@ public class Arena : Spatial, IGamemode {
 
     Career career = Career.GetActiveCareer();
     if(id == playerWorldId && career != null){
-      career.lootTable.HandleAction("kill enemy");
+      career.lootTable.HandleLootingAction("kill enemy");
       Sound.PlayEffect(Sound.Effects.Coins);
 
       if(PlayerWon()){

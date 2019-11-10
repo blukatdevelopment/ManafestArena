@@ -62,7 +62,6 @@ public class DeviceState : Node {
     keys = new Dictionary<int, float>();
   }
 
-  // Will fail loudly if you listen for an invalid button/axis/key
   public float GetJoyButton(int button){
     return joyButtons[button];
   }
@@ -79,7 +78,6 @@ public class DeviceState : Node {
     return keys[key];
   }
 
-  // You don't need to add  mouseAxes. They are listened to automagically.
   public float GetMouseAxis(int axis){
     if(axis == (int)FPSInputHandler.MouseAxis.X){
       return mouseMovement.x;
@@ -127,7 +125,7 @@ public class DeviceState : Node {
     InputEventMouseButton btn = evt as InputEventMouseButton;
     if(btn!=null){
       int btnIndex = btn.ButtonIndex;
-      if(btnIndex == (int)ButtonList.WheelDown||btnIndex==(int)ButtonList.WheelUp)
+      
       if(mouseButtons.ContainsKey(btnIndex)){
         mouseButtons[btnIndex] = 1;
       }

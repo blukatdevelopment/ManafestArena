@@ -87,7 +87,7 @@ public class StateAi : IInputSource {
   public void EquipHotBarItem(IItem item){
     int slot = host.hotbar.GetSlotByItem(item);
     int activeSlot = host.hotbar.GetEquippedSlot();
-    int requiredPresses = host.hotbar.SlotDistance(activeSlot, slot);
+    int requiredPresses = host.hotbar.PressesToFinishSlot(activeSlot, slot);
     GD.Print("Going from " + activeSlot + " to " + slot + " with " + requiredPresses + " presses");
     for(int i = 0; i < requiredPresses; i++){
       Press(FPSInputHandler.Inputs.NextItem);
