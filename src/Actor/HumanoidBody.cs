@@ -301,9 +301,9 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     Move(grav, delta, true);
 
     // Kill actor when it falls out of map
-    if(actor.stats != null && actor.stats.HasStat("health") && GetTranslation().y < -100){
+    if(actor.stats != null && GetTranslation().y < -100){
       Damage damage = new Damage();
-      damage.health = actor.stats.GetStat("health");
+      damage.health = actor.stats.Health;
       actor.stats.ReceiveDamage(damage);
     }
   }
@@ -320,9 +320,9 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
       return;  
     }
 
-    if(actor.stats != null && actor.stats.HasStat("jumpcost")){
-      int jumpCost = actor.stats.GetStat("jumpcost");
-      if(actor.stats.ConsumeStat("stamina", jumpCost)){
+    if(actor.stats != null){
+      int jumpCost = actor.stats.JumpCost;
+      if(actor.stats.ConsumeCondition(Stats.Conditions.Stamina, jumpCost)){
         gravityVelocity = jumpForce;
         grounded = false;
       }

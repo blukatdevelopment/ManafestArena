@@ -9,16 +9,6 @@ public class ActorFactory {
     AI
   };
 
-  public enum StatsHandlers {
-    None,
-    Icepaws
-  };
-
-  public enum InventoryHandlers {
-    None,
-    Simple
-  };
-
   public enum Bodies {
     None,
     HumanoidBody,
@@ -36,16 +26,12 @@ public class ActorFactory {
 
   public static Actor FromComponentTypes(
     InputSources inputSource,
-    StatsHandlers statsHandler,
-    Bodies body,
-    InventoryHandlers inventoryHandler
+    Bodies body
   ){
     Actor actor = new Actor();
     InitInputHandler(inputSource, actor);
-    InitStats(statsHandler, actor);
     actor.SetBodyType(body);
 
-    InitInventory(inventoryHandler, actor);
     return actor;
   }
 
@@ -78,14 +64,6 @@ public class ActorFactory {
     }
   }
 
-  public static void InitStats(StatsHandlers statsHandler, Actor actor){
-    switch(statsHandler){
-      case StatsHandlers.Icepaws:
-        actor.stats = new IcepawsStats();
-      break;
-    }
-  }
-
   public static void InitBody(Actor actor){
     switch(actor.bodyType){
       case Bodies.HumanoidBody:
@@ -96,14 +74,6 @@ public class ActorFactory {
       break;
       case Bodies.BatBody:
         actor.body = new BatBody(actor);
-      break;
-    }
-  }
-
-  public static void InitInventory(InventoryHandlers inventoryHandler, Actor actor){
-    switch(inventoryHandler){
-      case InventoryHandlers.Simple:
-        // Set up a simple inventory
       break;
     }
   }
@@ -130,45 +100,27 @@ public class ActorFactory {
   }
 
   public static Actor DebugPlayerCharacter(){
-    Actor actor = FromComponentTypes(InputSources.Keyboard, StatsHandlers.Icepaws, Bodies.HumanoidBody, InventoryHandlers.None);
-    actor.stats.SetStat("intelligence", 5);
-    actor.stats.SetStat("charisma", 5);
-    actor.stats.SetStat("endurance", 5);
-    actor.stats.SetStat("perception", 5);
-    actor.stats.SetStat("agility", 5);
-    actor.stats.SetStat("willpower", 5);
-    actor.stats.SetStat("strength", 5);
-    actor.stats.RestoreCondition();
+    Actor actor = FromComponentTypes(InputSources.Keyboard, Bodies.HumanoidBody);
+  
+    actor.stats = new Stats(Stats.EmptyStats(5));
     actor.hotbar.AddItem(0, ItemFactory.Factory(ItemFactory.Items.Knife));
     actor.InitCam(0);
     return actor;
   }
 
   public static Actor TargetCharacter(){
-    Actor actor = FromComponentTypes(InputSources.None, StatsHandlers.Icepaws, Bodies.HumanoidBody, InventoryHandlers.None);
-    actor.stats.SetStat("intelligence", 5);
-    actor.stats.SetStat("charisma", 5);
-    actor.stats.SetStat("endurance", 5);
-    actor.stats.SetStat("perception", 5);
-    actor.stats.SetStat("agility", 5);
-    actor.stats.SetStat("willpower", 5);
-    actor.stats.SetStat("strength", 5);
-    actor.stats.RestoreCondition();
+    Actor actor = FromComponentTypes(InputSources.None, Bodies.HumanoidBody);
+
+    actor.stats = new Stats(Stats.EmptyStats(5));
     actor.hotbar = new HotBar(10, actor);
     actor.hotbar.AddItem(0, ItemFactory.Factory(ItemFactory.Items.Knife));
     return actor;
   }
 
   public static Actor DebugEnemyCharacter(){
-    Actor actor = FromComponentTypes(InputSources.AI, StatsHandlers.Icepaws, Bodies.HumanoidBody, InventoryHandlers.None);
-    actor.stats.SetStat("intelligence", 5);
-    actor.stats.SetStat("charisma", 5);
-    actor.stats.SetStat("endurance", 5);
-    actor.stats.SetStat("perception", 5);
-    actor.stats.SetStat("agility", 5);
-    actor.stats.SetStat("willpower", 5);
-    actor.stats.SetStat("strength", 5);
-    actor.stats.RestoreCondition();
+    Actor actor = FromComponentTypes(InputSources.AI, Bodies.HumanoidBody);
+
+    actor.stats = new Stats(Stats.EmptyStats(5));
     actor.hotbar = new HotBar(10, actor);
     actor.hotbar.AddItem(0, ItemFactory.Factory(ItemFactory.Items.Knife));
     return actor;

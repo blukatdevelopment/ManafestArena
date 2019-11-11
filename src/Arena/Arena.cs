@@ -148,8 +148,8 @@ public class Arena : Spatial, IGamemode {
     int id = NextId();
     ActorFactory.InitActor(actor);
     
-    if(actor.stats != null && actor.stats.HasStat("id")){
-      actor.stats.SetStat("id", id);
+    if(actor.stats != null){
+      actor.stats.Id = id;
       scores.Add(id, 0);
       actors.Add(id, actor);
     }
@@ -266,8 +266,8 @@ public class Arena : Spatial, IGamemode {
     Actor killed = ActorFromPath(actorPaths[0]);
     Actor killer = ActorFromPath(actorPaths[1]);
 
-    int killedId = killed != null ? killed.stats.GetStat("id") : -1;
-    int killerId = killer != null ? killer.stats.GetStat("id") : -1;
+    int killedId = killed != null ? killed.stats.Id : -1;
+    int killerId = killer != null ? killer.stats.Id : -1;
 
     if(killedId != -1){
       QueueClearActor(killedId,10);

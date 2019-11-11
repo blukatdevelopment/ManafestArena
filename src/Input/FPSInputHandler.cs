@@ -57,13 +57,13 @@ public class FPSInputHandler : IInputHandler {
     float currentSpeed = walkSpeed;
     int sprintCost = 1;
     if(actor.stats != null){
-      sprintCost = actor.stats.GetStat("sprintcost");
+      sprintCost = actor.stats.SprintCost;
     }
 
     if(activelySprinting && actor.stats == null){
       currentSpeed = sprintSpeed;
     }
-    else if(activelySprinting && actor.stats.ConsumeStat("stamina", sprintCost)){
+    else if(activelySprinting && actor.stats.ConsumeCondition(Stats.Conditions.Stamina, sprintCost)){
       currentSpeed = sprintSpeed;
     }
 
@@ -75,10 +75,10 @@ public class FPSInputHandler : IInputHandler {
   public void UpdateSpeed(){
     if(actor != null && actor.stats != null){
       float speedDivisor = 100f;
-      walkSpeed = (float)actor.stats.GetStat("speed") / speedDivisor;
+      walkSpeed = (float)actor.stats.Speed / speedDivisor;
       walkSpeed += SpeedBase;
       
-      sprintSpeed = walkSpeed + ((float)actor.stats.GetStat("sprintbonus"))/ speedDivisor;
+      sprintSpeed = walkSpeed + ((float)actor.stats.SprintBonus)/ speedDivisor;
     }
     else{
       float speedCoefficient = 2f;
