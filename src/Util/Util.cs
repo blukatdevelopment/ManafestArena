@@ -450,4 +450,8 @@ public class Util{
     return damage * (1f/delay);
   }
 
+  public static Array GetEnumValues<T>(){
+    return Enum.GetValues(typeof(T));
+  }
+
 }

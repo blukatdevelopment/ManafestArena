@@ -134,8 +134,6 @@
     <Compile Include="src/Career/Encounters/ShopEncounter.cs" />
     <Compile Include="src/Db/CareerDb.cs" />
     <Compile Include="src/Db/SoundDb.cs" />
-    <Compile Include="src/Stats/IStats.cs" />
-    <Compile Include="src/Stats/IcepawsStats.cs" />
     <Compile Include="src/Stats/IHasStats.cs" />
     <Compile Include="src/AI/StateAi.cs" />
     <Compile Include="src/AI/IBehaviorState.cs" />
@@ -153,6 +151,7 @@
     <Compile Include="src/Menus/Interfaces/ISubmenu.cs" />
     <Compile Include="src/Menus/Interfaces/IInputHandledMenu.cs" />
     <Compile Include="src/Menus/Interfaces/IMenu.cs" />
+    <Compile Include="src/Stats/Stats.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" /> 
 </Project>

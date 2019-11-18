@@ -54,12 +54,12 @@ public class HUDMenu : MenuBase{
       GD.Print("Player 1 doesn't exist.");
       return;
     }
-    IStats stats = player.GetStats();
+    Stats stats = player.GetStats();
     statBox.Text = StatusText(player);
 
-    staminaBar.UpdateProgress(stats.GetStat("stamina"),stats.GetStat("staminamax"));
-    healthBar.UpdateProgress(stats.GetStat("health"),stats.GetStat("healthmax"));
-    manaBar.UpdateProgress(stats.GetStat("mana"),stats.GetStat("manamax"));
+    staminaBar.UpdateProgress(stats.Stamina, stats.StaminaMax);
+    healthBar.UpdateProgress(stats.Health, stats.HealthMax);
+    manaBar.UpdateProgress(stats.Mana, stats.ManaMax);
 
     string itemText = player.hotbar.GetInfo();
 
@@ -73,13 +73,13 @@ public class HUDMenu : MenuBase{
     if(player.stats == null){
       return "";
     }
-    IStats stats = player.stats;
+    Stats stats = player.stats;
 
     string ret = "";
 
-    ret += "Health: " + stats.GetStat("health") + "/" + stats.GetStat("healthmax");
-    ret += "\nStamina: " + stats.GetStat("stamina") + "/" + stats.GetStat("staminamax");
-    ret += "\nMana: " + stats.GetStat("mana") + "/" + stats.GetStat("manamax");
+    ret += "Health: " + stats.Health + "/" + stats.HealthMax;
+    ret += "\nStamina: " + stats.Stamina + "/" + stats.StaminaMax;
+    ret += "\nMana: " + stats.Mana + "/" + stats.ManaMax;
     return ret;
   }
 
@@ -91,11 +91,11 @@ public class HUDMenu : MenuBase{
       return;
     }
     
-    IStats stats = player.GetStats();
+    Stats stats = player.GetStats();
 
-    staminaBar = new ColorProgressBar(this, new Color(0,0.8f,0),stats.GetStat("stamina"),stats.GetStat("staminamax"));
-    healthBar = new ColorProgressBar(this, new Color(1,0,0),stats.GetStat("health"),stats.GetStat("healthmax"));
-    manaBar = new ColorProgressBar(this, new Color(0,0,1),stats.GetStat("mana"),stats.GetStat("manamax"));
+    staminaBar = new ColorProgressBar(this, new Color(0,0.8f,0),stats.Stamina, stats.StaminaMax);
+    healthBar = new ColorProgressBar(this, new Color(1,0,0),stats.Stamina, stats.HealthMax);
+    manaBar = new ColorProgressBar(this, new Color(0,0,1),stats.Mana, stats.ManaMax);
 
     itemBox = Menu.Label(this, "item");
     objectiveBox = Menu.Label(this, "Objective Info");

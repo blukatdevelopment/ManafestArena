@@ -8,8 +8,8 @@ using System.Collections.Generic;
 
 public class Actor : IHasInputHandler, IHasStats, IHasBody {
   public ActorFactory.Bodies bodyType;
-  public IInputHandler inputHandler; // 
-  public IStats stats;
+  public IInputHandler inputHandler;
+  public Stats stats;
   public IBody body;
   public HotBar hotbar;
   public int camId = -1;
@@ -29,7 +29,7 @@ public class Actor : IHasInputHandler, IHasStats, IHasBody {
     return inputHandler;
   }
 
-  public IStats GetStats(){
+  public Stats GetStats(){
     return stats;
   }
 

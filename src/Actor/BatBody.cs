@@ -212,9 +212,9 @@ public class BatBody : KinematicBody , IBody, IReceiveDamage
   private void DieWhenOutOfBounds(){
     float minimumYBounds = -100;
     
-    if(actor.stats != null && actor.stats.HasStat("health") && GetTranslation().y < minimumYBounds){
+    if(actor.stats != null && GetTranslation().y < minimumYBounds){
       Damage damage = new Damage();
-      damage.health = actor.stats.GetStat("health");
+      damage.health = actor.stats.Health;
       actor.stats.ReceiveDamage(damage);
     }
 
