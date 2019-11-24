@@ -35,9 +35,10 @@ public class Session : Node {
   List<DeviceState> deviceStates;
 
   public override void _Ready() {
+    EnforceSingleton();
     PauseMode = PauseModeEnum.Process;
     activeGamemodes = new Dictionary<string, Node>();
-    EnforceSingleton();
+    ConfigsDb.Init();
     CareerDb.Init();
     ChangeMenu("MainMenu");
     InitJukeBox();

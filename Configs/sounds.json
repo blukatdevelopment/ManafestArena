@@ -1,0 +1,34 @@
+[
+{
+  "name": "RifleShot",
+  "file": "res://Assets/Audio/Effects/pew.wav"
+},
+{
+  "name": "RifleReload",
+  "file": "res://Assets/Audio/Effects/chtcht.wav"
+},
+{
+  "name": "FistSwing",
+  "file": "res://Assets/Audio/Effects/swing.wav"
+},
+{
+  "name": "FistImpact",
+  "file": "res://Assets/Audio/Effects/impact.wav"
+},
+{
+  "name": "ActorDamage",
+  "file": "res://Assets/Audio/Effects/actor_damage.wav"
+},
+{
+  "name": "ActorDeath",
+  "file": "res://Assets/Audio/Effects/actor_die.wav"
+},
+{
+  "name": "Click",
+  "file": "res://Assets/Audio/Effects/click.wav"
+},
+{
+  "name": "Coins",
+  "file": "res://Assets/Audio/Effects/coins.wav"
+}
+]

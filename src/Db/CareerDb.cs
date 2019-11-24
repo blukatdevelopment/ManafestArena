@@ -14,6 +14,7 @@ public class CareerDb {
   public const string RelicsFile = "Configs/relics.json";
   public const string PotionsFile = "Configs/potions.json";
   public static Dictionary<string,List<Dictionary<string, string>>> configData;
+  
 
   public static void Init(){
     LoadConfigData();

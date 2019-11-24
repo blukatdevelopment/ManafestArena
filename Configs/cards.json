@@ -3,30 +3,30 @@
    "name": "sword",
    "class": "MeleeStabItem",
    "icon": "Assets/Textures/UI/Icons/sword.png",
-   "damage": "30",
-   "uses": "3"
+   "damage": 30,
+   "uses": 3
  },
  {
    "name": "sword+",
    "class": "MeleeStabItem",
    "icon": "Assets/Textures/UI/Icons/sword.png",
-   "damage": "35",
-   "uses": "3"
+   "damage": 35,
+   "uses": 3
  },
  {
    "name": "crossbow",
    "class": "RangedProjectileItem",
    "icon": "Assets/Textures/UI/Icons/crossbow.png",
-   "damage": "55",
-   "uses": "5",
-   "reload_delay": "0.5"
+   "damage": 55,
+   "uses": 5,
+   "reload_delay": 0.5
  },
  {
    "name": "crossbow+",
    "class": "RangedProjectileItem",
    "icon": "Assets/Textures/UI/Icons/crossbow.png",
-   "damage": "55",
-   "uses": "5",
-   "reload_delay": "0.25"
+   "damage": 55,
+   "uses": 5,
+   "reload_delay": 0.25
  }
 ]
