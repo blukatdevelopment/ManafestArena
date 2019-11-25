@@ -13,7 +13,6 @@ using System.Text;
 public class Session : Node {
   public static Session session;
   
-  public NetworkSession netSes;
   public Random random;
   public AudioStreamPlayer jukeBox;
   public List<AudioStreamPlayer> sfxPlayers;
@@ -22,11 +21,10 @@ public class Session : Node {
   public Sound.Songs currentSong;
   bool clearGame = false;
   public Node activeMenu;
-  //public List<Node> activeGamemodes;
-  private System.Collections.Generic.Dictionary<string, Node> activeGamemodes;
+
+  private Dictionary<string, Node> activeGamemodes;
 
   public const string DebugMenu = "";
-  public const bool DebugTests = false;
 
   // Settings
   public float masterVolume, sfxVolume, musicVolume;
@@ -35,28 +33,15 @@ public class Session : Node {
 
   // Input
   List<DeviceState> deviceStates;
-  
-
-  public static int NextItemId(){
-    return 0;
-  }
-
-  public static int NextActorId(){
-    return 0;
-  }
 
   public override void _Ready() {
     PauseMode = PauseModeEnum.Process;
-    activeGamemodes = new System.Collections.Generic.Dictionary<string, Node>();
+    activeGamemodes = new Dictionary<string, Node>();
     EnforceSingleton();
     CareerDb.Init();
     ChangeMenu("MainMenu");
     InitJukeBox();
     InitSettings();
-
-    if(DebugTests){
-      PerformTests();  
-    }
     
     AddDevice(0);
 
@@ -86,11 +71,7 @@ public class Session : Node {
     }
   }
 
-  public void PerformTests(){
-    Test.Init();
-    LootTable.TestLootTable();
-    Test.PrintFails();
-  }
+
   public static void AddGamemode(string name, Node node){
     Session ses = Session.session;
     
@@ -181,9 +162,6 @@ public class Session : Node {
   }
   
   public static System.Random GetRandom(){
-    if(Session.session.netSes != null && Session.session.netSes.random != null){
-      return Session.session.netSes.random;
-    }
 
     if(Session.session.random != null){
       return Session.session.random;
@@ -191,23 +169,6 @@ public class Session : Node {
 
     Session.session.random = new System.Random();
     return Session.session.random;
-  }
-
-  public static bool NetActive(){
-    if(session.netSes != null){
-      return true;
-    }
-    
-    return false;
-  }
-
-  /* Used for syncing items. */
-  public static bool IsServer(){
-    if(session.netSes != null){
-      return session.netSes.isServer;
-    }
-    
-    return false;
   }
 
   /* Convenience method for creating nodes. */

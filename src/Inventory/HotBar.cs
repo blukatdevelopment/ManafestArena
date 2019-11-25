@@ -68,10 +68,10 @@ public IItem[] GetItemSlots(){
     return ValidSlot(i) ? itemSlots[i] : null;
   }
 
-    /* How many times do you need to hit NextItem to get from the
+  /* How many times do you need to hit NextItem to get from the
      the start to finish.
   */
-  public int SlotDistance(int start, int finish){
+  public int PressesToFinishSlot(int start, int finish){
     if(start < finish){
       return finish - start;
     }
@@ -181,7 +181,6 @@ public IItem[] GetItemSlots(){
     equippedSlot = PrevNonEmptySlot(equippedSlot);
     EquipActive();
   }
-
 
   private int NextSlot(int i = -1){
     if(i == -1){

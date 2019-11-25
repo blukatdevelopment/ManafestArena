@@ -8,9 +8,7 @@ public class ArenaSettings {
 	public bool useKits, usePowerups;
 	public int duration; // Minutes
 	public int bots;
-	public List<int> botIds; 
-	//public List<ActorData> enemies;
-	//public ActorData player;
+	public List<int> botIds;
 
 
 	public ArenaSettings(){
@@ -19,6 +17,5 @@ public class ArenaSettings {
 		duration = 5;
 		bots = 0;
 		botIds = new List<int>();
-		//enemies = new List<ActorData>();
 	}
 }

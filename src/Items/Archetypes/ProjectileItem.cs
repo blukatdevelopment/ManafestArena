@@ -7,7 +7,6 @@ public class ProjectileItem : Item {
     public CollisionDamager collision;
     public string sender;
 
-
     public ProjectileItem(){}
 
     public ProjectileItem(

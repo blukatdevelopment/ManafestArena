@@ -1,5 +1,5 @@
 /*
-    Store's players progress through a game.
+    Manages player's progress through a game.
 */
 using Godot;
 using System;
@@ -20,9 +20,8 @@ public class Career : Node , IGamemode{
     lootTable = new LootTable();
   }
 
-  new public string ToString(){
+  public string ToString(){
     string text = "Career:\n";
-
     return text;
   }
 
@@ -41,39 +40,9 @@ public class Career : Node , IGamemode{
   public void Update(float delta){}
 
   public void CompleteEncounter(){
-    GD.Print("CompleteEncounter");
     encounterInProgress = false;
     Session.ChangeMenu("CareerMenu");
     Session.RemoveGamemode("arena");
-
-    // if(Session.GetPlayer() != null){
-    //   //playerData = Session.GetPlayer().GetData();
-    //   if(playerData != null && playerData.stats != null){
-    //     int health = playerData.stats.GetBaseStat(StatsManager.Stats.Health);
-    //     stats.SetBaseStat(StatsManager.Stats.Health, health);
-    //     playerData.stats = stats;
-    //   }
-    // }
-
-    // Session.ClearGame();
-    // int id = stats.GetStat(StatsManager.Stats.CurrentNode);
-    // CareerNode node = CareerNode.GetNode(id, careerNodes);
-    // int nodeLevel = CareerNode.GetLevel(node, careerNodes);
-    // int nextLevel = nodeLevel -1;
-
-    // stats.SetBaseStat(StatsManager.Stats.CurrentLevel, nextLevel);
-    // stats.SetBaseStat(StatsManager.Stats.LastNode, id);
-    // stats.SetBaseStat(StatsManager.Stats.CurrentNode, 0);
-    // stats.SetBaseStat(StatsManager.Stats.NodeInProgress, 0);
-    
-    // CareerDb.SaveCareer(this);
-
-    // if(nextLevel == -1){
-    //   CompleteGame();
-    // }
-    // else{
-    //   Session.ChangeMenu(Menu.Menus.Career);
-    // }
   }
 
   public Actor GetPlayer(){
@@ -114,7 +83,6 @@ public class Career : Node , IGamemode{
   public static IEncounter RandomEncounter(){
     List<IEncounter> encounterTypes = new List<IEncounter>{
       new ArenaMatchEncounter() as IEncounter//,
-      //new PressEventEncounter() as IEncounter,
       //new RestSiteEncounter() as IEncounter,
       //new ShopEncounter() as IEncounter
     };

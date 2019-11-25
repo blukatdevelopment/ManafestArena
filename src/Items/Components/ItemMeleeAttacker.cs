@@ -22,17 +22,17 @@ public class ItemMeleeAttacker {
     }
 
     public void Config(
-        float attackSpeed, // How long a stab takes to complete
-        Damage damage, // Damage object passed to stabbed target
-        Speaker speaker, // Use this to make noise
+        float attackSpeed,
+        Damage damage,
+        Speaker speaker,
         Sound.Effects attackSound,
         Sound.Effects impactSound
     ){
         this.attackSpeed  = attackSpeed;
-        this.damage     = damage;
-        this.speaker    = speaker;
-        this.attackSound = attackSound;
-        this.impactSound = impactSound;
+        this.damage       = damage;
+        this.speaker      = speaker;
+        this.attackSound  = attackSound;
+        this.impactSound  = impactSound;
     }
 
     public void Update(float delta){
@@ -45,7 +45,6 @@ public class ItemMeleeAttacker {
     }
 
     public void OnUpdateWielder(){
-
         EndAttack();
         UpdateSender();        
     }

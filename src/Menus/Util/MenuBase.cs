@@ -48,14 +48,16 @@ public class MenuBase : Container, IMenu, IHasSubmenu {
       submenu.QueueFree();
     }
 
-    if(menuName==null||menuName==""){
+    if(menuName == null || menuName == ""){
       submenu = null;
       Input.SetMouseMode(Input.MouseMode.Captured);
       return;
     }
+    
     Input.SetMouseMode(Input.MouseMode.Visible);
     Node menuNode = Menu.MenuFactory(menuName);
     IMenu menu = menuNode as IMenu;
+    
     if(menu == null){
       GD.Print("Menu " + menuName + " was null.");
     }

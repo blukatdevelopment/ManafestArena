@@ -57,7 +57,6 @@
     <Compile Include="src/Actor/Actor.cs" />
     <Compile Include="src/Actor/ActorFactory.cs" />
     <Compile Include="src/Actor/IBody.cs" />
-    <Compile Include="src/Actor/PillBody.cs" />
     <Compile Include="src/Actor/HumanoidBody.cs" />
     <Compile Include="src/Actor/HumanoidBody2.cs" />
     <Compile Include="src/Actor/WolfBody.cs" />
@@ -78,7 +77,6 @@
     <Compile Include="src/Menus/ControlsMenu.cs" />
     <Compile Include="src/Menus/CareerMenu.cs" />
     <Compile Include="src/Menus/NewGameMenu.cs" />
-    <Compile Include="src/Menus/PressEventMenu.cs" />
     <Compile Include="src/Menus/CreditsMenu.cs" />
     <Compile Include="src/Menus/ShopMenu.cs" />
     <Compile Include="src/Menus/RestSiteMenu.cs" />
@@ -106,7 +104,6 @@
     <Compile Include="src/Items/Components/SelfDamager.cs" />
     <Compile Include="src/Items/Components/StatConsumer.cs" />
     <Compile Include="src/Actor/IHasBody.cs" />
-    <Compile Include="src/Actor/IHasInventory.cs" />
     <Compile Include="src/Actor/IHasInputHandler.cs" />
     <Compile Include="src/Actor/HumanoidAnimationHandler.cs" />
     <Compile Include="src/Items/Interfaces/ICollide.cs" />
@@ -116,12 +113,9 @@
     <Compile Include="src/Items/ItemData.cs" />
     <Compile Include="src/Arena/Arena.cs" />
     <Compile Include="src/Arena/ArenaSettings.cs" />
-    <Compile Include="src/Util/NetworkSession.cs" />
     <Compile Include="src/Util/Session.cs" />
     <Compile Include="src/Util/IGamemode.cs" />
     <Compile Include="src/Util/Sound.cs" />
-    <Compile Include="src/Util/PlayerData.cs" />
-    <Compile Include="src/Util/Test.cs" />
     <Compile Include="src/Util/Util.cs" />
     <Compile Include="src/Util/IncrementTimer.cs" />
     <Compile Include="src/Util/GFX.cs" />
@@ -129,8 +123,6 @@
     <Compile Include="src/Util/SessionEvent.cs" />
     <Compile Include="src/Db/SettingsDb.cs" />
     <Compile Include="src/Inventory/HotBar.cs" />
-    <Compile Include="src/Inventory/PaperDoll.cs" />
-    <Compile Include="src/Inventory/IInventory.cs" />
     <Compile Include="src/Inventory/Loot/LootTable.cs" />
     <Compile Include="src/Inventory/Loot/LootDrop.cs" />    
     <Compile Include="src/Career/Career.cs" />
@@ -139,15 +131,10 @@
     <Compile Include="src/Career/CareerTreeFactory.cs" />
     <Compile Include="src/Career/IEncounter.cs" />
     <Compile Include="src/Career/Encounters/ArenaMatchEncounter.cs" />
-    <Compile Include="src/Career/Encounters/PressEventEncounter.cs" />
     <Compile Include="src/Career/Encounters/RestSiteEncounter.cs" />
     <Compile Include="src/Career/Encounters/ShopEncounter.cs" />
-    <Compile Include="src/Career/PressEvent.cs" />
-    <Compile Include="src/Career/PressEventNode.cs" />
     <Compile Include="src/Db/CareerDb.cs" />
     <Compile Include="src/Db/SoundDb.cs" />
-    <Compile Include="src/Stats/IStats.cs" />
-    <Compile Include="src/Stats/IcepawsStats.cs" />
     <Compile Include="src/Stats/IHasStats.cs" />
     <Compile Include="src/AI/StateAi.cs" />
     <Compile Include="src/AI/IBehaviorState.cs" />
@@ -157,7 +144,6 @@
     <Compile Include="src/AI/MeleeCombatState.cs" />
     <Compile Include="src/AI/FightingState.cs" />
     <Compile Include="src/Menus/Util/ColorProgressBar.cs" />
-    <Compile Include="src/Menus/Util/TextBox.cs" />
     <Compile Include="src/Menus/Util/Menu.cs" />
     <Compile Include="src/Menus/Util/Button.cs" />
     <Compile Include="src/Menus/Util/TexturedButton.cs" />
@@ -166,6 +152,7 @@
     <Compile Include="src/Menus/Interfaces/ISubmenu.cs" />
     <Compile Include="src/Menus/Interfaces/IInputHandledMenu.cs" />
     <Compile Include="src/Menus/Interfaces/IMenu.cs" />
+    <Compile Include="src/Stats/Stats.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)/Microsoft.CSharp.targets" /> 
 </Project>

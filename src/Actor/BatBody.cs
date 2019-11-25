@@ -20,8 +20,11 @@ public class BatBody : KinematicBody , IBody, IReceiveDamage
   const int maxY = 90;
   const int minY = -40;
 
-  float height = 4;  
-  Vector3 GravityAcceleration = new Vector3(0,-9.81f,0) ;
+  const float StartingHeight = 4;
+  float height = StartingHeight;
+
+  const float GravityForceY = -9.81f;
+  Vector3 GravityAcceleration = new Vector3(0,GravityForceY,0) ;
   const float TerminalVelocity = -53;
   const float SightSize = 100f;
 
@@ -33,11 +36,7 @@ public class BatBody : KinematicBody , IBody, IReceiveDamage
   }
 
   public void AnimationTrigger(string triggerName){
-    GD.Print("Animation trigger " + triggerName);
-    // triggerName = triggerName.ToLower();
-    // if(triggerName=="bite"){
-    //   stateMachine.Travel("bite");
-    // }
+    // FIX ME: Implement animations.
   }
 
   public Actor GetActor(){
@@ -62,7 +61,7 @@ public class BatBody : KinematicBody , IBody, IReceiveDamage
     AddChild(collisionShape);
 
     eyes = rootNode.FindNode("Eyes") as Spatial;
-    //eyes = rootNode.FindNode("Test") as Spatial; //for testing
+
     meshInstance = rootNode.FindNode("Body") as MeshInstance;
     skeleton = rootNode.FindNode("Skeleton") as Skeleton;
     mouth = rootNode.FindNode("Mouth") as Spatial;
@@ -74,8 +73,6 @@ public class BatBody : KinematicBody , IBody, IReceiveDamage
     animationTree.SetActive(true);
     stateMachine = animationTree.Get("parameters/playback") as AnimationNodeStateMachinePlayback;
   }
-
-
 
   public void ReceiveDamage(Damage damage){
     if(dead){
@@ -108,27 +105,16 @@ public class BatBody : KinematicBody , IBody, IReceiveDamage
   }
 
   public List<Node> GetHands(){ 
-    return new List<Node>(){}; //No hands for wolf (for now)
+    return new List<Node>(){};
   }
   
   public Node GetNode(){ 
     return this as Node; 
   }
   
-  public void InitCam(int index){
-    if(index != 0){
-      return; // Splitscreen cameras not implemented
-    }
-    
-    Camera cam = new Camera();
-    cam.Far = 1000f;
-    eyes.AddChild(cam);
-  }
-  public void Move(Vector3 movement, float moveDelta = 1f, bool ignoreAnimator = true, bool sprint = false){
+  public void InitCam(int index){}
 
-      if(!ignoreAnimator){
-        
-      }
+  public void Move(Vector3 movement, float moveDelta = 1f, bool ignoreAnimator = true, bool sprint = false){
       movement *= moveDelta;
       
       Transform current = GetTransform();
@@ -149,9 +135,7 @@ public class BatBody : KinematicBody , IBody, IReceiveDamage
           collider.OnCollide(this as object);
         }
       }
-
   }
-
 
   public void Turn(Vector3 movement, float moveDelta = 1f){
     movement *= moveDelta;
@@ -169,43 +153,33 @@ public class BatBody : KinematicBody , IBody, IReceiveDamage
     }
 
     this.SetRotationDegrees(bodyRot);
-    
-    // Vector3 headRot = eyes.GetRotationDegrees();
-    // headRot.x += movement.y;
-
-    // if(headRot.x < minY){
-    //   headRot.x = minY;
-    // }
-
-    // if(headRot.x > maxY){
-    //   headRot.x = maxY;
-    // }
-
-    //eyes.SetRotationDegrees(headRot);
-    //eyes2.SetRotationDegrees(headRot);
   }
 
   public void Update(float delta){
+    float margin = 0.1f;
+
     CalcVelocity(delta);
-    if(dead&&!grounded){
-      float margin = 0.1f;
-      if(TestMove(Transform,margin*Vector3.Down)){
-        if(velocity.y < 0){
-          grounded = true;
-          velocity = new Vector3();
-        }
-      }
+    
+    if(!dead || grounded || !TestMove(Transform,margin*Vector3.Down)){
+      return;
     }
+    
+    if(velocity.y >= 0){
+      return;
+    }
+
+    grounded = true;
+    velocity = new Vector3();
   }
 
   public void Fly(float delta){
     float margin = 0.2f;
     float riseSpeed = 3;
 
-    if(GetTranslation().y-height>margin){
-      Move(Vector3.Down*riseSpeed, delta, true);
+    if(GetTranslation().y - height > margin){
+      Move(Vector3.Down * riseSpeed, delta, true);
     }
-    else if(GetTranslation().y-height<-margin){
+    else if(GetTranslation().y - height <- margin){
       Move(Vector3.Up*riseSpeed, delta, true);
     }
   }
@@ -216,7 +190,7 @@ public class BatBody : KinematicBody , IBody, IReceiveDamage
       if(grounded){
         return;
       }
-      Gravity(delta);
+      ApplyGravity(delta);
     }
     else{
       Fly(delta);
@@ -232,15 +206,21 @@ public class BatBody : KinematicBody , IBody, IReceiveDamage
     
     Move(velocity, delta, true);
 
-    // Kill actor when it falls out of map
-    if(actor.stats != null && actor.stats.HasStat("health") && GetTranslation().y < -100){
-      Damage damage = new Damage();
-      damage.health = actor.stats.GetStat("health");
-      actor.stats.ReceiveDamage(damage);
-    }
+    DieWhenOutOfBounds();
   }
 
-  private void Gravity(float delta){
+  private void DieWhenOutOfBounds(){
+    float minimumYBounds = -100;
+    
+    if(actor.stats != null && GetTranslation().y < minimumYBounds){
+      Damage damage = new Damage();
+      damage.health = actor.stats.Health;
+      actor.stats.ReceiveDamage(damage);
+    }
+
+  }
+
+  private void ApplyGravity(float delta){
     Vector3 gravityForce = GravityAcceleration * delta;
     velocity += gravityForce;
 
@@ -250,20 +230,11 @@ public class BatBody : KinematicBody , IBody, IReceiveDamage
     
     Move(velocity, delta, true);
 
-    // Kill actor when it falls out of map
-    if(actor.stats != null && actor.stats.HasStat("health") && GetTranslation().y < -100){
-      Damage damage = new Damage();
-      damage.health = actor.stats.GetStat("health");
-      actor.stats.ReceiveDamage(damage);
-    }
+    DieWhenOutOfBounds();
   }
 
-  public void ToggleCrouch(){
-
-  }
-  public void Jump(){
-      
-  }
+  public void ToggleCrouch(){}
+  public void Jump(){}
 
   public void HoldItem(int hand, IItem item){
     Node node = item.GetNode();
@@ -275,8 +246,6 @@ public class BatBody : KinematicBody , IBody, IReceiveDamage
       mouth.RemoveChild(item.GetNode());
     }
   }
-
-
 
   public Speaker GetSpeaker(){
     return speaker;
@@ -297,7 +266,7 @@ public class BatBody : KinematicBody , IBody, IReceiveDamage
     trans.origin = pos;
     Transform = trans;
     dead = true;
-    //play dead anim
+    //FIX ME: play dead anim
   }
 
   public List<Actor> ActorsInSight(){
@@ -310,6 +279,7 @@ public class BatBody : KinematicBody , IBody, IReceiveDamage
     Vector3 max = spat.Transform.origin + offset;
     List<object> objects = Util.SiblingBoxCast(spat, min, max);
     List<Actor> ret = new List<Actor>();
+
     foreach(object obj in objects){
       Node node = obj as Node;
       Actor sightedActor = Actor.GetActorFromNode(node);
@@ -320,7 +290,6 @@ public class BatBody : KinematicBody , IBody, IReceiveDamage
     return ret;
   }
 
-  // The end of a ray pointed forward in global space
   public Vector3 Get3DCursor(float distance = 100f){
     Vector3 start = eyes.GlobalTransform.origin;
     Transform headTrans = eyes.Transform;
@@ -333,7 +302,7 @@ public class BatBody : KinematicBody , IBody, IReceiveDamage
   public Vector3 LookingDegrees(){
     Vector3 torsoRot = GetRotationDegrees();
     Vector3 eyesRot = eyes.GetRotationDegrees();
-    //torsoRot.x = eyesRot.x;
+
     return torsoRot;
   }
 

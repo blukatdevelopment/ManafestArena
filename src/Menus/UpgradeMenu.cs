@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 
 public class UpgradeMenu : MenuBase {
-  public List<System.Collections.Generic.Dictionary<string, string>> cards;
+  public List<Dictionary<string, string>> cards;
   public TextEdit background;
   public List<Button> upgradeButtons;
   public const int CardsPerRow = 4;
@@ -23,9 +23,9 @@ public class UpgradeMenu : MenuBase {
     else{
       // IMPLEMENT ME
     }
-    cards = new List<System.Collections.Generic.Dictionary<string, string>>();
+    cards = new List<Dictionary<string, string>>();
     foreach(string cardName in cardNames){
-      System.Collections.Generic.Dictionary<string, string> card = CareerDb.GetCard(cardName);
+      Dictionary<string, string> card = CareerDb.GetCard(cardName);
       if(card != null){
         cards.Add(card);
       }
@@ -36,7 +36,7 @@ public class UpgradeMenu : MenuBase {
     background = Menu.BackgroundBox(this);
 
     upgradeButtons = new List<Button>();
-    foreach(System.Collections.Generic.Dictionary<string, string> card in cards){
+    foreach(Dictionary<string, string> card in cards){
       string upgradeName = card["name"] + "+"; 
       if(CareerDb.GetCard(upgradeName) == null){
         GD.Print("Card " + card["name"] + " has no upgrade.");

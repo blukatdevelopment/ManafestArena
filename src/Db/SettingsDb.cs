@@ -11,10 +11,10 @@ using System.Collections.Generic;
 public class SettingsDb{
     const string SavesDirectory = "Saves/";
     const string SettingsPath = "Saves/settings.json";
-    System.Collections.Generic.Dictionary<string, string> settings;
+    Dictionary<string, string> settings;
 
     public SettingsDb(){
-        settings = new System.Collections.Generic.Dictionary<string, string>();
+        settings = new Dictionary<string, string>();
         FetchSettings();
     }
 
@@ -34,7 +34,7 @@ public class SettingsDb{
         }
 
         string rawText = System.IO.File.ReadAllText(SettingsPath);
-        settings = Util.FromJson<System.Collections.Generic.Dictionary<string, string>>(rawText);
+        settings = Util.FromJson<Dictionary<string, string>>(rawText);
     }
 
     public void InitSettings(){

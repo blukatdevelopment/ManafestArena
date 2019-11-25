@@ -1,4 +1,3 @@
-// Interface for anything that can be damaged.
 using System;
 
 interface IReceiveDamage {

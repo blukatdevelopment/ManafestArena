@@ -30,7 +30,7 @@ public class PursuingState : IBehaviorState {
   }
 
   public void Update(float delta){
-    if(enemy == null||enemy.GetNode()==null){
+    if(enemy == null || enemy.GetNode() == null){
       hostAi.enemies = new List<Actor>();
       hostAi.ChangeState(StateAi.States.Roaming);
     }

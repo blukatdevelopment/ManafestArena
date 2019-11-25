@@ -80,16 +80,19 @@ public class RangedCombatState : IBehaviorState {
   public void Strafe(float delta){
     strafeTimer -= delta;
     if(strafeTimer > 0){
-      if(strafeDirection == -1){
+      if(strafeDirection == Util.Left){
         hostAi.Hold(FPSInputHandler.Inputs.MoveLeft);
       }
-      else if(strafeDirection == 1){
+      else if(strafeDirection == Util.Right){
         hostAi.Hold(FPSInputHandler.Inputs.MoveRight);
       }
       return;
     }
-    strafeDirection = Util.RandInt(-1, 1,true);
-    strafeTimer = (float)Util.RandInt(0, 6,true) * 0.5f;
+    strafeDirection = Util.RandInt(Util.Left, Util.Right,true);
+
+    int strafeTimerMin = 0;
+    int strafeTimerMax = 3;
+    strafeTimer = (float)Util.RandInt(strafeTimerMin, strafeTimerMax,true);
   }
 
   public void MaintainDistance(float delta, Spatial enemySpat){

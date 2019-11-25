@@ -143,11 +143,13 @@ public class InputMapping {
   }
 
   public static InputMapping Unflatten(string flat){
-    //GD.Print("Unflattening " + flat);
     string[] values = flat.Split(';');
-    if(values.Length != 5){
+    int numberOfColumns = 5;
+    
+    if(values.Length != numberOfColumns){
       GD.Print("Invalid flat mapping: " + flat);
     }
+
     Inputs inputType = (Inputs)Util.ToInt(values[0]);
     int inputId = Util.ToInt(values[1]);
     int mappedEventId = Util.ToInt(values[2]);

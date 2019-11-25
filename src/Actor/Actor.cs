@@ -6,14 +6,12 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class Actor : IHasInputHandler, IHasStats, IHasBody, IHasInventory {
+public class Actor : IHasInputHandler, IHasStats, IHasBody {
   public ActorFactory.Bodies bodyType;
-  public IInputHandler inputHandler; // 
-  public IStats stats;
+  public IInputHandler inputHandler;
+  public Stats stats;
   public IBody body;
-  public IInventory inventory;
   public HotBar hotbar;
-  public PaperDoll paperdoll;
   public int camId = -1;
 
   public Actor(){
@@ -31,16 +29,12 @@ public class Actor : IHasInputHandler, IHasStats, IHasBody, IHasInventory {
     return inputHandler;
   }
 
-  public IStats GetStats(){
+  public Stats GetStats(){
     return stats;
   }
 
   public IBody GetBody(){
     return body;
-  }
-
-  public IInventory GetInventory(){
-    return inventory;
   }
 
   public void SetBodyType(ActorFactory.Bodies bodyType){

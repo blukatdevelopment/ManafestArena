@@ -9,7 +9,15 @@ using Newtonsoft.Json;
 using System.IO;
 
 public class Util{
-  
+  public const int Greater = 1;
+  public const int Lesser = -1;
+  public const int Equal = 0;
+
+  public const int Left = -1;
+  public const int None = 0;
+  public const int Right = 1;
+
+
   private static Random random;
 
   public static void Dump(string message, object obj){
@@ -440,6 +448,10 @@ public class Util{
   // Damage per second
   public static float DPS(float damage, float delay){
     return damage * (1f/delay);
+  }
+
+  public static Array GetEnumValues<T>(){
+    return Enum.GetValues(typeof(T));
   }
 
 }

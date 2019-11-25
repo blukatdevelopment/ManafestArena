@@ -2,7 +2,7 @@
   An AI that uses objects implementing IBehaviorState as states in a state machine.
 
   In addition to managing the state transitions, this class holds some methods 
-  and variables to be used by active state.
+  and variables to be used by the active state.
 */
 using Godot;
 using System;
@@ -84,11 +84,10 @@ public class StateAi : IInputSource {
   //#     State convenience methods                                            #
   //############################################################################
   
-  /* Equip an item currently in the hotbar */
-  public void SelectHotBarItem(IItem item){
+  public void EquipHotBarItem(IItem item){
     int slot = host.hotbar.GetSlotByItem(item);
     int activeSlot = host.hotbar.GetEquippedSlot();
-    int requiredPresses = host.hotbar.SlotDistance(activeSlot, slot);
+    int requiredPresses = host.hotbar.PressesToFinishSlot(activeSlot, slot);
     GD.Print("Going from " + activeSlot + " to " + slot + " with " + requiredPresses + " presses");
     for(int i = 0; i < requiredPresses; i++){
       Press(FPSInputHandler.Inputs.NextItem);
@@ -130,7 +129,8 @@ public class StateAi : IInputSource {
 
   // TODO: Replace hardcoding with logic
   public float GetCombatRange(){
-    return 20f;
+    int combatRange = 20;
+    return combatRange;
   }
 
   public float DistanceToActor(Actor actor){
@@ -197,7 +197,6 @@ public class StateAi : IInputSource {
       GD.Print("Need a host spatial");
       return false;
     }
-
 
     Vector3 hostRot = hostSpat.GetRotationDegrees();
     Vector3 up = Util.TUp(hostSpat.Transform);

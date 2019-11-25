@@ -37,9 +37,9 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     Foot_r,
     Foot_l
   };
-  System.Collections.Generic.Dictionary<BodyParts, BoneAttachment> boneAttachments;
-  System.Collections.Generic.Dictionary<BodyParts, CollisionShape> collisionShapes;
-  System.Collections.Generic.Dictionary<BodyParts, int> boneIds;
+  Dictionary<BodyParts, BoneAttachment> boneAttachments;
+  Dictionary<BodyParts, CollisionShape> collisionShapes;
+  Dictionary<BodyParts, int> boneIds;
   Vector3 spineRotation;
 
   public bool dead;
@@ -88,9 +88,9 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     AnimationPlayer legsAnimationPlayer = rootNode.FindNode("LegsAnimationPlayer") as AnimationPlayer;
     animHandler = new HumanoidAnimationHandler(armsAnimationPlayer, legsAnimationPlayer);
 
-    boneAttachments = new System.Collections.Generic.Dictionary<BodyParts, BoneAttachment>();
-    collisionShapes = new System.Collections.Generic.Dictionary<BodyParts, CollisionShape>();
-    boneIds = new System.Collections.Generic.Dictionary<BodyParts, int>();
+    boneAttachments = new Dictionary<BodyParts, BoneAttachment>();
+    collisionShapes = new Dictionary<BodyParts, CollisionShape>();
+    boneIds = new Dictionary<BodyParts, int>();
     
     // These commented out bones are turned off for performance reasons.
     CreateBone(BodyParts.Head,        "head",         new Vector3(0.1f, 0.1f, 0.1f), true);
@@ -301,9 +301,9 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     Move(grav, delta, true);
 
     // Kill actor when it falls out of map
-    if(actor.stats != null && actor.stats.HasStat("health") && GetTranslation().y < -100){
+    if(actor.stats != null && GetTranslation().y < -100){
       Damage damage = new Damage();
-      damage.health = actor.stats.GetStat("health");
+      damage.health = actor.stats.Health;
       actor.stats.ReceiveDamage(damage);
     }
   }
@@ -320,9 +320,9 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
       return;  
     }
 
-    if(actor.stats != null && actor.stats.HasStat("jumpcost")){
-      int jumpCost = actor.stats.GetStat("jumpcost");
-      if(actor.stats.ConsumeStat("stamina", jumpCost)){
+    if(actor.stats != null){
+      int jumpCost = actor.stats.JumpCost;
+      if(actor.stats.ConsumeCondition(Stats.Conditions.Stamina, jumpCost)){
         gravityVelocity = jumpForce;
         grounded = false;
       }

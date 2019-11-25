@@ -8,21 +8,21 @@ using System.Collections.Generic;
 public class DeviceState : Node {
 
   public int joypad; // Keyboard/Mouse input is the same for every DeviceState
-  private System.Collections.Generic.Dictionary<int, float> joyButtons;
-  private System.Collections.Generic.Dictionary<int, float> joyAxes;
+  private Dictionary<int, float> joyButtons;
+  private Dictionary<int, float> joyAxes;
 
 
-  private System.Collections.Generic.Dictionary<int, float> mouseButtons;
-  private System.Collections.Generic.Dictionary<int, float> keys;
+  private Dictionary<int, float> mouseButtons;
+  private Dictionary<int, float> keys;
   
   private Vector2 mousePosition, mouseMovement;
 
   public DeviceState(int joypad){
     this.joypad = joypad;
-    joyButtons = new System.Collections.Generic.Dictionary<int, float>();
-    joyAxes = new System.Collections.Generic.Dictionary<int, float>();
-    mouseButtons = new System.Collections.Generic.Dictionary<int, float>();
-    keys = new System.Collections.Generic.Dictionary<int, float>();
+    joyButtons = new Dictionary<int, float>();
+    joyAxes = new Dictionary<int, float>();
+    mouseButtons = new Dictionary<int, float>();
+    keys = new Dictionary<int, float>();
     mousePosition = new Vector2();
     mouseMovement = new Vector2();
   }
@@ -56,13 +56,12 @@ public class DeviceState : Node {
   }
 
   public void ClearInputs(){
-    joyButtons = new System.Collections.Generic.Dictionary<int, float>();
-    joyAxes = new System.Collections.Generic.Dictionary<int, float>();
-    mouseButtons = new System.Collections.Generic.Dictionary<int, float>();
-    keys = new System.Collections.Generic.Dictionary<int, float>();
+    joyButtons = new Dictionary<int, float>();
+    joyAxes = new Dictionary<int, float>();
+    mouseButtons = new Dictionary<int, float>();
+    keys = new Dictionary<int, float>();
   }
 
-  // Will fail loudly if you listen for an invalid button/axis/key
   public float GetJoyButton(int button){
     return joyButtons[button];
   }
@@ -79,7 +78,6 @@ public class DeviceState : Node {
     return keys[key];
   }
 
-  // You don't need to add  mouseAxes. They are listened to automagically.
   public float GetMouseAxis(int axis){
     if(axis == (int)FPSInputHandler.MouseAxis.X){
       return mouseMovement.x;
@@ -127,7 +125,7 @@ public class DeviceState : Node {
     InputEventMouseButton btn = evt as InputEventMouseButton;
     if(btn!=null){
       int btnIndex = btn.ButtonIndex;
-      if(btnIndex == (int)ButtonList.WheelDown||btnIndex==(int)ButtonList.WheelUp)
+      
       if(mouseButtons.ContainsKey(btnIndex)){
         mouseButtons[btnIndex] = 1;
       }
