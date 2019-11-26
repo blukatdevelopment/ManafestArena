@@ -4172,17 +4172,17 @@ mesh = SubResource( 1 )
 material/0 = SubResource( 2 )
 
 [node name="Head" type="BoneAttachment" parent="Armature"]
-transform = Transform( -1, -3.55271e-014, -4.58574e-008, -3.80544e-008, -0.557997, 0.829841, -2.55883e-008, 0.829841, 0.557997, -1.43595e-015, 6.67329, 0.486872 )
+transform = Transform( -1, -4.26326e-014, -4.58574e-008, -3.80544e-008, -0.557997, 0.829841, -2.55883e-008, 0.829841, 0.557997, -6.19336e-015, 6.67329, 0.486872 )
 bone_name = "head"
 
 [node name="Head" type="Spatial" parent="Armature/Head"]
 transform = Transform( 2, 3.16075e-008, -3.09143e-007, -2.12835e-007, -1.3104, -1.51091, -2.26429e-007, 1.51091, -1.3104, 0, 0, 0 )
 
 [node name="Eyes" type="Position3D" parent="Armature/Head/Head"]
-transform = Transform( 1, -7.2624e-008, 2.60754e-008, 6.88944e-008, 0.992509, 0.122172, -3.47529e-008, -0.122171, 0.992509, 3.31028e-008, -0.149747, -0.402044 )
+transform = Transform( 1, -7.2624e-008, 2.60754e-008, 6.88944e-008, 0.992509, 0.122172, -3.47529e-008, -0.122171, 0.992509, 3.17689e-008, -0.131517, -0.404288 )
 
 [node name="Hand" type="BoneAttachment" parent="Armature"]
-transform = Transform( -0.975545, 0.146907, -0.163491, -0.203108, -0.886827, 0.415071, -0.0840117, 0.438127, 0.894979, -1.481, 3.94599, 0.166398 )
+transform = Transform( -0.975545, 0.146907, -0.163491, -0.218635, -0.72498, 0.653148, -0.0225761, 0.67292, 0.739371, -1.481, 4.15126, 0.649447 )
 bone_name = "hand.R"
 
 [node name="Hand" type="Spatial" parent="Armature/Hand"]

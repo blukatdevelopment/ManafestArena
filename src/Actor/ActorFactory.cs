@@ -67,7 +67,7 @@ public class ActorFactory {
   public static void InitBody(Actor actor){
     switch(actor.bodyType){
       case Bodies.HumanoidBody:
-        actor.body = new HumanoidBody2(actor);
+        actor.body = new HumanoidBody(actor);
       break;
       case Bodies.WolfBody:
         actor.body = new WolfBody(actor);

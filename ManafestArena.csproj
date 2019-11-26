@@ -58,7 +58,6 @@
     <Compile Include="src/Actor/ActorFactory.cs" />
     <Compile Include="src/Actor/IBody.cs" />
     <Compile Include="src/Actor/HumanoidBody.cs" />
-    <Compile Include="src/Actor/HumanoidBody2.cs" />
     <Compile Include="src/Actor/WolfBody.cs" />
     <Compile Include="src/Actor/BatBody.cs" />
     <Compile Include="src/Input/DeviceState.cs" />
@@ -105,7 +104,6 @@
     <Compile Include="src/Items/Components/StatConsumer.cs" />
     <Compile Include="src/Actor/IHasBody.cs" />
     <Compile Include="src/Actor/IHasInputHandler.cs" />
-    <Compile Include="src/Actor/HumanoidAnimationHandler.cs" />
     <Compile Include="src/Items/Interfaces/ICollide.cs" />
     <Compile Include="src/Items/Interfaces/IConsume.cs" />
     <Compile Include="src/Items/Interfaces/IWeapon.cs" />

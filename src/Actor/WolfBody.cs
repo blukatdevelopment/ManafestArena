@@ -2,9 +2,8 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class WolfBody : KinematicBody , IBody, IReceiveDamage
-{
-    
+public class WolfBody : KinematicBody , IBody, IReceiveDamage {
+  
   Actor actor;
   Spatial eyes, mouth;
   Speaker speaker;
@@ -19,15 +18,16 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
   IncrementTimer ChangeAnimTimer;
   
   bool grounded, crouched;
-  Vector3 gravityVelocity = new Vector3();
+  Vector3 velocity = new Vector3();
   const int maxY = 90;
   const int minY = -40;
 
-  Vector3 GravityAcceleration = new Vector3(0,-9.81f,0) ;
+  const float GravityForceY = -9.81f;
+  Vector3 GravityAcceleration = new Vector3(0, GravityForceY, 0);
   const float TerminalVelocity = -53;
   const float SightSize = 100f;
 
-  public WolfBody(Actor actor, string rootPath = "res://Assets/Scenes/Actors/wolf_body.tscn"){
+  public WolfBody(Actor actor, string rootPath = "res://Assets/Scenes/Actors/wolf_body.tscn") {
     this.actor = actor;
     this.rootPath = rootPath;
     this.dead = false;
@@ -38,7 +38,7 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
   public void AnimationTrigger(string triggerName){
     GD.Print("Animation trigger " + triggerName);
     triggerName = triggerName.ToLower();
-    if(triggerName=="bite"){
+    if(triggerName == "bite"){
       stateMachine.Travel("bite");
     }
   }
@@ -60,18 +60,17 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
     shape.SetRadius(.4f);
     collisionShape =  new CollisionShape();
     collisionShape.SetShape(shape);
-    collisionShape.TranslateObjectLocal(new Vector3(0,0.5f,0));
+    collisionShape.TranslateObjectLocal(new Vector3(0, 0.5f, 0));
     AddChild(collisionShape);
 
     BoxShape shape2 = new BoxShape();
-    shape2.SetExtents(new Vector3(0.15f,0.2f,0.25f));
+    shape2.SetExtents(new Vector3(0.15f, 0.2f, 0.25f));
     collisionShape =  new CollisionShape();
     collisionShape.SetShape(shape2);
-    collisionShape.TranslateObjectLocal(new Vector3(0,1.4f,-1));
+    collisionShape.TranslateObjectLocal(new Vector3(0, 1.4f, -1));
     AddChild(collisionShape);
 
     eyes = rootNode.FindNode("Eyes") as Spatial;
-    //eyes = rootNode.FindNode("Test") as Spatial; //for testing
     meshInstance = rootNode.FindNode("Body") as MeshInstance;
     skeleton = rootNode.FindNode("Skeleton") as Skeleton;
     mouth = rootNode.FindNode("Mouth") as Spatial;
@@ -90,7 +89,7 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
     animationTree.Set("parameters/walk/blend_position",blendPosition);
     animationTree.Set("parameters/run/blend_position",blendPosition);
     animationTree.Set("parameters/crouch/blend_position",blendPosition*0.7f);//the 0.7 is temporary
-    if(blendPosition!=0){
+    if(blendPosition != 0){
       ChangeAnimTimer.StartTimer();
     }
   }
@@ -126,7 +125,7 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
   }
 
   public List<Node> GetHands(){ 
-    return new List<Node>(){}; //No hands for wolf (for now)
+    return new List<Node>(){};
   }
   
   public Node GetNode(){ 
@@ -144,9 +143,9 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
   }
   public void Move(Vector3 movement, float moveDelta = 1f, bool ignoreAnimator = true, bool sprint = false){
 
-      if(!ignoreAnimator&&grounded){
-        if(movement.z!=0){ 
-           if(movement.z<0){
+      if(!ignoreAnimator && grounded){
+        if(movement.z != 0){ 
+           if(movement.z < 0){
             setBlendPosition(1);
           }
           else{
@@ -156,7 +155,7 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
         }
       }
 
-      movement.x*=0.25f;//wolves dont strafe
+      movement.x *= 0.25f;
       movement *= moveDelta;
       
       Transform current = GetTransform();
@@ -198,7 +197,7 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
     }
     else
     {
-      bodyRot.y +=movement.x*0.25f;
+      bodyRot.y += movement.x * 0.25f;
     }
     this.SetRotationDegrees(bodyRot);
     
@@ -218,23 +217,28 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
   }
 
   public void Update(float delta){
-    if(!dead){
-      Gravity(delta);
-      if(ChangeAnimTimer.CheckTimer(delta))
-        setBlendPosition(0);
-      float margin = 0.05f;
-      if(TestMove(Transform,margin*Vector3.Down)){
-        if(gravityVelocity.y < 0){
-          if(!grounded){
-            grounded = true;
-            gravityVelocity = new Vector3();
-          }
-          if(grounded &&stateMachine.GetCurrentNode()=="jump"){
-            stateMachine.Travel("walk");
-          }
+    float margin = 0.05f;
+    
+    if(dead){
+      return;
+    }
+    
+    ApplyGravity(delta);
+
+    if(ChangeAnimTimer.CheckTimer(delta))
+      setBlendPosition(0);
+    if(TestMove(Transform,margin*Vector3.Down)){
+      if(velocity.y < 0){
+        if(!grounded){
+          grounded = true;
+          velocity = new Vector3();
+        }
+        if(grounded &&stateMachine.GetCurrentNode()=="jump"){
+          stateMachine.Travel("walk");
         }
       }
     }
+    
   }
 
   public void HoldItem(int hand, IItem item){
@@ -248,22 +252,28 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
     }
   }
 
-  private void Gravity(float delta){
-    Vector3 gravityForce = GravityAcceleration * delta;
-    gravityVelocity += gravityForce;
-
-    if(gravityVelocity.Length() < TerminalVelocity){
-      gravityVelocity = TerminalVelocity*gravityVelocity.Normalized();
-    }
+  private void DieWhenOutOfBounds(){
+    float minimumYBounds = -100;
     
-    Move(gravityVelocity, delta, true);
-
-    // Kill actor when it falls out of map
-    if(actor.stats != null && GetTranslation().y < -100){
+    if(actor.stats != null && GetTranslation().y < minimumYBounds){
       Damage damage = new Damage();
       damage.health = actor.stats.Health;
       actor.stats.ReceiveDamage(damage);
     }
+
+  }
+
+  private void ApplyGravity(float delta){
+    Vector3 gravityForce = GravityAcceleration * delta;
+    velocity += gravityForce;
+
+    if(velocity.Length() < TerminalVelocity){
+      velocity = TerminalVelocity*velocity.Normalized();
+    }
+    
+    Move(velocity, delta, true);
+
+    DieWhenOutOfBounds();
   }
 
   public void Jump(){
@@ -271,10 +281,10 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
       return; 
     }
     crouched=false;
-    Vector3 jumpForce = new Vector3(0,11,-5);
+    Vector3 jumpForce = new Vector3(0, 11, -5);
     
     if(actor.stats == null){
-      gravityVelocity = jumpForce;
+      velocity = jumpForce;
       grounded = false;
       stateMachine.Travel("jump");
       return;  
@@ -283,7 +293,7 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
     if(actor.stats != null){
       int jumpCost = actor.stats.JumpCost;
       if(actor.stats.ConsumeCondition(Stats.Conditions.Stamina, jumpCost)){
-        gravityVelocity = jumpForce;
+        velocity = jumpForce;
         grounded = false;
         stateMachine.Travel("jump");
       }
@@ -309,7 +319,7 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
     trans.origin = pos;
     Transform = trans;
     dead = true;
-    //play dead anim
+    //FIX ME: play dead anim
   }
 
   public List<Actor> ActorsInSight(){
@@ -332,7 +342,6 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage
     return ret;
   }
 
-  // The end of a ray pointed forward in global space
   public Vector3 Get3DCursor(float distance = 100f){
     Vector3 start = eyes.GlobalTransform.origin;
     Transform headTrans = eyes.Transform;

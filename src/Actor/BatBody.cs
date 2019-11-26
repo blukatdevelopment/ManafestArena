@@ -2,8 +2,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-public class BatBody : KinematicBody , IBody, IReceiveDamage
-{
+public class BatBody : KinematicBody , IBody, IReceiveDamage {
     
   Actor actor;
   Spatial eyes, mouth;
@@ -158,18 +157,21 @@ public class BatBody : KinematicBody , IBody, IReceiveDamage
   public void Update(float delta){
     float margin = 0.1f;
 
-    CalcVelocity(delta);
-    
-    if(!dead || grounded || !TestMove(Transform,margin*Vector3.Down)){
-      return;
+    if(dead){
+      if(grounded){
+        return;
+      }
     }
-    
-    if(velocity.y >= 0){
+    else{
+      Fly(delta);
       return;
     }
 
-    grounded = true;
-    velocity = new Vector3();
+    ApplyGravity(delta);
+    if(TestMove(Transform,margin*Vector3.Down)){
+        grounded = true;
+        velocity = new Vector3();
+    }
   }
 
   public void Fly(float delta){
@@ -182,31 +184,6 @@ public class BatBody : KinematicBody , IBody, IReceiveDamage
     else if(GetTranslation().y - height <- margin){
       Move(Vector3.Up*riseSpeed, delta, true);
     }
-  }
-
-  private void CalcVelocity(float delta){
-
-    if(dead){
-      if(grounded){
-        return;
-      }
-      ApplyGravity(delta);
-    }
-    else{
-      Fly(delta);
-      return;
-    }
-    Vector3 acceleration = GravityAcceleration;
-    Vector3 deltaVelocity = acceleration * delta;
-    velocity += deltaVelocity;
-
-    if(velocity.Length() < TerminalVelocity){
-      velocity = TerminalVelocity*velocity.Normalized();
-    }
-    
-    Move(velocity, delta, true);
-
-    DieWhenOutOfBounds();
   }
 
   private void DieWhenOutOfBounds(){
