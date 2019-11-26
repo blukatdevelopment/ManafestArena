@@ -17,7 +17,7 @@ public class Stats : IReceiveDamage {
   }
 
   private IncrementTimer updateTimer;
-  private const float UpdateDelay = 0.1f;
+  private const float UpdateDelay = 1f;
   private Dictionary<string, int> stats;
 
   public int Id { get; set; }
@@ -73,10 +73,10 @@ public class Stats : IReceiveDamage {
     get => Endurance / 5;
   }
   public int StaminaRegen {
-    get => (Endurance * 5) + (Willpower + 2);
+    get => (Endurance / 2) + (Willpower / 2) + 1;
   }
   public int ManaRegen {
-    get => (Willpower * 10) + (Endurance * 2);
+    get => (Willpower) + (Endurance / 2);
   }
 
   public int JumpCost {
@@ -135,7 +135,7 @@ public class Stats : IReceiveDamage {
 
     stats["Health"] += HealthRegen;
     stats["Stamina"] += StaminaRegen;
-    stats["Mana"] += StaminaRegen;
+    stats["Mana"] += ManaRegen;
 
     EnforceMaxValues();
   }
