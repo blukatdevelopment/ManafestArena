@@ -1,0 +1,131 @@
+[gd_resource type="AnimationNodeStateMachine" load_steps=31 format=2]
+
+[sub_resource type="AnimationNodeAnimation" id=1]
+animation = "claw"
+
+[sub_resource type="AnimationNodeAnimation" id=2]
+animation = "claw"
+
+[sub_resource type="AnimationNodeAnimation" id=3]
+animation = "crouch_idle"
+
+[sub_resource type="AnimationNodeAnimation" id=4]
+animation = "crouch_walk"
+
+[sub_resource type="AnimationNodeAnimation" id=5]
+animation = "crouch_walk_back"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=6]
+blend_point_0/node = SubResource( 3 )
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource( 4 )
+blend_point_1/pos = 1.0
+blend_point_2/node = SubResource( 5 )
+blend_point_2/pos = -1.0
+
+[sub_resource type="AnimationNodeAnimation" id=7]
+animation = "jump"
+
+[sub_resource type="AnimationNodeAnimation" id=8]
+animation = "land"
+
+[sub_resource type="AnimationNodeAnimation" id=9]
+animation = "run"
+
+[sub_resource type="AnimationNodeAnimation" id=10]
+animation = "stab"
+
+[sub_resource type="AnimationNodeAnimation" id=11]
+animation = "stab"
+
+[sub_resource type="AnimationNodeAnimation" id=12]
+animation = "idle"
+
+[sub_resource type="AnimationNodeAnimation" id=13]
+animation = "walk"
+
+[sub_resource type="AnimationNodeAnimation" id=14]
+animation = "walk_back"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=15]
+blend_point_0/node = SubResource( 12 )
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource( 13 )
+blend_point_1/pos = 1.0
+blend_point_2/node = SubResource( 14 )
+blend_point_2/pos = -1.0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=16]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=17]
+switch_mode = 2
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=18]
+switch_mode = 2
+auto_advance = true
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=19]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=20]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=21]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=22]
+switch_mode = 2
+auto_advance = true
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=23]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=24]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=25]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=26]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=27]
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=28]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=29]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=30]
+switch_mode = 2
+auto_advance = true
+xfade_time = 0.2
+
+[resource]
+states/claw/node = SubResource( 1 )
+states/claw/position = Vector2( 818, 262 )
+states/claw_crouched/node = SubResource( 2 )
+states/claw_crouched/position = Vector2( 787, 471.464 )
+states/crouch/node = SubResource( 6 )
+states/crouch/position = Vector2( 563, 404.464 )
+states/jump/node = SubResource( 7 )
+states/jump/position = Vector2( 563, 49 )
+states/land/node = SubResource( 8 )
+states/land/position = Vector2( 739, 90 )
+states/run/node = SubResource( 9 )
+states/run/position = Vector2( 357, 215 )
+states/stab/node = SubResource( 10 )
+states/stab/position = Vector2( 818, 156 )
+states/stab_crouched/node = SubResource( 11 )
+states/stab_crouched/position = Vector2( 787, 337.464 )
+states/walk/node = SubResource( 15 )
+states/walk/position = Vector2( 563, 215 )
+transitions = [ "walk", "jump", SubResource( 16 ), "jump", "land", SubResource( 17 ), "land", "walk", SubResource( 18 ), "walk", "run", SubResource( 19 ), "run", "walk", SubResource( 20 ), "walk", "stab", SubResource( 21 ), "stab", "walk", SubResource( 22 ), "walk", "claw", SubResource( 23 ), "claw", "walk", SubResource( 24 ), "walk", "crouch", SubResource( 25 ), "crouch", "walk", SubResource( 26 ), "crouch", "stab_crouched", SubResource( 27 ), "stab_crouched", "crouch", SubResource( 28 ), "crouch", "claw_crouched", SubResource( 29 ), "claw_crouched", "crouch", SubResource( 30 ) ]
+start_node = "walk"
+graph_offset = Vector2( 102, 30.464 )

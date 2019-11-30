@@ -2,12 +2,12 @@
 
 importer="scene"
 type="PackedScene"
-path="res://.import/beast_new4.glb-fd04cf29090613e56381035839790790.scn"
+path="res://.import/beast.gltf-a6c5de6ed1092dcd89e47ab839c2e27c.scn"
 
 [deps]
 
-source_file="res://Assets/Models/beast_new4.glb"
-dest_files=[ "res://.import/beast_new4.glb-fd04cf29090613e56381035839790790.scn" ]
+source_file="res://Assets/Models/beast.gltf"
+dest_files=[ "res://.import/beast.gltf-a6c5de6ed1092dcd89e47ab839c2e27c.scn" ]
 
 [params]
 

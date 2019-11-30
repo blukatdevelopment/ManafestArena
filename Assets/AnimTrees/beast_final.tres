@@ -1,0 +1,46 @@
+[gd_resource type="AnimationNodeBlendTree" load_steps=9 format=2]
+
+[ext_resource path="res://Assets/AnimTrees/beast_state_machine.tres" type="AnimationNodeStateMachine" id=1]
+
+[sub_resource type="AnimationNodeBlend2" id=1]
+filter_enabled = true
+filters = [ "Skeleton:chest.L", "Skeleton:chest.R", "Skeleton:ear.L", "Skeleton:ear.R", "Skeleton:head", "Skeleton:head.001", "Skeleton:neck", "Skeleton:spine.003" ]
+
+[sub_resource type="AnimationNodeBlend2" id=2]
+filter_enabled = true
+filters = [ "Skeleton:f_index.01.R", "Skeleton:f_index.02.R", "Skeleton:f_middle.01.R", "Skeleton:f_middle.02.R", "Skeleton:f_pinky.01.R", "Skeleton:f_pinky.02.R", "Skeleton:f_ring.01.R", "Skeleton:f_ring.02.R", "Skeleton:hand.R", "Skeleton:palm.01.R", "Skeleton:palm.02.R", "Skeleton:palm.03.R", "Skeleton:palm.04.R", "Skeleton:thumb.01.R", "Skeleton:thumb.02.R" ]
+
+[sub_resource type="AnimationNodeAnimation" id=3]
+animation = "hold"
+
+[sub_resource type="AnimationNodeAnimation" id=4]
+animation = "look_ahead"
+
+[sub_resource type="AnimationNodeAnimation" id=5]
+animation = "look_up"
+
+[sub_resource type="AnimationNodeAnimation" id=6]
+animation = "look_down"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=7]
+blend_point_0/node = SubResource( 4 )
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource( 5 )
+blend_point_1/pos = 1.0
+blend_point_2/node = SubResource( 6 )
+blend_point_2/pos = -1.0
+
+[resource]
+graph_offset = Vector2( 103, 3.5 )
+nodes/Blend2/node = SubResource( 1 )
+nodes/Blend2/position = Vector2( 520, 20 )
+nodes/StateMachine/node = ExtResource( 1 )
+nodes/StateMachine/position = Vector2( 300, 20 )
+nodes/hold/node = SubResource( 2 )
+nodes/hold/position = Vector2( 720, 20 )
+nodes/hold_anim/node = SubResource( 3 )
+nodes/hold_anim/position = Vector2( 540, 220 )
+nodes/look/node = SubResource( 7 )
+nodes/look/position = Vector2( 300, 220 )
+nodes/output/position = Vector2( 920, 20 )
+node_connections = [ "output", 0, "hold", "Blend2", 0, "StateMachine", "Blend2", 1, "look", "hold", 0, "Blend2", "hold", 1, "hold_anim" ]

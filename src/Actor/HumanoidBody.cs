@@ -28,7 +28,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
   const float TerminalVelocity = -53;
   const float SightSize = 100f;
 
-  public HumanoidBody(Actor actor, string rootPath = "res://Assets/Scenes/Actors/debug2.tscn"){
+  public HumanoidBody(Actor actor, string rootPath = "res://Assets/Scenes/Actors/beast.tscn"){
     this.actor = actor;
     this.rootPath = rootPath;
     this.dead = false;
@@ -40,11 +40,31 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     GD.Print("Animation trigger " + triggerName);
     triggerName = triggerName.ToLower();
     if(triggerName=="claw"){
-      stateMachine.Travel("claw");
+      if(crouched){
+        stateMachine.Travel("claw_crouched");
+      }
+      else{
+        stateMachine.Travel("claw");
+      }
     }
+
     if(triggerName=="stab"){
-      stateMachine.Travel("stab");
+      if(crouched){
+        stateMachine.Travel("stab_crouched");
+      }
+      else{
+        stateMachine.Travel("stab");
+      }
     }
+
+    if(triggerName=="hold"){
+      animationTree.Set("parameters/hold/blend_amount", 1);
+    }
+
+    if(triggerName=="release"){
+      animationTree.Set("parameters/hold/blend_amount", 0);
+    }
+
   }
 
   public Actor GetActor(){
@@ -71,12 +91,13 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
 
   public void initAnimTree(){
     animationTree.SetActive(true);
-    stateMachine = animationTree.Get("parameters/playback") as AnimationNodeStateMachinePlayback;
+    stateMachine = animationTree.Get("parameters/StateMachine/playback") as AnimationNodeStateMachinePlayback;
     setBlendPosition(0);
   }
 
   public void setBlendPosition(float blendPosition =0){
-    animationTree.Set("parameters/walk/blend_position",blendPosition);
+    animationTree.Set("parameters/StateMachine/walk/blend_position", blendPosition);
+    animationTree.Set("parameters/StateMachine/crouch/blend_position", blendPosition);
     if(blendPosition!=0){
       ChangeAnimTimer.StartTimer();
     }
@@ -176,24 +197,18 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     }
   }
 
-  public void Turn(Vector3 movement, float moveDelta = 1f){
+  public void Turn(Vector3 movement, float moveDelta){
+    float factor = 20;
     movement *= moveDelta;
     Vector3 bodyRot = this.GetRotationDegrees();
     bodyRot.y += movement.x;
     this.SetRotationDegrees(bodyRot);
-    
-    Vector3 headRot = eyes.GetRotationDegrees();
-    headRot.x += movement.y;
 
-    if(headRot.x < minY){
-      headRot.x = minY;
-    }
+    float blendPosition = (float) animationTree.Get("parameters/look/blend_position");
+    blendPosition += movement.y / factor;
+    blendPosition = Mathf.Clamp(blendPosition, -1, 1);
 
-    if(headRot.x > maxY){
-      headRot.x = maxY;
-    }
-
-    eyes.SetRotationDegrees(headRot);
+    animationTree.Set("parameters/look/blend_position", blendPosition);
 
   }
 

@@ -86,9 +86,9 @@ public class WolfBody : KinematicBody , IBody, IReceiveDamage {
   }
 
   public void setBlendPosition(float blendPosition =0){
-    animationTree.Set("parameters/walk/blend_position",blendPosition);
-    animationTree.Set("parameters/run/blend_position",blendPosition);
-    animationTree.Set("parameters/crouch/blend_position",blendPosition*0.7f);//the 0.7 is temporary
+    animationTree.Set("parameters/walk/blend_position", blendPosition);
+    animationTree.Set("parameters/run/blend_position", blendPosition);
+    animationTree.Set("parameters/crouch/blend_position", blendPosition);
     if(blendPosition != 0){
       ChangeAnimTimer.StartTimer();
     }
