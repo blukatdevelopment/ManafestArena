@@ -25,6 +25,13 @@ public class Actor : IHasInputHandler, IHasStats, IHasBody {
     return null;
   }
 
+  public Boolean IsDead(){
+    if(body != null){
+      return body.IsDead();;
+    }
+    return true;
+  }
+
   public IInputHandler GetInputHandler(){
     return inputHandler;
   }
