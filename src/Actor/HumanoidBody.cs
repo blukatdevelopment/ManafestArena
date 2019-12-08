@@ -9,9 +9,8 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
   Speaker speaker;
   string rootPath;
   MeshInstance meshInstance;
-  CollisionShape collisionShape;
-  Godot.Collections.Array<CollisionShape> dummyCollisions;
-  Godot.Collections.Array<CollisionShape> collisions;
+  Dictionary<CollisionKey, CollisionShape> dummyCollisions;
+  Dictionary<CollisionKey, int>  collisions;
   Skeleton skeleton;
   AnimationTree animationTree;
   AnimationNodeStateMachinePlayback stateMachine;
@@ -34,6 +33,29 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     this.dead = false;
     ChangeAnimTimer = new IncrementTimer(ChangeAnimDelay);
     InitChildren();
+  }
+
+  enum CollisionKey{
+    Idle,
+    Crouch,
+    Run,
+    Dead
+  }
+
+  private void ChangeCollision(CollisionKey key){
+    if(!collisions.ContainsKey(key)){
+      return;
+    }
+    foreach (KeyValuePair<CollisionKey, int> pair in collisions)
+    {
+      int ownerId  = pair.Value;
+      if(pair.Key == key){
+        ShapeOwnerSetDisabled(ownerId,false);
+      }
+      else{
+        ShapeOwnerSetDisabled(ownerId,true);
+      }
+    }
   }
 
   public void AnimationTrigger(string triggerName){
@@ -86,13 +108,38 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     hand = rootNode.FindNode("Hand") as Spatial;
     animationTree = rootNode.FindNode("AnimationTree") as AnimationTree;
     grounded = true;
+    dummyCollisions = new Dictionary<CollisionKey, CollisionShape>();
+    dummyCollisions.Add(CollisionKey.Idle, rootNode.FindNode("CollisionIdle") as CollisionShape);
+    dummyCollisions.Add(CollisionKey.Crouch, rootNode.FindNode("CollisionCrouch") as CollisionShape);
+    dummyCollisions.Add(CollisionKey.Run, rootNode.FindNode("CollisionRun") as CollisionShape);
+    dummyCollisions.Add(CollisionKey.Dead, rootNode.FindNode("CollisionDead") as CollisionShape);
     initAnimTree();
   }
 
-  public void initAnimTree(){
+  private void initAnimTree(){
     animationTree.SetActive(true);
     stateMachine = animationTree.Get("parameters/StateMachine/playback") as AnimationNodeStateMachinePlayback;
     setBlendPosition(0);
+  }
+
+  private void initCollisions(){
+    collisions = new Dictionary<CollisionKey, int>();
+    foreach (KeyValuePair<CollisionKey, CollisionShape> pair in dummyCollisions)
+    {
+      CollisionShape dummy = pair.Value;
+      if(dummy != null){
+        int ownerId = CreateShapeOwner(this);
+        ShapeOwnerAddShape(ownerId, dummy.Shape);
+        ShapeOwnerSetTransform(ownerId, dummy.GetGlobalTransform());
+        ShapeOwnerSetDisabled(ownerId, dummy.Disabled);
+        collisions.Add(pair.Key, ownerId);
+      }
+    }
+  }
+
+  public override void _Ready(){
+    initCollisions();
+    ChangeCollision(CollisionKey.Idle);
   }
 
   public void setBlendPosition(float blendPosition =0){
@@ -191,9 +238,11 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     crouched = !crouched;
     if(crouched){
       stateMachine.Travel("crouch");
+      ChangeCollision(CollisionKey.Crouch);
     }
     else{
       stateMachine.Travel("walk");
+      ChangeCollision(CollisionKey.Idle);
     }
   }
 
@@ -210,23 +259,6 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
 
     animationTree.Set("parameters/look/blend_position", blendPosition);
 
-  }
-
-  public override void _Ready(){
-    dummyCollisions = new Godot.Collections.Array<CollisionShape>();
-    collisions = new Godot.Collections.Array<CollisionShape>();
-    foreach(System.Object obj in GetTree().GetNodesInGroup("Collisions")){
-      CollisionShape dummy = obj as CollisionShape;
-      if(dummy != null && IsAParentOf(dummy)){
-        dummyCollisions.Add(dummy);
-        CollisionShape collision = new CollisionShape();
-        collision.Shape = dummy.Shape;
-        AddChild(collision);
-        collision.SetGlobalTransform(dummy.GetGlobalTransform());
-        collision.Disabled = dummy.Disabled;
-        collisions.Add(collision);
-      }
-    }
   }
 
   public void Update(float delta){
@@ -260,16 +292,6 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
       }
     }
     
-  }
-
-  public void UpdateCollision(float delta){
-    for (int i = 0; i < collisions.Count; i++)
-    {
-      CollisionShape collision = collisions[i];
-      CollisionShape dummy = dummyCollisions[i];
-      collision.SetGlobalTransform(dummy.GetGlobalTransform());
-      collision.Disabled=dummy.Disabled;
-    }
   }
 
   public void HoldItem(int hand, IItem item){
@@ -346,13 +368,9 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
   }
 
   public void Die(){
-    Transform trans = Transform;
-    Vector3 pos = trans.origin;
-    trans = trans.Rotated(new Vector3(0, 0, 1), 1.5f);
-    trans.origin = pos;
-    Transform = trans;
     dead = true;
-    //FIX ME: play dead anim
+    stateMachine.Travel("die");
+    ChangeCollision(CollisionKey.Dead);
   }
 
   public List<Actor> ActorsInSight(){

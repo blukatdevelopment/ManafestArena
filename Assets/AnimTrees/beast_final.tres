@@ -43,4 +43,4 @@ nodes/hold_anim/position = Vector2( 540, 220 )
 nodes/look/node = SubResource( 7 )
 nodes/look/position = Vector2( 300, 220 )
 nodes/output/position = Vector2( 920, 20 )
-node_connections = [ "output", 0, "hold", "Blend2", 0, "StateMachine", "Blend2", 1, "look", "hold", 0, "Blend2", "hold", 1, "hold_anim" ]
+node_connections = [ "output", 0, "hold", "hold", 0, "Blend2", "hold", 1, "hold_anim", "Blend2", 0, "StateMachine", "Blend2", 1, "look" ]
