@@ -37,18 +37,25 @@ public class Session : Node {
   public override void _Ready() {
     EnforceSingleton();
     PauseMode = PauseModeEnum.Process;
-    activeGamemodes = new Dictionary<string, Node>();
-    ConfigsDb.Init();
-    CareerDb.Init();
-    ChangeMenu("MainMenu");
-    InitJukeBox();
-    InitSettings();
     
-    AddDevice(0);
+    Initdata();
 
     if(!DebugMenu.Equals("")){
       ChangeMenu(DebugMenu);
     }
+  }
+
+  public InitData(){
+    activeGamemodes = new Dictionary<string, Node>();
+    ConfigsDb.Init();
+
+    Sound.LoadSoundFiles();
+
+    CareerDb.Init();
+    ChangeMenu("MainMenu");
+    InitJukeBox();
+    InitSettings();
+    AddDevice(0);
   }
 
   public override void _Process(float delta){

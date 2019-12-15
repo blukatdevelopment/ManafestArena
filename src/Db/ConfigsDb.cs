@@ -1,5 +1,7 @@
 /*
   This class automatically loads data from configuration files into a static context.
+  These files are intended to be edited by developers only, and game state should not
+  be stored here.
 */
 using Godot;
 using System;
@@ -12,6 +14,7 @@ public class ConfigsDb {
   public const string LootFile = "Configs/loot.json";
   public const string ItemsFile = "Configs/items.json";
   public const string ActorsFile = "Configs/actors.json";
+  public const string PlaylistsFile = "Configs/playlists.json";
 
   public static List<CardRecord> cards;
   public static List<SoundRecord> sounds;
@@ -19,6 +22,7 @@ public class ConfigsDb {
   public static List<LootActionRecord> loots;
   public static List<ItemRecord> items;
   public static List<ActorRecord> actors;
+  public static List<PlaylistRecord> playlists;
 
   public static void Init(){
     cards = RecordsFromJsonFile<CardRecord>(CardsFile);
@@ -27,6 +31,7 @@ public class ConfigsDb {
     loots = RecordsFromJsonFile<LootActionRecord>(LootFile);
     items = RecordsFromJsonFile<ItemRecord>(ItemsFile);
     actors = RecordsFromJsonFile<ActorRecord>(ActorsFile);
+    playlists = RecordsFromJsonFile<PlaylistRecord>(PlaylistsFile);
   }
 
   public static List<T> RecordsFromJsonFile<T>(string filePath){

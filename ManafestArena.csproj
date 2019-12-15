@@ -129,6 +129,7 @@
     <Compile Include="src/Db/Records/ActorRecord.cs" />
     <Compile Include="src/Db/Records/SongRecord.cs" />
     <Compile Include="src/Db/Records/SoundRecord.cs" />
+    <Compile Include="src/Db/Records/PlaylistRecord.cs" />
     <Compile Include="src/Inventory/HotBar.cs" />
     <Compile Include="src/Inventory/Loot/LootTable.cs" />
     <Compile Include="src/Inventory/Loot/LootDrop.cs" />    

@@ -18,27 +18,6 @@ public class Sound {
     Coins
   };
 
-  public enum Songs{
-    None,
-    // Main menu music
-    Menu1,
-    Menu2,
-    Menu3,
-    Menu4,
-    // Arena music
-    Arena1,
-    Arena2,
-    Arena3,
-    Arena4,
-    Arena5,
-    Arena6,
-    Arena7,
-    Arena8,
-    Arena9,
-    Arena10,
-    Arena11
-  };
-
   public enum Playlists{
     None,
     Menu,
@@ -47,31 +26,27 @@ public class Sound {
 
   public static Dictionary<string, AudioStreamOGGVorbis> loadedMusic;
   public static Dictionary<string, AudioStreamSample> loadedEffects;
+  public static Dictionary<Playlists, PlaylistRecord> loadedPlaylists;
 
   public static void LoadSoundFiles(){
-    Dictionary<string, string> music = SoundDb.GetMusic();
     loadedMusic = new Dictionary<string, AudioStreamOGGVorbis>();
-    foreach(string key in music.Keys){
-      loadedMusic.Add(key, (AudioStreamOGGVorbis)GD.Load(music[key]));
+
+    foreach(Songrecord song in ConfigsDb.songs){
+      loadedMusic.Add(song.title, (AudioStreamOGGVorbis)GD.Load(song.file)));
     }
 
-    Dictionary<string, string> effects = SoundDb.GetEffects();
     loadedEffects = new Dictionary<string, AudioStreamSample>();
-    foreach(string key in effects.Keys){
-      loadedEffects.Add(key, (AudioStreamSample)GD.Load(effects[key]));
-    }
-  }
 
-  public static AudioStreamSample LoadEffect(Effects effect){
-    string effectName = "" + effect;
-    if(loadedEffects == null){
-      LoadSoundFiles();
+    foreach(SoundRecord sound in ConfigsDb.sounds){
+      loadedEffects.Add(sound.name, (AudioStreamSample)GD.Load(sound.file));
     }
-    if(!loadedEffects.ContainsKey(effectName)){
-      GD.Print("No such sound effect " + effectName);
-      return null;
+    
+    loadedPlaylists = new Dictionary<Playlists, Playlistrecord>();
+
+    foreach(PlaylistRecord playlist in ConfigsDb.playlists){
+      Playlists playlistEnum = Enum.Parse(typeof(Playlists), playlist.name);
+      loadedPlaylists.Add(playlistEnum, playlist);
     }
-    return loadedEffects[effectName];
   }
 
   public static void RefreshVolume(){
@@ -88,47 +63,28 @@ public class Sound {
     return val;
   }
 
-  public static List<Songs> GetPlaylist(Playlists playlist){
-    List<Songs> ret = new List<Songs>();
-    switch(playlist){
-      case Playlists.Menu:
-        ret = new List<Songs>{
-          Songs.Menu1,
-          Songs.Menu2,
-          Songs.Menu3,
-          Songs.Menu4
-        };
-        break;
-      case Playlists.Arena:
-        ret = new List<Songs>{
-          Songs.Arena1,
-          Songs.Arena2,
-          Songs.Arena3,
-          Songs.Arena4,
-          Songs.Arena5,
-          Songs.Arena6,
-          Songs.Arena7,
-          Songs.Arena8,
-          Songs.Arena9,
-          Songs.Arena10,
-          Songs.Arena11
-        };
-        break;
-    }
-
-    return ret;
-  }
-
-  public static void PlayRandomSong(List<Songs> playlist){
-    if(playlist == null || playlist.Count == 0){
-      GD.Print("Tried to play bad playlist");
+  public static void PlayRandomSong(Playlists playlistEnum){
+    if(playlistEnum == Playlists.None){
+      PauseSong();
       return;
     }
-    int choice = Util.RandInt(0, playlist.Count);
-    Sound.PlaySong(playlist[choice]);
+
+    PlaylistRecord playlist = loadedPlaylists[playlistEnum];
+
+    if(playlist.songs.Count == 0){
+      GD.Print("No songs in this playlist");
+      return;
+    }
+
+    int choice = Util.RandInt(0, playlist.songs.Count);
+    Sound.PlaySong(playlist.songs[choice]);
   }
   
-  public static void PlaySong(Songs song){
+  public static void PlaySong(string song){
+    if(!loadedMusic.ContainsKey(song)){
+      GD.Print("'" + song + "' is an invalid song");
+    }
+
     if(song == Songs.None || song == Session.session.currentSong){
       GD.Print("Not playing song " + song);
       return;
