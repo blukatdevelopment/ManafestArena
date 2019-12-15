@@ -1,0 +1,45 @@
+[gd_resource type="AnimationNodeStateMachine" load_steps=10 format=2]
+
+[sub_resource type="AnimationNodeAnimation" id=1]
+animation = "attack"
+
+[sub_resource type="AnimationNodeAnimation" id=8]
+animation = "die"
+
+[sub_resource type="AnimationNodeAnimation" id=2]
+animation = "idle"
+
+[sub_resource type="AnimationNodeAnimation" id=3]
+animation = "walk"
+
+[sub_resource type="AnimationNodeAnimation" id=4]
+animation = "walk_back"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=5]
+blend_point_0/node = SubResource( 2 )
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource( 3 )
+blend_point_1/pos = 1.0
+blend_point_2/node = SubResource( 4 )
+blend_point_2/pos = -1.0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=6]
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=7]
+switch_mode = 2
+auto_advance = true
+xfade_time = 0.2
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=9]
+xfade_time = 0.2
+
+[resource]
+states/attack/node = SubResource( 1 )
+states/attack/position = Vector2( 352, 90 )
+states/die/node = SubResource( 8 )
+states/die/position = Vector2( 550, 190 )
+states/walk/node = SubResource( 5 )
+states/walk/position = Vector2( 550, 90 )
+transitions = [ "walk", "attack", SubResource( 6 ), "attack", "walk", SubResource( 7 ), "walk", "die", SubResource( 9 ) ]
+start_node = "walk"

@@ -62,23 +62,30 @@ blend_point_2/pos = -1.0
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=16]
 switch_mode = 1
+xfade_time = 0.2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=17]
 switch_mode = 1
+xfade_time = 0.2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=18]
 switch_mode = 1
+xfade_time = 0.2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=19]
 switch_mode = 1
+xfade_time = 0.2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=20]
+xfade_time = 0.2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=21]
+xfade_time = 0.2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=22]
 switch_mode = 2
 auto_advance = true
+xfade_time = 0.2
 
 [sub_resource type="AnimationNodeStateMachineTransition" id=23]
 switch_mode = 2
@@ -86,6 +93,7 @@ switch_mode = 2
 [sub_resource type="AnimationNodeStateMachineTransition" id=24]
 switch_mode = 2
 auto_advance = true
+xfade_time = 0.2
 
 [resource]
 states/bite/node = SubResource( 1 )
@@ -102,4 +110,4 @@ states/walk/node = SubResource( 15 )
 states/walk/position = Vector2( 539, 129 )
 transitions = [ "walk", "run", SubResource( 16 ), "run", "walk", SubResource( 17 ), "walk", "crouch", SubResource( 18 ), "crouch", "walk", SubResource( 19 ), "walk", "jump", SubResource( 20 ), "walk", "bite", SubResource( 21 ), "bite", "walk", SubResource( 22 ), "jump", "land", SubResource( 23 ), "land", "walk", SubResource( 24 ) ]
 start_node = "walk"
-graph_offset = Vector2( 49, -109.371 )
+graph_offset = Vector2( 18, -84.371 )

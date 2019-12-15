@@ -1,149 +1,152 @@
-/*
-  An actor's body consisting of a rigged humanoid model with animations.
-*/
 using Godot;
 using System;
 using System.Collections.Generic;
 
-
 public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
+    
   Actor actor;
   Spatial eyes, hand;
   Speaker speaker;
   string rootPath;
   MeshInstance meshInstance;
-  CollisionShape collisionShape;
-
-  HumanoidAnimationHandler animHandler;
-  const float SkeletonUpdateDelay = 0.03f;
-  IncrementTimer skeletonTimer;
+  Dictionary<CollisionKey, CollisionShape> dummyCollisions;
+  Dictionary<CollisionKey, int>  collisions;
   Skeleton skeleton;
-  public enum BodyParts{
-    Head,
-    Chest,
-    Shoulder_r,
-    Shoulder_l,
-    Forearm_r,
-    Forearm_l,
-    Hand_r,
-    Palm_r,
-    Hand_l,
-    Spine,
-    Hips,
-    Thigh_r,
-    Thigh_l,
-    Shin_r,
-    Shin_l,
-    Foot_r,
-    Foot_l
-  };
-  Dictionary<BodyParts, BoneAttachment> boneAttachments;
-  Dictionary<BodyParts, CollisionShape> collisionShapes;
-  Dictionary<BodyParts, int> boneIds;
-  Vector3 spineRotation;
-
+  AnimationTree animationTree;
+  AnimationNodeStateMachinePlayback stateMachine;
   public bool dead;
-  
-
+  const float ChangeAnimDelay = 0.05f;
+  IncrementTimer ChangeAnimTimer;
   bool grounded, crouched;
-  float gravityVelocity = 0f;
-  float spinePivot = 0f;
+  Vector3 velocity = new Vector3();
+  const int maxY = 90;
+  const int minY = -40;
 
-  const float GravityAcceleration = -9.81f;
-  const float TerminalVelocity = -53;
+  const float GravityForceY = -9.81f;
+  Vector3 GravityAcceleration = new Vector3(0,GravityForceY,0);
+  const float TerminalVelocity = 53;
   const float SightSize = 100f;
 
-  public HumanoidBody(Actor actor, string rootPath = "res://Assets/Scenes/Actors/debug.tscn"){
+  public HumanoidBody(Actor actor, string rootPath = "res://Assets/Scenes/Actors/beast.tscn"){
     this.actor = actor;
     this.rootPath = rootPath;
     this.dead = false;
-    skeletonTimer = new IncrementTimer(SkeletonUpdateDelay);
+    ChangeAnimTimer = new IncrementTimer(ChangeAnimDelay);
     InitChildren();
   }
-  
+
+  enum CollisionKey{
+    Idle,
+    Crouch,
+    Run,
+    Dead
+  }
+
+  private void ChangeCollision(CollisionKey key){
+    if(!collisions.ContainsKey(key)){
+      return;
+    }
+    foreach (KeyValuePair<CollisionKey, int> pair in collisions)
+    {
+      int ownerId  = pair.Value;
+      if(pair.Key == key){
+        ShapeOwnerSetDisabled(ownerId,false);
+      }
+      else{
+        ShapeOwnerSetDisabled(ownerId,true);
+      }
+    }
+  }
+
+  public void AnimationTrigger(string triggerName){
+    GD.Print("Animation trigger " + triggerName);
+    triggerName = triggerName.ToLower();
+    if(triggerName=="claw"){
+      if(crouched){
+        stateMachine.Travel("claw_crouched");
+      }
+      else{
+        stateMachine.Travel("claw");
+      }
+    }
+
+    if(triggerName=="stab"){
+      if(crouched){
+        stateMachine.Travel("stab_crouched");
+      }
+      else{
+        stateMachine.Travel("stab");
+      }
+    }
+
+    if(triggerName=="hold"){
+      animationTree.Set("parameters/hold/blend_amount", 1);
+    }
+
+    if(triggerName=="release"){
+      animationTree.Set("parameters/hold/blend_amount", 0);
+    }
+
+  }
+
   public Actor GetActor(){
     return actor;
   }
 
-  public void AnimationTrigger(string triggerName){
-    animHandler.AnimationTrigger(triggerName);
-  }
-
   private void InitChildren(){
-
-    eyes = new Spatial();
-    AddChild(eyes);
+    
+    PackedScene ps = (PackedScene)GD.Load(rootPath);
+    Node rootNode = ps.Instance();
+    AddChild(rootNode);
     
     speaker = new Speaker();
     AddChild(speaker);
 
-    PackedScene ps = (PackedScene)GD.Load(rootPath);
-    Node rootNode = ps.Instance();
-    AddChild(rootNode);
-
-    meshInstance = rootNode.FindNode("Cube") as MeshInstance;
+    eyes = rootNode.FindNode("Eyes") as Spatial;
+    meshInstance = rootNode.FindNode("Body") as MeshInstance;
     skeleton = rootNode.FindNode("Skeleton") as Skeleton;
-
-    AnimationPlayer armsAnimationPlayer = rootNode.FindNode("ArmsAnimationPlayer") as AnimationPlayer;
-    AnimationPlayer legsAnimationPlayer = rootNode.FindNode("LegsAnimationPlayer") as AnimationPlayer;
-    animHandler = new HumanoidAnimationHandler(armsAnimationPlayer, legsAnimationPlayer);
-
-    boneAttachments = new Dictionary<BodyParts, BoneAttachment>();
-    collisionShapes = new Dictionary<BodyParts, CollisionShape>();
-    boneIds = new Dictionary<BodyParts, int>();
-    
-    // These commented out bones are turned off for performance reasons.
-    CreateBone(BodyParts.Head,        "head",         new Vector3(0.1f, 0.1f, 0.1f), true);
-    CreateBone(BodyParts.Chest,       "chest",        new Vector3(0.25f, 0.25f, 0.4f));
-    // CreateBone(BodyParts.Shoulder_r,  "shoulder.R",   new Vector3(0.1f, 0.1f, 0.1f));
-    // CreateBone(BodyParts.Shoulder_l,  "shoulder.L",   new Vector3(0.1f, 0.1f, 0.1f));
-    // CreateBone(BodyParts.Forearm_r,   "forearm.R",    new Vector3(0.1f, 0.1f, 0.1f));
-    // CreateBone(BodyParts.Forearm_l,   "forearm.L",    new Vector3(0.1f, 0.1f, 0.1f));
-    // CreateBone(BodyParts.Hand_r,      "hand.R",       new Vector3(0.1f, 0.1f, 0.1f), true);
-    CreateBone(BodyParts.Palm_r,      "palm.01.R",    new Vector3(0.1f, 0.1f, 0.1f), true);
-    // CreateBone(BodyParts.Hand_l,      "hand.L",       new Vector3(0.1f, 0.1f, 0.1f), true);
-    CreateBone(BodyParts.Spine,       "spine",        new Vector3(0.1f, 0.1f, 0.1f), true);
-    // CreateBone(BodyParts.Hips,        "hips",         new Vector3(0.1f, 0.1f, 0.1f), true);
-    // CreateBone(BodyParts.Thigh_r,     "thigh.R",      new Vector3(0.1f, 0.1f, 0.1f), true);
-    // CreateBone(BodyParts.Thigh_l,     "thigh.L",      new Vector3(0.1f, 0.1f, 0.1f), true);
-    // CreateBone(BodyParts.Shin_r,      "shin.R",       new Vector3(0.1f, 0.1f, 0.1f));
-    // CreateBone(BodyParts.Shin_l,      "shin.L",       new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone(BodyParts.Foot_r,      "foot.R",       new Vector3(0.1f, 0.1f, 0.1f));
-    CreateBone(BodyParts.Foot_l,      "foot.L",       new Vector3(0.1f, 0.1f, 0.1f));
+    hand = rootNode.FindNode("Hand") as Spatial;
+    animationTree = rootNode.FindNode("AnimationTree") as AnimationTree;
     grounded = true;
-    spineRotation = boneAttachments[BodyParts.Spine].GetRotationDegrees();
-    
-    hand = new Spatial();
-    boneAttachments[BodyParts.Palm_r].AddChild(hand);
-    hand.Rotate(new Vector3(1, 0, 0), Util.ToRadians(-90f));
-    hand.Rotate(new Vector3(0, 1, 0), Util.ToRadians(-90f));
-    hand.Translate(new Vector3(-0.05f, 0, 0.04f));
+    dummyCollisions = new Dictionary<CollisionKey, CollisionShape>();
+    dummyCollisions.Add(CollisionKey.Idle, rootNode.FindNode("CollisionIdle") as CollisionShape);
+    dummyCollisions.Add(CollisionKey.Crouch, rootNode.FindNode("CollisionCrouch") as CollisionShape);
+    dummyCollisions.Add(CollisionKey.Run, rootNode.FindNode("CollisionRun") as CollisionShape);
+    dummyCollisions.Add(CollisionKey.Dead, rootNode.FindNode("CollisionDead") as CollisionShape);
+    initAnimTree();
   }
 
-  private void CreateBone(BodyParts part, string name, Vector3 extents, bool skipHitbox = false){
-    boneIds.Add(part, skeleton.FindBone(name));
-    if(!skipHitbox){
-      CollisionShape hitbox = new CollisionShape();
-      BoxShape boxShape = new BoxShape();
-      boxShape.Extents = extents;
-      hitbox.SetShape(boxShape);
-      hitbox.Name = name;
-      AddChild(hitbox);
-      collisionShapes.Add(part, hitbox);
-    }
-    BoneAttachment attachment = new BoneAttachment();
-    attachment.BoneName = name;
-    attachment.Name = name;
-    skeleton.AddChild(attachment);
-
-    boneAttachments.Add(part, attachment);
+  private void initAnimTree(){
+    animationTree.SetActive(true);
+    stateMachine = animationTree.Get("parameters/StateMachine/playback") as AnimationNodeStateMachinePlayback;
+    setBlendPosition(0);
   }
 
-  public void UpdateSkeleton(){
-    foreach(BodyParts part in boneAttachments.Keys){
-      if(collisionShapes.ContainsKey(part)){
-        collisionShapes[part].GlobalTransform = boneAttachments[part].GlobalTransform;
+  private void initCollisions(){
+    collisions = new Dictionary<CollisionKey, int>();
+    foreach (KeyValuePair<CollisionKey, CollisionShape> pair in dummyCollisions)
+    {
+      CollisionShape dummy = pair.Value;
+      if(dummy != null){
+        int ownerId = CreateShapeOwner(this);
+        ShapeOwnerAddShape(ownerId, dummy.Shape);
+        ShapeOwnerSetTransform(ownerId, dummy.GetGlobalTransform());
+        ShapeOwnerSetDisabled(ownerId, dummy.Disabled);
+        collisions.Add(pair.Key, ownerId);
       }
+    }
+  }
+
+  public override void _Ready(){
+    initCollisions();
+    ChangeCollision(CollisionKey.Idle);
+  }
+
+  public void setBlendPosition(float blendPosition =0){
+    animationTree.Set("parameters/StateMachine/walk/blend_position", blendPosition);
+    animationTree.Set("parameters/StateMachine/crouch/blend_position", blendPosition);
+    if(blendPosition!=0){
+      ChangeAnimTimer.StartTimer();
     }
   }
 
@@ -178,7 +181,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
   }
 
   public List<Node> GetHands(){ 
-    return new List<Node>(){ hand }; 
+    return new List<Node>(){hand};
   }
   
   public Node GetNode(){ 
@@ -189,21 +192,23 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     if(index != 0){
       return; // Splitscreen cameras not implemented
     }
-
-    RemoveChild(eyes);
     
     Camera cam = new Camera();
     cam.Far = 1000f;
-    eyes = (Spatial)cam;
-    boneAttachments[BodyParts.Head].AddChild(eyes);
-    eyes.Rotate(new Vector3(1, 0, 0), Util.ToRadians(90f));
-    eyes.Rotate(new Vector3(0, 1, 0), Util.ToRadians(180f));
-    eyes.Translate(new Vector3(0, 0.2f, 0f));
+    eyes.AddChild(cam);
   }
-
   public void Move(Vector3 movement, float moveDelta = 1f, bool ignoreAnimator = true, bool sprint = false){
-      if(!ignoreAnimator && movement != new Vector3()){
-        animHandler.HandleMovement();
+
+      if(!ignoreAnimator && grounded){
+        if(movement.z != 0){ 
+           if(movement.z < 0){
+            setBlendPosition(1);
+          }
+          else{
+            setBlendPosition(-1);
+          }
+          ChangeAnimTimer.StartTimer();
+        }
       }
 
       movement *= moveDelta;
@@ -227,104 +232,123 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
         }
       }
 
-      if(grounded){
-        return;
-      }
-
-      if(collision.Position.y < boneAttachments[BodyParts.Foot_r].GlobalTransform.origin.y || collision.Position.y < boneAttachments[BodyParts.Foot_l].GlobalTransform.origin.y){
-        if(gravityVelocity < 0){
-          grounded = true;
-          gravityVelocity = 0f;
-        }
-      }
   }
 
   public void ToggleCrouch(){
     crouched = !crouched;
-    animHandler.HandleCrouch(crouched);
+    if(crouched){
+      stateMachine.Travel("crouch");
+      ChangeCollision(CollisionKey.Crouch);
+    }
+    else{
+      stateMachine.Travel("walk");
+      ChangeCollision(CollisionKey.Idle);
+    }
   }
 
-  public void Turn(Vector3 movement, float moveDelta = 1f){
+  public void Turn(Vector3 movement, float moveDelta){
+    float factor = 20;
     movement *= moveDelta;
     Vector3 bodyRot = this.GetRotationDegrees();
     bodyRot.y += movement.x;
-    SetRotationDegrees(bodyRot);
+    this.SetRotationDegrees(bodyRot);
 
-    spineRotation.x -= movement.y;
-    float maxX = 160f;
-    float minX = 10f;
+    float blendPosition = (float) animationTree.Get("parameters/look/blend_position");
+    blendPosition += movement.y / factor;
+    blendPosition = Mathf.Clamp(blendPosition, -1, 1);
 
-    if(spineRotation.x > maxX){
-      spineRotation.x = maxX;
-    }
-    if(spineRotation.x < minX){
-      spineRotation.x = minX;
-    }
-
-    boneAttachments[BodyParts.Spine].SetRotationDegrees(spineRotation);
-
-    skeleton.SetBoneGlobalPose(boneIds[BodyParts.Spine], boneAttachments[BodyParts.Spine].Transform);
+    animationTree.Set("parameters/look/blend_position", blendPosition);
 
   }
 
   public void Update(float delta){
-    if(!dead){
-      Gravity(delta);
-      if(skeletonTimer.CheckTimer(delta)){
-        UpdateSkeleton();
-      }
-      animHandler.Update(delta);
+    float margin = 0.05f;
+    float landMargin = 3f;
+    
+    if(dead){
+      return;
     }
+    
+    ApplyGravity(delta);
+    
+    if(ChangeAnimTimer.CheckTimer(delta))
+      setBlendPosition(0);
+    if(TestMove(Transform, margin * Vector3.Down)){
+      if(velocity.y < 0){
+        grounded = true;
+        velocity = new Vector3();
+        if(stateMachine.GetCurrentNode() == "jump"){
+          stateMachine.Travel("walk");
+        }
+      }
+    }
+    else if(TestMove(Transform, landMargin * Vector3.Down)){
+      if(velocity.y < 0){
+        if(stateMachine.GetCurrentNode() == "jump"){
+          stateMachine.Travel("land");
+        }
+      }
+    }
+    
   }
 
   public void HoldItem(int hand, IItem item){
     Node node = item.GetNode();
     this.hand.AddChild(node);
-    Spatial spat = node as Spatial;
-    animHandler.HandleHold(true);
+    AnimationTrigger("hold");
   }
 
   public void ReleaseItem(int hand, IItem item){
-    this.hand.RemoveChild(item.GetNode());
-    animHandler.HandleHold(false);
+    if(this.hand.IsAParentOf(item.GetNode())){
+      this.hand.RemoveChild(item.GetNode());
+    }
+    AnimationTrigger("release");
   }
 
-  private void Gravity(float delta){
-    float gravityForce = GravityAcceleration * delta;
-    gravityVelocity += gravityForce;
-
-    if(gravityVelocity < TerminalVelocity){
-      gravityVelocity = TerminalVelocity;
-    }
+  private void DieWhenOutOfBounds(){
+    float minimumYBounds = -100;
     
-    Vector3 grav = new Vector3(0, gravityVelocity, 0);
-    Move(grav, delta, true);
-
-    // Kill actor when it falls out of map
-    if(actor.stats != null && GetTranslation().y < -100){
+    if(actor.stats != null && GetTranslation().y < minimumYBounds){
       Damage damage = new Damage();
       damage.health = actor.stats.Health;
       actor.stats.ReceiveDamage(damage);
     }
+
+  }
+
+  private void ApplyGravity(float delta){
+    Vector3 gravityForce = GravityAcceleration * delta;
+    velocity += gravityForce;
+
+    if(velocity.Length() > TerminalVelocity){
+      velocity = TerminalVelocity*velocity.Normalized();
+    }
+    
+    Move(velocity, delta, true);
+
+    DieWhenOutOfBounds();
   }
 
   public void Jump(){
     if(!grounded){ 
       return; 
     }
-    float jumpForce = 11;
+    crouched=false;
+    Vector3 jumpForce = new Vector3(0, 11, 0);
     
     if(actor.stats == null){
-      gravityVelocity = jumpForce;
+      velocity = jumpForce;
       grounded = false;
-      return;  
+      stateMachine.Travel("jump");
+      return;
     }
 
     if(actor.stats != null){
       int jumpCost = actor.stats.JumpCost;
       if(actor.stats.ConsumeCondition(Stats.Conditions.Stamina, jumpCost)){
-        gravityVelocity = jumpForce;
+        velocity = jumpForce;
         grounded = false;
+        stateMachine.Travel("jump");
       }
     }
   }
@@ -342,19 +366,15 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
   }
 
   public void Die(){
-    Transform trans = Transform;
-    Vector3 pos = trans.origin;
-    trans = trans.Rotated(new Vector3(0, 0, 1), 1.5f);
-    trans.origin = pos;
-    Transform = trans;
     dead = true;
-    animHandler.AnimationTrigger("dead");
+    stateMachine.Travel("die");
+    ChangeCollision(CollisionKey.Dead);
   }
 
   public List<Actor> ActorsInSight(){
     Vector3 start = eyes.GlobalTransform.origin;
     Vector3 end = Get3DCursor();
-
+    
     Spatial spat = this as Spatial;
     Vector3 offset = new Vector3(SightSize, SightSize, SightSize);
     Vector3 min = spat.Transform.origin - offset;
@@ -371,7 +391,6 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     return ret;
   }
 
-  // The end of a ray pointed forward in global space
   public Vector3 Get3DCursor(float distance = 100f){
     Vector3 start = eyes.GlobalTransform.origin;
     Transform headTrans = eyes.Transform;

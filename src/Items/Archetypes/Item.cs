@@ -137,7 +137,7 @@ public class Item: RigidBody, IItem, IHasInfo {
         for(int i = 0; i < areaShapeOwners.Count; i++){
           int ownerInt = (int)areaShapeOwners[i];
           for(int j = 0; j < shapes.Count; j++){
-            area.ShapeOwnerAddShape(ownerInt, shapes[i].Shape);
+            area.ShapeOwnerAddShape(ownerInt, shapes[j].Shape);
           }
         }
         area.Connect("body_entered", this, nameof(OnCollide));
