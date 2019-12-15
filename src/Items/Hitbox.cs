@@ -8,7 +8,8 @@ using System.Collections.Generic;
 
 public class Hitbox : Area, IItem, IHasDamage, IWeapon {
   
-  public IBody wielder;
+  public Actor actor;
+  private object wielder;
   public int id;
   public ItemMeleeAttacker attacker;
   public StatConsumer consumer;
@@ -31,13 +32,14 @@ public class Hitbox : Area, IItem, IHasDamage, IWeapon {
     this.Connect("body_entered", this, nameof(OnCollide));
     speaker = new Speaker();
     AddChild(speaker);
-    Actor actor = FindActor();
+    actor = FindActor();
     if(actor == null){
       return;
     }
     wielder = actor.GetBody();
     actor.hotbar.AddItemToNextSlot(this);
     Config();
+    SetCollision(false);
   }
 
   private Actor FindActor(){
@@ -99,6 +101,7 @@ public class Hitbox : Area, IItem, IHasDamage, IWeapon {
     this.id = id;
   }
   public object GetWielder(){
+    wielder = actor.GetBody();
     return wielder;
   }
 

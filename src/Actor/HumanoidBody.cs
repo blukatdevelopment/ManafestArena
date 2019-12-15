@@ -24,7 +24,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
 
   const float GravityForceY = -9.81f;
   Vector3 GravityAcceleration = new Vector3(0,GravityForceY,0);
-  const float TerminalVelocity = -53;
+  const float TerminalVelocity = 53;
   const float SightSize = 100f;
 
   public HumanoidBody(Actor actor, string rootPath = "res://Assets/Scenes/Actors/beast.tscn"){
@@ -275,11 +275,9 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
       setBlendPosition(0);
     if(TestMove(Transform, margin * Vector3.Down)){
       if(velocity.y < 0){
-        if(!grounded){
-          grounded = true;
-          velocity = new Vector3();
-        }
-        if(grounded && stateMachine.GetCurrentNode() == "jump"){
+        grounded = true;
+        velocity = new Vector3();
+        if(stateMachine.GetCurrentNode() == "jump"){
           stateMachine.Travel("walk");
         }
       }
@@ -322,7 +320,7 @@ public class HumanoidBody : KinematicBody , IBody, IReceiveDamage {
     Vector3 gravityForce = GravityAcceleration * delta;
     velocity += gravityForce;
 
-    if(velocity.Length() < TerminalVelocity){
+    if(velocity.Length() > TerminalVelocity){
       velocity = TerminalVelocity*velocity.Normalized();
     }
     

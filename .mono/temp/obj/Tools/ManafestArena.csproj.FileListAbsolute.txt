@@ -1,0 +1,6 @@
+F:\BlukatStudios\ManafestArena\.mono\temp\bin\Tools\ManafestArena.dll
+F:\BlukatStudios\ManafestArena\.mono\temp\bin\Tools\ManafestArena.pdb
+F:\BlukatStudios\ManafestArena\.mono\temp\obj\Tools\ManafestArena.csprojAssemblyReference.cache
+F:\BlukatStudios\ManafestArena\.mono\temp\obj\Tools\ManafestArena.csproj.CoreCompileInputs.cache
+F:\BlukatStudios\ManafestArena\.mono\temp\obj\Tools\ManafestArena.dll
+F:\BlukatStudios\ManafestArena\.mono\temp\obj\Tools\ManafestArena.pdb

@@ -118,11 +118,10 @@ public class ActorFactory {
   }
 
   public static Actor DebugEnemyCharacter(){
-    Actor actor = FromComponentTypes(InputSources.AI, Bodies.HumanoidBody);
+    Actor actor = FromComponentTypes(InputSources.AI, Bodies.WolfBody);
 
     actor.stats = new Stats(Stats.EmptyStats(5));
     actor.hotbar = new HotBar(10, actor);
-    actor.hotbar.AddItem(0, ItemFactory.Factory(ItemFactory.Items.Knife));
     return actor;
   }
 }

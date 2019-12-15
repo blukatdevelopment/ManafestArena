@@ -15,8 +15,8 @@ public class MeleeCombatState : IBehaviorState {
 
   public float attackTimer;
   public const float AttackInterval = 1f;
-  public const float MeleeRange = 3f;
-  public const float MeleeAimMargin = 0.5f;
+  public const float MeleeRange = 3.5f;
+  public const float MeleeAimMargin = 5f;
 
   public float strafeTimer;
   public int strafeDirection;
